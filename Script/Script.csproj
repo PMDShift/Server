@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0E3F328A-88DD-46B0-8B3B-99878EFE0BEC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Script</RootNamespace>
+    <AssemblyName>Script</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auction.cs" />
+    <Compile Include="BattleScript.cs" />
+    <Compile Include="BossBattles.cs" />
+    <Compile Include="ChatMessageWatcher.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="CTF.cs" />
+    <Compile Include="DatabaseManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Debug.cs" />
+    <Compile Include="DungeonRules.cs" />
+    <Compile Include="ElectrostasisTower.cs" />
+    <Compile Include="exPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Globals.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Lottery.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MapInteractions.cs" />
+    <Compile Include="PitchBlackAbyss.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomIce.cs" />
+    <Compile Include="ScriptedTiles.cs" />
+    <Compile Include="SnowballGame.cs" />
+    <Compile Include="StatusScript.cs" />
+    <Compile Include="StoryConstruction.cs" />
+    <Compile Include="StoryHelper.cs" />
+    <Compile Include="Test.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{0F397789-1719-47E8-B83E-45B721981B73}</Project>
+      <Name>Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DataManager\DataManager.csproj">
+      <Project>{871f2374-f17b-4c40-8479-589553184b1d}</Project>
+      <Name>DataManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+      <Project>{7F001974-C37D-46F0-A2B3-73C9B79C4DC1}</Project>
+      <Name>Exceptions</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\framework\Core\PMDCP.Core.csproj">
+      <Project>{2bd1eb8d-04db-4c04-9ab8-8965b42e7cf1}</Project>
+      <Name>PMDCP.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\framework\DatabaseConnector\PMDCP.DatabaseConnector.csproj">
+      <Project>{518980b1-74d8-4760-8a39-e4192f42f92a}</Project>
+      <Name>PMDCP.DatabaseConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\framework\Sockets\PMDCP.Sockets.csproj">
+      <Project>{2469e594-4f97-49e4-80cd-da99d76132ba}</Project>
+      <Name>PMDCP.Sockets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IO\IO.csproj">
+      <Project>{6D9BB0A3-AFC1-402B-A596-E2FA03C6C4B5}</Project>
+      <Name>IO</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\RDungeons\RDungeons.csproj">
+      <Project>{B27512C4-9D86-4E3B-ADC0-E00A43193C22}</Project>
+      <Name>RDungeons</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Scripting\Scripting.csproj">
+      <Project>{D40E045A-02AB-4065-99A7-5F5EF85031D2}</Project>
+      <Name>Scripting</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Server\Server.csproj">
+      <Project>{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}</Project>
+      <Name>Server</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
