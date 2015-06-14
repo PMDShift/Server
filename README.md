@@ -23,5 +23,3 @@ You will now need to configure the database connections used by the server appli
 Install [Visual Studio](https://www.visualstudio.com). Once installed, launch *Server.sln*. In the Visual Studio interface, change *Debug* to *Release*. Build the server. Output files will be placed in *Server\bin\Release*.
 
 That's it! Your server is setup and can now be run!
-
-Launch *Server.sln*. In the Visual Studio interface, change *Debug* to *Release*.
