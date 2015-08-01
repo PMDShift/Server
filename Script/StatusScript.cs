@@ -4017,9 +4017,9 @@ namespace Script {
 					setup.moveIndex == 87 || //Shadow Ball
 					setup.moveIndex == 300 || //Sludge Bomb
 					setup.moveIndex == 446 || //Weather Ball
-					setup.moveIndex == 252 ||){ // Zap Canon
+					setup.moveIndex == 252){ // Zap Canon
 					setup.Move.Accuracy = 0;
-					setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Defender.Name + " avoided damage with Bulletproof!", Text.WhiteSmoke), 
+					setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Defender.Name + " avoided damage with Bulletproof!", Text.WhiteSmoke)); 
 						}		
 						}
 

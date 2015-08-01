@@ -1295,7 +1295,7 @@ namespace Script {
 				//Turns Normal type moves into Flying. Attack power becomes 1.3x.
 				if (HasAbility(setup.Attacker, "Aerilate")) {
 					if (setup.Move.Element == Enums.PokemonType.Normal){
-						setup.Move.Element = Enums.PokemonType.Aerilate;
+						setup.Move.Element = Enums.PokemonType.Flying;
 						setup.AttackerMultiplier *= 13;
 						setup.AttackerMultiplier /= 10;
 					}
