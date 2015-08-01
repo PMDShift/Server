@@ -32,7 +32,7 @@ namespace Script
 {
 	public class CTF
 	{
-		public const int MAXTEAMCOUNT = 30;
+		public const int MAXTEAMCOUNT = 25;
 		public const int MINTEAMCOUNT = 2;
 		
 		public const int REDMAP = 791;
