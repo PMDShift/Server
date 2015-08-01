@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -6344,7 +6344,7 @@ namespace Script {
                     }
                     bool trapRemoved = false;
                     for (int x = 0; x <= setup.AttackerMap.MaxX; x++) {
-                        for (int y = 0; y <= setup.AttackerMap.MaxX; y++) {
+                        for (int y = 0; y <= setup.AttackerMap.MaxY; y++) {
                             Tile tile = setup.AttackerMap.Tile[x, y];
                             if (tile.Type == Enums.TileType.Scripted && GetTrapType(tile.Data1) != null && tile.Data2 == 1) {
                                 RemoveTrap(setup.AttackerMap, x, y, setup.PacketStack);
