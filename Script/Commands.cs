@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -623,6 +623,7 @@ namespace Script
                         break;
                     case "/createtourny":
                         {
+			    Messenger.PlayerMsg(client, "You are making a tourney!", Text.BrightRed);
                             Tournament tourny = TournamentManager.CreateTournament(client, joinedArgs, "s1193", 10, 10);
                             tourny.AddCombatMap("s1194");
                         }
