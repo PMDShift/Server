@@ -1269,6 +1269,38 @@ namespace Script {
 
                 }
 
+				//Refrigerate
+				//Turns Normal type moves into Ice. Attack power becomes 1.3x.
+				if (HasAbility(setup.Attacker, "Refrigerate")) {
+					if (setup.Move.Element == Enums.PokemonType.Normal){
+						setup.Move.Element = Enums.PokemonType.Ice;
+						setup.AttackerMultiplier *= 13;
+						setup.AttackerMultiplier /= 10;
+					}
+				}
+
+
+				//Pixilate
+				//Turns Normal type moves into Fairy. Attack power becomes 1.3x.
+				if (HasAbility(setup.Attacker, "Pixilate")) {
+					if (setup.Move.Element == Enums.PokemonType.Normal){
+						setup.Move.Element = Enums.PokemonType.Fairy;
+						setup.AttackerMultiplier *= 13;
+						setup.AttackerMultiplier /= 10;
+					}
+				}
+
+
+				//Aerilate
+				//Turns Normal type moves into Flying. Attack power becomes 1.3x.
+				if (HasAbility(setup.Attacker, "Aerilate")) {
+					if (setup.Move.Element == Enums.PokemonType.Normal){
+						setup.Move.Element = Enums.PokemonType.Aerilate;
+						setup.AttackerMultiplier *= 13;
+						setup.AttackerMultiplier /= 10;
+					}
+				}
+
                 //apply STAB
                 if (setup.Move.EffectType == Enums.MoveType.SubHP && setup.Move.Element != Enums.PokemonType.None && (setup.Move.Element == setup.Attacker.Type1 || setup.Move.Element == setup.Attacker.Type2)) {
                     setup.AttackerMultiplier *= 5;

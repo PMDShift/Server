@@ -1224,6 +1224,16 @@ namespace Script {
                                     return true;
                                 }
                             }
+
+							//Sweet Veil
+							if (HasAbility(character, "Sweet Veil") && !HasAbility(attacker, "Mold Breaker")) {
+								if (msg) {
+									hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " can't become drowsy due to Sweet Veil!", Text.BrightRed), character.X, character.Y, 10);
+								}
+								PacketHitList.MethodEnded(ref hitlist);
+								return true;
+							}
+
 	                        if (character.HasActiveItem(59)) {
 	                            if (msg) {
 	                                hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + "'s Insomniscope prevented it from falling asleep!", Text.WhiteSmoke), character.X, character.Y, 10);
@@ -3984,6 +3994,35 @@ namespace Script {
                     setup.Multiplier /= 416;
                 }
             }
+
+			//Bulletproof
+			if (HasAbility(setup.Defender, "Bulletproof") && !HasAbility(setup.Attacker, "Mold Breaker")) {
+				if (setup.moveIndex == 624 || //Acid Spray
+					setup.moveIndex == 70 || //Aura Sphere
+					setup.moveIndex == 219 || //Barrage
+					setup.moveIndex == 1 || //Bullet Seed
+					setup.moveIndex == 71 || //Egg Bomb
+					setup.moveIndex == 619 || //Electro Ball
+					setup.moveIndex == 378 || //Energy Ball
+					setup.moveIndex == 23 || //Focus Blast
+					setup.moveIndex == 47 || //Gyro Ball
+					setup.moveIndex == 429 || //Ice Ball
+					setup.moveIndex == 391 || //Magnet Bomb
+					setup.moveIndex == 375 || //Mist Ball
+					setup.moveIndex == 150 || //Mud Bomb
+					setup.moveIndex == 412 || //Octazooka
+					setup.moveIndex == 427 || //Rock Wrecker
+					setup.moveIndex == 678 || //Searing Shot
+					setup.moveIndex == 65 || //Seed Bomb
+					setup.moveIndex == 87 || //Shadow Ball
+					setup.moveIndex == 300 || //Sludge Bomb
+					setup.moveIndex == 446 || //Weather Ball
+					setup.moveIndex == 252 ||){ // Zap Canon
+					setup.Move.Accuracy = 0;
+					setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Defender.Name + " avoided damage with Bulletproof!", Text.WhiteSmoke), 
+						}		
+						}
+
             if (HasAbility(setup.Defender, "Soundproof") && !HasAbility(setup.Attacker, "Mold Breaker")) {
 
                 if (setup.moveIndex == 180 ||
