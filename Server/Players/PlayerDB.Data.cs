@@ -350,6 +350,10 @@ namespace Server.Players
 
         public Story CurrentChapter {
             get {
+                if (playerData.CurrentChapter != "-1" && (currentChapter == null || currentChapter.ID != playerData.CurrentChapter))
+                {
+                    currentChapter = StoryManager.Stories.Stories[playerData.CurrentChapter.ToInt()];
+                }
                 return currentChapter;
             }
             set {
