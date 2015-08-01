@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -3443,7 +3443,7 @@ namespace Script {
 
         public static void CheckAttackerModAbility(BattleSetup setup) {
             if (HasAbility(setup.Attacker, "Adaptability")) {
-                if (setup.Move.MoveCategory != Enums.MoveCategory.Status && setup.Move.Element == setup.Attacker.Type1 || setup.Move.Element == setup.Attacker.Type2) {
+                if (setup.Move.MoveCategory != Enums.MoveCategory.Status && (setup.Move.Element == setup.Attacker.Type1 || setup.Move.Element == setup.Attacker.Type2)) {
                     setup.AttackerMultiplier *= 6;
                     setup.AttackerMultiplier /= 5;
                 }
