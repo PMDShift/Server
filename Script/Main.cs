@@ -242,14 +242,14 @@ namespace Script {
 
         public static void OnChatMessageRecieved(Client client, string message, Enums.ChatMessageType msgType) {
             try {
-            	if (message.Length > 2048) {
+            	if (message.Length > 500) {
             		// Lets start off small. Autoban if spamming.
             		string muteTimeDays = "-----";
             		client.Player.Muted = true;
                     using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
 	                    Bans.BanPlayer(dbConnection, client.IP.ToString(), client.Player.CharID,
 		                    client.Player.AccountName + "/" + client.Player.Name, client.MacAddress, client.BiosId,
-		                    client.Player.CharID, client.IP.ToString(), muteTimeDays, Enums.BanType.Mute);
+		                    client.Player.CharID, client.IP.ToString(), muteTimeDays, Enums.BanType.Ban);
                     }
             	}
             	/*
