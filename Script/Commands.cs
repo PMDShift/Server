@@ -605,33 +605,33 @@ namespace Script
                             }
                         }
                         break;
-                    case "/tournyplayers":
+                    case "/tourneyplayers":
                         {
-                            Tournament tourny = client.Player.Tournament;
-                            if (tourny != null)
+                            Tournament tourney = client.Player.Tournament;
+                            if (tourney != null)
                             {
-                                if (tourny.RegisteredMembers[client] != null)
+                                if (tourney.RegisteredMembers[client] != null)
                                 {
-                                    if (tourny.RegisteredMembers[client].Admin)
+                                    if (tourney.RegisteredMembers[client].Admin)
                                     {
-                                        tourny.PlayersNeeded = joinedArgs.ToInt();
-                                        Messenger.PlayerMsg(client, "The current player requirement is: " + tourny.PlayersNeeded.ToString(), Text.BrightGreen);
+                                        tourney.PlayersNeeded = joinedArgs.ToInt();
+                                        Messenger.PlayerMsg(client, "The current player requirement is: " + tourney.PlayersNeeded.ToString(), Text.BrightGreen);
                                     }
                                 }
                             }
                         }
                         break;
-                    case "/createtourny":
+                    case "/createtourney":
                         {
 			    Messenger.PlayerMsg(client, "You are making a tourney!", Text.BrightRed);
-                            Tournament tourny = TournamentManager.CreateTournament(client, joinedArgs, "s1193", 10, 10);
-                            tourny.AddCombatMap("s1194");
+                            Tournament tourney = TournamentManager.CreateTournament(client, joinedArgs, "s1193", 10, 10);
+                            tourney.AddCombatMap("s1194");
                         }
                         break;
-                    case "/jointourny":
+                    case "/jointourney":
                         {
-                            Tournament tourny = TournamentManager.Tournaments[joinedArgs.ToInt()];
-                            tourny.RegisterPlayer(client);
+                            Tournament tourney = TournamentManager.Tournaments[joinedArgs.ToInt()];
+                            tourney.RegisterPlayer(client);
                         }
                         break;
                     case "/estlevel":
