@@ -3247,6 +3247,7 @@ namespace Script {
                     case "Substitute": {
                             if (sendInfo) hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + "'s substitute faded away!", Text.WhiteSmoke), character.X, character.Y, 10);
                             sprite = true;
+                            forme = true;
                         }
                         break;
                     case "Bide": {
@@ -3334,7 +3335,8 @@ namespace Script {
                     case "Illusion": {
                             if (sendInfo) hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + "'s Illusion was broken!", Text.WhiteSmoke), character.X, character.Y, 10);
                             sprite = true;    
-                        extraStatus = true;
+                            extraStatus = true;
+                            forme = true;
                             hitlist.AddPacketToMap(map, PacketBuilder.CreateSpellAnim(503, character.X, character.Y));
                         }
                         break;
@@ -3351,6 +3353,7 @@ namespace Script {
                         sprite = true;
                         speedLimit = true;
                         swapLock = true;
+                        forme = true;
                         }
                         break;
                     case "Slip":
@@ -4731,6 +4734,9 @@ namespace Script {
 
         public static void RefreshCharacterForme(ICharacter character, IMap map, PacketHitList hitlist) {
             PacketHitList.MethodStart(ref hitlist);
+
+            character.CalculateOriginalForm();
+
             //forme
             if (HasAbility(character, "Forecast") && character.Species == 351) {
                 switch (map.Weather) {

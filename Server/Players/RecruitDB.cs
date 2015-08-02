@@ -191,7 +191,8 @@ namespace Server.Players {
             this.NpcBase = recruitData.NpcBase;
             this.Species = recruitData.Species;
             this.Sex = (Enums.Sex)recruitData.Sex;
-            this.Form = recruitData.Form;
+            this.PermanentForm = recruitData.Form;
+            this.Form = this.PermanentForm;
             this.Shiny = (Enums.Coloration)recruitData.Shiny;
             this.Level = recruitData.Level;
             this.Exp = recruitData.Exp;
@@ -243,7 +244,7 @@ namespace Server.Players {
             recruitData.NpcBase = this.NpcBase;
             recruitData.Species = this.Species;
             recruitData.Sex = (byte)this.Sex;
-            recruitData.Form = this.Form;
+            recruitData.Form = this.PermanentForm;
             recruitData.Shiny = (int)this.Shiny;
             recruitData.Level = this.Level;
             recruitData.Exp = this.Exp;
@@ -626,6 +627,18 @@ namespace Server.Players {
             CalculateOriginalType();
             CalculateOriginalAbility();
             //CalculateOriginalMobility();
+        }
+
+        public void SetOriginalForm(int form)
+        {
+            PermanentForm = form;
+
+            if (Pokedex.Pokedex.GetPokemon(Species).Forms.Count <= Form)
+            {
+                PermanentForm = 0;
+            }
+
+            SetForm(form);
         }
 
         public void UseMove(int moveSlot) {

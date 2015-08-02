@@ -47,6 +47,7 @@ namespace Server.Maps
 
         public MapNpcBase(DataManager.Maps.MapNpc rawNpc) {
             this.rawNpc = rawNpc;
+            Form = PermanentForm;
             Darkness = -2;
             Mobility = new bool[16];
             TimeMultiplier = 1000;
@@ -64,10 +65,13 @@ namespace Server.Maps
             get { return (Enums.Coloration)rawNpc.Shiny; }
             set { rawNpc.Shiny = (byte)value; }
         }
-        public int Form {
+        public int Form { get; set; }
+        public int PermanentForm
+        {
             get { return rawNpc.Form; }
             set { rawNpc.Form = value; }
         }
+
         public int Level {
             get { return rawNpc.Level; }
             set { rawNpc.Level = value; }

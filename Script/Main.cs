@@ -2390,6 +2390,7 @@ namespace Script {
                             //recruit.SpriteOverride = -1;
                             recruit.Level = client.Player.GetActiveRecruit().Level;
                             recruit.Species = 292;
+                            recruit.PermanentForm = 0;
                             recruit.Form = 0;
                             recruit.Sex = Enums.Sex.Genderless;
                             recruit.Name = Pokedex.GetPokemon(292).Name;
@@ -6016,6 +6017,7 @@ namespace Script {
                             //Gracidea
                             TakeItemSlotFromCharacter(setup.Attacker, invNum, 1);
                             if (setup.Attacker.Species == 492 && setup.Attacker.Form == 0) {
+                                setup.Attacker.PermanentForm = 1;
                             	setup.Attacker.Form = 1;
                             	setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSoundPacket("Magic838.wav"), setup.Attacker.X, setup.Attacker.Y, 10);
                             	setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(502, setup.Attacker.X, setup.Attacker.Y));
