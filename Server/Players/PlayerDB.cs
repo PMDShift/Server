@@ -388,6 +388,7 @@ namespace Server.Players
             recruit.Name = npc.Name;
             recruit.Species = npc.Species;
             recruit.Form = npc.Form;
+            recruit.PermanentForm = npc.Form;
             recruit.Sex = npc.Sex;
 
             if (npc.Level <= 0) {
@@ -431,6 +432,7 @@ namespace Server.Players
                 recruit.Level = requestedRecruit.Level;
                 recruit.Species = requestedRecruit.Species;
                 recruit.Form = requestedRecruit.Form;
+                recruit.PermanentForm = requestedRecruit.PermanentForm;
                 recruit.Sex = requestedRecruit.Sex;
                 recruit.CalculateOriginalStats();
                 recruit.Exp = requestedRecruit.Exp;
@@ -553,6 +555,7 @@ namespace Server.Players
             Team[teamSlot].Loaded = true;
             Team[teamSlot].Species = species;
             Team[teamSlot].Form = form;
+            Team[teamSlot].PermanentForm = form;
             Team[teamSlot].Sex = Pokedex.Pokedex.GetPokemonForm(species, form).GenerateLegalSex();
             //Team[teamSlot].Form = Npcs.NpcManager.Npcs[npcNum].Form;
             client.Player.Team[teamSlot].Level = level;

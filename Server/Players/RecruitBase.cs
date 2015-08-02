@@ -61,6 +61,7 @@ namespace Server.Players {
         public ulong Exp { get; set; }
         //public int[] Species { get; set; }
         public int Species { get; set; }
+        public int PermanentForm { get; set; }
         public int Form { get; set; }
         public Enums.Sex Sex { get; set; }
         public Enums.PokemonType Type1 { get; set; }
@@ -669,6 +670,11 @@ namespace Server.Players {
         }
         */
         #endregion
+
+        public void CalculateOriginalForm()
+        {
+            Form = PermanentForm;
+        }
 
         public void CalculateOriginalSpecies() {
 

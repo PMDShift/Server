@@ -316,6 +316,10 @@ namespace Server.Maps
 
         }
 
+        public void CalculateOriginalForm()
+        {
+            // Does nothing?
+        }
 
         public void CalculateOriginalAbility() {
             Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(Species, Form);

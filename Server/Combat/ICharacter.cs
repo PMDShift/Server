@@ -30,6 +30,7 @@ namespace Server.Combat {
         Enums.Coloration Shiny { get; set; }
         int Species { get; }
         int Form { get; set; }
+        int PermanentForm { get; set; }
         int Sprite { get; set; }
 
         //PokemonData BaseSpecies { get; set; }
@@ -96,6 +97,7 @@ namespace Server.Combat {
         Enums.Direction Direction { get; set; }
         int Darkness { get; set; }
 
+        void CalculateOriginalForm();
         void CalculateOriginalSpecies();
         void CalculateOriginalSprite();
         void CalculateOriginalStats();
