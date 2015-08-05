@@ -88,27 +88,27 @@ namespace Server.Missions
                 case Enums.JobDifficulty.B:
                     return 30;
                 case Enums.JobDifficulty.A:
-                    return 50;
+                    return 60;
                 case Enums.JobDifficulty.S:
-                    return 70;
+                    return 90;
                 case Enums.JobDifficulty.Star:
-                    return 100;
+                    return 150;
                 case Enums.JobDifficulty.TwoStar:
-                    return 200;
+                    return 250;
                 case Enums.JobDifficulty.ThreeStar:
-                    return 300 ;
-                case Enums.JobDifficulty.FourStar:
                     return 400 ;
+                case Enums.JobDifficulty.FourStar:
+                    return 600 ;
                 case Enums.JobDifficulty.FiveStar:
-                    return 500 ;
+                    return 800 ;
                 case Enums.JobDifficulty.SixStar:
-                    return 700 ;
+                    return 1000 ;
                 case Enums.JobDifficulty.SevenStar:
-                    return 1000;
+                    return 1200;
                 case Enums.JobDifficulty.EightStar:
-                    return 1300;
+                    return 1400;
                 case Enums.JobDifficulty.NineStar:
-                    return 1500;
+                    return 1600;
                 default:
                     return 0;
             }
