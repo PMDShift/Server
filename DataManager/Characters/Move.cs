@@ -27,6 +27,6 @@ namespace DataManager.Characters
         public int MoveNum { get; set; }
         public int CurrentPP { get; set; }
         public int MaxPP { get; set; } 
-        //public bool Sealed { get; set; } 
+        public bool Sealed { get; set; } 
     }
 }
