@@ -34,6 +34,7 @@ namespace Server
         static Color brightGreen = System.Drawing.Color.LightGreen;
         static Color brightRed = System.Drawing.Color.Red;
         static Color brown = System.Drawing.Color.Brown;
+        static Color orange = System.Drawing.Color.Orange;
         static Color cyan = System.Drawing.Color.Cyan;
         static Color darkGrey = System.Drawing.Color.DarkGray;
         static Color green = System.Drawing.Color.Green;
@@ -82,6 +83,11 @@ namespace Server
         public static Color Brown
         {
             get { return brown; }
+        }
+
+        public static Color Orange
+        {
+            get { return orange; }
         }
 
         public static Color Cyan
