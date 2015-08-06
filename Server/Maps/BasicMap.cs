@@ -328,7 +328,11 @@ namespace Server.Maps
                 ActiveNpc[npcSlot].CalculateOriginalAbility();
                 //ActiveNpc[npcSlot].CalculateOriginalMobility();
 
-
+                if (Server.Math.Rand(0, 1000) < 1) 
+                {
+                    ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
+                }
+               
                 ActiveNpc[npcSlot].HP = ActiveNpc[npcSlot].MaxHP;
 
                 ActiveNpc[npcSlot].Direction = (Enums.Direction)Server.Math.Rand(0, 4);
