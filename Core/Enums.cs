@@ -356,7 +356,8 @@ namespace Server {
             Ambiguous = 36,
             Slippery = 37,
             Slow = 38,
-            DropShop = 39
+            DropShop = 39,
+            Road = 40
         }
 
         public enum LoadingType {
