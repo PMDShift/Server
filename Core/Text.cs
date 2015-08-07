@@ -27,24 +27,24 @@ namespace Server
     {
         #region Fields
 
-        static Color black = System.Drawing.Color.Black;
-        static Color blue = System.Drawing.Color.Blue;
-        static Color brightBlue = System.Drawing.Color.LightBlue;
-        static Color brightCyan = System.Drawing.Color.LightCyan;
-        static Color brightGreen = System.Drawing.Color.LightGreen;
-        static Color brightRed = System.Drawing.Color.Red;
-        static Color brown = System.Drawing.Color.Brown;
-        static Color orange = System.Drawing.Color.Orange;
-        static Color cyan = System.Drawing.Color.Cyan;
-        static Color darkGrey = System.Drawing.Color.DarkGray;
-        static Color green = System.Drawing.Color.Green;
-        static Color grey = System.Drawing.Color.Gray;
-        static Color magenta = System.Drawing.Color.Magenta;
-        static Color pink = System.Drawing.Color.Pink;
-        static Color red = System.Drawing.Color.Red;
-        static Color white = System.Drawing.Color.White;
-        static Color whiteSmoke = System.Drawing.Color.WhiteSmoke;
-        static Color yellow = System.Drawing.Color.Yellow;
+        static Color black = System.Drawing.Color.Black; // 01
+        static Color blue = System.Drawing.Color.Blue; // 02
+        static Color brightBlue = System.Drawing.Color.LightBlue; // 12
+        static Color brightCyan = System.Drawing.Color.LightCyan; // 11
+        static Color brightGreen = System.Drawing.Color.LightGreen; // 09
+        static Color brightRed = System.Drawing.Color.Red; // 04
+        static Color brown = System.Drawing.Color.Brown; // 05
+        static Color orange = System.Drawing.Color.Orange; // 07
+        static Color cyan = System.Drawing.Color.Cyan; // 10
+        static Color darkGrey = System.Drawing.Color.DarkGray; // 15
+        static Color green = System.Drawing.Color.Green; // 03
+        static Color grey = System.Drawing.Color.Gray; // 14
+        static Color magenta = System.Drawing.Color.Magenta; // 13
+        static Color pink = System.Drawing.Color.Pink; // 06
+        static Color red = System.Drawing.Color.Red; // 04
+        static Color white = System.Drawing.Color.White; // default
+        static Color whiteSmoke = System.Drawing.Color.WhiteSmoke; // 00
+        static Color yellow = System.Drawing.Color.Yellow; // 08
 
         #endregion Fields
 
