@@ -7,7 +7,7 @@ using System.Text;
 namespace Server.Migrations
 {
     [Migration(1)]
-    public class CreateInitialPlayersSchema: Migration
+    public class CreateInitialPlayersSchema : Migration
     {
         public override void Down()
         {
@@ -41,6 +41,8 @@ namespace Server.Migrations
             Delete.Table("story_helper_state_settings");
             Delete.Table("team");
             Delete.Table("trigger_events");
+
+            Delete.Schema("pmdcp_players");
         }
 
         public override void Up()

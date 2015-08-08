@@ -70,6 +70,8 @@ namespace Server.Migrations
             Delete.Table("story_param");
             Delete.Table("story_segment");
             Delete.Table("title");
+
+            Delete.Schema("pmdcp_data");
         }
 
         public override void Up()
