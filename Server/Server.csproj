@@ -202,6 +202,8 @@
     <Compile Include="Maps\TileCollection.cs" />
     <Compile Include="Maps\Void.cs" />
     <Compile Include="Maps\WarpDestination.cs" />
+    <Compile Include="Migrations\1_CreateInitialPlayersSchema.cs" />
+    <Compile Include="Migrations\2_CreateInitialDataSchema.cs" />
     <Compile Include="Moves\Move.cs" />
     <Compile Include="Moves\MoveAnimation.cs" />
     <Compile Include="Moves\MoveCollection.cs" />
