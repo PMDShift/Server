@@ -2674,6 +2674,15 @@ namespace Server.Network
                                     map.Tile[X, Y].Fringe2Set = parse[n + 26].ToInt();
                                     map.Tile[X, Y].F2AnimSet = parse[n + 27].ToInt();
                                     n += 28;
+
+                                    if (map.MapType == Enums.MapType.House)
+                                    {
+                                        if (map.Tile[X, Y].Type == Enums.TileType.Warp || map.Tile[X, Y].Type == Enums.TileType.Item)
+                                        {
+                                            Messenger.PlayerMsg(client, "Invalid map tile placed!", Text.BrightRed);
+                                            return;
+                                        }
+                                    }
                                 }
                             }
 
