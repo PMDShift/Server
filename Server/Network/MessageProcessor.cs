@@ -134,7 +134,7 @@ namespace Server.Network
                                     // Verify that the client used is a valid one
                                     if (parse[10] != "PMDCPCore")
                                     {
-                                        Messenger.PlainMsg(client, "Error, invalid client version", Enums.PlainMsgType.MainMenu);
+                                        Messenger.PlainMsg(client, "Bad client version! Did you edit the source code?", Enums.PlainMsgType.MainMenu);
                                         return;
                                     }
 
@@ -156,7 +156,7 @@ namespace Server.Network
                                         if (Bans.IsIPBanned(dbConnection, client) == Enums.BanType.Ban || Bans.IsMacBanned(dbConnection, client) == Enums.BanType.Ban)
                                         {
                                             Logging.ChatLogger.AppendToChatLog("Staff", "IP: " + client.IP + " Mac: " + client.MacAddress + " attempted to log on, but was banned.");
-                                            Messenger.PlainMsg(client, "You are banned!", Enums.PlainMsgType.MainMenu);
+                                            Messenger.PlainMsg(client, "You can't enter this world!", Enums.PlainMsgType.MainMenu);
                                             client.SetMacAddress("");
                                             client.SetBiosIdentification("");
                                             return;
@@ -169,13 +169,13 @@ namespace Server.Network
                                     }
                                     else
                                     {
-                                        Messenger.PlainMsg(client, "Incorrect password", Enums.PlainMsgType.MainMenu);
+                                        Messenger.PlainMsg(client, "Invalid password.", Enums.PlainMsgType.MainMenu);
                                     }
                                 }
                             }
                             else
                             {
-                                Messenger.PlainMsg(client, "You are already playing!", Enums.PlainMsgType.MainMenu);
+                                Messenger.PlainMsg(client, "You are already in the Pokémon world!", Enums.PlainMsgType.MainMenu);
                             }
                         }
                         break;
@@ -217,7 +217,7 @@ namespace Server.Network
 
                                     if (Bans.IsCharacterBanned(dbConnection, client.Player.CharID) == Enums.BanType.Ban)
                                     {
-                                        Messenger.PlainMsg(client, "This character is banned!", Enums.PlainMsgType.MainMenu);
+                                        Messenger.PlainMsg(client, "This character can't enter the Pokémon world!", Enums.PlainMsgType.MainMenu);
                                         client.Player = new Player(client);
                                         client.CloseConnection();
                                         return;
@@ -231,7 +231,7 @@ namespace Server.Network
                                 }
                                 else
                                 {
-                                    Messenger.PlainMsg(client, "Character does not exist", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "This character hasn't been sent to the Pokémon world yet!", Enums.PlainMsgType.Chars);
                                     return;
                                 }
                             }
@@ -347,7 +347,7 @@ namespace Server.Network
 
                             if ((sex < (int)Enums.Sex.Genderless) || (sex > (int)Enums.Sex.Female))
                             {
-                                Messenger.PlainMsg(client, "Invalid sex", Enums.PlainMsgType.Chars);
+                                Messenger.PlainMsg(client, "Invalid gender", Enums.PlainMsgType.Chars);
                                 return;
                             }
 
@@ -360,13 +360,13 @@ namespace Server.Network
                             {
                                 if (client.Player.CharacterExists(dbConnection, charNum))
                                 {
-                                    Messenger.PlainMsg(client, "Character already exists!", Enums.PlainMsgType.NewChar);
+                                    Messenger.PlainMsg(client, "That character is already in the Pokémon world!", Enums.PlainMsgType.NewChar);
                                     return;
                                 }
 
                                 if (PlayerManager.CharacterNameExists(dbConnection, name))
                                 {
-                                    Messenger.PlainMsg(client, "Sorry, but that name is in use!", Enums.PlainMsgType.NewChar);
+                                    Messenger.PlainMsg(client, "There's already a character with that name!", Enums.PlainMsgType.NewChar);
                                     return;
                                 }
 
@@ -378,9 +378,9 @@ namespace Server.Network
                         {
                             int charNum = parse[1].ToInt(-1);
 
-                            if (charNum < 1 || charNum > 4)
+                            if (charNum < 1 || charNum > 3)
                             {
-                                Messenger.PlainMsg(client, "Unable to delete character. Wrong character slot.", Enums.PlainMsgType.Chars);
+                                Messenger.PlainMsg(client, "Invalid character number", Enums.PlainMsgType.Chars);
                                 return;
                             }
 
@@ -390,11 +390,11 @@ namespace Server.Network
                                 {
                                     PlayerManager.DeleteCharacter(dbConnection, client.Player.AccountName, charNum);
                                     Messenger.SendChars(dbConnection, client);
-                                    Messenger.PlainMsg(client, "Character has been deleted!", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "The character has been sent back from the Pokémon world, never to return.", Enums.PlainMsgType.Chars);
                                 }
                                 else
                                 {
-                                    Messenger.PlainMsg(client, "Character does not exist!", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "That character doesn't exist!", Enums.PlainMsgType.Chars);
                                 }
                             }
                         }

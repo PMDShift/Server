@@ -74,11 +74,11 @@ namespace Server.Players
                 case Enums.Rank.Normal:
                     return Color.Brown;
                 case Enums.Rank.Moniter:
-                    return Color.FromArgb(255, 254, 150, 46);
+                    return Color.Orange;
                 case Enums.Rank.Mapper:
                     return Color.Cyan;
                 case Enums.Rank.Developer:
-                    return Color.FromArgb(255, 0, 110, 210);
+                    return Color.Blue;
                 case Enums.Rank.Admin:
                     return Color.Pink;
                 case Enums.Rank.ServerHost:
