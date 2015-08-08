@@ -231,7 +231,7 @@ namespace Server.Network
                                 }
                                 else
                                 {
-                                    Messenger.PlainMsg(client, "This character hasn't been sent in yet!", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "This character hasn't been sent to the Pokémon world yet!", Enums.PlainMsgType.Chars);
                                     return;
                                 }
                             }
