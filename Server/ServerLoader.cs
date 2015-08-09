@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Server.Network;
+using System.Threading.Tasks;
+using Open.Nat;
 
 namespace Server
 {
@@ -51,6 +53,8 @@ namespace Server
             Players.PlayerID.Initialize();
             Players.PlayerID.LoadIDInfo();
 
+            ForwardPorts();
+
             Forms.LoadingUI loading = new Forms.LoadingUI();
             loading.Text = "Loading...";
 
@@ -58,6 +62,15 @@ namespace Server
 
             Thread t = new Thread(new ParameterizedThreadStart(LoadServerBackground));
             t.Start(loading);
+        }
+
+        private static async Task ForwardPorts()
+        {
+            var discoverer = new NatDiscoverer();
+            var cts = new CancellationTokenSource(5000);
+            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+
+            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, Settings.GamePort, Settings.GamePort, "Temporary"));
         }
 
         private static void LoadServerBackground(Object param) {
