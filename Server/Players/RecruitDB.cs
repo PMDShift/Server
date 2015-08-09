@@ -41,6 +41,8 @@ namespace Server.Players {
         Client owner;
         public List<int> ActiveItems { get; set; }
 
+        private static readonly int MegaFormBaseline = 1000;
+
         #endregion Fields
 
         #region Properties
@@ -98,6 +100,29 @@ namespace Server.Players {
             }
         }
 
+        public bool IsMegaEvolved
+        {
+            get
+            {
+                return (Form >= MegaFormBaseline);
+            }
+        }
+
+        public int MegaForm
+        {
+            get
+            {
+                if (IsMegaEvolved)
+                {
+                    return Form - MegaFormBaseline;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -113,6 +138,22 @@ namespace Server.Players {
             TimeMultiplier = 1000;
             ActiveItems = new List<int>();
             VolatileStatus = new ExtraStatusCollection();
+        }
+
+        public void BeginMegaEvolution()
+        {
+            BeginMegaEvolution(0);
+        }
+
+        public void BeginMegaEvolution(int megaForm)
+        {
+            SetForm(MegaFormBaseline + megaForm);
+        }
+
+        public void EndMegaEvolution()
+        {
+            // TODO: Restore original form if that needs to ever be done
+            SetForm(0);
         }
 
         public void LoadFromRecruitData(RecruitData recruitData, int recruitIndex) {
