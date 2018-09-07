@@ -1,4 +1,4 @@
-# PMDCP Core Server
+# PMD: Shift! Core Server
 
 ## Downloading
 
