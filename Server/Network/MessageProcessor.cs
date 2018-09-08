@@ -39,6 +39,7 @@ using PMDCP.Core;
 using PMDCP.Sockets;
 using Server.Tournaments;
 using Server.Database;
+using System.IO;
 
 namespace Server.Network
 {
@@ -3570,10 +3571,10 @@ namespace Server.Network
                                 Scripting.Editor.EditorHelper.InitTempScript(client);
                                 if (parse[1].ToBool() == false)
                                 {
-                                    Messenger.SendDataTo(client, TcpPacket.CreatePacket("scriptsyntax", System.IO.File.ReadAllText(IO.Paths.ScriptsFolder + "CSharp.syn")));
+                                    Messenger.SendDataTo(client, TcpPacket.CreatePacket("scriptsyntax", System.IO.File.ReadAllText(Path.Combine(IO.Paths.ScriptsFolder, "CSharp.syn"))));
                                 }
                                 Messenger.SendDataTo(client, TcpPacket.CreatePacket("scripteditstart"));
-                                Messenger.SendDataTo(client, TcpPacket.CreatePacket("scripteditdata", "Main.cs", System.IO.File.ReadAllText(IO.Paths.ScriptsFolder + "Main.cs").Replace(TcpPacket.SEP_CHAR, '/')));
+                                Messenger.SendDataTo(client, TcpPacket.CreatePacket("scripteditdata", "Main.cs", System.IO.File.ReadAllText(Path.Combine(IO.Paths.ScriptsFolder, "Main.cs")).Replace(TcpPacket.SEP_CHAR, '/')));
                                 Scripting.Editor.EditorHelper.SendScriptClasses(client);
                                 TcpPacket filelistPacket = new TcpPacket("scriptfilelist");
                                 Scripting.Editor.EditorHelper.AppendFileListToPacket(client, filelistPacket);
@@ -3591,7 +3592,7 @@ namespace Server.Network
                         }
                         else
                         {
-                            System.IO.File.WriteAllText(Scripting.Editor.EditorHelper.GetTempFolder(client) + parse[1] + ".cs", parse[2]);
+                            System.IO.File.WriteAllText(Path.Combine(Scripting.Editor.EditorHelper.GetTempFolder(client), parse[1] + ".cs"), parse[2]);
                             Messenger.PlayerMsg(client, "File Saved! (Temp)", Text.Yellow);
                         }
                         break;
@@ -3705,7 +3706,7 @@ namespace Server.Network
                         }
                         else
                         {
-                            Messenger.SendDataTo(client, TcpPacket.CreatePacket("scriptsyntax", System.IO.File.ReadAllText(IO.Paths.ScriptsFolder + "CSharp.syn")));
+                            Messenger.SendDataTo(client, TcpPacket.CreatePacket("scriptsyntax", System.IO.File.ReadAllText(Path.Combine(IO.Paths.ScriptsFolder, "CSharp.syn"))));
                         }
                         break;
                     case "requesteditscriptfile":

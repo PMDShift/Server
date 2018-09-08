@@ -28,7 +28,7 @@ namespace Server.Exceptions
         public static void WriteToErrorLog(Exception exception, string optionalInfo) {
             try {
                 string date = DateTime.Now.ToShortTimeString();
-                string filePath = IO.Paths.LogsFolder + "ErrorLog-" + DateTime.Now.ToShortDateString().Replace("/", "-") + ".txt";
+                string filePath = Path.Combine(IO.Paths.LogsFolder, "ErrorLog-" + DateTime.Now.ToShortDateString().Replace("/", "-") + ".txt");
                 using (StreamWriter writer = new StreamWriter(filePath, true)) {
                     writer.WriteLine("--- " + DateTime.Now.ToLongTimeString() + " ---");
                     writer.WriteLine("Exception: " + exception.ToString());

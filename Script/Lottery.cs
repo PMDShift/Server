@@ -25,6 +25,7 @@ using Server.Network;
 using Server.Players;
 using Server.Stories;
 using System.Xml;
+using System.IO;
 
 namespace Script {
     public class Lottery {
@@ -38,7 +39,7 @@ namespace Script {
         public static DateTime? LotteryLastDraw;
 
         public static void LoadLottery() {
-            using (XmlReader reader = XmlReader.Create(Server.IO.Paths.ScriptsIOFolder + "lottery.xml")) {
+            using (XmlReader reader = XmlReader.Create(Path.Combine(Server.IO.Paths.ScriptsIOFolder, "lottery.xml"))) {
                 while (reader.Read()) {
                     if (reader.IsStartElement()) {
                         switch (reader.Name) {
@@ -73,7 +74,7 @@ namespace Script {
         }
 
         public static void SaveLottery() {
-            using (XmlWriter writer = XmlWriter.Create(Server.IO.Paths.ScriptsIOFolder + "lottery.xml", Settings.XmlWriterSettings))
+            using (XmlWriter writer = XmlWriter.Create(Path.Combine(Server.IO.Paths.ScriptsIOFolder, "lottery.xml"), Settings.XmlWriterSettings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("Lottery");

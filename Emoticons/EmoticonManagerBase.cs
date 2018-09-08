@@ -20,6 +20,7 @@ namespace Server.Emoticons
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
     using System.Xml;
 
@@ -50,7 +51,7 @@ namespace Server.Emoticons
         #region Methods
 
         public static void CheckEmotions() {
-            if (System.IO.File.Exists(IO.Paths.DataFolder + "emoticons.xml") == false) {
+            if (System.IO.File.Exists(Path.Combine(IO.Paths.DataFolder, "emoticons.xml")) == false) {
                 //SaveEmotions();
             }
         }
@@ -62,7 +63,7 @@ namespace Server.Emoticons
 
         public static void LoadEmotions(object object1) {
             try {
-                using (XmlReader reader = XmlReader.Create(IO.Paths.DataFolder + "emoticons.xml")) {
+                using (XmlReader reader = XmlReader.Create(Path.Combine(IO.Paths.DataFolder, "emoticons.xml"))) {
                     while (reader.Read()) {
                         if (reader.IsStartElement()) {
                             switch (reader.Name) {

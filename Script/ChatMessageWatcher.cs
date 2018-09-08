@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 
 using PMDCP.DatabaseConnector;
 using PMDCP.DatabaseConnector.SQLite;
+using System.IO;
 
 namespace Script {
     public static class ChatMessageWatcher {
@@ -43,8 +44,8 @@ namespace Script {
         }
 
         private static void VerifyDatabase() {
-            if (Server.IO.IO.FileExists(Server.IO.Paths.ScriptsFolder + "ScriptIO/ChatMessageWatcherDB.sqlite") == false) {
-                System.IO.File.Create(Server.IO.Paths.ScriptsFolder + "ScriptIO/ChatMessageWatcherDB.sqlite").Close();
+            if (Server.IO.IO.FileExists(Path.Combine(Server.IO.Paths.ScriptsFolder, "ScriptIO", "ChatMessageWatcherDB.sqlite")) == false) {
+                System.IO.File.Create(Path.Combine(Server.IO.Paths.ScriptsFolder, "ScriptIO", "ChatMessageWatcherDB.sqlite")).Close();
 
             }
         }

@@ -20,6 +20,7 @@ namespace Server.IO
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
 
     public class Paths
@@ -101,17 +102,17 @@ namespace Server.IO
                 startFolder += "\\";
             startFolder = System.IO.Path.GetFullPath(startFolder);
             Paths.startFolder = startFolder;
-            Paths.dataFolder = IO.ProcessPath(startFolder + "Data\\");
-            Paths.itemsFolder = IO.ProcessPath(startFolder + "Items\\");
-            Paths.npcsFolder = IO.ProcessPath(startFolder + "Npcs\\");
-            Paths.movesFolder = IO.ProcessPath(startFolder + "Moves\\");
-            Paths.storiesFolder = IO.ProcessPath(startFolder + "Stories\\");
-            Paths.rdungeonsFolder = IO.ProcessPath(startFolder + "RDungeons\\");
-            Paths.shopsFolder = IO.ProcessPath(startFolder + "Shops\\");
-            Paths.dungeonsFolder = IO.ProcessPath(startFolder + "Dungeons\\");
-            Paths.logsFolder = IO.ProcessPath(startFolder + "Logs\\");
-            Paths.scriptsFolder = IO.ProcessPath(startFolder + "Scripts\\");
-            Paths.scriptsIOFolder = IO.ProcessPath(startFolder + "Scripts\\ScriptIO\\");
+            Paths.dataFolder = Path.Combine(startFolder, "Data");
+            Paths.itemsFolder = Path.Combine(startFolder, "Items");
+            Paths.npcsFolder = Path.Combine(startFolder, "Npcs");
+            Paths.movesFolder = Path.Combine(startFolder, "Moves");
+            Paths.storiesFolder = Path.Combine(startFolder, "Stories");
+            Paths.rdungeonsFolder = Path.Combine(startFolder, "RDungeons");
+            Paths.shopsFolder = Path.Combine(startFolder, "Shops");
+            Paths.dungeonsFolder = Path.Combine(startFolder, "Dungeons");
+            Paths.logsFolder = Path.Combine(startFolder, "Logs");
+            Paths.scriptsFolder = Path.Combine(startFolder, "Scripts");
+            Paths.scriptsIOFolder = Path.Combine(startFolder, "Scripts", "ScriptIO");
 
             if (!IO.DirectoryExists(Paths.startFolder))
                 IO.CreateDirectory(Paths.startFolder);

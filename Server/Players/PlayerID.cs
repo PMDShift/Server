@@ -25,6 +25,7 @@ namespace Server.Players
     using Server.Network;
     using PMDCP.Core;
     using System.Threading;
+    using System.IO;
 
     class PlayerID
     {
@@ -260,12 +261,12 @@ namespace Server.Players
         /// </summary>
         public static void LoadIDInfo() {
             // Check if the configuration file exists, if not, create it
-            if (IO.IO.FileExists(IO.Paths.DataFolder + "playerid.dat") == false) {
+            if (IO.IO.FileExists(Path.Combine(IO.Paths.DataFolder, "playerid.dat")) == false) {
                 SaveIDInfo();
             }
             // Decrypt the configuration file into a string
             Security.Encryption crypt = new Security.Encryption(ENCRYPTION_KEY);
-            string xmlData = System.Text.Encoding.Unicode.GetString(crypt.DecryptBytes(System.IO.File.ReadAllBytes(IO.Paths.DataFolder + "playerid.dat")));
+            string xmlData = System.Text.Encoding.Unicode.GetString(crypt.DecryptBytes(System.IO.File.ReadAllBytes(Path.Combine(IO.Paths.DataFolder, "playerid.dat"))));
             using (XmlTextReader reader = new XmlTextReader(new System.IO.StringReader(xmlData))) {
                 while (reader.Read()) {
                     if (reader.IsStartElement()) {
@@ -323,7 +324,7 @@ namespace Server.Players
             }
             // Encrypt the xml string and write the encrypted value to the file
             Security.Encryption crypt = new Security.Encryption(ENCRYPTION_KEY);
-            System.IO.File.WriteAllBytes(IO.Paths.DataFolder + "playerid.dat", crypt.EncryptBytes(System.Text.Encoding.Unicode.GetBytes(output.ToString())));
+            System.IO.File.WriteAllBytes(Path.Combine(IO.Paths.DataFolder, "playerid.dat"), crypt.EncryptBytes(System.Text.Encoding.Unicode.GetBytes(output.ToString())));
         }
 
         private static string CombineIDs(string lastID, string newID) {

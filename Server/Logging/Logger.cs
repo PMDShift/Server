@@ -79,7 +79,7 @@ namespace Server.Logging
                 if (logs.TryGetValue(key, out log)) {
                     string logFilePath = key;
                     if (logFilePath.StartsWith("/")) {
-                        logFilePath = IO.Paths.LogsFolder + logFilePath.Substring(1, logFilePath.Length - 1);
+                        logFilePath = Path.Combine(IO.Paths.LogsFolder, logFilePath.Substring(1, logFilePath.Length - 1));
                     }
                     if (System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(logFilePath)) == false) {
                         System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logFilePath));

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Server.DataConverter.Items.V2
@@ -28,7 +29,7 @@ namespace Server.DataConverter.Items.V2
         {
             Item item = new Item();
             string[] parse = null;
-            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.ItemsFolder + "item" + itemNum + ".dat"))
+            using (System.IO.StreamReader read = new System.IO.StreamReader(Path.Combine(IO.Paths.ItemsFolder, "item" + itemNum + ".dat")))
             {
                 while (!(read.EndOfStream))
                 {
@@ -91,7 +92,7 @@ namespace Server.DataConverter.Items.V2
 
         public static void SaveItem(Item item, int itemNum)
         {
-            string FileName = IO.Paths.ItemsFolder + "item" + itemNum + ".dat";
+            string FileName = Path.Combine(IO.Paths.ItemsFolder, "item" + itemNum + ".dat");
             using (System.IO.StreamWriter Write = new System.IO.StreamWriter(FileName))
             {
                 Write.WriteLine("ItemData|V2");

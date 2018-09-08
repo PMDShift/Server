@@ -26,6 +26,7 @@ namespace Server
     using PMDCP.DatabaseConnector.MySql;
     using PMDCP.DatabaseConnector;
     using Server.Database;
+    using System.IO;
 
     public class Settings
     {
@@ -50,10 +51,9 @@ namespace Server
 
         public static XmlWriterSettings XmlWriterSettings { get; set; }
 
-        
 
-        public static void Initialize()
-        {
+
+        public static void Initialize() {
             XmlWriterSettings = new System.Xml.XmlWriterSettings();
             XmlWriterSettings.OmitXmlDeclaration = false;
             XmlWriterSettings.IndentChars = "  ";
@@ -63,43 +63,33 @@ namespace Server
             News = new List<string>();
         }
 
-        public static void LoadConfig()
-        {
-            using (XmlReader reader = XmlReader.Create(IO.Paths.DataFolder + "config.xml"))
-            {
-                while (reader.Read())
-                {
-                    if (reader.IsStartElement())
-                    {
-                        switch (reader.Name)
-                        {
+        public static void LoadConfig() {
+            using (XmlReader reader = XmlReader.Create(Path.Combine(IO.Paths.DataFolder, "config.xml"))) {
+                while (reader.Read()) {
+                    if (reader.IsStartElement()) {
+                        switch (reader.Name) {
                             case "GamePort":
-                                if (reader.Read())
-                                {
+                                if (reader.Read()) {
                                     GamePort = reader.ReadString().ToInt();
                                 }
                                 break;
                             case "DatabaseIP":
-                                if (reader.Read())
-                                {
+                                if (reader.Read()) {
                                     DatabaseIP = reader.ReadString();
                                 }
                                 break;
                             case "DatabasePort":
-                                if (reader.Read())
-                                {
+                                if (reader.Read()) {
                                     DatabasePort = reader.ReadString().ToInt();
                                 }
                                 break;
                             case "DatabaseUser":
-                                if (reader.Read())
-                                {
+                                if (reader.Read()) {
                                     DatabaseUser = reader.ReadString();
                                 }
                                 break;
                             case "DatabasePassword":
-                                if (reader.Read())
-                                {
+                                if (reader.Read()) {
                                     DatabasePassword = reader.ReadString();
                                 }
                                 break;
@@ -109,29 +99,23 @@ namespace Server
             }
 
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
-            {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
                 MySql database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT id, message " +
                     "FROM title WHERE title.id = 'GameName' OR title.id = 'MOTD' OR title.id = 'GameNameShort'";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
-                {
-                    switch (columnCollection["id"].ValueString)
-                    {
-                        case "GameName":
-                            {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
+                    switch (columnCollection["id"].ValueString) {
+                        case "GameName": {
                                 GameName = columnCollection["message"].ValueString;
                             }
                             break;
-                        case "GameNameShort":
-                            {
+                        case "GameNameShort": {
                                 GameNameShort = columnCollection["message"].ValueString;
                             }
                             break;
-                        case "MOTD":
-                            {
+                        case "MOTD": {
                                 MOTD = columnCollection["message"].ValueString;
                             }
                             break;
@@ -148,37 +132,29 @@ namespace Server
                    "OR start_value.id = 'StartX' " +
                    "OR start_value.id = 'StartY'";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
-                {
-                    switch (columnCollection["id"].ValueString)
-                    {
-                        case "Crossroads":
-                            {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
+                    switch (columnCollection["id"].ValueString) {
+                        case "Crossroads": {
                                 Crossroads = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "NewCharForm":
-                            {
+                        case "NewCharForm": {
                                 NewCharForm = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "NewCharSpecies":
-                            {
+                        case "NewCharSpecies": {
                                 NewCharSpecies = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartMap":
-                            {
+                        case "StartMap": {
                                 StartMap = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartX":
-                            {
+                        case "StartX": {
                                 StartX = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartY":
-                            {
+                        case "StartY": {
                                 StartY = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
@@ -187,17 +163,14 @@ namespace Server
             }
         }
 
-        public static void LoadNews()
-        {
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
-            {
+        public static void LoadNews() {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
                 MySql database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT num, news_time, message " +
                     "FROM news WHERE news.num > (SELECT COUNT(num) FROM news) - 10";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
-                {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
                     int num = columnCollection["num"].ValueString.ToInt();
 
                     News.Add("[" + columnCollection["news_time"].ValueString + "] " + columnCollection["message"].ValueString);
@@ -205,11 +178,9 @@ namespace Server
             }
         }
 
-        public static void SaveMOTD()
-        {
+        public static void SaveMOTD() {
             //save motd
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
-            {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
                 MySql database = dbConnection.Database;
 
                 database.UpdateOrInsert("title", new IDataColumn[] {
@@ -220,14 +191,12 @@ namespace Server
             }
         }
 
-        public static void AddNews(string newNews)
-        {
+        public static void AddNews(string newNews) {
             string date = DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss");
 
             News.Add("[" + date + "] " + newNews);
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
-            {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
                 MySql database = dbConnection.Database;
 
                 database.AddRow("news", new IDataColumn[] {

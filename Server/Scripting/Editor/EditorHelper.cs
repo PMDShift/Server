@@ -21,6 +21,7 @@ using System.Text;
 using System.Reflection;
 using PMDCP.Sockets;
 using Server.Network;
+using System.IO;
 
 namespace Server.Scripting.Editor
 {
@@ -42,12 +43,12 @@ namespace Server.Scripting.Editor
             System.IO.Directory.CreateDirectory(GetTempFolder(client));
             string[] files = System.IO.Directory.GetFiles(IO.Paths.ScriptsFolder, "*.cs", System.IO.SearchOption.TopDirectoryOnly);
             for (int i = 0; i < files.Length; i++) {
-                System.IO.File.Copy(files[i], GetTempFolder(client) + System.IO.Path.GetFileNameWithoutExtension(files[i]) + ".cs");
+                System.IO.File.Copy(files[i], Path.Combine(GetTempFolder(client), System.IO.Path.GetFileNameWithoutExtension(files[i]) + ".cs"));
             }
         }
 
         public static string GetTempFolder(Client client) {
-            return IO.IO.ProcessPath(IO.Paths.ScriptsFolder + "Temp" + client.Player.CharID + "\\");
+            return Path.Combine(IO.Paths.ScriptsFolder, "Temp" + client.Player.CharID);
         }
 
         public static void AppendFileListToPacket(Client client, TcpPacket packet) {
@@ -132,24 +133,24 @@ namespace Server.Scripting.Editor
             }
             foreach (string File in System.IO.Directory.GetFiles(GetTempFolder(client))) {
                 //IO.File.Delete(ScriptFolder & Path.GetFileNameWithoutExtension(File) & ".txt")
-                System.IO.File.Copy(File, IO.Paths.ScriptsFolder + System.IO.Path.GetFileNameWithoutExtension(File) + ".cs", true);
+                System.IO.File.Copy(File, Path.Combine(IO.Paths.ScriptsFolder, System.IO.Path.GetFileNameWithoutExtension(File) + ".cs"), true);
             }
         }
 
         public static string GetScriptFile(Client client, string File) {
-            return System.IO.File.ReadAllText(GetTempFolder(client) + File + ".cs");
+            return System.IO.File.ReadAllText(Path.Combine(GetTempFolder(client), File + ".cs"));
         }
 
         public static void SaveTempScript(Client client, string File, string Code) {
             if (System.IO.Directory.Exists(GetTempFolder(client)) == false) {
                 System.IO.Directory.CreateDirectory(GetTempFolder(client));
             }
-            System.IO.File.WriteAllText(GetTempFolder(client) + File + ".cs", Code);
+            System.IO.File.WriteAllText(Path.Combine(GetTempFolder(client), File + ".cs"), Code);
         }
 
         public static void AddNewClass(Client client, string ClassName) {
-            if (System.IO.File.Exists(GetTempFolder(client) + ClassName + ".cs") == false) {
-                System.IO.File.WriteAllText(GetTempFolder(client) + ClassName + ".cs", "using Server;\nusing Server.Scripting;\nusing Server.Database;\nusing System;\nusing System.Drawing;\nusing System.Xml;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Text;\nusing System.Windows.Forms;\n\nnamespace Script \n{\npublic class " + ClassName + "\n{\n\n}\n}");
+            if (System.IO.File.Exists(Path.Combine(GetTempFolder(client), ClassName + ".cs")) == false) {
+                System.IO.File.WriteAllText(Path.Combine(GetTempFolder(client), ClassName + ".cs"), "using Server;\nusing Server.Scripting;\nusing Server.Database;\nusing System;\nusing System.Drawing;\nusing System.Xml;\nusing System.Collections.Generic;\nusing System.Linq;\nusing System.Text;\nusing System.Windows.Forms;\n\nnamespace Script \n{\npublic class " + ClassName + "\n{\n\n}\n}");
                 Messenger.SendDataTo(client, TcpPacket.CreatePacket("scriptfiledata", ClassName, GetScriptFile(client, ClassName)));
             }
         }
