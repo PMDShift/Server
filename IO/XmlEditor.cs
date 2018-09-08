@@ -42,7 +42,7 @@ namespace Server.IO
         /// <param name="rootNode">The root node of the Xml File</param>
         public XmlEditor(string xmlPath, string rootNode)
         {
-            path = IO.ProcessPath(xmlPath);
+            this.path = xmlPath;
             this.rootNode = rootNode;
             CheckXMLFile();
             LoadDocument();
