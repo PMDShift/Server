@@ -1,17 +1,17 @@
-# PMDCP Core Server
+# PMD: Shift! Core Server
 
 ## Downloading
 
 To download this repository, run:
 ```
-git clone --recursive https://github.com/pmdcp/Server
+git clone --recursive https://github.com/PMDShift/Server
 ```
 
 This will download the core server files, as well as all dependancies.
 
 ## Configuring Your Database
 
-You will need to install [MySQL](http://dev.mysql.com/downloads/mysql/). The prefered version is 5.6, although the server will likely run with later versions.
+You will need to install [MySQL](http://dev.mysql.com/downloads/mysql/). The prefered version is 8.0, although the server will likely run with later versions.
 
 Once installed, extract the files from the *Content_Data.zip* file. 
 Run *LoadTableBackup.bat*. You will be prompted for your database username, database password, and database version. Input those fields and your database will be loaded with the default datasets.
