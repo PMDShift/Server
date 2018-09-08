@@ -30,10 +30,10 @@ namespace DataManager.Players
     {
         #region Methods
 
-        public static void ChangePassword(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string currentPassword, string newPassword) {
-            database.UpdateRow("accounts", new IDataColumn[] {
-                database.CreateColumn(false, "Password", newPassword)
-            }, "accounts.AccountName = \'" + database.VerifyValueString(accountName) + "\' AND accounts.Password = \'" + database.VerifyValueString(currentPassword) + "\'");
+        public static void ChangePassword(IDatabase database, string accountName, string currentPassword, string newPassword) {
+            database.UpdateRow("accounts", new IGenericDataColumn[] {
+                database.CreateColumn(false, "Password")
+            }, "accounts.AccountName = @AccountName AND accounts.Password = @CurrentPassword", new { AccountName = accountName, Password = newPassword, CurrentPassword = currentPassword });
         }
 
         public static void ChangePlayerEmail(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string currentEmail, string newEmail) {
@@ -831,7 +831,7 @@ namespace DataManager.Players
 
         public static bool LoadPlayerData(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT accounts.Email, characteristics.Name, characteristics.Access, characteristics.ActiveSlot, characteristics.PK, " +
-                "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " + 
+                "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " +
                 "expkit.AvailableModules, " +
                 "location.Map, location.X, location.Y, location.Direction, " +
                 "guild.GuildName, guild.GuildAccess, " +
@@ -1038,7 +1038,7 @@ namespace DataManager.Players
                 "FROM guild " +
                 "WHERE guild.CharID = \'" + charID + "\';";
 
-            
+
             List<DataColumnCollection> rows = database.RetrieveRows(query);
             if (rows != null) {
                 return rows[0]["GuildName"].ValueString;
