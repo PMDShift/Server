@@ -77,7 +77,7 @@
     <ItemGroup>
       <ScriptFiles Include="$(ProjectDir)..\Script\**\*.cs" />
       <ScriptSyntaxFile Include="$(ProjectDir)..\Script\CSharp.syn" />
-      <DataFiles Include="$(ProjectDir)..\Data\Data\Config.xml" />
+      <DataFiles Include="$(ProjectDir)..\Data\Data\config.xml" />
     </ItemGroup>
     <Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(OutputPath)publish\Scripts\%(RecursiveDir)" />
     <Copy SourceFiles="@(ScriptSyntaxFile)" DestinationFolder="$(OutputPath)publish\Scripts\" />
