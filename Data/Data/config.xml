@@ -4,7 +4,7 @@
 		<GamePort>4001</GamePort>
 		<DatabaseIP>localhost</DatabaseIP>
 		<DatabasePort>3306</DatabasePort>
-		<DatabaseUser>UsernameHere</DatabaseUser>
-		<DatabasePassword>PasswordHere</DatabasePassword>
+		<DatabaseUser>root</DatabaseUser>
+		<DatabasePassword>root</DatabasePassword>
 	</Settings>
 </Data>
