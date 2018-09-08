@@ -26,7 +26,7 @@ namespace Server
     public class Text
     {
         #region Fields
-
+        #region OldColors
         static Color black = System.Drawing.Color.Black; // 01
         static Color blue = System.Drawing.Color.Blue; // 02
         static Color brightBlue = System.Drawing.Color.LightBlue; // 12
@@ -45,7 +45,36 @@ namespace Server
         static Color white = System.Drawing.Color.White; // default
         static Color whiteSmoke = System.Drawing.Color.WhiteSmoke; // 00
         static Color yellow = System.Drawing.Color.Yellow; // 08
-
+        #endregion OldColors
+            
+        #region NewColors
+        public static Color BoxReward { get; } = Color.FromArgb(0xffcece);		// same as Item
+		public static Color Unselectable { get; } = Color.FromArgb(0xff0000);	// also used in rank S missions
+		public static Color UnknownC { get; } = Color.FromArgb(0xffff00);		// same as Teammate
+		public static Color Default { get; } = Color.FromArgb(0xffffff);		// also used in rank E missions
+		public static Color Emphasis { get; } = Color.FromArgb(0x00ffff);		// same as NPC
+		public static Color Teammate { get; } = Color.FromArgb(0xffff00);		// also used in rank *1-*9 missions
+		public static Color Money { get; } = Color.FromArgb(0x00ffff);			// same as NPC
+		public static Color Trap { get; } = Color.FromArgb(0xff7b7b);
+		public static Color Item { get; } = Color.FromArgb(0xffcece);           // also used in rank D missions
+		public static Color MoveEffect { get; } = Color.FromArgb(0xffffa5);
+		public static Color SpeciesName { get; } = Color.FromArgb(0x00ff00);
+		public static Color UnknownL { get; } = Color.FromArgb(0x00e763);
+		public static Color Move { get; } = Color.FromArgb(0x00ff00);           // also used in rank C missions
+		public static Color NPC { get; } = Color.FromArgb(0x00ffff);            // also used in rank A missions
+		public static Color UnknownO { get; } = Color.FromArgb(0x009c00);
+		public static Color Location { get; } = Color.FromArgb(0xffc663);       // also used in rank B missions
+		public static Color UnknownQ { get; } = Color.FromArgb(0x0084ff);
+		public static Color ShopPrice { get; } = Color.FromArgb(0x42ff42);
+		public static Color MultiSelect { get; } = Color.FromArgb(0x6384e7);    // should be used as bg/highlight color
+		public static Color Transparent { get; } = Color.FromArgb(0x000000);    // could be used for drop shadows?
+		public static Color TreasureBox { get; } = Color.FromArgb(0xffff00);    // same as Teammate
+		public static Color Number { get; } = Color.FromArgb(0x00ffff);         // same as NPC
+		public static Color UnknownW { get; } = Color.FromArgb(0xff0000);       // same as Unselectable
+		public static Color Team { get; } = Color.FromArgb(0xffa5ff);
+		public static Color Player { get; } = Color.FromArgb(0x009cff);
+		public static Color ExclusiveItem { get; } = Color.FromArgb(0x8484ff);
+        #endregion NewColors
         #endregion Fields
 
         #region Properties
