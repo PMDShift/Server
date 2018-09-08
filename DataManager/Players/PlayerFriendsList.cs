@@ -97,7 +97,7 @@ namespace DataManager.Players
                 QuickRemove(friendIndex);
 
                 if (UpdateOnDemand && database != null) {
-                    database.DeleteRow("friends", "CharID = \'" + ownerCharID + "\' AND FriendName = \'" + name + "\'");
+                    database.DeleteRow("friends", "CharID = @CharID AND FriendName = @FriendName", new { CharID = ownerCharID, FriendName = name });
                 }
             } else {
                 error = 1;

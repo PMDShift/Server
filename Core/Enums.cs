@@ -397,6 +397,12 @@ namespace Server {
             Ban = 2
         }
 
+        public enum BanMethod {
+            PlayerIP = 0,
+            PlayerMAC = 1,
+            PlayerID = 2
+        }
+
         public enum Coloration {
             Normal,
             Shiny

@@ -3153,7 +3153,7 @@ namespace Script
                                 Messenger.SendPlayerData(n);
                                 using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
                                 {
-                                    Bans.RemoveBan(dbConnection, "BannedPlayerID", n.Player.CharID);
+                                    Bans.RemoveBan(dbConnection, Enums.BanMethod.PlayerID, n.Player.CharID);
                                 }
                             }
                         }

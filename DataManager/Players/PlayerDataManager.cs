@@ -37,9 +37,9 @@ namespace DataManager.Players
         }
 
         public static void ChangePlayerEmail(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string currentEmail, string newEmail) {
-            database.UpdateRow("accounts", new IDataColumn[] {
-                database.CreateColumn(false, "Email", newEmail)
-            }, "accounts.AccountName = \'" + database.VerifyValueString(accountName) + "\' AND accounts.Email = \'" + database.VerifyValueString(currentEmail) + "\'");
+            database.UpdateRow("accounts", new IGenericDataColumn[] {
+                database.CreateColumn(false, "Email")
+            }, "accounts.AccountName = @AccountName AND accounts.Email = @CurrentEmail", new { AccountName = accountName, CurrentEmail = currentEmail, Email = newEmail });
         }
 
         public static void CreateNewAccount(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string encryptedPassword, string email) {
