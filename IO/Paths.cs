@@ -98,8 +98,6 @@ namespace Server.IO
         static string scriptsIOFolder;
 
         internal static void Initialize(string startFolder) {
-            if (startFolder.EndsWith("\\") == false)
-                startFolder += "\\";
             startFolder = System.IO.Path.GetFullPath(startFolder);
             Paths.startFolder = startFolder;
             Paths.dataFolder = Path.Combine(startFolder, "Data");
