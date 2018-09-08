@@ -98,6 +98,30 @@ namespace Server
                 }
             }
 
+            var gamePortEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_GAME_PORT");
+            if (!string.IsNullOrEmpty(gamePortEnvironmentVariable)) {
+                GamePort = gamePortEnvironmentVariable.ToInt();
+            }
+
+            var databaseIPEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_IP");
+            if (!string.IsNullOrEmpty(databaseIPEnvironmentVariable)) {
+                DatabaseIP = databaseIPEnvironmentVariable;
+            }
+
+            var databasePortEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_PORT");
+            if (!string.IsNullOrEmpty(databasePortEnvironmentVariable)) {
+                DatabasePort = databasePortEnvironmentVariable.ToInt();
+            }
+
+            var databaseUserEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_USER");
+            if (!string.IsNullOrEmpty(databaseUserEnvironmentVariable)) {
+                DatabaseUser = databaseUserEnvironmentVariable;
+            }
+
+            var databasePasswordEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_PASSWORD");
+            if (!string.IsNullOrEmpty(databasePasswordEnvironmentVariable)) {
+                DatabasePassword = databasePasswordEnvironmentVariable;
+            }
 
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
                 MySql database = dbConnection.Database;
