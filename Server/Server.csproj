@@ -73,19 +73,18 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release' ">
+  <Target Name="_CopyPublishFiles" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release' ">
     <ItemGroup>
       <ScriptFiles Include="$(ProjectDir)..\Script\**\*.cs" />
       <ScriptSyntaxFile Include="$(ProjectDir)..\Script\CSharp.syn" />
-      <DataFiles Include="$(ProjectDir)..\Data\**\*" Exclude="$(ProjectDir)..\Data\Data\Config.xml" />
+      <DataFiles Include="$(ProjectDir)..\Data\Data\Config.xml" />
     </ItemGroup>
-    <Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(OutputPath)Scripts\%(RecursiveDir)" />
-    <Copy SourceFiles="@(ScriptSyntaxFile)" DestinationFolder="$(OutputPath)Scripts\" />
+    <Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(OutputPath)publish\Scripts\%(RecursiveDir)" />
+    <Copy SourceFiles="@(ScriptSyntaxFile)" DestinationFolder="$(OutputPath)publish\Scripts\" />
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(OutputPath)publish\Data\%(RecursiveDir)" />
   </Target>
   <Target Name="_CopyDataFiles" BeforeTargets="AfterBuild" Condition="'$(Configuration)' == 'Debug'">
     <ItemGroup>
-      <ScriptFiles Include="$(ProjectDir)..\Script\**\*.cs" />
-      <ScriptSyntaxFile Include="$(ProjectDir)..\Script\CSharp.syn" />
       <DataFiles Include="$(ProjectDir)..\Data\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(OutputPath)%(RecursiveDir)" />
