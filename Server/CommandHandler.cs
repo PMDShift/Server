@@ -28,10 +28,7 @@ namespace Server
 {
     class CommandHandler
     {
-        Forms.MainUI mainUI;
-
-        public CommandHandler(Forms.MainUI mainUI) {
-            this.mainUI = mainUI;
+        public CommandHandler() {
         }
 
         public void ProcessCommand(int activeLine, string command) {
@@ -49,12 +46,11 @@ namespace Server
                     }
                     break;
                 case "/clear": {
-                        mainUI.ClearCommands();
                     }
                     break;
                 case "/global": {
                         Messenger.GlobalMsg(fullArgs, Text.White);
-                        mainUI.AddCommandLine("Global: " + fullArgs);
+                        ServerConsole.WriteLine("Global: " + fullArgs);
                     }
                     break;
                 case "/masskick": {
@@ -64,17 +60,17 @@ namespace Server
                                 Messenger.AlertMsg(i, "You have been kicked by the server!");
                             }
                         }
-                        mainUI.AddCommandLine("Everyone has been kicked.");
+                        ServerConsole.WriteLine("Everyone has been kicked.");
                     }
                     break;
                 case "/dumpstats": {
                         Statistics.PacketStatistics.DumpStatistics();
-                        mainUI.AddCommandLine("Packet statistics dumped to database.");
+                        ServerConsole.WriteLine("Packet statistics dumped to database.");
                     }
                     break;
                 case "/clearstats": {
                         Statistics.PacketStatistics.ClearStatistics();
-                        mainUI.AddCommandLine("Packet statistics cleared."); 
+                        ServerConsole.WriteLine("Packet statistics cleared."); 
                     }
                     break;
                 case "/masswarp": {
@@ -83,22 +79,22 @@ namespace Server
                             int x = fullCommand.CommandArgs[2].ToInt(-1);
                             int y = fullCommand.CommandArgs[3].ToInt(-1);
                             if (map <= 0) {
-                                mainUI.AddCommandLine("Invalid Map.");
+                                ServerConsole.WriteLine("Invalid Map.");
                                 break;
                             } else if (x == -1) {
-                                mainUI.AddCommandLine("Invalid X coordinate.");
+                                ServerConsole.WriteLine("Invalid X coordinate.");
                                 break;
                             } else if (y == -1) {
-                                mainUI.AddCommandLine("Invalid Y coordinate.");
+                                ServerConsole.WriteLine("Invalid Y coordinate.");
                                 break;
                             }
                             // TODO: Mass Warp
                             //if (x > MapManager.Maps[map].MaxX) {
-                            //    mainUI.AddCommandLine("Invalid X coordinate.");
+                            //    ServerConsole.WriteLine("Invalid X coordinate.");
                             //    break;
                             //}
                             //if (y > MapManager.Maps[map].MaxY) {
-                            //    mainUI.AddCommandLine("Invalid Y coordinate.");
+                            //    ServerConsole.WriteLine("Invalid Y coordinate.");
                             //    break;
                             //}
                             foreach (Client i in ClientManager.GetClients()) {
@@ -107,9 +103,9 @@ namespace Server
                                     Messenger.PlayerWarp(i, map, x, y);
                                 }
                             }
-                            mainUI.AddCommandLine("Everyone has been warped.");
+                            ServerConsole.WriteLine("Everyone has been warped.");
                         } else {
-                            mainUI.AddCommandLine("Invalid arguments.");
+                            ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
@@ -117,14 +113,14 @@ namespace Server
                         if (fullCommand.CommandArgs.Count == 2) {
                             Client client = ClientManager.FindClient(fullCommand.CommandArgs[1]);
                             if (client == null) {
-                                mainUI.AddCommandLine("Player is offline.");
+                                ServerConsole.WriteLine("Player is offline.");
                             } else {
                                 Messenger.GlobalMsg(client.Player.Name + " has been kicked by the server!", Text.White);
                                 Messenger.AlertMsg(client, "You have been kicked by the server!");
-                                mainUI.AddCommandLine(client.Player.Name + " has been kicked!");
+                                ServerConsole.WriteLine(client.Player.Name + " has been kicked!");
                             }
                         } else {
-                            mainUI.AddCommandLine("Invalid arguments.");
+                            ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
@@ -132,19 +128,19 @@ namespace Server
                         if (fullCommand.CommandArgs.Count == 5) {
                             Client client = ClientManager.FindClient(fullCommand.CommandArgs[1]);
                             if (client == null) {
-                                mainUI.AddCommandLine("Player is offline.");
+                                ServerConsole.WriteLine("Player is offline.");
                             } else {
                                 int mapNum = fullCommand.CommandArgs[2].ToInt(-1);
                                 int x = fullCommand.CommandArgs[3].ToInt(-1);
                                 int y = fullCommand.CommandArgs[4].ToInt(-1);
                                 if (mapNum <= 0) {
-                                    mainUI.AddCommandLine("Invalid Map.");
+                                    ServerConsole.WriteLine("Invalid Map.");
                                     break;
                                 } else if (x == -1) {
-                                    mainUI.AddCommandLine("Invalid X coordinate.");
+                                    ServerConsole.WriteLine("Invalid X coordinate.");
                                     break;
                                 } else if (y == -1) {
-                                    mainUI.AddCommandLine("Invalid Y coordinate.");
+                                    ServerConsole.WriteLine("Invalid Y coordinate.");
                                     break;
                                 }
                                 IMap map;
@@ -156,19 +152,19 @@ namespace Server
                                     }
                                 }
                                 if (x > map.MaxX) {
-                                    mainUI.AddCommandLine("Invalid X coordinate.");
+                                    ServerConsole.WriteLine("Invalid X coordinate.");
                                     break;
                                 }
                                 if (y > map.MaxY) {
-                                    mainUI.AddCommandLine("Invalid Y coordinate.");
+                                    ServerConsole.WriteLine("Invalid Y coordinate.");
                                     break;
                                 }
                                 Messenger.PlayerMsg(client, "You have been warped by the server!", Text.White);
                                 Messenger.PlayerWarp(client, mapNum, x, y);
-                                mainUI.AddCommandLine(client.Player.Name + " has been warped.");
+                                ServerConsole.WriteLine(client.Player.Name + " has been warped.");
                             }
                         } else {
-                            mainUI.AddCommandLine("Invalid arguments.");
+                            ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
@@ -177,19 +173,19 @@ namespace Server
                             string map = fullCommand.CommandArgs[1];
                             // Check if the map is active
                             if (!MapManager.IsMapActive(map)) {
-                                mainUI.AddCommandLine("Invalid Map.");
+                                ServerConsole.WriteLine("Invalid Map.");
                                 break;
                             }
                             Messenger.MapMsg(map, fullCommand.CommandArgs[2], Text.DarkGrey);
-                            mainUI.AddCommandLine("Map Msg (Map " + map.ToString() + "): " + fullCommand.CommandArgs[2]);
+                            ServerConsole.WriteLine("Map Msg (Map " + map.ToString() + "): " + fullCommand.CommandArgs[2]);
                         } else {
-                            mainUI.AddCommandLine("Invalid arguments.");
+                            ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
                 case "/reloadscripts": {
                         Scripting.ScriptManager.Reload();
-                        mainUI.AddCommandLine("Scripts reloaded.");
+                        ServerConsole.WriteLine("Scripts reloaded.");
                     }
                     break;
                 case "/players": {
@@ -201,38 +197,38 @@ namespace Server
                                 players += i.Player.Name + "\r\n";
                             }
                         }
-                        mainUI.AddCommandLine("Players online: \r\n" + players);
-                        mainUI.AddCommandLine("There are " + count.ToString() + " players online");
+                        ServerConsole.WriteLine("Players online: \r\n" + players);
+                        ServerConsole.WriteLine("There are " + count.ToString() + " players online");
                     }
                     break;
                 case "/test": {
                         //Email.Email.SendEmail("test");
-                        //mainUI.AddCommandLine("Mail sent!");
-                        //mainUI.AddCommandLine("There are currently no benchmarking tests");
+                        //ServerConsole.WriteLine("Mail sent!");
+                        //ServerConsole.WriteLine("There are currently no benchmarking tests");
                         //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
                         //watch.Start();
                         //MapGeneralInfo genInfo = MapManager.RetrieveMapGeneralInfo(10);
                         //watch.Stop();
-                        //mainUI.AddCommandLine("Elapsed, New: " + watch.Elapsed.ToString());
+                        //ServerConsole.WriteLine("Elapsed, New: " + watch.Elapsed.ToString());
                         //watch.Reset();
                         //watch.Start();
                         //Map map = MapManager.LoadMap(10);
                         //watch.Stop();
-                        //mainUI.AddCommandLine("Elapsed, Old: " + watch.Elapsed.ToString());
-                        //mainUI.AddCommandLine("Name: " + genInfo.Name);
+                        //ServerConsole.WriteLine("Elapsed, Old: " + watch.Elapsed.ToString());
+                        //ServerConsole.WriteLine("Name: " + genInfo.Name);
                     }
                     break;
                 case "/finditem": {
                         int itemsFound = 0;
                         for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++) {
                             if (ItemManager.Items[i].Name.ToLower().StartsWith(fullCommand.CommandArgs[1].ToLower())) {
-                                mainUI.AddCommandLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
+                                ServerConsole.WriteLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
                                 itemsFound++;
                                 //return;
                             }
                         }
                         if (itemsFound == 0) {
-                            mainUI.AddCommandLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
+                            ServerConsole.WriteLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
                         }
                     }
                     break;
@@ -240,31 +236,30 @@ namespace Server
                         int itemsFound = 0;
                         for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++) {
                             if (ItemManager.Items[i].Name.ToLower().Contains(fullCommand.CommandArgs[1].ToLower())) {
-                                mainUI.AddCommandLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
+                                ServerConsole.WriteLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
                                 itemsFound++;
                                 //return;
                             }
                         }
                         if (itemsFound == 0) {
-                            mainUI.AddCommandLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
+                            ServerConsole.WriteLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
                         }
                     }
                     break;
                 case "/calcwm": {
-                        mainUI.AddCommandLine("Factorial: " + Server.Math.CalculateFactorial(fullCommand.CommandArgs[1].ToInt()).ToString("R"));
+                        ServerConsole.WriteLine("Factorial: " + Server.Math.CalculateFactorial(fullCommand.CommandArgs[1].ToInt()).ToString("R"));
                     }
                     break;
                 case "/gmmode": {
                         Globals.GMOnly = !Globals.GMOnly;
-                        mainUI.AddCommandLine("GM Only Mode Active: " + Globals.GMOnly);
+                        ServerConsole.WriteLine("GM Only Mode Active: " + Globals.GMOnly);
                     }
                     break;
                 default: {
-                    Scripting.ScriptManager.InvokeSub("ProcessServerCommand", mainUI, fullCommand, fullArgs);
+                    Scripting.ScriptManager.InvokeSub("ProcessServerCommand", fullCommand, fullArgs);
                     }
                     break;
             }
-            mainUI.CommandComplete(activeLine, command);
         }
 
         internal bool IsValidCommand(string command) {
@@ -296,20 +291,20 @@ namespace Server
         }
 
         private void DisplayHelp() {
-            mainUI.AddCommandLine("-=- Server Command Help -=-");
-            mainUI.AddCommandLine("Available Commands:");
-            mainUI.AddCommandLine("/help - Shows help");
-            mainUI.AddCommandLine("/clear - Clears the command prompt");
-            mainUI.AddCommandLine("/global [string]msg - Sends a global message");
-            mainUI.AddCommandLine("/masskick - Kicks all players, excluding staff");
-            mainUI.AddCommandLine("/masswarp [int]map [int]x [int]y - Warps all players to the specified location");
-            mainUI.AddCommandLine("/kick [string]playername - Kicks the player specified");
-            mainUI.AddCommandLine("/warp [string]playername [int]map [int]x [int]y - Warps the player to the specified location");
-            mainUI.AddCommandLine("/mapmsg [int]mapnum [string]msg - Sends a message to the map");
-            mainUI.AddCommandLine("/reloadscripts - Reloads the scripts");
-            mainUI.AddCommandLine("/togglescripts [bool]value - Turns the scripts on/off based on the value");
-            mainUI.AddCommandLine("/players - Gets a list of all online players");
-            Scripting.ScriptManager.InvokeSub("DisplayServerCommandHelp", mainUI);
+            ServerConsole.WriteLine("-=- Server Command Help -=-");
+            ServerConsole.WriteLine("Available Commands:");
+            ServerConsole.WriteLine("/help - Shows help");
+            ServerConsole.WriteLine("/clear - Clears the command prompt");
+            ServerConsole.WriteLine("/global [string]msg - Sends a global message");
+            ServerConsole.WriteLine("/masskick - Kicks all players, excluding staff");
+            ServerConsole.WriteLine("/masswarp [int]map [int]x [int]y - Warps all players to the specified location");
+            ServerConsole.WriteLine("/kick [string]playername - Kicks the player specified");
+            ServerConsole.WriteLine("/warp [string]playername [int]map [int]x [int]y - Warps the player to the specified location");
+            ServerConsole.WriteLine("/mapmsg [int]mapnum [string]msg - Sends a message to the map");
+            ServerConsole.WriteLine("/reloadscripts - Reloads the scripts");
+            ServerConsole.WriteLine("/togglescripts [bool]value - Turns the scripts on/off based on the value");
+            ServerConsole.WriteLine("/players - Gets a list of all online players");
+            Scripting.ScriptManager.InvokeSub("DisplayServerCommandHelp");
         }
 
 

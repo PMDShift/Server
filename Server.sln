@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{0F397789-1719-47E8-B83E-45B721981B73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{0F397789-1719-47E8-B83E-45B721981B73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "IO\IO.csproj", "{6D9BB0A3-AFC1-402B-A596-E2FA03C6C4B5}"
 EndProject
@@ -23,17 +23,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDungeons", "RDungeons\RDun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Script", "Script\Script.csproj", "{0E3F328A-88DD-46B0-8B3B-99878EFE0BEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMDCP.Core", "framework\Core\PMDCP.Core.csproj", "{2BD1EB8D-04DB-4C04-9AB8-8965B42E7CF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.Core", "framework\Core\PMDCP.Core.csproj", "{2BD1EB8D-04DB-4C04-9AB8-8965B42E7CF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMDCP.DatabaseConnector", "framework\DatabaseConnector\PMDCP.DatabaseConnector.csproj", "{518980B1-74D8-4760-8A39-E4192F42F92A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.DatabaseConnector", "framework\DatabaseConnector\PMDCP.DatabaseConnector.csproj", "{518980B1-74D8-4760-8A39-E4192F42F92A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMDCP.Net", "framework\Net\PMDCP.Net.csproj", "{1847A683-B574-4236-947E-EA2130C2648A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.Net", "framework\Net\PMDCP.Net.csproj", "{1847A683-B574-4236-947E-EA2130C2648A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMDCP.Compression", "framework\Compression\PMDCP.Compression.csproj", "{496E2A61-21B4-4403-91DB-60B1F7826684}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.Compression", "framework\Compression\PMDCP.Compression.csproj", "{496E2A61-21B4-4403-91DB-60B1F7826684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMDCP.Sockets", "framework\Sockets\PMDCP.Sockets.csproj", "{2469E594-4F97-49E4-80CD-DA99D76132BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.Sockets", "framework\Sockets\PMDCP.Sockets.csproj", "{2469E594-4F97-49E4-80CD-DA99D76132BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManager", "DataManager\DataManager.csproj", "{871F2374-F17B-4C40-8479-589553184B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataManager", "DataManager\DataManager.csproj", "{871F2374-F17B-4C40-8479-589553184B1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6395EB24-1D71-4E04-8B03-42F17FCC345A}"
 	ProjectSection(SolutionItems) = preProject
@@ -59,16 +59,16 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|x86.ActiveCfg = Debug|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|x86.Build.0 = Debug|x86
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Debug|x86.Build.0 = Debug|Any CPU
 		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Mixed Platforms.Build.0 = Release|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|x86.ActiveCfg = Release|x86
-		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|x86.Build.0 = Release|x86
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}.Release|x86.Build.0 = Release|Any CPU
 		{0F397789-1719-47E8-B83E-45B721981B73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F397789-1719-47E8-B83E-45B721981B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F397789-1719-47E8-B83E-45B721981B73}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

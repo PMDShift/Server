@@ -715,7 +715,7 @@ namespace Server.Players
                         mapsToDelete.Clear();
                     }
                 } catch (Exception ex) {
-                    System.Windows.Forms.MessageBox.Show("Map: " + MapID + System.Environment.NewLine + ex.ToString());
+                    ServerConsole.WriteLine("Map: " + MapID + System.Environment.NewLine + ex.ToString());
                 } finally {
                     dataLock.ExitWriteLock();
                 }

@@ -195,7 +195,7 @@ namespace Server.Network
                     }
                     catch (Exception ex)
                     {
-                        System.Windows.Forms.MessageBox.Show(ex.ToString());
+                        ServerConsole.WriteLine(ex.ToString());
                     }
                     finally
                     {

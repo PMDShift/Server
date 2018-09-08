@@ -114,9 +114,11 @@ namespace Server.Scripting.Editor
             int i = 1;
             TcpPacket packet = new TcpPacket("scriptediterrors");
             packet.AppendParameter(ScriptManager.Errors.Count.ToString());
-            foreach (System.CodeDom.Compiler.CompilerError Err in ScriptManager.Errors) {
-                if (Err.ErrorText.ToLower().Contains("not a valid win32") == false) {
-                    packet.AppendParameters(i.ToString(), Err.Line.ToString(), Err.IsWarning.ToString(), Err.ErrorText);
+            foreach (var Err in ScriptManager.Errors) {
+                var errorMessage = Err.GetMessage();
+
+                if (Err.GetMessage().ToLower().Contains("not a valid win32") == false) {
+                    packet.AppendParameters(i.ToString(), Err.Location.GetLineSpan().StartLinePosition.Line.ToString(), "false", errorMessage);
                     i += 1;
                 }
             }

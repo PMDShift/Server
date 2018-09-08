@@ -4083,7 +4083,8 @@ namespace Server.Network
                             }
                             PlayerManager.SavingEnabled = false;
 
-                            System.Windows.Forms.Application.Restart();
+                            // TODO: Restart server?
+                            //System.Windows.Forms.Application.Restart();
                             System.Environment.Exit(0);
                         }
                         break;

@@ -33,8 +33,6 @@ namespace Server
 
         public static Enums.Time ServerTime { get; set; }
 
-        public static Forms.MainUI MainUI { get; set; }
-
         public static Command CommandLine { get; set; }
 
         public static bool ServerClosed { get; set; }

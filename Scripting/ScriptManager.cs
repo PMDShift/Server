@@ -20,8 +20,12 @@ namespace Server.Scripting
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Reflection;
     using System.Text;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.Text;
     using PMDCP.Core;
 
     public class ScriptManager
@@ -30,7 +34,7 @@ namespace Server.Scripting
 
         static ListPair<string, IAICore> AIInstances;
         static ListPair<string, Type> AITypes;
-        static List<System.CodeDom.Compiler.CompilerError> errors;
+        static List<Diagnostic> errors;
         static Assembly script;
         static string scriptFolder;
         static Type type;
@@ -44,7 +48,7 @@ namespace Server.Scripting
             set;
         }
 
-        public static List<System.CodeDom.Compiler.CompilerError> Errors {
+        public static List<Diagnostic> Errors {
             get { return errors; }
         }
 
@@ -163,49 +167,41 @@ namespace Server.Scripting
         }
 
         private static Assembly Compile(string[] files) {
-            errors = new List<System.CodeDom.Compiler.CompilerError>();
+            errors = new List<Diagnostic>();
 
-            Microsoft.CSharp.CSharpCodeProvider provider;
-            Dictionary<string, string> param = new Dictionary<string, string>();
-            param.Add("CompilerVersion", "v4.0");
-            provider = new Microsoft.CSharp.CSharpCodeProvider(param);
-            System.CodeDom.Compiler.CompilerParameters options = new System.CodeDom.Compiler.CompilerParameters();
+            var currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            options.GenerateInMemory = true;
-            options.TreatWarningsAsErrors = false;
-            options.IncludeDebugInformation = true;
+            var assemblies = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(';');
 
-            List<string> refs = new List<string>();
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            for (int i = 0; i < assemblies.Length; i++) {
-                if (!assemblies[i].FullName.Contains("System.") && !assemblies[i].FullName.Contains("Microsoft.")) {
-                    refs.Add(System.IO.Path.GetFileName(assemblies[i].Location));
-                    //refs.Add(assemblies[i].Location);
+            var references = new List<MetadataReference>();
+            foreach (var referenceAssembly in assemblies) {
+                references.Add(MetadataReference.CreateFromFile(referenceAssembly));
+            }
 
+            var syntaxTrees = new List<SyntaxTree>();
+            foreach (var file in files) {
+                using (var fileStream = new FileStream(file, FileMode.Open)) {
+                    var sourceText = SourceText.From(fileStream);
+
+                    syntaxTrees.Add(SyntaxFactory.ParseSyntaxTree(sourceText));
                 }
             }
-            refs.Add("System.dll");
-            refs.Add("System.Data.dll");
-            refs.Add("System.Drawing.dll");
-            refs.Add("System.Xml.dll");
-            refs.Add("System.Windows.Forms.dll");
-            //refs.Add("DatabaseConnector.dll");
-            refs.Add("System.Core.dll");
-            refs.Add("MySql.Data.dll");
-            refs.Add("DataManager.dll");
-            refs.Add("Server.RDungeons.dll");
-            refs.Add(Assembly.GetEntryAssembly().CodeBase);
-            options.ReferencedAssemblies.AddRange(refs.ToArray());
+            string fileName = "CompiledScript.dll";
 
-            System.CodeDom.Compiler.ICodeCompiler compiler = provider.CreateCompiler();
-            System.CodeDom.Compiler.CompilerResults results = compiler.CompileAssemblyFromFileBatch(options, files);
+            var compilation = CSharpCompilation.Create(fileName)
+              .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+              .AddReferences(references)
+              .AddSyntaxTrees(syntaxTrees);
 
-            foreach (System.CodeDom.Compiler.CompilerError err in results.Errors) {
-                errors.Add(err);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var compilationResult = compilation.Emit(path);
+
+            foreach (var diagnostic in compilationResult.Diagnostics) {
+                errors.Add(diagnostic);
             }
 
-            if (results.Errors.Count == 0) {
-                return results.CompiledAssembly;
+            if (compilationResult.Success) {
+                return System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
             } else {
                 return null;
             }

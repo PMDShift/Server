@@ -23,6 +23,7 @@ using System.Threading;
 using Server.Network;
 using System.Threading.Tasks;
 using Open.Nat;
+using System.Reflection;
 
 namespace Server
 {
@@ -39,7 +40,7 @@ namespace Server
             if (overridePath > -1) {
                 startFolder = Globals.CommandLine[overridePath + 1];
             } else {
-                startFolder = System.Windows.Forms.Application.StartupPath;
+                startFolder = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             }
 
             Globals.LiveTime = new System.Diagnostics.Stopwatch();
@@ -53,15 +54,10 @@ namespace Server
             Players.PlayerID.Initialize();
             Players.PlayerID.LoadIDInfo();
 
-            ForwardPorts();
-
-            Forms.LoadingUI loading = new Forms.LoadingUI();
-            loading.Text = "Loading...";
-
-            loading.Show();
+            //ForwardPorts();
 
             Thread t = new Thread(new ParameterizedThreadStart(LoadServerBackground));
-            t.Start(loading);
+            t.Start();
         }
 
         private static async Task ForwardPorts()
@@ -74,32 +70,27 @@ namespace Server
         }
 
         private static void LoadServerBackground(Object param) {
-            Forms.LoadingUI loading = param as Forms.LoadingUI;
             System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LoadDatasBackground));
             t.Name = "Data Load Thread";
-            t.Start(loading);
+            t.Start();
 
             resetEvent.WaitOne();
 
-            Globals.MainUI = new Forms.MainUI();
-
-            loading.UpdateStatus("Initializing TCP...");
+            ServerConsole.WriteLine("Initializing TCP...");
 
             NetworkManager.Initialize();
             NetworkManager.TcpListener.Listen(System.Net.IPAddress.Any, Settings.GamePort);
 
-            loading.Close(true);
+            ServerConsole.WriteLine("Server loaded!");
 
             if (LoadComplete != null)
                 LoadComplete(null, EventArgs.Empty);
         }
 
         private static void LoadDatasBackground(object data) {
-            Forms.LoadingUI loading = data as Forms.LoadingUI;
-
             //ThreadManager.SetMaxThreads(Settings.MaxWorkerThreads, Settings.MaxCompletionThreads);
             // Load pokedex
-            Pokedex.Pokedex.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Pokedex... " + e.Percent.ToString() + "%"); };
+            //Pokedex.Pokedex.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Pokedex... " + e.Percent.ToString() + "%"); };
             Pokedex.Pokedex.Initialize();
             Pokedex.Pokedex.LoadAllPokemon();
             // Load emoticons
@@ -107,47 +98,58 @@ namespace Server
             //Emoticons.EmoticonManagerBase.Initialize(Settings.MaxEmoticons);
             //Emoticons.EmoticonManagerBase.LoadEmotions(null);
             // Load exp
-            Exp.ExpManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Experience values... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Exp...");
+            //Exp.ExpManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Experience values... " + e.Percent.ToString() + "%"); };
             Exp.ExpManager.Initialize();
             Exp.ExpManager.LoadExps(null);
             // Load maps
-            Maps.MapManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Maps... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Maps...");
+            //Maps.MapManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Maps... " + e.Percent.ToString() + "%"); };
             Maps.MapManager.Initialize();
             //Maps.MapManager.LoadMaps(null);
             // Load items
-            Items.ItemManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Items... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Items...");
+            //Items.ItemManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Items... " + e.Percent.ToString() + "%"); };
             Items.ItemManager.Initialize();
             Items.ItemManager.LoadItems(null);
             // Load npcs
-            Npcs.NpcManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Npcs... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Npcs...");
+            //Npcs.NpcManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Npcs... " + e.Percent.ToString() + "%"); };
             Npcs.NpcManager.Initialize();
             Npcs.NpcManager.LoadNpcs(null);
             // Load shops
-            Shops.ShopManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Shops... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Shops...");
+            //Shops.ShopManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Shops... " + e.Percent.ToString() + "%"); };
             Shops.ShopManager.Initialize();
             Shops.ShopManager.LoadShops(null);
             // Load moves
-            Moves.MoveManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Moves... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Moves...");
+            //Moves.MoveManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Moves... " + e.Percent.ToString() + "%"); };
             Moves.MoveManager.Initialize();
             Moves.MoveManager.LoadMoves(null);
             // Load evos
-            Evolutions.EvolutionManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Evolutions... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Evolutions...");
+            //Evolutions.EvolutionManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Evolutions... " + e.Percent.ToString() + "%"); };
             Evolutions.EvolutionManager.Initialize();
             Evolutions.EvolutionManager.LoadEvos(null);
             // Load stories
-            Stories.StoryManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Stories... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Stories...");
+            //Stories.StoryManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Stories... " + e.Percent.ToString() + "%"); };
             Stories.StoryManager.Initialize();
             Stories.StoryManager.LoadStories(null);
             // Load rdungeons
-            RDungeons.RDungeonManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading RDungeons... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading RDungeons...");
+            //RDungeons.RDungeonManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading RDungeons... " + e.Percent.ToString() + "%"); };
             RDungeons.RDungeonManager.Initialize();
             RDungeons.RDungeonManager.LoadRDungeons(null);
             // Load dungeons
-            Dungeons.DungeonManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Dungeons... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading Dungeons...");
+            //Dungeons.DungeonManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Dungeons... " + e.Percent.ToString() + "%"); };
             Dungeons.DungeonManager.Initialize();
             Dungeons.DungeonManager.LoadDungeons(null);
             //Load wonder mail
-            WonderMails.WonderMailManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading WonderMail... " + e.Percent.ToString() + "%"); };
+            ServerConsole.WriteLine("Loading WonderMail...");
+            //WonderMails.WonderMailManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading WonderMail... " + e.Percent.ToString() + "%"); };
             WonderMails.WonderMailManager.Initialize();
             WonderMails.WonderMailManager.LoadMissionPools(null);
 
@@ -165,15 +167,15 @@ namespace Server
             Logging.Logger.Initialize();
 
             // Load scripts
-            loading.UpdateStatus("Loading scripts... ");
+            ServerConsole.WriteLine("Loading scripts... ");
             Scripting.ScriptManager.Initialize();
             Scripting.ScriptManager.CompileScript(IO.Paths.ScriptsFolder, true);
-            loading.UpdateStatus("Loading script editor data...");
+            ServerConsole.WriteLine("Loading script editor data...");
             Scripting.Editor.EditorHelper.Initialize();
             Scripting.ScriptManager.InvokeSub("ServerInit");
 
             // Finalizing load
-            loading.UpdateStatus("Starting game loop...");
+            ServerConsole.WriteLine("Starting game loop...");
             AI.AIProcessor.InitGameLoop();
 
             resetEvent.Set();
