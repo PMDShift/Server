@@ -653,9 +653,8 @@ namespace DataManager.Players
         */
         #endregion
 
-        public static void UnlinkCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, int slot) {
-            database.ExecuteNonQuery("DELETE FROM characters WHERE UPPER(AccountName) = UPPER(\'" + database.VerifyValueString(accountName) + "\') " +
-            "AND Slot = " + slot.ToString());
+        public static void UnlinkCharacter(IDatabase database, string accountName, int slot) {
+            database.DeleteRow("characters", "UPPER(AccountName) = UPPER(@AccountName) AND Slot = @Slot", new { AccountName = accountName, Slot = slot });
         }
 
         public static void DeleteCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string characterID) {
