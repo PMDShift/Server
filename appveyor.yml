@@ -1,6 +1,9 @@
 image: ubuntu
 services:
 - docker
+install:
+  - git submodule update --init --recursive
+  - nuget restore Server.sln
 build_script:
   - dotnet publish Server.sln -c Release
   - ps: docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASSWORD"
