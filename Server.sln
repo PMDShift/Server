@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{7368E9DA-0CDC-4E60-88E6-C0DA164F14EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{0F397789-1719-47E8-B83E-45B721981B73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "IO\IO.csproj", "{6D9BB0A3-AFC1-402B-A596-E2FA03C6C4B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IO", "IO\IO.csproj", "{6D9BB0A3-AFC1-402B-A596-E2FA03C6C4B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exceptions", "Exceptions\Exceptions.csproj", "{7F001974-C37D-46F0-A2B3-73C9B79C4DC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exceptions", "Exceptions\Exceptions.csproj", "{7F001974-C37D-46F0-A2B3-73C9B79C4DC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security", "Security\Security.csproj", "{55600CBF-BD1F-4319-99C6-98A3B3E19073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security", "Security\Security.csproj", "{55600CBF-BD1F-4319-99C6-98A3B3E19073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emoticons", "Emoticons\Emoticons.csproj", "{72F43913-AA6D-41F1-AEEF-C9E6DD914A65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emoticons", "Emoticons\Emoticons.csproj", "{72F43913-AA6D-41F1-AEEF-C9E6DD914A65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Missions", "Missions\Missions.csproj", "{EEAD38A1-5185-4457-93D2-72DAD4B19C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Missions", "Missions\Missions.csproj", "{EEAD38A1-5185-4457-93D2-72DAD4B19C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripting", "Scripting\Scripting.csproj", "{D40E045A-02AB-4065-99A7-5F5EF85031D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scripting", "Scripting\Scripting.csproj", "{D40E045A-02AB-4065-99A7-5F5EF85031D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDungeons", "RDungeons\RDungeons.csproj", "{B27512C4-9D86-4E3B-ADC0-E00A43193C22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDungeons", "RDungeons\RDungeons.csproj", "{B27512C4-9D86-4E3B-ADC0-E00A43193C22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Script", "Script\Script.csproj", "{0E3F328A-88DD-46B0-8B3B-99878EFE0BEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Script", "Script\Script.csproj", "{0E3F328A-88DD-46B0-8B3B-99878EFE0BEC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMDCP.Core", "framework\Core\PMDCP.Core.csproj", "{2BD1EB8D-04DB-4C04-9AB8-8965B42E7CF1}"
 EndProject
@@ -45,6 +45,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F15C4466-61C3-4E33-814B-01124EC74205}"
 	ProjectSection(SolutionItems) = preProject
 		Data\Data\config.xml = Data\Data\config.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4EEC103-8DB0-431B-A687-CDB0DAA20B33}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Global

@@ -1,0 +1,8 @@
+image: ubuntu
+services:
+- docker
+build_script:
+  - dotnet publish Server.sln -c Release
+  - ps: docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASSWORD"
+  - ps: docker build -t burningblaze/pmdshiftserver:latest .
+  - ps: docker push burningblaze/pmdshiftserver:latest
