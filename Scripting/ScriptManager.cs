@@ -171,7 +171,16 @@ namespace Server.Scripting
 
             var currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            var assemblies = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(';');
+            var trustedPlatformAssemblies = (string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES");
+            var assemblies = Array.Empty<string>();
+
+            if (trustedPlatformAssemblies.Contains(";")) {
+                // Windows
+                assemblies = trustedPlatformAssemblies.Split(';'); 
+            } else if (trustedPlatformAssemblies.Contains(":")) {
+                // Linux
+                assemblies = trustedPlatformAssemblies.Split(':');
+            }
 
             var references = new List<MetadataReference>();
             foreach (var referenceAssembly in assemblies) {
