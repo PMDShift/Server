@@ -70,7 +70,7 @@ namespace Server.Dungeons
             }
         }
 
-        public static void LoadDungeon(int dungeonNum, MySql database)
+        public static void LoadDungeon(int dungeonNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             Dungeon dungeon = new Dungeon();
 
@@ -147,7 +147,7 @@ namespace Server.Dungeons
                 dungeons.Dungeons.Add(dungeonNum, new Dungeon());
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
 
                 database.ExecuteNonQuery("DELETE FROM dungeon WHERE num = \'" + dungeonNum + "\'");

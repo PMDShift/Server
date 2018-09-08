@@ -181,20 +181,20 @@ namespace Server.Scripting
                 if (!assemblies[i].FullName.Contains("System.") && !assemblies[i].FullName.Contains("Microsoft.")) {
                     refs.Add(System.IO.Path.GetFileName(assemblies[i].Location));
                     //refs.Add(assemblies[i].Location);
-                
+
                 }
             }
             refs.Add("System.dll");
             refs.Add("System.Data.dll");
             refs.Add("System.Drawing.dll");
             refs.Add("System.Xml.dll");
-            refs.Add("System.Windows.Forms.dll"); 
+            refs.Add("System.Windows.Forms.dll");
             //refs.Add("DatabaseConnector.dll");
             refs.Add("System.Core.dll");
             refs.Add("MySql.Data.dll");
             refs.Add("DataManager.dll");
             refs.Add("Server.RDungeons.dll");
-            refs.Add(System.Windows.Forms.Application.ExecutablePath);
+            refs.Add(Assembly.GetEntryAssembly().CodeBase);
             options.ReferencedAssemblies.AddRange(refs.ToArray());
 
             System.CodeDom.Compiler.ICodeCompiler compiler = provider.CreateCompiler();

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using PMU.Core;
-using PMU.DatabaseConnector;
-using PMU.DatabaseConnector.MySql;
+using PMDCP.Core;
+using PMDCP.DatabaseConnector;
+using PMDCP.DatabaseConnector.MySql;
 
 namespace DataManager.Missions {
     public class MissionDataManager {
 
-        public static IEnumerable<MissionRewardData> LoadMissionRewardData(MySql database, int difficulty) {
+        public static IEnumerable<MissionRewardData> LoadMissionRewardData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             string query = "SELECT mission_reward.ItemNum, mission_reward.ItemAmount, mission_reward.ItemTag " +
                 "FROM mission_reward " +
                 "WHERE mission_reward.Rank = \'" + difficulty + "\'  " +
@@ -23,7 +23,7 @@ namespace DataManager.Missions {
             }
         }
 
-        public static IEnumerable<MissionClientData> LoadMissionClientData(MySql database, int difficulty) {
+        public static IEnumerable<MissionClientData> LoadMissionClientData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             string query = "SELECT mission_client.DexNum, mission_client.FormNum " +
                 "FROM mission_client " +
                 "WHERE mission_client.Rank = \'" + difficulty + "\'  " +
@@ -37,7 +37,7 @@ namespace DataManager.Missions {
             }
         }
 
-        public static IEnumerable<MissionEnemyData> LoadMissionEnemyData(MySql database, int difficulty) {
+        public static IEnumerable<MissionEnemyData> LoadMissionEnemyData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             string query = "SELECT mission_enemy.NpcNum " +
                 "FROM mission_enemy " +
                 "WHERE mission_enemy.Rank = \'" + difficulty + "\'  " +
@@ -52,21 +52,21 @@ namespace DataManager.Missions {
 
 
 
-        public static void ClearMissionRewardData(MySql database, int difficulty) {
+        public static void ClearMissionRewardData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             database.ExecuteNonQuery("DELETE FROM mission_reward WHERE Rank = \'" + difficulty + "\'");
         }
 
-        public static void ClearMissionClientData(MySql database, int difficulty) {
+        public static void ClearMissionClientData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             database.ExecuteNonQuery("DELETE FROM mission_client WHERE Rank = \'" + difficulty + "\'");
         }
 
-        public static void ClearMissionEnemyData(MySql database, int difficulty) {
+        public static void ClearMissionEnemyData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty) {
             database.ExecuteNonQuery("DELETE FROM mission_enemy WHERE Rank = \'" + difficulty + "\'");
         }
 
 
 
-        public static void AddMissionRewardData(MySql database, int difficulty, int index, MissionRewardData data) {
+        public static void AddMissionRewardData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty, int index, MissionRewardData data) {
             database.AddRow("mission_reward", new IDataColumn[] {
                 database.CreateColumn(false, "Rank", difficulty.ToString()),
                 database.CreateColumn(false, "RewardIndex", index.ToString()),
@@ -76,7 +76,7 @@ namespace DataManager.Missions {
             });
         }
 
-        public static void AddMissionClientData(MySql database, int difficulty, int index, MissionClientData data) {
+        public static void AddMissionClientData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty, int index, MissionClientData data) {
             database.AddRow("mission_client", new IDataColumn[] {
                 database.CreateColumn(false, "Rank", difficulty.ToString()),
                 database.CreateColumn(false, "ClientIndex", index.ToString()),
@@ -85,7 +85,7 @@ namespace DataManager.Missions {
             });
         }
 
-        public static void AddMissionEnemyData(MySql database, int difficulty, int index, MissionEnemyData data) {
+        public static void AddMissionEnemyData(PMDCP.DatabaseConnector.MySql.MySql database, int difficulty, int index, MissionEnemyData data) {
             database.AddRow("mission_enemy", new IDataColumn[] {
                 database.CreateColumn(false, "Rank", difficulty.ToString()),
                 database.CreateColumn(false, "EnemyIndex", index.ToString()),

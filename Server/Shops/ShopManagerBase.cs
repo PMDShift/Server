@@ -76,7 +76,7 @@ namespace Server.Shops
             }
         }
 
-        public static void LoadShop(int shopNum, MySql database)
+        public static void LoadShop(int shopNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (shops.Shops.ContainsKey(shopNum) == false)
                 shops.Shops.Add(shopNum, new Shop());
@@ -121,7 +121,7 @@ namespace Server.Shops
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
 
                 database.ExecuteNonQuery("DELETE FROM shop WHERE num = \'" + shopNum + "\'");

@@ -305,7 +305,7 @@ namespace Server.Pokedex {
 
         public void LoadMoves(DatabaseConnection dbConnection, int ID, int formNum)
         {
-            MySql database = dbConnection.Database;
+            var database = dbConnection.Database;
 
             string query = "SELECT pokedex_pokemonlevelmove.LevelNum, pokedex_pokemonlevelmove.Move " +
                 "FROM pokedex_pokemonlevelmove " +

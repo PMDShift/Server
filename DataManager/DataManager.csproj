@@ -1,74 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{871F2374-F17B-4C40-8479-589553184B1D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>DataManager</RootNamespace>
     <AssemblyName>DataManager</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\DataManager.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Maps\HouseMap.cs" />
-    <Compile Include="Maps\InstancedMap.cs" />
-    <Compile Include="Maps\Map.cs" />
-    <Compile Include="Maps\MapDataManager.cs" />
-    <Compile Include="Maps\MapDump.cs" />
-    <Compile Include="Maps\MapItem.cs" />
-    <Compile Include="Maps\MapNpc.cs" />
-    <Compile Include="Maps\MapNpcPreset.cs" />
-    <Compile Include="Maps\MapStatus.cs" />
-    <Compile Include="Maps\RawMap.cs" />
-    <Compile Include="Maps\RDungeonMap.cs" />
-    <Compile Include="Maps\Tile.cs" />
-    <Compile Include="Players\AssemblyRecruitData.cs" />
-    <Compile Include="Characters\InventoryItem.cs" />
-    <Compile Include="Players\GuildMemberData.cs" />
-    <Compile Include="Players\PlayerDataJobListItem.cs" />
-    <Compile Include="Players\PlayerDataManager.cs" />
-    <Compile Include="Players\PlayerData.cs" />
-    <Compile Include="Players\PlayerDataTeamMember.cs" />
-    <Compile Include="Players\PlayerDataTriggerEvent.cs" />
-    <Compile Include="Players\PlayerFriendsList.cs" />
-    <Compile Include="Players\RecruitData.cs" />
-    <Compile Include="Characters\Move.cs" />
-    <Compile Include="Characters\VolatileStatus.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\framework\Core\PMDCP.Core.csproj">
       <Project>{2bd1eb8d-04db-4c04-9ab8-8965b42e7cf1}</Project>
@@ -79,16 +16,8 @@
       <Name>PMDCP.DatabaseConnector</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 </Project>

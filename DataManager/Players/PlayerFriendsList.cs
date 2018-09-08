@@ -59,7 +59,7 @@ namespace DataManager.Players
         /// </list>
         /// </summary>
         /// <param name="name"></param>
-        public int AddFriend(MySql database, string name) {
+        public int AddFriend(PMDCP.DatabaseConnector.MySql.MySql database, string name) {
             int error = 0;
             if (friends.Contains(name) == false) {
                 QuickAdd(name);
@@ -90,7 +90,7 @@ namespace DataManager.Players
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public int RemoveFriend(MySql database, string name) {
+        public int RemoveFriend(PMDCP.DatabaseConnector.MySql.MySql database, string name) {
             int error = 0;
             int friendIndex = friends.IndexOf(name);
             if (friendIndex > -1) {

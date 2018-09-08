@@ -47,18 +47,18 @@ namespace Script
 
     public partial class Main
     {
-        public static void ProcessServerCommand(Server.Forms.MainUI mainUI, Command fullCommand, string fullArgs)
-        {
-            try
-            {
-                mainUI.AddCommandLine("Command not found: " + fullCommand.CommandArgs[0]);
-            }
-            catch (Exception ex)
-            {
-                Messenger.AdminMsg("Error: ProcessServerCommand", Text.Black);
-            }
+        //public static void ProcessServerCommand(Server.Forms.MainUI mainUI, Command fullCommand, string fullArgs)
+        //{
+        //    try
+        //    {
+        //        //mainUI.AddCommandLine("Command not found: " + fullCommand.CommandArgs[0]);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Messenger.AdminMsg("Error: ProcessServerCommand", Text.Black);
+        //    }
 
-        }
+        //}
 
         public static bool IsValidServerCommand(string header, string command)
         {
@@ -81,17 +81,17 @@ namespace Script
             }
         }
 
-        public static void DisplayServerCommandHelp(Server.Forms.MainUI mainUI)
-        {
-            try
-            {
+        //public static void DisplayServerCommandHelp(Server.Forms.MainUI mainUI)
+        //{
+        //    try
+        //    {
 
-            }
-            catch (Exception ex)
-            {
-                Messenger.AdminMsg("Error: DisplayServerCommandHelp", Text.Black);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Messenger.AdminMsg("Error: DisplayServerCommandHelp", Text.Black);
+        //    }
+        //}
 
         public static bool InQuiz;
         public static bool QuestionReady;

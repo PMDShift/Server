@@ -27,7 +27,7 @@ namespace DataManager.Maps
 {
     public class MapDataManager
     {
-        public static void LoadRawMap(MySql database, string mapID, RawMap rawMap) {
+        public static void LoadRawMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, RawMap rawMap) {
             string query = "SELECT map_general.Revision, map_general.MaxX, map_general.MaxY, " +
                 "map_switchovers.UpMap, map_switchovers.DownMap, map_switchovers.LeftMap, map_switchovers.RightMap, " +
                 "map_data.Name, map_data.Moral, map_data.Music, map_data.Indoors, map_data.Weather, " +
@@ -138,7 +138,7 @@ namespace DataManager.Maps
             rawMap.MapID = mapID;
         }
 
-        public static void LoadMapDump(MySql database, string mapID, MapDump mapDump) {
+        public static void LoadMapDump(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, MapDump mapDump) {
             // First, load the raw map data
             LoadRawMap(database, mapID, mapDump);
 
@@ -360,7 +360,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static void SaveMapDump(MySql database, string mapID, MapDump mapDump) {
+        public static void SaveMapDump(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, MapDump mapDump) {
             mapID = database.VerifyValueString(mapID);
 
             bool localTransaction = false;
@@ -573,7 +573,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static void SaveRawMap(MySql database, string mapID, RawMap rawMap) {
+        public static void SaveRawMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, RawMap rawMap) {
 
             bool localTransaction = false;
             if (database.IsTransactionActive == false) {
@@ -672,7 +672,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static void SaveStandardMap(MySql database, string mapID, Map map) {
+        public static void SaveStandardMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, Map map) {
             bool localTransaction = false;
             if (database.IsTransactionActive == false) {
                 database.BeginTransaction();
@@ -693,7 +693,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static Map LoadStandardMap(MySql database, string mapID) {
+        public static Map LoadStandardMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             Map map = new Map(mapID);
             LoadRawMap(database, mapID, map);
 
@@ -709,7 +709,7 @@ namespace DataManager.Maps
             return map;
         }
 
-        public static InstancedMap LoadInstancedMap(MySql database, string mapID) {
+        public static InstancedMap LoadInstancedMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             InstancedMap map = new InstancedMap(mapID);
             LoadMapDump(database, mapID, map);
 
@@ -725,7 +725,7 @@ namespace DataManager.Maps
             return map;
         }
 
-        public static void SaveInstancedMap(MySql database, string mapID, InstancedMap map) {
+        public static void SaveInstancedMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, InstancedMap map) {
             bool localTransaction = false;
             if (database.IsTransactionActive == false) {
                 database.BeginTransaction();
@@ -745,7 +745,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static HouseMap LoadHouseMap(MySql database, string mapID) {
+        public static HouseMap LoadHouseMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             if (IsMapIDInUse(database, mapID)) {
                 HouseMap map = new HouseMap(mapID);
                 LoadMapDump(database, mapID, map);
@@ -768,7 +768,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static void SaveHouseMap(MySql database, string mapID, HouseMap map) {
+        public static void SaveHouseMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, HouseMap map) {
             bool localTransaction = false;
             if (database.IsTransactionActive == false) {
                 database.BeginTransaction();
@@ -791,7 +791,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static RDungeonMap LoadRDungeonMap(MySql database, string mapID) {
+        public static RDungeonMap LoadRDungeonMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             RDungeonMap map = new RDungeonMap(mapID);
             LoadMapDump(database, mapID, map);
 
@@ -810,7 +810,7 @@ namespace DataManager.Maps
             return map;
         }
 
-        public static void SaveRDungeonMap(MySql database, string mapID, RDungeonMap map) {
+        public static void SaveRDungeonMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID, RDungeonMap map) {
             bool localTransaction = false;
             if (database.IsTransactionActive == false) {
                 database.BeginTransaction();
@@ -833,7 +833,7 @@ namespace DataManager.Maps
             }
         }
 
-        public static string GetMapName(MySql database, string mapID) {
+        public static string GetMapName(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             string query = "SELECT map_data.Name FROM map_data WHERE map_data.MapID = \'" + mapID + "\'";
             DataColumnCollection row = database.RetrieveRow(query);
             if (row != null) {
@@ -843,13 +843,13 @@ namespace DataManager.Maps
             }
         }
 
-        public static void DeleteMap(MySql database, string mapID) {
+        public static void DeleteMap(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             // All map data will be deleted because foreign keys in the database are linked to the map_general table
             string query = "DELETE FROM map_general WHERE MapID = \'" + mapID + "\'";
             database.ExecuteNonQuery(query);
         }
 
-        public static bool IsMapIDInUse(MySql database, string mapID) {
+        public static bool IsMapIDInUse(PMDCP.DatabaseConnector.MySql.MySql database, string mapID) {
             string query = "SELECT MapID FROM map_general WHERE MapID = \'" + mapID + "\'";
             DataColumnCollection row = database.RetrieveRow(query);
             if (row != null) {

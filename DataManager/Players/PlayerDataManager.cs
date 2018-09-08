@@ -30,19 +30,19 @@ namespace DataManager.Players
     {
         #region Methods
 
-        public static void ChangePassword(MySql database, string accountName, string currentPassword, string newPassword) {
+        public static void ChangePassword(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string currentPassword, string newPassword) {
             database.UpdateRow("accounts", new IDataColumn[] {
                 database.CreateColumn(false, "Password", newPassword)
             }, "accounts.AccountName = \'" + database.VerifyValueString(accountName) + "\' AND accounts.Password = \'" + database.VerifyValueString(currentPassword) + "\'");
         }
 
-        public static void ChangePlayerEmail(MySql database, string accountName, string currentEmail, string newEmail) {
+        public static void ChangePlayerEmail(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string currentEmail, string newEmail) {
             database.UpdateRow("accounts", new IDataColumn[] {
                 database.CreateColumn(false, "Email", newEmail)
             }, "accounts.AccountName = \'" + database.VerifyValueString(accountName) + "\' AND accounts.Email = \'" + database.VerifyValueString(currentEmail) + "\'");
         }
 
-        public static void CreateNewAccount(MySql database, string accountName, string encryptedPassword, string email) {
+        public static void CreateNewAccount(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string encryptedPassword, string email) {
             database.AddRow("accounts", new IDataColumn[] {
                 database.CreateColumn(false, "AccountName", accountName),
                 database.CreateColumn(false, "Password", encryptedPassword),
@@ -50,7 +50,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void CreateNewCharacter(MySql database, string accountName, int charNum, PlayerData playerData) {
+        public static void CreateNewCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, int charNum, PlayerData playerData) {
             // Add the character to the 'characters' table
             database.AddRow("characters", new IDataColumn[] {
                 database.CreateColumn(false, "AccountName", accountName),
@@ -67,7 +67,7 @@ namespace DataManager.Players
 
         #region Copy
         /*
-        public static void CopyCharacter(MySql database, string characterIDFrom, string characterIDTo) {
+        public static void CopyCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string characterIDFrom, string characterIDTo) {
             string query;
             MultiRowInsert multiRowInsert;
 
@@ -653,12 +653,12 @@ namespace DataManager.Players
         */
         #endregion
 
-        public static void UnlinkCharacter(MySql database, string accountName, int slot) {
+        public static void UnlinkCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, int slot) {
             database.ExecuteNonQuery("DELETE FROM characters WHERE UPPER(AccountName) = UPPER(\'" + database.VerifyValueString(accountName) + "\') " +
             "AND Slot = " + slot.ToString());
         }
 
-        public static void DeleteCharacter(MySql database, string characterID) {
+        public static void DeleteCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string characterID) {
             database.ExecuteNonQuery("DELETE FROM bank WHERE CharID = \'" + characterID + "\'");
             database.ExecuteNonQuery("DELETE FROM character_statistics WHERE CharID = \'" + characterID + "\'");
             database.ExecuteNonQuery("DELETE FROM characteristics WHERE CharID = \'" + characterID + "\'");
@@ -687,7 +687,7 @@ namespace DataManager.Players
             database.ExecuteNonQuery("DELETE FROM trigger_events WHERE CharID = \'" + characterID + "\'");
         }
 
-        public static void DeleteAccount(MySql database, string accountName) {
+        public static void DeleteAccount(PMDCP.DatabaseConnector.MySql.MySql database, string accountName) {
             // Delete the account record
             database.ExecuteNonQuery("DELETE FROM accounts WHERE AccountName = \'" + database.VerifyValueString(accountName) + "\'");
             for (int i = 1; i <= 3; i++) {
@@ -702,7 +702,7 @@ namespace DataManager.Players
             }
         }
 
-        public static bool IsAccountNameTaken(MySql database, string accountName) {
+        public static bool IsAccountNameTaken(PMDCP.DatabaseConnector.MySql.MySql database, string accountName) {
             string query = "SELECT accounts.AccountName FROM accounts " +
                 "WHERE UPPER(accounts.AccountName) = UPPER(\'" + database.VerifyValueString(accountName) + "\')";
 
@@ -717,7 +717,7 @@ namespace DataManager.Players
             return accountFound;
         }
 
-        public static bool IsCharacterSlotEmpty(MySql database, string accountName, int slot) {
+        public static bool IsCharacterSlotEmpty(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, int slot) {
             string query = "SELECT characters.CharID " +
                 "FROM characters " +
                 "WHERE characters.AccountName = \'" + database.VerifyValueString(accountName) + "\' " +
@@ -734,7 +734,7 @@ namespace DataManager.Players
             }
         }
 
-        public static bool IsRecruitSlotEmpty(MySql database, string charID, int recruitIndex) {
+        public static bool IsRecruitSlotEmpty(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int recruitIndex) {
             string query = "SELECT recruit_data.CharID " +
                 "FROM recruit_data " +
                 "WHERE recruit_data.CharID = \'" + database.VerifyValueString(charID) + "\' " +
@@ -752,7 +752,7 @@ namespace DataManager.Players
             }
         }
 
-        public static int FindOpenRecruitmentSlot(MySql database, string charID) {
+        public static int FindOpenRecruitmentSlot(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
             string query = "SELECT recruit_data.RecruitIndex " +
                 "FROM recruit_data " +
                 "WHERE recruit_data.CharID = \'" + database.VerifyValueString(charID) + "\' " +
@@ -781,7 +781,7 @@ namespace DataManager.Players
             return slot;
         }
 
-        public static bool IsPasswordCorrect(MySql database, string accountName, string encryptedPassword) {
+        public static bool IsPasswordCorrect(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, string encryptedPassword) {
             string query = "SELECT accounts.AccountName, accounts.Password " +
                 "FROM accounts " +
                 "WHERE UPPER(accounts.AccountName) = UPPER(\'" + database.VerifyValueString(accountName) + "\') " +
@@ -800,7 +800,7 @@ namespace DataManager.Players
         }
 
         /*
-        public static bool IsWonderMailCompleted(MySql database, string charID, string wonderMail) {
+        public static bool IsWonderMailCompleted(PMDCP.DatabaseConnector.MySql.MySql database, string charID, string wonderMail) {
             string query = "SELECT completed_mail.Code " +
                 "FROM completed_mail " +
                 "WHERE completed_mail.CharID = \'" + database.VerifyValueString(charID) + "\' " +
@@ -817,7 +817,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void LoadPlayerCompletedMail(MySql database, PlayerData playerData) {
+        public static void LoadPlayerCompletedMail(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT completed_mail.Code " +
                "FROM completed_mail " +
                "WHERE completed_mail.CharID = \'" + playerData.CharID + "\';";
@@ -829,7 +829,7 @@ namespace DataManager.Players
         }
         */
 
-        public static bool LoadPlayerData(MySql database, PlayerData playerData) {
+        public static bool LoadPlayerData(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT accounts.Email, characteristics.Name, characteristics.Access, characteristics.ActiveSlot, characteristics.PK, " +
                 "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " + 
                 "expkit.AvailableModules, " +
@@ -956,7 +956,7 @@ namespace DataManager.Players
             return true;
         }
 
-        public static void LoadPlayerDungeonCompletionCounts(MySql database, PlayerData playerData) {
+        public static void LoadPlayerDungeonCompletionCounts(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT dungeons.DungeonID, dungeons.CompletionCount " +
                 "FROM dungeons " +
                 "WHERE dungeons.CharID = \'" + playerData.CharID + "\';";
@@ -978,7 +978,7 @@ namespace DataManager.Players
             playerData.DungeonCompletionCountsLoaded = true;
         }
 
-        public static void LoadPlayerFriendsList(MySql database, PlayerData playerData) {
+        public static void LoadPlayerFriendsList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT friends.FriendName " +
                 "FROM friends " +
                 "WHERE friends.CharID = \'" + playerData.CharID + "\';";
@@ -991,7 +991,7 @@ namespace DataManager.Players
             playerData.Friends.Loaded = true;
         }
 
-        public static List<GuildMemberData> LoadGuildInfo(MySql database, string guildName) {
+        public static List<GuildMemberData> LoadGuildInfo(PMDCP.DatabaseConnector.MySql.MySql database, string guildName) {
             string query = "SELECT guild.GuildAccess, characteristics.Name, character_statistics.LastLogin " +
                 "FROM guild " +
                 "LEFT JOIN characteristics ON (guild.CharID = characteristics.CharID) " +
@@ -1013,7 +1013,7 @@ namespace DataManager.Players
 
         }
 
-        public static ListPair<string, int> LoadGuild(MySql database, string guildName) {
+        public static ListPair<string, int> LoadGuild(PMDCP.DatabaseConnector.MySql.MySql database, string guildName) {
             string query = "SELECT guild.CharID, guild.GuildAccess " +
                 "FROM guild " +
                 "WHERE guild.GuildName = \'" + guildName + "\';";
@@ -1029,11 +1029,11 @@ namespace DataManager.Players
 
         }
 
-        public static void SetGuildAccess(MySql database, string charID, int access) {
+        public static void SetGuildAccess(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int access) {
             database.ExecuteNonQuery("UPDATE guild SET GuildAccess = " + access + " WHERE CharID = \'" + charID + "\'");
         }
 
-        public static string GetGuildName(MySql database, string charID) {
+        public static string GetGuildName(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
             string query = "SELECT guild.GuildName " +
                 "FROM guild " +
                 "WHERE guild.CharID = \'" + charID + "\';";
@@ -1046,7 +1046,7 @@ namespace DataManager.Players
             return null;
         }
 
-        public static void AddGuildMember(MySql database, string guildName, string charID) {
+        public static void AddGuildMember(PMDCP.DatabaseConnector.MySql.MySql database, string guildName, string charID) {
             database.UpdateOrInsert("guild", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", charID),
                 database.CreateColumn(false, "GuildName", guildName),
@@ -1054,15 +1054,15 @@ namespace DataManager.Players
             });
         }
 
-        public static void RemoveGuildMember(MySql database, string charID) {
+        public static void RemoveGuildMember(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
             database.ExecuteNonQuery("DELETE FROM guild WHERE CharID = \'" + charID + "\'");
         }
 
-        public static void RemoveGuild(MySql database, string guildName) {
+        public static void RemoveGuild(PMDCP.DatabaseConnector.MySql.MySql database, string guildName) {
             database.ExecuteNonQuery("DELETE FROM guild WHERE GuildName = \'" + guildName + "\'");
         }
 
-        public static void LoadPlayerIgnoreList(MySql database, PlayerData playerData) {
+        public static void LoadPlayerIgnoreList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             //string query = "SELECT friends.FriendName " +
             //    "FROM friends " +
             //    "WHERE friends.CharID = \'" + playerData.CharID + "\';";
@@ -1075,7 +1075,7 @@ namespace DataManager.Players
             //playerData.Friends.Loaded = true;
         }
 
-        public static void LoadPlayerJobList(MySql database, PlayerData playerData) {
+        public static void LoadPlayerJobList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT job_list.Accepted, job_list.SendsRemaining, " +
                 "job_list.ClientIndex, job_list.TargetIndex, job_list.RewardIndex, job_list.MissionType, " +
                 "job_list.Data1, job_list.Data2, job_list.DungeonIndex, job_list.Goal, " +
@@ -1106,7 +1106,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void LoadPlayerMissionBoardMissions(MySql database, PlayerData playerData) {
+        public static void LoadPlayerMissionBoardMissions(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT mission_board_missions.Slot, " +
                 "mission_board_missions.ClientIndex, mission_board_missions.TargetIndex, mission_board_missions.RewardIndex, mission_board_missions.MissionType, " +
                 "mission_board_missions.Data1, mission_board_missions.Data2, mission_board_missions.DungeonIndex, mission_board_missions.Goal, " +
@@ -1135,7 +1135,7 @@ namespace DataManager.Players
 
         }
 
-        public static IEnumerable<AssemblyRecruitData> LoadPlayerAssemblyRecruits(MySql database, string charID) {
+        public static IEnumerable<AssemblyRecruitData> LoadPlayerAssemblyRecruits(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
             string query = "SELECT recruit_data.RecruitIndex, recruit_data.Name, " +
                "recruit_data.Species, recruit_data.Sex, recruit_data.Shiny, recruit_data.Form, recruit_data.Level " +
                "FROM recruit_data " +
@@ -1167,7 +1167,7 @@ namespace DataManager.Players
             }
         }
 
-        public static RecruitData LoadPlayerRecruit(MySql database, string charID, int recruitIndex, bool usingTempStats) {
+        public static RecruitData LoadPlayerRecruit(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int recruitIndex, bool usingTempStats) {
             RecruitData recruitData = new RecruitData();
 
             // Load general
@@ -1254,7 +1254,7 @@ namespace DataManager.Players
             return recruitData;
         }
 
-        public static void LoadPlayerRecruitList(MySql database, PlayerData playerData) {
+        public static void LoadPlayerRecruitList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT recruit_list.PokemonID, recruit_list.Status " +
               "FROM recruit_list " +
               "WHERE recruit_list.CharID = \'" + playerData.CharID + "\'";
@@ -1269,7 +1269,7 @@ namespace DataManager.Players
             playerData.RecruitListLoaded = true;
         }
 
-        public static void LoadPlayerStatistics(MySql database, PlayerData playerData) {
+        public static void LoadPlayerStatistics(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT character_statistics.TotalPlayTime, character_statistics.LastIPAddressUsed, " +
                 "character_statistics.LastMacAddressUsed, character_statistics.LastLogin, character_statistics.LastLogout, " +
                 "character_statistics.LastPlayTime, character_statistics.LastOS, character_statistics.LastDotNetVersion " +
@@ -1289,7 +1289,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void LoadPlayerStoryChapters(MySql database, PlayerData playerData) {
+        public static void LoadPlayerStoryChapters(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT story_chapters.Chapter, story_chapters.Complete " +
                "FROM story_chapters " +
                "WHERE story_chapters.CharID = \'" + playerData.CharID + "\';";
@@ -1301,7 +1301,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void LoadPlayerStoryHelperStateSettings(MySql database, PlayerData playerData) {
+        public static void LoadPlayerStoryHelperStateSettings(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT story_helper_state_settings.SettingKey, story_helper_state_settings.Value " +
                "FROM story_helper_state_settings " +
                "WHERE story_helper_state_settings.CharID = \'" + playerData.CharID + "\'";
@@ -1313,7 +1313,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void LoadPlayerTriggerEvents(MySql database, PlayerData playerData) {
+        public static void LoadPlayerTriggerEvents(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT trigger_events.ID, trigger_events.Type, trigger_events.Action, " +
                "trigger_events.TriggerCommand, trigger_events.AutoRemove " +
                "FROM trigger_events " +
@@ -1366,7 +1366,7 @@ namespace DataManager.Players
             }
         }
 
-        public static string RetrieveAccountCharacterID(MySql database, string accountName, int characterSlot) {
+        public static string RetrieveAccountCharacterID(PMDCP.DatabaseConnector.MySql.MySql database, string accountName, int characterSlot) {
             string query = "SELECT characters.CharID " +
                "FROM characters " +
                "WHERE characters.AccountName = \'" + database.VerifyValueString(accountName) + "\' " +
@@ -1380,7 +1380,7 @@ namespace DataManager.Players
             }
         }
 
-        public static string[] RetrieveAccountCharacters(MySql database, string accountName) {
+        public static string[] RetrieveAccountCharacters(PMDCP.DatabaseConnector.MySql.MySql database, string accountName) {
             string query = "SELECT characters.Slot, characteristics.Name " +
                "FROM characters " +
                "JOIN characteristics ON characters.CharID = characteristics.CharID " +
@@ -1399,7 +1399,7 @@ namespace DataManager.Players
             return characters;
         }
 
-        public static string RetrieveCharacterID(MySql database, string characterName) {
+        public static string RetrieveCharacterID(PMDCP.DatabaseConnector.MySql.MySql database, string characterName) {
             string query = "SELECT characteristics.CharID " +
                 "FROM characteristics " +
                 "WHERE UPPER(characteristics.Name) = UPPER(\'" + database.VerifyValueString(characterName) + "\');";
@@ -1412,7 +1412,7 @@ namespace DataManager.Players
             }
         }
 
-        public static string RetrieveCharacterName(MySql database, string characterID) {
+        public static string RetrieveCharacterName(PMDCP.DatabaseConnector.MySql.MySql database, string characterID) {
             string query = "SELECT characteristics.Name " +
                 "FROM characteristics " +
                 "WHERE characteristics.CharID = \'" + database.VerifyValueString(characterID) + "\';";
@@ -1425,7 +1425,7 @@ namespace DataManager.Players
             }
         }
 
-        public static bool RetrieveCharacterInformation(MySql database, string characterName, ref string characterID, ref string characterAccount, ref int characterSlot) {
+        public static bool RetrieveCharacterInformation(PMDCP.DatabaseConnector.MySql.MySql database, string characterName, ref string characterID, ref string characterAccount, ref int characterSlot) {
             string query = "SELECT characteristics.CharID, characters.AccountName, characters.Slot " +
                 "FROM characteristics " +
                 "JOIN characters ON characters.CharID = characteristics.CharID " +
@@ -1443,7 +1443,7 @@ namespace DataManager.Players
             }
         }
 
-        public static bool RetrievePlayerStoryChapterState(MySql database, string characterID, int chapter) {
+        public static bool RetrievePlayerStoryChapterState(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int chapter) {
             string query = "SELECT story_chapters.Complete " +
               "FROM story_chapters " +
               "WHERE story_chapters.CharID = \'" + database.VerifyValueString(characterID) + "\' " +
@@ -1456,7 +1456,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerStoryChapterState(MySql database, string characterID, int chapter, bool value) {
+        public static void SavePlayerStoryChapterState(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int chapter, bool value) {
             database.UpdateOrInsert("story_chapters", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", characterID),
                 database.CreateColumn(false, "Chapter", chapter.ToString()),
@@ -1464,7 +1464,7 @@ namespace DataManager.Players
             });
         }
 
-        public static int RetrievePlayerDungeonCompletionCount(MySql database, string characterID, int dungeonID) {
+        public static int RetrievePlayerDungeonCompletionCount(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int dungeonID) {
             string query = "SELECT dungeons.CompletionCount " +
               "FROM dungeons " +
               "WHERE dungeons.CharID = \'" + database.VerifyValueString(characterID) + "\' " +
@@ -1477,7 +1477,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerDungeonCompletionCount(MySql database, string characterID, int dungeonID, int completionCount) {
+        public static void SavePlayerDungeonCompletionCount(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int dungeonID, int completionCount) {
             database.UpdateOrInsert("dungeons", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", characterID),
                 database.CreateColumn(false, "DungeonID", dungeonID.ToString()),
@@ -1485,7 +1485,7 @@ namespace DataManager.Players
             });
         }
 
-        public static byte RetrievePlayerRecruitListStatus(MySql database, string characterID, int pokemonID) {
+        public static byte RetrievePlayerRecruitListStatus(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int pokemonID) {
             string query = "SELECT recruit_list.Status " +
               "FROM recruit_list " +
               "WHERE recruit_list.CharID = \'" + database.VerifyValueString(characterID) + "\' " +
@@ -1499,7 +1499,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerRecruitListStatus(MySql database, string characterID, int pokemonID, byte status) {
+        public static void SavePlayerRecruitListStatus(PMDCP.DatabaseConnector.MySql.MySql database, string characterID, int pokemonID, byte status) {
             database.UpdateOrInsert("recruit_list", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", characterID),
                 database.CreateColumn(false, "PokemonID", pokemonID.ToString()),
@@ -1508,7 +1508,7 @@ namespace DataManager.Players
         }
 
 
-        public static void SavePlayerAvailableExpKitModules(MySql database, PlayerData playerData) {
+        public static void SavePlayerAvailableExpKitModules(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("expkit", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1516,7 +1516,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void SavePlayerBank(MySql database, PlayerData playerData) {
+        public static void SavePlayerBank(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM bank WHERE CharID = \'" + playerData.CharID + "\' " +
                 "AND ItemSlot > " + (playerData.MaxBank));
 
@@ -1536,7 +1536,7 @@ namespace DataManager.Players
             database.ExecuteNonQuery(multiRowInsert.GetSqlQuery());
         }
 
-        public static void SavePlayerBankUpdates(MySql database, string charID, ListPair<int, Characters.InventoryItem> updateList) {
+        public static void SavePlayerBankUpdates(PMDCP.DatabaseConnector.MySql.MySql database, string charID, ListPair<int, Characters.InventoryItem> updateList) {
             MultiRowInsert multiRowInsert = new MultiRowInsert(database, "bank", "CharID", "ItemSlot", "ItemNum",
                 "Amount", "Sticky", "Tag");
 
@@ -1555,7 +1555,7 @@ namespace DataManager.Players
             database.ExecuteNonQuery(multiRowInsert.GetSqlQuery());
         }
 
-        public static void SavePlayerBankItem(MySql database, string charID, int slot, Characters.InventoryItem item) {
+        public static void SavePlayerBankItem(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int slot, Characters.InventoryItem item) {
             database.UpdateOrInsert("bank", new IDataColumn[] {
                     database.CreateColumn(false, "CharID", charID),
                     database.CreateColumn(false, "ItemSlot", slot.ToString()),
@@ -1566,7 +1566,7 @@ namespace DataManager.Players
                 });
         }
 
-        public static void SavePlayerCharacteristics(MySql database, PlayerData playerData) {
+        public static void SavePlayerCharacteristics(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("characteristics", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1583,7 +1583,7 @@ namespace DataManager.Players
         }
 
         /*
-        public static void SavePlayerCompletedMail(MySql database, PlayerData playerData) {
+        public static void SavePlayerCompletedMail(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM completed_mail WHERE CharID = \'" + playerData.CharID + "\' " +
             "AND completed_mail.Slot > " + (playerData.CompletedMail.Count - 1));
 
@@ -1596,7 +1596,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void AddPlayerCompletedMail(MySql database, string charID, string code) {
+        public static void AddPlayerCompletedMail(PMDCP.DatabaseConnector.MySql.MySql database, string charID, string code) {
             int count = CountPlayerCompletedMail(database, charID);
             database.AddRow("completed_mail", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", charID),
@@ -1605,13 +1605,13 @@ namespace DataManager.Players
             });
         }
 
-        public static int CountPlayerCompletedMail(MySql database, string charID) {
+        public static int CountPlayerCompletedMail(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
             Object returnVal = database.ExecuteQuery("SELECT COUNT(*) FROM completed_mail WHERE CharID = \'" + charID + "\'");
             return Convert.ToInt32(returnVal);
         }
         */
 
-        public static void SavePlayerDungeons(MySql database, PlayerData playerData) {
+        public static void SavePlayerDungeons(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             StringBuilder dungeonsToDelete = new StringBuilder();
             for (int i = 0; i < playerData.DungeonCompletionCounts.Count; i++) {
                 dungeonsToDelete.Append("AND DungeonID <> \'");
@@ -1634,7 +1634,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerFriendsList(MySql database, PlayerData playerData) {
+        public static void SavePlayerFriendsList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM friends WHERE CharID = \'" + playerData.CharID + "\' " +
                 "AND FriendListSlot > " + (playerData.Friends.Count - 1));
             //database.DeleteRow("friends", "CharID = \'" + playerData.CharID + "\'");
@@ -1648,7 +1648,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerIgnoreList(MySql database, PlayerData playerData) {
+        public static void SavePlayerIgnoreList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             //database.ExecuteNonQuery("DELETE FROM friends WHERE CharID = \'" + playerData.CharID + "\' " +
             //    "AND FriendListSlot > " + (playerData.Friends.Count - 1));
             //database.DeleteRow("friends", "CharID = \'" + playerData.CharID + "\'");
@@ -1663,7 +1663,7 @@ namespace DataManager.Players
         }
 
 
-        public static void SavePlayerGuild(MySql database, PlayerData playerData) {
+        public static void SavePlayerGuild(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM guild WHERE CharID = \'" + playerData.CharID + "\'");
             if (!String.IsNullOrEmpty(playerData.GuildName) && playerData.GuildAccess > 0) {
                 database.UpdateOrInsert("guild", new IDataColumn[]
@@ -1675,7 +1675,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerInventory(MySql database, PlayerData playerData) {
+        public static void SavePlayerInventory(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM inventory WHERE CharID = \'" + playerData.CharID + "\' " +
                 "AND ItemSlot > " + (playerData.MaxInv));
 
@@ -1692,7 +1692,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerInventoryItem(MySql database, string charID, int slot, Characters.InventoryItem item) {
+        public static void SavePlayerInventoryItem(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int slot, Characters.InventoryItem item) {
             database.UpdateOrInsert("inventory", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", charID),
                 database.CreateColumn(false, "ItemSlot", slot.ToString()),
@@ -1703,7 +1703,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void SavePlayerInventoryUpdates(MySql database, string charID, ListPair<int, Characters.InventoryItem> updateList) {
+        public static void SavePlayerInventoryUpdates(PMDCP.DatabaseConnector.MySql.MySql database, string charID, ListPair<int, Characters.InventoryItem> updateList) {
             for (int i = 0; i < updateList.Count; i++) {
                 Characters.InventoryItem invItem = updateList.ValueByIndex(i);
                 database.UpdateOrInsert("inventory", new IDataColumn[] {
@@ -1717,7 +1717,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerItemGenerals(MySql database, PlayerData playerData) {
+        public static void SavePlayerItemGenerals(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("items", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1726,7 +1726,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void SavePlayerJobList(MySql database, PlayerData playerData) {
+        public static void SavePlayerJobList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM job_list WHERE CharID = \'" + playerData.CharID + "\'");
 
             for (int i = 0; i < playerData.JobList.Count; i++) {
@@ -1753,7 +1753,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerLocation(MySql database, PlayerData playerData) {
+        public static void SavePlayerLocation(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("location", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1765,7 +1765,7 @@ namespace DataManager.Players
         }
 
         /*
-        public static void SavePlayerMissionBoardGenerals(MySql database, PlayerData playerData) {
+        public static void SavePlayerMissionBoardGenerals(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("mission_board", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", playerData.CharID),
                 database.CreateColumn(false, "LastGenerationDate", playerData.MissionBoardLastGenerationDate.Ticks.ToString())
@@ -1773,7 +1773,7 @@ namespace DataManager.Players
         }
         */
 
-        public static void SavePlayerMissionBoardMissions(MySql database, PlayerData playerData) {
+        public static void SavePlayerMissionBoardMissions(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.ExecuteNonQuery("DELETE FROM mission_board_missions WHERE CharID = \'" + playerData.CharID + "\'");
             for (int i = 0; i < playerData.MissionBoardMissions.Count; i++) {
                 database.UpdateOrInsert("mission_board_missions", new IDataColumn[] {
@@ -1795,7 +1795,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerMissionGenerals(MySql database, PlayerData playerData) {
+        public static void SavePlayerMissionGenerals(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("missions", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1805,7 +1805,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void SavePlayerRecruit(MySql database, string charID, int recruitIndex, RecruitData recruitData) {
+        public static void SavePlayerRecruit(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int recruitIndex, RecruitData recruitData) {
             database.UpdateOrInsert("recruit_data", new IDataColumn[] {
                 database.CreateColumn(false, "CharID", charID),
                 database.CreateColumn(false, "RecruitIndex", recruitIndex.ToString()),
@@ -1872,7 +1872,7 @@ namespace DataManager.Players
         /// <param name="charID">The char ID.</param>
         /// <param name="recruitIndex">Index of the recruit.</param>
         /// <param name="inTempMode">if set to <c>true</c>, the temporary recruit will be deleted. Otherwise, the main recruit will be deleted.</param>
-        public static void DeletePlayerRecruit(MySql database, string charID, int recruitIndex, bool inTempMode) {
+        public static void DeletePlayerRecruit(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int recruitIndex, bool inTempMode) {
             if (inTempMode == false) {
                 // Mark recruit slot as deleted
                 database.UpdateOrInsert("recruit_data", new IDataColumn[] {
@@ -1899,7 +1899,7 @@ namespace DataManager.Players
               "AND UsingTempStats = \'" + inTempMode.ToIntString() + "\'");
         }
 
-        public static void SavePlayerRecruitList(MySql database, PlayerData playerData) {
+        public static void SavePlayerRecruitList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             for (int i = 0; i < playerData.StoryHelperStateSettings.Count; i++) {
                 database.UpdateOrInsert("recruit_list", new IDataColumn[] {
                     database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1909,7 +1909,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerStatistics(MySql database, PlayerData playerData) {
+        public static void SavePlayerStatistics(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("character_statistics", new IDataColumn[] {
                     database.CreateColumn(false, "CharID", playerData.CharID),
                     database.CreateColumn(false, "TotalPlayTime", playerData.TotalPlayTime.ToString()),
@@ -1923,7 +1923,7 @@ namespace DataManager.Players
                 });
         }
 
-        public static void SavePlayerStoryChapters(MySql database, PlayerData playerData) {
+        public static void SavePlayerStoryChapters(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             for (int i = 0; i < playerData.StoryChapters.Count; i++) {
                 database.UpdateOrInsert("story_chapters", new IDataColumn[] {
                     database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1933,7 +1933,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerStoryGenerals(MySql database, PlayerData playerData) {
+        public static void SavePlayerStoryGenerals(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             database.UpdateOrInsert("story", new IDataColumn[]
             {
                 database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1942,7 +1942,7 @@ namespace DataManager.Players
             });
         }
 
-        public static void SavePlayerStoryHelperStateSettings(MySql database, PlayerData playerData) {
+        public static void SavePlayerStoryHelperStateSettings(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             for (int i = 0; i < playerData.StoryHelperStateSettings.Count; i++) {
                 database.UpdateOrInsert("story_helper_state_settings", new IDataColumn[] {
                     database.CreateColumn(false, "CharID", playerData.CharID),
@@ -1952,7 +1952,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerTeam(MySql database, PlayerData playerData) {
+        public static void SavePlayerTeam(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             for (int i = 0; i < playerData.TeamMembers.Length; i++) {
                 database.UpdateOrInsert("team", new IDataColumn[]
                 {
@@ -1964,7 +1964,7 @@ namespace DataManager.Players
             }
         }
 
-        public static void SavePlayerTriggerEvents(MySql database, PlayerData playerData) {
+        public static void SavePlayerTriggerEvents(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             for (int i = 0; i < playerData.TriggerEvents.Count; i++) {
                 PlayerDataTriggerEvent triggerEvent = playerData.TriggerEvents[i];
 

@@ -65,7 +65,7 @@ namespace Server.WonderMails {
 
         public static void LoadMissionPool(DatabaseConnection dbConnection, int difficulty) {
             MissionPool missionPool = new MissionPool();
-            MySql database = dbConnection.Database;
+            var database = dbConnection.Database;
 
             string query = "SELECT mission_client.DexNum, mission_client.FormNum " +
                 "FROM mission_client " +
@@ -112,7 +112,7 @@ namespace Server.WonderMails {
 
         public static void SaveMissionPool(DatabaseConnection dbConnection, int difficulty)
         {
-            MySql database = dbConnection.Database;
+            var database = dbConnection.Database;
 
             database.ExecuteNonQuery("DELETE FROM mission_client WHERE Rank = \'" + difficulty + "\'");
             

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using PMU.DatabaseConnector.MySql;
-using PMU.DatabaseConnector;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
 
 namespace DataManager.Parties {
     public class PartyData {

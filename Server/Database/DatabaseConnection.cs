@@ -28,11 +28,11 @@ namespace Server.Database
 {
     public class DatabaseConnection : IDisposable
     {
-        MySql database;
+        PMDCP.DatabaseConnector.MySql.MySql database;
         Client client;
         DatabaseID databaseID;
 
-        public MySql Database {
+        public PMDCP.DatabaseConnector.MySql.MySql Database {
             get {
                 if (!disposed) {
                     return database;
@@ -48,10 +48,10 @@ namespace Server.Database
             string databaseName = DetermineDatabaseName(databaseID);
             if (!string.IsNullOrEmpty(databaseName)) {
 #if !DEBUG
-                database = new MySql(Settings.DatabaseIP, Settings.DatabasePort, databaseName, Settings.DatabaseUser, Settings.DatabasePassword);
+                database = new PMDCP.DatabaseConnector.MySql.MySql(Settings.DatabaseIP, Settings.DatabasePort, databaseName, Settings.DatabaseUser, Settings.DatabasePassword);
                  
 #else
-                database = new MySql("localhost", Settings.DatabasePort, databaseName, Settings.DatabaseUser, Settings.DatabasePassword);
+                database = new PMDCP.DatabaseConnector.MySql.MySql("localhost", Settings.DatabasePort, databaseName, Settings.DatabaseUser, Settings.DatabasePassword);
 #endif
             }
 

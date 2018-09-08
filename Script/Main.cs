@@ -8465,7 +8465,8 @@ namespace Script {
            	                    }
            	                    Logger.SaveLogs();
               	                Messenger.AdminMsg("!", Text.Black);
-                            	System.Windows.Forms.Application.Restart();
+                                // TODO: Handle restarts?
+                            	//System.Windows.Forms.Application.Restart();
                             	Environment.Exit(0);
                	 	          }
                            );

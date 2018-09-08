@@ -77,7 +77,7 @@ namespace Server.Evolutions
             }
         }
 
-        public static void LoadEvo(int evoNum, MySql database)
+        public static void LoadEvo(int evoNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (evolution.Evolutions.ContainsKey(evoNum) == false)
                 evolution.Evolutions.Add(evoNum, new Evolution());
@@ -125,7 +125,7 @@ namespace Server.Evolutions
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
 
                 database.BeginTransaction();
 
