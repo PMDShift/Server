@@ -654,41 +654,41 @@ namespace DataManager.Players
         #endregion
 
         public static void UnlinkCharacter(IDatabase database, string accountName, int slot) {
-            database.DeleteRow("characters", "UPPER(AccountName) = UPPER(@AccountName) AND Slot = @Slot", new { AccountName = accountName, Slot = slot });
+            database.DeleteRow("characters", @"UPPER(""AccountName"") = UPPER(@AccountName) AND Slot = @Slot", new { AccountName = accountName, Slot = slot });
         }
 
         public static void DeleteCharacter(PMDCP.DatabaseConnector.MySql.MySql database, string characterID) {
-            database.ExecuteNonQuery("DELETE FROM bank WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM character_statistics WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM characteristics WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM dungeons WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM expkit WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM friends WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM guild WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM inventory WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM items WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM job_list WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM location WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM map_load_trigger_event WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM mission_board_missions WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM missions WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM recruit_data WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM recruit_list WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM recruit_moves WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM recruit_volatile_status WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM script_extras_general WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM step_counter_trigger_event WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM stepped_on_tile_trigger_event WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM story WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM story_chapters WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM story_helper_state_settings WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM team WHERE CharID = \'" + characterID + "\'");
-            database.ExecuteNonQuery("DELETE FROM trigger_events WHERE CharID = \'" + characterID + "\'");
+            database.DeleteRow("bank", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("character_statistics", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("characteristics", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("dungeons", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("expkit", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("friends", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("guild", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("inventory", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("items", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("job_list", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("location", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("map_load_trigger_event", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("mission_board_missions", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("missions", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("recruit_data", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("recruit_list", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("recruit_moves", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("recruit_volatile_status", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("script_extras_general", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("step_counter_trigger_event", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("stepped_on_tile_trigger_event", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("story", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("story_chapters", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("story_helper_state_settings", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("team", @"""CharID"" = @CharID", new { CharID = characterID });
+            database.DeleteRow("trigger_events", @"""CharID"" = @CharID", new { CharID = characterID });
         }
 
         public static void DeleteAccount(PMDCP.DatabaseConnector.MySql.MySql database, string accountName) {
             // Delete the account record
-            database.ExecuteNonQuery("DELETE FROM accounts WHERE AccountName = \'" + database.VerifyValueString(accountName) + "\'");
+            database.DeleteRow("accounts", @"""AccountName"" = @AccountName", new { AccountName = accountName });
             for (int i = 1; i <= 3; i++) {
                 // Delete all of the characters
                 if (!IsCharacterSlotEmpty(database, accountName, i)) {
@@ -1053,12 +1053,12 @@ namespace DataManager.Players
             });
         }
 
-        public static void RemoveGuildMember(PMDCP.DatabaseConnector.MySql.MySql database, string charID) {
-            database.ExecuteNonQuery("DELETE FROM guild WHERE CharID = \'" + charID + "\'");
+        public static void RemoveGuildMember(IDatabase database, string charID) {
+            database.DeleteRow("guild", @"""CharID"" = @CharID", new { CharID = charID });
         }
 
-        public static void RemoveGuild(PMDCP.DatabaseConnector.MySql.MySql database, string guildName) {
-            database.ExecuteNonQuery("DELETE FROM guild WHERE GuildName = \'" + guildName + "\'");
+        public static void RemoveGuild(IDatabase database, string guildName) {
+            database.DeleteRow("guild", @"""GuildName"" = @GuildName", new { GuildName = guildName });
         }
 
         public static void LoadPlayerIgnoreList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
@@ -1516,8 +1516,7 @@ namespace DataManager.Players
         }
 
         public static void SavePlayerBank(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
-            database.ExecuteNonQuery("DELETE FROM bank WHERE CharID = \'" + playerData.CharID + "\' " +
-                "AND ItemSlot > " + (playerData.MaxBank));
+            database.DeleteRow("bank", @"""CharID"" = @CharID AND ""ItemSlot"" > @ItemSlot", new { CharID = playerData.CharID, ItemSlot = playerData.MaxBank });
 
             MultiRowInsert multiRowInsert = new MultiRowInsert(database, "bank", "CharID", "ItemSlot", "ItemNum",
                 "Amount", "Sticky", "Tag");
@@ -1634,9 +1633,7 @@ namespace DataManager.Players
         }
 
         public static void SavePlayerFriendsList(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
-            database.ExecuteNonQuery("DELETE FROM friends WHERE CharID = \'" + playerData.CharID + "\' " +
-                "AND FriendListSlot > " + (playerData.Friends.Count - 1));
-            //database.DeleteRow("friends", "CharID = \'" + playerData.CharID + "\'");
+            database.DeleteRow("friends", @"""CharID"" = @CharID AND FriendListSlot > @FriendListSlot", new { CharID = playerData.CharID, FriendListSlot = (playerData.Friends.Count - 1) });
 
             for (int i = 0; i < playerData.Friends.Count; i++) {
                 database.UpdateOrInsert("friends", new IDataColumn[] {
