@@ -1,6 +1,9 @@
 image: ubuntu
 services:
 - docker
+branches:
+  only:
+    - master
 install:
   - git submodule update --init --recursive
   - nuget restore Server.sln
