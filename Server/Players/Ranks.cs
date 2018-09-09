@@ -31,8 +31,8 @@ namespace Server.Players
             switch (RankToCheck) {
                 case Enums.Rank.Normal:
                     return true;
-                case Enums.Rank.Moniter:
-                    if (PlayerRank == Enums.Rank.Moniter | PlayerRank == Enums.Rank.Mapper | PlayerRank == Enums.Rank.Developer | PlayerRank == Enums.Rank.Admin | PlayerRank == Enums.Rank.ServerHost | PlayerRank == Enums.Rank.Scripter) {
+                case Enums.Rank.Monitor:
+                    if (PlayerRank == Enums.Rank.Monitor | PlayerRank == Enums.Rank.Mapper | PlayerRank == Enums.Rank.Developer | PlayerRank == Enums.Rank.Admin | PlayerRank == Enums.Rank.ServerHost | PlayerRank == Enums.Rank.Scripter) {
                         return true;
                     }
                     break;
@@ -72,19 +72,19 @@ namespace Server.Players
         public static Color GetRankColor(Enums.Rank rank) {
             switch (rank) {
                 case Enums.Rank.Normal:
-                    return Color.Brown;
-                case Enums.Rank.Moniter:
-                    return Color.Orange;
+                    return Text.Trap;
+                case Enums.Rank.Monitor:
+                    return Text.Location;
                 case Enums.Rank.Mapper:
-                    return Color.Cyan;
+                    return Text.NPC;
                 case Enums.Rank.Developer:
-                    return Color.Blue;
+                    return Text.Player;
                 case Enums.Rank.Admin:
-                    return Color.Pink;
+                    return Text.Item;
                 case Enums.Rank.ServerHost:
-                    return Color.Yellow;
+                    return Text.Teammate;
                 case Enums.Rank.Scripter:
-                    return Color.LightCyan;
+                    return Text.MoveEffect;
                 default:
                     return Color.DarkRed;
             }

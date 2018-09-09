@@ -40,7 +40,7 @@ namespace Server.Statistics
                 if (i.Player != null) {
                     if (i.IsPlaying()) {
                         playerCount++;
-                        if (Players.Ranks.IsAllowed(i, Enums.Rank.Moniter)) {
+                        if (Players.Ranks.IsAllowed(i, Enums.Rank.Monitor)) {
                             staffCount++;
                         }
                     }

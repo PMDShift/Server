@@ -737,7 +737,7 @@ namespace Server.Network
                     case "globalmsg":
                         if (CanSayMsg(client, parse[1]))
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
                                 Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Announcement);
 
@@ -756,7 +756,7 @@ namespace Server.Network
                     case "adminmsg":
                         if (CanSayMsg(client, parse[1]))
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
 
                                 Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Staff);
@@ -3963,7 +3963,7 @@ namespace Server.Network
                         break;
                     case "playerinforequest":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
                                 string name = parse[1];
                                 Client i = ClientManager.FindClient(name);
@@ -4018,7 +4018,7 @@ namespace Server.Network
                                     {
                                         if (Ranks.IsAllowed(client, (Enums.Rank)i))
                                         {
-                                            if (Ranks.IsDisallowed(n, Enums.Rank.Moniter))
+                                            if (Ranks.IsDisallowed(n, Enums.Rank.Monitor))
                                             {
                                                 Messenger.GlobalMsg(n.Player.Name + " has been blessed with administrative access.", Text.BrightBlue);
                                             }
@@ -4170,7 +4170,7 @@ namespace Server.Network
                         break;
                     case "kickplayer":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4235,7 +4235,7 @@ namespace Server.Network
                         break;
                     case "banlist":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;

@@ -59,7 +59,7 @@ namespace Server.Network
 
         public static void AdminMsg(string Msg, Color Color) {
             foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Moniter)) {
+                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Monitor)) {
                     SendDataTo(i, TcpPacket.CreatePacket("msg", Msg, Color.ToArgb().ToString()));
                 }
             }
@@ -1370,7 +1370,7 @@ namespace Server.Network
                 hitlist.AddPacket(client, TcpPacket.CreatePacket("ingame"));
 
 #if DEBUG
-                if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                     hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("The server is currently in debug mode!", Text.BrightRed));
                 }
 #endif

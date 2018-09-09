@@ -55,7 +55,7 @@ namespace Server
                     break;
                 case "/masskick": {
                         foreach (Client i in ClientManager.GetClients()) {
-                            if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Moniter)) {
+                            if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor)) {
                                 Messenger.GlobalMsg(i.Player.Name + " has been kicked by the server!", Text.White);
                                 Messenger.AlertMsg(i, "You have been kicked by the server!");
                             }
@@ -98,7 +98,7 @@ namespace Server
                             //    break;
                             //}
                             foreach (Client i in ClientManager.GetClients()) {
-                                if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Moniter)) {
+                                if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor)) {
                                     Messenger.GlobalMsg("The server has warped everyone!", Text.White);
                                     Messenger.PlayerWarp(i, map, x, y);
                                 }

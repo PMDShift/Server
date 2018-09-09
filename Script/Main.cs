@@ -63,7 +63,7 @@ namespace Script {
             try {
                 // Called when a player joins the game
 
-                if (Ranks.IsDisallowed(client, Enums.Rank.Moniter)) {
+                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
                     for (int i = 1; i <= client.Player.MaxInv; i++) {
                         if (client.Player.Inventory[i].Amount >= 1000 && client.Player.Inventory[i].Num != 1) {
                             Messenger.AdminMsg("[Staff] " + client.Player.Name + " has " + client.Player.Inventory[i].Amount + " " + ItemManager.Items[client.Player.Inventory[i].Num].Name + " in their inventory!", Text.BrightRed);
@@ -201,7 +201,7 @@ namespace Script {
 				
                 // Remove all player timers
                 client.Player.Timers.RemoveAllTimers();
-                if (Ranks.IsDisallowed(client, Enums.Rank.Moniter)) {
+                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
                     Messenger.MapMsg(client.Player.MapID, client.Player.Name + " has left " + Settings.GameName + "!", Text.BrightGreen);
                     Messenger.AdminMsg(client.Player.Name + " has left " + Settings.GameName + "!", Text.BrightGreen);
                     foreach (Client i in ClientManager.GetClients()) {
@@ -4691,7 +4691,7 @@ namespace Script {
         }
 
         public static void OpenStaffElevator(Client client) {
-            if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+            if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                 Server.CustomMenus.CustomMenu menu = client.Player.CustomMenuManager.CreateMenu("Staff Elevator", "", true);
                 menu.UpdateSize(300, 350);
                 menu.AddLabel(0, 2, 3, 268, 29, "Select a location", "PMDCP.ttf", 10, Text.Black);
@@ -7987,7 +7987,7 @@ namespace Script {
             switch (rank) {
                 case Enums.Rank.Normal:
                     return "";
-                case Enums.Rank.Moniter:
+                case Enums.Rank.Monitor:
                     return "Mod";
                 case Enums.Rank.Mapper:
                     return "Mapper";
@@ -8401,7 +8401,7 @@ namespace Script {
         }
         
         public static void PlayerInfoReport(Client client) {
-        	if ((!Ranks.IsAllowed(client, Enums.Rank.Moniter)) && client != null) {
+        	if ((!Ranks.IsAllowed(client, Enums.Rank.Monitor)) && client != null) {
 					Messenger.AdminMsg("\n" + "Player Information Report:" + "\n" + 
 					"Account/Character: " + client.Player.AccountName + "/" + client.Player.Name + "\n" + "IP: " 
                     + client.IP.ToString() + "\n" + "MAC: " + client.MacAddress, Text.BrightBlue);
