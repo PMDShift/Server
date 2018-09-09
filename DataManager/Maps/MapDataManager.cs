@@ -132,7 +132,9 @@ namespace DataManager.Maps
                 tile.Fringe2Set = Convert.ToInt32(row[counter++].Value);
                 tile.F2AnimSet = Convert.ToInt32(row[counter++].Value);
 
-                rawMap.Tile[x, y] = tile;
+                if (x < rawMap.Tile.GetLength(0) && y < rawMap.Tile.GetLength(1)) {
+                    rawMap.Tile[x, y] = tile;
+                }
             }
 
             rawMap.MapID = mapID;
