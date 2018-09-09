@@ -137,7 +137,7 @@ namespace Script {
                 if (Ranks.IsDisallowed(client, Enums.Rank.Scripter)) {
                     packetList.HitList.Clear(); // Remove the warp packets to cancel the map load
                     Messenger.PlayerWarp(client, 1015, 25, 25);
-                    if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+                    if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                         Messenger.PlayerMsg(client, "Sorry, you can't go here! ~Pikachu", Text.BrightRed);
                     } else {
                         Messenger.PlayerMsg(client, "Sorry, you can't go here!", Text.BrightRed);

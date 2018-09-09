@@ -234,7 +234,7 @@ namespace Script {
                 //unfinished move check
                 if (setup.moveIndex > 0) {
                     if (MoveManager.Moves[setup.moveIndex].Name.EndsWith("\'") || MoveManager.Moves[setup.moveIndex].Name.EndsWith("`")) {
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit && Ranks.IsAllowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Moniter)) {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit && Ranks.IsAllowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor)) {
 
                         } else {
                             setup.Cancel = true;
@@ -1546,7 +1546,7 @@ namespace Script {
             	
                 ExtraStatus status;
                 //if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                //	if (Ranks.IsAllowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Moniter)) {
+                //	if (Ranks.IsAllowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor)) {
                 //		Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "Place Hit", Text.BrightRed);
                 //	}
                 //}
@@ -1829,7 +1829,7 @@ namespace Script {
                             			eligible = false;
                             		}
                             	} else {
-                            		if (Ranks.IsAllowed(((Recruit)targets[i]).Owner, Enums.Rank.Moniter)) {
+                            		if (Ranks.IsAllowed(((Recruit)targets[i]).Owner, Enums.Rank.Monitor)) {
                             				eligible = false;
                             		}
                                 }
@@ -5551,7 +5551,7 @@ namespace Script {
             try {
                 ExtraStatus status;
                 //if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
-                //	if (Ranks.IsAllowed(((Recruit)setup.Defender).Owner, Enums.Rank.Moniter)) {
+                //	if (Ranks.IsAllowed(((Recruit)setup.Defender).Owner, Enums.Rank.Monitor)) {
                 //		Messenger.PlayerMsg(((Recruit)setup.Defender).Owner, "HP: " + setup.Attacker.HP, Text.BrightRed);
                 //	}
                 //}
@@ -7176,7 +7176,7 @@ namespace Script {
 
             RemoveBuffs(client.Player.GetActiveRecruit());
             
-			if (Ranks.IsDisallowed(client, Enums.Rank.Moniter)) {
+			if (Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
 	            client.Player.Hunted = false;
 	            PacketBuilder.AppendHunted(client, hitlist);
             }

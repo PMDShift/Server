@@ -1047,11 +1047,11 @@ namespace Server.Combat
         //}
         //if (Victim.Player.GetCurrentMap().Tile[Victim.Player.X, Victim.Player.Y].Type != Enums.TileType.Arena & Attacker.Player.GetCurrentMap().Tile[Attacker.Player.X, Attacker.Player.Y].Type != Enums.TileType.Arena) {
         //    // Check to make sure that they don't have access
-        //    if (Ranks.IsAllowed(Attacker, Enums.Rank.Moniter) && !Settings.AdminAttack) {
+        //    if (Ranks.IsAllowed(Attacker, Enums.Rank.Monitor) && !Settings.AdminAttack) {
         //        Messenger.PlayerMsg(Attacker, "You cannot attack any player for thou art an admin!", Text.BrightBlue);
         //    } else {
         //        // Check to make sure the victim isn't an admin
-        //        if (Ranks.IsAllowed(Victim, Enums.Rank.Moniter) && !Settings.AdminAttack) {
+        //        if (Ranks.IsAllowed(Victim, Enums.Rank.Monitor) && !Settings.AdminAttack) {
         //            Messenger.PlayerMsg(Attacker, "You cannot attack " + Victim.Player.Name + "!", Text.BrightRed);
         //        } else {
         //            // Check if map is attackable
@@ -1773,7 +1773,7 @@ namespace Server.Combat
 
 
             if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Moniter) || ((Recruit)setup.Attacker).Owner.Player.ProtectionOff) {
+                if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.ProtectionOff) {
                     ((Recruit)setup.Attacker).Owner.Player.Hunted = true;
                     PacketBuilder.AppendHunted(((Recruit)setup.Attacker).Owner, setup.PacketStack);
                 }
@@ -2335,7 +2335,7 @@ namespace Server.Combat
                     ((MapNpc)setup.Defender).HitByMove = true;
                 }
                 if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                    if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Moniter) || ((Recruit)setup.Attacker).Owner.Player.Hunted) {
+                    if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.Hunted) {
                         ((MapNpc)setup.Defender).Target = ((Recruit)setup.Attacker).Owner;
                         if (NpcManager.Npcs[((MapNpc)setup.Defender).Num].Behavior == Enums.NpcBehavior.Guard) {
                             for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
