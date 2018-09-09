@@ -831,6 +831,7 @@ namespace DataManager.Players
         public static bool LoadPlayerData(PMDCP.DatabaseConnector.MySql.MySql database, PlayerData playerData) {
             string query = "SELECT accounts.Email, characteristics.Name, characteristics.Access, characteristics.ActiveSlot, characteristics.PK, " +
                 "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " +
+                "characteristics.CanLinkDiscord, characteristics.LinkedDiscordId, " +
                 "expkit.AvailableModules, " +
                 "location.Map, location.X, location.Y, location.Direction, " +
                 "guild.GuildName, guild.GuildAccess, " +
@@ -860,6 +861,8 @@ namespace DataManager.Players
                 playerData.Veteran = row["Veteran"].ValueString.ToBool();
                 playerData.InTempMode = row["InTempMode"].ValueString.ToBool();
                 playerData.Dead = row["Dead"].ValueString.ToBool();
+                playerData.CanLinkDiscord = row["CanLinkDiscord"].ValueString.ToBool();
+                playerData.LinkedDiscordId = row["LinkedDiscordId"].ValueString.ToUlng();
 
                 playerData.AvailableModules = row["AvailableModules"].ValueString;
 
@@ -1576,7 +1579,9 @@ namespace DataManager.Players
                 database.CreateColumn(false, "Status", playerData.Status),
                 database.CreateColumn(false, "Veteran", playerData.Veteran.ToIntString()),
                 database.CreateColumn(false, "InTempMode", playerData.InTempMode.ToIntString()),
-                database.CreateColumn(false, "Dead", playerData.Dead.ToIntString())
+                database.CreateColumn(false, "Dead", playerData.Dead.ToIntString()),
+                database.CreateColumn(false, "CanLinkDiscord", playerData.CanLinkDiscord.ToIntString()),
+                database.CreateColumn(false, "LinkedDiscordId", playerData.LinkedDiscordId.ToString())
             });
         }
 

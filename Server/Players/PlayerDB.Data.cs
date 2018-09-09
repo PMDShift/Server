@@ -87,6 +87,8 @@ namespace Server.Players
 
         #region Properties
 
+        public ulong PendingDiscordId { get; set; }
+
         public bool SavingLocked {
             get;
             set;
@@ -159,7 +161,7 @@ namespace Server.Players
             get { return statistics; }
         }
 
-        internal PlayerData PlayerData {
+        public PlayerData PlayerData {
             get { return playerData; }
         }
 

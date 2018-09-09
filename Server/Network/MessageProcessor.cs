@@ -1765,6 +1765,17 @@ namespace Server.Network
                                         #endregion
                                     }
                                     break;
+                                case "LinkDiscord": {
+                                        #region Link Discord
+                                        if (parse[1] == "Yes") {
+                                            client.Player.PlayerData.LinkedDiscordId = client.Player.PendingDiscordId;
+                                            Messenger.PlayerMsg(client, "Discord account connected!", Text.BrightGreen);
+                                        }
+
+                                        client.Player.PendingDiscordId = 0;
+                                        #endregion
+                                    }
+                                    break;
                                 default:
                                     {
                                         Scripting.ScriptManager.InvokeSub("QuestionResult", client, id, parse[1]);

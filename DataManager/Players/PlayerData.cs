@@ -36,6 +36,9 @@ namespace DataManager.Players
         public bool InTempMode { get; set; }
         public bool Dead { get; set; }
 
+        public bool CanLinkDiscord { get; set; }
+        public ulong LinkedDiscordId { get; set; }
+
         public string AvailableModules { get; set; }
 
         public string Map { get; set; }

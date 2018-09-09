@@ -109,6 +109,29 @@ namespace Script
 
                 switch (command[0])
                 {
+                    case "/enablediscord": {
+                            client.Player.PlayerData.CanLinkDiscord = true;
+                            Messenger.PlayerMsg(client, "Discord connecting enabled!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/disablediscord": {
+                            client.Player.PlayerData.CanLinkDiscord = false;
+                            Messenger.PlayerMsg(client, "Discord connecting disabled!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/resetdiscord": {
+                            client.Player.PendingDiscordId = 0;
+                            Messenger.PlayerMsg(client, "Discord connecting reset!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/discordinfo": {
+                            if (client.Player.PlayerData.LinkedDiscordId > 0) {
+                                Messenger.PlayerMsg(client, "Your account is linked with Discord.", Text.BrightGreen);
+                            } else {
+                                Messenger.PlayerMsg(client, "Your account is NOT linked with Discord.", Text.BrightGreen);
+                            }
+                        }
+                        break;
                     case "/savelogs":
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Scripter))

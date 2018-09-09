@@ -42,7 +42,10 @@ namespace Server.Database
             }
         }
 
-        public DatabaseConnection(DatabaseID databaseID) {
+        public DatabaseConnection(DatabaseID databaseID) : this(databaseID, true) {
+        }
+
+        public DatabaseConnection(DatabaseID databaseID, bool openConnection) {
             this.databaseID = databaseID;
 
             string databaseName = DetermineDatabaseName(databaseID);
@@ -55,7 +58,9 @@ namespace Server.Database
 #endif
             }
 
-            database.OpenConnection();
+            if (openConnection) {
+                database.OpenConnection();
+            }
         }
 
         private string DetermineDatabaseName(DatabaseID databaseID) {

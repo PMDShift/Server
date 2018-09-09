@@ -79,6 +79,8 @@ namespace Server
         }
 
         private static void LoadServerBackground(Object param) {
+            Migrations.MigrationRunner.MigrateDatabase();
+
             System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LoadDatasBackground));
             t.Name = "Data Load Thread";
             t.Start();
