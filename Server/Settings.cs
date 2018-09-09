@@ -49,6 +49,8 @@ namespace Server
         public static string DatabaseUser { get; set; }
         public static string DatabasePassword { get; set; }
 
+        public static string DiscordBotToken { get; set; }
+
         public static XmlWriterSettings XmlWriterSettings { get; set; }
 
 
@@ -93,6 +95,12 @@ namespace Server
                                     DatabasePassword = reader.ReadString();
                                 }
                                 break;
+                            case "DiscordBotToken": {
+                                    if (reader.Read()) {
+                                        DiscordBotToken = reader.ReadString();
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -121,6 +129,11 @@ namespace Server
             var databasePasswordEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_PASSWORD");
             if (!string.IsNullOrEmpty(databasePasswordEnvironmentVariable)) {
                 DatabasePassword = databasePasswordEnvironmentVariable;
+            }
+
+            var discordBotTokenEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DISCORD_BOT_TOKEN");
+            if (!string.IsNullOrEmpty(discordBotTokenEnvironmentVariable)) {
+                DiscordBotToken = discordBotTokenEnvironmentVariable;
             }
 
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {

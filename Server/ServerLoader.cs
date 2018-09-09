@@ -24,6 +24,7 @@ using Server.Network;
 using System.Threading.Tasks;
 using Open.Nat;
 using System.Reflection;
+using Server.Discord;
 
 namespace Server
 {
@@ -58,6 +59,14 @@ namespace Server
 
             Thread t = new Thread(new ParameterizedThreadStart(LoadServerBackground));
             t.Start();
+
+            if (!string.IsNullOrEmpty(Settings.DiscordBotToken)) {
+                var discordThread = new Thread(new ThreadStart(() =>
+                {
+                    new DiscordManager().Run(Settings.DiscordBotToken);
+                }));
+                discordThread.Start();
+            }
         }
 
         private static async Task ForwardPorts()
