@@ -1053,7 +1053,7 @@ namespace Script
                     case "/silentkick*":
                     case "/silentkick":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 string playerName = command[1];
                                 Client kickedClient;
@@ -1091,7 +1091,7 @@ namespace Script
                     case "/kick*":
                     case "/kick":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 string playerName = command[1];
                                 Client kickedClient;
@@ -1131,7 +1131,7 @@ namespace Script
                     case "/ban*":
                     case "/ban":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Moniter))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 string playerName = command[1];
                                 string banTimeDays = "-----";
