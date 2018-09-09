@@ -148,6 +148,18 @@ namespace Server.Network
             return null;
         }
 
+        public static Client FindClient(ulong discordID) {
+            foreach (var client in GetClients()) {
+                if (client.IsPlaying()) {
+                    if (client.Player.PlayerData.LinkedDiscordId == discordID) {
+                        return client;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static bool CanLogin(string accountName) {
             //return true;
 #if DEBUG
