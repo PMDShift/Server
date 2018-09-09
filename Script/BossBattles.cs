@@ -114,7 +114,7 @@ namespace Script
                         //    Messenger.PlayerWarp(client, 1422, 10, 22);
                         //    StoryManager.PlayStory(client, 994);
                         //} else {// Not in mission, warp to instanced map
-                        //    //if (Ranks.IsAllowed(index, Enums.Rank.Moniter)) {
+                        //    //if (Ranks.IsAllowed(index, Enums.Rank.Monitor)) {
                         //    InstancedMap map = new InstancedMap(MapManager.GenerateMapID("i"));
                         //    MapCloner.CloneMapTiles(MapManager.RetrieveMap(1422), map);
                         //    map.MapBase = 1422;

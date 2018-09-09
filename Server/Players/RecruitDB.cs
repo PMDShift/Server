@@ -691,7 +691,7 @@ namespace Server.Players {
             owner.Player.Map.ProcessingPaused = false;
 
 
-            if (Ranks.IsDisallowed(owner, Enums.Rank.Moniter) || owner.Player.ProtectionOff) {
+            if (Ranks.IsDisallowed(owner, Enums.Rank.Monitor) || owner.Player.ProtectionOff) {
                 owner.Player.Hunted = true;
                 Messenger.SendHunted(owner);
             }
@@ -805,7 +805,7 @@ namespace Server.Players {
             Move move = setup.SetdownMove();
             // Attack any players that are on the map
             foreach (ICharacter i in targets.Friends) {
-                if (i.CharacterType == Enums.CharacterType.Recruit && Ranks.IsAllowed(((Recruit)i).Owner, Enums.Rank.Moniter)
+                if (i.CharacterType == Enums.CharacterType.Recruit && Ranks.IsAllowed(((Recruit)i).Owner, Enums.Rank.Monitor)
                         && !((Recruit)i).Owner.Player.Hunted && !((Recruit)i).Owner.Player.Dead) {
                 } else {
                     setup.Defender = i;
@@ -832,7 +832,7 @@ namespace Server.Players {
                 // Don't attack allies
                 if (i.CharacterType == Enums.CharacterType.Recruit) {
                     Recruit recruit = i as Recruit;
-                    if (Ranks.IsAllowed(recruit.Owner, Enums.Rank.Moniter) && !recruit.Owner.Player.Hunted
+                    if (Ranks.IsAllowed(recruit.Owner, Enums.Rank.Monitor) && !recruit.Owner.Player.Hunted
                         || (recruit.Owner.Player.Map.Tile[recruit.Owner.Player.X, recruit.Owner.Player.Y].Type == Enums.TileType.Arena) != (Owner.Player.Map.Tile[X, Y].Type == Enums.TileType.Arena)) {
 
                     } else {

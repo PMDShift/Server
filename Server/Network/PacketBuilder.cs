@@ -1514,7 +1514,7 @@ namespace Server.Network
 
         public static void AppendAdminMsg(PacketHitList hitlist, string Msg, Color Color) {
             foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Moniter)) {
+                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Monitor)) {
                     hitlist.AddPacket(i, TcpPacket.CreatePacket("msg", Msg, Color.ToArgb().ToString()));
                 }
             }

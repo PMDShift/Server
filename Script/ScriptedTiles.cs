@@ -307,7 +307,7 @@ namespace Script
                         break;
                     case 24: {//Admin-only
                             if (client != null) {
-                                if (Ranks.IsDisallowed(client, Enums.Rank.Moniter)) {
+                                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
                                     BlockPlayer(client);
                                     Messenger.PlayerMsg(client, "You must be an Admin to get through!", Text.BrightRed);
                                 }
@@ -735,7 +735,7 @@ namespace Script
                         break;
                     case 55: { // Staff Elevator
                             if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                                     // TODO: OpenStaffElevator(client);
                                 }
                             }
@@ -871,7 +871,7 @@ namespace Script
                     	break;
                     case 67: {// Auction master + bid winner only
                     		if (client.Player.CharID != Auction.AuctionMaster && client.Player.CharID != Auction.LastAuctionMaster && client.Player.Name != Auction.HighestBidder
-                    			&& Ranks.IsDisallowed(client, Enums.Rank.Moniter)) {
+                    			&& Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
                     			BlockPlayer(client);
                     		}
                     	}
@@ -974,7 +974,7 @@ namespace Script
                     	break;
                     case 72: { // Warp to hard mode entrance
                             if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                                 	Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
                                 }
                             }
@@ -982,7 +982,7 @@ namespace Script
                         break;
                     case 73: { // Warp from hard mode entrance
                             if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Moniter)) {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
                                 	Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
                                 }
                             }
