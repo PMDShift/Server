@@ -1130,7 +1130,7 @@ namespace Server.Network
                                                                   player2.MapID, player2.X.ToString(), player2.Y.ToString(),
                                                                   ((int)player2.Direction).ToString(), ((int)player2.Access).ToString(), player2.Hunted.ToIntString(),
                                                                   player2.Dead.ToIntString(), player2.GuildName, ((int)player2.GuildAccess).ToString(),
-                                                                  player2.Status, client.Player.GetActiveRecruit().Visible.ToIntString());
+                                                                  player2.Status, player2.GetActiveRecruit().Visible.ToIntString());
                         
                         packet.AppendParameters((int)player2.GetActiveRecruit().StatusAilment, player2.GetActiveRecruit().VolatileStatus.Count);
                         for (int j = 0; j < player2.GetActiveRecruit().VolatileStatus.Count; j++) {
