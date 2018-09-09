@@ -66,13 +66,13 @@ namespace Server.Network
             dataSplittingTime = watch.ElapsedTicks;
             watch.Reset();
 
-            Server.Debug.ThreadCPUWatcher cpuWatch = new Debug.ThreadCPUWatcher();
-            cpuWatch.Start();
+            //Server.Debug.ThreadCPUWatcher cpuWatch = new Debug.ThreadCPUWatcher(); // TODO: Not supported on linux!
+            //cpuWatch.Start();
             watch.Start();
             ProcessData(client, parse);
             watch.Stop();
-            cpuWatch.StopWatcher(watch.ElapsedMilliseconds);
-            Statistics.PacketStatistics.AddStatistic(parse[0], watch.ElapsedTicks, dataSplittingTime, cpuWatch.CPUusage);
+            //cpuWatch.StopWatcher(watch.ElapsedMilliseconds);
+            Statistics.PacketStatistics.AddStatistic(parse[0], watch.ElapsedTicks, dataSplittingTime, 0);
         }
 
         internal static void ProcessData(Client client, string[] parse)
