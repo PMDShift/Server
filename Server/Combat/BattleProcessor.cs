@@ -2040,9 +2040,17 @@ namespace Server.Combat
 
         public static void HandleAttack(BattleSetup setup) {
             if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {//if player, check if he's playing
-                if (NetworkManager.IsPlaying(((Recruit)setup.Attacker).Owner) == false) {
+                var attacker = ((Recruit)setup.Attacker).Owner;
+                if (NetworkManager.IsPlaying(attacker) == false) {
                     return;
 
+                }
+
+                if (setup.Move.IsSandboxed) {
+                    if (!attacker.Player.PlayerData.IsSandboxed) {
+                        // Disable this attack if the move is sandboxed and the player is not
+                        return;
+                    }
                 }
             } else {//if NPC, check if it exists
                 if (((MapNpc)setup.Attacker).Num <= 0) {
