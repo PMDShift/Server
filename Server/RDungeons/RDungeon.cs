@@ -30,6 +30,8 @@ namespace Server.RDungeons
         public bool Exp { get; set; }
         public int WindTimer { get; set;}
         public int DungeonIndex { get; set; }
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
 
         public List<RDungeonFloor> Floors { get; set; }
 

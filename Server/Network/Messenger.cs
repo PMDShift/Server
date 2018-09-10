@@ -528,10 +528,18 @@ namespace Server.Network
             PlayerWarp(client, map, x, y, tileCheck, true);
         }
 
-
-
         public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound) {
-            
+            if (map.IsSandboxed) {
+                if (!client.Player.IsAssignedToZone(map.ZoneID)) {
+                    Messenger.PlayerMsg(client, "Unable to warp to a sandboxed map that you are not assigned to.", Text.BrightRed);
+                    return;
+                }
+
+                if (!client.Player.PlayerData.IsSandboxed) {
+                    client.Player.EnterSandbox();
+                }
+            }
+
             if (client.Player.LoggedIn && map.MapType == Enums.MapType.Void) {
                 Maps.Void @void = map as Maps.Void;
                 if (@void.PlayerOwner.CharID != client.Player.CharID) {

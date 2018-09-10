@@ -45,6 +45,9 @@ namespace Server.Npcs
 
         public string AIScript { get; set; }
 
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
+
         public Npc()
         {
             Name = "";

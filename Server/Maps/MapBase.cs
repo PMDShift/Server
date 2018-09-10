@@ -49,6 +49,16 @@ namespace Server.Maps
 
         #region Properties
 
+        public bool IsSandboxed {
+            get { return rawMap.IsSandboxed; }
+            set { rawMap.IsSandboxed = value; }
+        }
+
+        public int ZoneID {
+            get { return rawMap.ZoneID; }
+            set { rawMap.ZoneID = value; }
+        }
+
         public int Down {
             get { return rawMap.Down; }
             set { rawMap.Down = value; }

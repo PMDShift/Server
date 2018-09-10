@@ -2081,7 +2081,7 @@ namespace Server.Network
                         break;
                     case "addnewrdungeon":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -2099,7 +2099,16 @@ namespace Server.Network
                             int n = parse[1].ToInt();
                             if (n < 0 || n > RDungeonManager.RDungeons.Count - 1)
                             {
-                                Messenger.PlayerMsg(client, "Invalid dungeon client", Text.BrightRed);
+                                Messenger.PlayerMsg(client, "Invalid dungeon index", Text.BrightRed);
+                                return;
+                            }
+
+                            if (!RDungeonManager.RDungeons[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
 
@@ -2115,6 +2124,15 @@ namespace Server.Network
                             }
 
                             int z = parse[1].ToInt();
+
+                            if (!RDungeonManager.RDungeons[z].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[z].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
+                                return;
+                            }
 
                             RDungeonManager.RDungeons[z].DungeonName = parse[2];
                             RDungeonManager.RDungeons[z].Direction = (Enums.Direction)parse[3].ToInt();
@@ -2546,6 +2564,16 @@ namespace Server.Network
                             Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                             return;
                         }
+
+                        if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House) {
+                            Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                            return;
+                        }
+                        if (!client.Player.IsAssignedToZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House) {
+                            Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
+                            return; 
+                        }
+
                         client.Player.InMapEditor = true;
                         Messenger.SendDataTo(client, TcpPacket.CreatePacket("editmap"));
                         Messenger.SendMapLatestPropertiesTo(client);
@@ -2591,6 +2619,11 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House) {
+                                Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
                             IMap map = null;
                             string mapID = "s0";
                             int n = 0;
@@ -2623,6 +2656,8 @@ namespace Server.Network
                             map.IsSaving = true;
 
                             int revision = MapManager.RetrieveActiveMap(mapID).Revision;
+                            map.IsSandboxed = client.Player.Map.IsSandboxed;
+                            map.ZoneID = client.Player.Map.ZoneID;
                             map.Name = parse[n + 1];
                             map.Revision = revision + 1;
                             map.Moral = (Enums.MapMoral)parse[n + 3].ToInt();
@@ -3033,6 +3068,15 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Items.ItemManager.Items[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this item (item not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Items.ItemManager.Items[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this item (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             ItemManager.Items[n].Name = parse[2];
                             ItemManager.Items[n].Desc = parse[3];
                             ItemManager.Items[n].Pic = parse[4].ToInt();
@@ -3093,7 +3137,19 @@ namespace Server.Network
                                 Messenger.HackingAttempt(client, "Invalid story client");
                                 return;
                             }
+
+                            if (!Stories.StoryManager.Stories[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Story story = new Story(StoryManager.Stories[n].ID);
+                            story.IsSandboxed = Stories.StoryManager.Stories[n].IsSandboxed;
+                            story.ZoneID = Stories.StoryManager.Stories[n].ZoneID;
                             story.Name = parse[2];
                             story.StoryStart = parse[3].ToInt();
                             story.Revision = StoryManager.Stories[n].Revision + 1;
@@ -3137,6 +3193,16 @@ namespace Server.Network
                                 Messenger.HackingAttempt(client, "Invalid story client");
                                 return;
                             }
+
+                            if (!Stories.StoryManager.Stories[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Messenger.SendEditStoryTo(client, n);
                         }
                         break;
@@ -3254,13 +3320,22 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Messenger.SendNpcAiTypes(client);
                             Messenger.SendEditNpcTo(client, n);
                         }
                         break;
                     case "addnewnpc":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -3289,7 +3364,19 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Npc npc = new Npc();
+
+                            npc.IsSandboxed = Npcs.NpcManager.Npcs[n].IsSandboxed;
+                            npc.ZoneID = Npcs.NpcManager.Npcs[n].ZoneID;
 
                             // Update the npc
                             npc.Name = parse[2];
@@ -3363,6 +3450,15 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Shops.ShopManager.Shops[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Messenger.SendEditShopTo(client, n);
                         }
                         break;
@@ -3386,7 +3482,19 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Shops.ShopManager.Shops[ShopNum].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[ShopNum].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Shop shop = new Shop();
+
+                            shop.IsSandboxed = Shops.ShopManager.Shops[ShopNum].IsSandboxed;
+                            shop.ZoneID = Shops.ShopManager.Shops[ShopNum].ZoneID;
 
                             // Update the shop
                             shop.Name = parse[2];
@@ -3445,6 +3553,11 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Moves.MoveManager.Moves[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this move (move not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
                             Messenger.SendEditMoveTo(client, n);
                         }
                         break;
@@ -3470,7 +3583,14 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!Moves.MoveManager.Moves[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this move (move not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
                             Move move = new Move();
+
+                            move.IsSandboxed = Moves.MoveManager.Moves[n].IsSandboxed;
 
                             // Update the spell
                             move.Name = parse[2];
@@ -3776,7 +3896,7 @@ namespace Server.Network
                         break;
                     case "addnewdungeon":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -3800,7 +3920,19 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!DungeonManager.Dungeons[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
+                                return;
+                            }
+
                             Dungeons.Dungeon dungeon = new Dungeon();
+
+                            dungeon.IsSandboxed = DungeonManager.Dungeons[n].IsSandboxed;
+                            dungeon.ZoneID = DungeonManager.Dungeons[n].ZoneID;
 
                             dungeon.Name = parse[2];
                             dungeon.AllowsRescue = parse[3].ToBool();
@@ -3859,6 +3991,15 @@ namespace Server.Network
                             if (n < 0 || n > DungeonManager.Dungeons.Count)
                             {
                                 Messenger.HackingAttempt(client, "Invalid dungeon client");
+                                return;
+                            }
+
+                            if (!DungeonManager.Dungeons[n].IsSandboxed) {
+                                Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID)) {
+                                Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
 
@@ -4063,7 +4204,7 @@ namespace Server.Network
                     case "setmotd":
                         {
                             // Prevent hacking
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin Cloning");
                                 return;

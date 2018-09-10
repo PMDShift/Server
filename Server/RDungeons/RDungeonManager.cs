@@ -83,7 +83,7 @@ namespace Server.RDungeons
                 "up, " +
                 "allow_recruit, " +
                 "allow_exp, " +
-                "time_limit " +
+                "time_limit, is_sandboxed, zone_id " +
                 "FROM rdungeon WHERE rdungeon.num = \'" + dungeonNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -102,6 +102,8 @@ namespace Server.RDungeons
                 dungeon.Recruitment = row["allow_recruit"].ValueString.ToBool();
                 dungeon.Exp = row["allow_exp"].ValueString.ToBool();
                 dungeon.WindTimer = row["time_limit"].ValueString.ToInt();
+                dungeon.IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                dungeon.ZoneID = row["zone_id"].ValueString.ToInt();
             }
 
             query = "SELECT floor_num, " +
@@ -794,13 +796,15 @@ namespace Server.RDungeons
                 database.ExecuteNonQuery("DELETE FROM rdungeon_chamber WHERE num = \'" + dungeonNum + "\'");
 
                 database.UpdateOrInsert("rdungeon", new IDataColumn[] {
-                database.CreateColumn(false, "num", dungeonNum.ToString()),
-                database.CreateColumn(false, "name", rdungeons[dungeonNum].DungeonName),
-                database.CreateColumn(false, "up", (rdungeons[dungeonNum].Direction == Enums.Direction.Up).ToIntString()),
-                database.CreateColumn(false, "allow_recruit", rdungeons[dungeonNum].Recruitment.ToIntString()),
-                database.CreateColumn(false, "allow_exp", rdungeons[dungeonNum].Exp.ToIntString()),
-                database.CreateColumn(false, "time_limit", rdungeons[dungeonNum].WindTimer.ToString()),
-            });
+                    database.CreateColumn(false, "num", dungeonNum.ToString()),
+                    database.CreateColumn(false, "name", rdungeons[dungeonNum].DungeonName),
+                    database.CreateColumn(false, "up", (rdungeons[dungeonNum].Direction == Enums.Direction.Up).ToIntString()),
+                    database.CreateColumn(false, "allow_recruit", rdungeons[dungeonNum].Recruitment.ToIntString()),
+                    database.CreateColumn(false, "allow_exp", rdungeons[dungeonNum].Exp.ToIntString()),
+                    database.CreateColumn(false, "time_limit", rdungeons[dungeonNum].WindTimer.ToString()),
+                    database.CreateColumn(false, "is_sandboxed", rdungeons[dungeonNum].IsSandboxed.ToIntString()),
+                    database.CreateColumn(false, "zone_id", rdungeons[dungeonNum].ZoneID.ToString())
+                });
 
                 for (int i = 0; i < rdungeons[dungeonNum].Floors.Count; i++)
                 {

@@ -50,6 +50,9 @@ namespace Server.Stories
 
         #region Properties
 
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
+
         public string Name {
             get;
             set;

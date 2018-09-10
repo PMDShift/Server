@@ -97,7 +97,9 @@ namespace Server.Items
                 "add_speed, " +
                 "add_exp, " +
                 "attack_speed, " +
-                "recruit_bonus " +
+                "recruit_bonus, " +
+                "is_sandboxed, " +
+                "zone_id " +
                 "FROM item WHERE item.num = \'" + itemNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -131,6 +133,8 @@ namespace Server.Items
                 items[itemNum].AddEXP = row["add_exp"].ValueString.ToInt();
                 items[itemNum].AttackSpeed = row["attack_speed"].ValueString.ToInt();
                 items[itemNum].RecruitBonus = row["recruit_bonus"].ValueString.ToInt();
+                items[itemNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                items[itemNum].ZoneID = row["zone_id"].ValueString.ToInt();
             }
         }
 
@@ -193,7 +197,9 @@ namespace Server.Items
                 database.CreateColumn(false, "add_speed", items[itemNum].AddSpeed.ToString()),
                 database.CreateColumn(false, "add_exp", items[itemNum].AddEXP.ToString()),
                 database.CreateColumn(false, "attack_speed", items[itemNum].AttackSpeed.ToString()),
-                database.CreateColumn(false, "recruit_bonus", items[itemNum].RecruitBonus.ToString())
+                database.CreateColumn(false, "recruit_bonus", items[itemNum].RecruitBonus.ToString()),
+                database.CreateColumn(false, "is_sandboxed", items[itemNum].IsSandboxed.ToIntString()),
+                database.CreateColumn(false, "zone_id", items[itemNum].ZoneID.ToString())
             });
 
                 database.EndTransaction();

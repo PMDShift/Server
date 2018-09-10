@@ -2346,6 +2346,18 @@ namespace Server.Players
         }
         //when outdating something, be sure it exists
 
+        public void EnterSandbox() {
+            PlayerData.IsSandboxed = true;
+        }
+
+        public void LeaveSandbox() {
+            PlayerData.IsSandboxed = false;
+        }
+
+        public bool IsAssignedToZone(int zoneID) {
+            return true;
+        }
+
         #endregion Methods
     }
 }

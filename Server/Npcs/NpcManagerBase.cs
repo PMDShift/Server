@@ -85,7 +85,9 @@ namespace Server.Npcs
                 "move1, " +
                 "move2, " +
                 "move3, " +
-                "move4 " +
+                "move4, " +
+                "is_sandboxed, " +
+                "zone_id " +
                 "FROM npc WHERE npc.num = \'" + npcNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -107,6 +109,8 @@ namespace Server.Npcs
                 npcs[npcNum].Moves[1] = row["move2"].ValueString.ToInt();
                 npcs[npcNum].Moves[2] = row["move3"].ValueString.ToInt();
                 npcs[npcNum].Moves[3] = row["move4"].ValueString.ToInt();
+                npcs[npcNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                npcs[npcNum].ZoneID = row["zone_id"].ValueString.ToInt();
             }
 
             query = "SELECT drop_num, " +
@@ -160,24 +164,26 @@ namespace Server.Npcs
                 database.ExecuteNonQuery("DELETE FROM npc_drop WHERE npc_num = \'" + npcNum + "\'");
 
                 database.UpdateOrInsert("npc", new IDataColumn[] {
-                database.CreateColumn(false, "num", npcNum.ToString()),
-                database.CreateColumn(false, "name", npcs[npcNum].Name),
-                database.CreateColumn(false, "attack_say", npcs[npcNum].AttackSay),
-                database.CreateColumn(false, "species", npcs[npcNum].Species.ToString()),
-                database.CreateColumn(false, "form", npcs[npcNum].Form.ToString()),
-                database.CreateColumn(false, "behavior", ((int)npcs[npcNum].Behavior).ToString()),
-                database.CreateColumn(false, "shiny_chance", npcs[npcNum].ShinyChance.ToString()),
-                database.CreateColumn(false, "dawn_spawn", npcs[npcNum].SpawnsAtDawn.ToIntString()),
-                database.CreateColumn(false, "day_spawn", npcs[npcNum].SpawnsAtDay.ToIntString()),
-                database.CreateColumn(false, "dusk_spawn", npcs[npcNum].SpawnsAtDusk.ToIntString()),
-                database.CreateColumn(false, "night_spawn", npcs[npcNum].SpawnsAtNight.ToIntString()),
-                database.CreateColumn(false, "ai_script", npcs[npcNum].AIScript),
-                database.CreateColumn(false, "recruit_rate", npcs[npcNum].RecruitRate.ToString()),
-                database.CreateColumn(false, "move1", npcs[npcNum].Moves[0].ToString()),
-                database.CreateColumn(false, "move2", npcs[npcNum].Moves[1].ToString()),
-                database.CreateColumn(false, "move3", npcs[npcNum].Moves[2].ToString()),
-                database.CreateColumn(false, "move4", npcs[npcNum].Moves[3].ToString()),
-            });
+                    database.CreateColumn(false, "num", npcNum.ToString()),
+                    database.CreateColumn(false, "name", npcs[npcNum].Name),
+                    database.CreateColumn(false, "attack_say", npcs[npcNum].AttackSay),
+                    database.CreateColumn(false, "species", npcs[npcNum].Species.ToString()),
+                    database.CreateColumn(false, "form", npcs[npcNum].Form.ToString()),
+                    database.CreateColumn(false, "behavior", ((int)npcs[npcNum].Behavior).ToString()),
+                    database.CreateColumn(false, "shiny_chance", npcs[npcNum].ShinyChance.ToString()),
+                    database.CreateColumn(false, "dawn_spawn", npcs[npcNum].SpawnsAtDawn.ToIntString()),
+                    database.CreateColumn(false, "day_spawn", npcs[npcNum].SpawnsAtDay.ToIntString()),
+                    database.CreateColumn(false, "dusk_spawn", npcs[npcNum].SpawnsAtDusk.ToIntString()),
+                    database.CreateColumn(false, "night_spawn", npcs[npcNum].SpawnsAtNight.ToIntString()),
+                    database.CreateColumn(false, "ai_script", npcs[npcNum].AIScript),
+                    database.CreateColumn(false, "recruit_rate", npcs[npcNum].RecruitRate.ToString()),
+                    database.CreateColumn(false, "move1", npcs[npcNum].Moves[0].ToString()),
+                    database.CreateColumn(false, "move2", npcs[npcNum].Moves[1].ToString()),
+                    database.CreateColumn(false, "move3", npcs[npcNum].Moves[2].ToString()),
+                    database.CreateColumn(false, "move4", npcs[npcNum].Moves[3].ToString()),
+                    database.CreateColumn(false, "is_sandboxed", npcs[npcNum].IsSandboxed.ToIntString()),
+                    database.CreateColumn(false, "zone_id", npcs[npcNum].ZoneID.ToString())
+                });
 
                 for (int i = 0; i < npcs[npcNum].Drops.Length; i++)
                 {

@@ -59,6 +59,7 @@ namespace Server.RDungeons
             rDungeonMap.Tile = new DataManager.Maps.Tile[rDungeonMap.MaxX + 1, rDungeonMap.MaxY + 1];
             rDungeonMap.RDungeonIndex = dungeonIndex;
             rDungeonMap.RDungeonFloor = floorNum;
+            rDungeonMap.IsSandboxed = dungeon.IsSandboxed;
 
             RDungeonMap map = new RDungeonMap(rDungeonMap);
 

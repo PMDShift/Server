@@ -31,6 +31,9 @@ namespace Server.Maps
             get;
         }
 
+        bool IsSandboxed { get; set; }
+        int ZoneID { get; set; }
+
         TickCount ActivationTime {
             get;
             set;

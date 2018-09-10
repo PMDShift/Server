@@ -28,6 +28,8 @@ namespace Server.Dungeons
         private List<RandomDungeonMap> randomMaps;
 
         public string Name { get; set; }
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
 
         public List<StandardDungeonMap> StandardMaps {
             get { return standardMaps; }

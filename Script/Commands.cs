@@ -109,6 +109,13 @@ namespace Script
 
                 switch (command[0])
                 {
+                    case "/sandbox": {
+                            // TODO: Only allow entering sandbox mode if assigned to at least one zone
+                            // TODO: Only allow entering sandbox mode if on the overworld
+                            client.Player.PlayerData.IsSandboxed = !client.Player.PlayerData.IsSandboxed;
+                            Messenger.PlayerMsg(client, "Sandbox mode is now " + (client.Player.PlayerData.IsSandboxed ? "enabled." : "disabled."), Text.BrightGreen);
+                        }
+                        break;
                     case "/enablediscord": {
                             client.Player.PlayerData.CanLinkDiscord = true;
                             Messenger.PlayerMsg(client, "Discord connecting enabled!", Text.BrightGreen);

@@ -26,6 +26,7 @@ namespace Server.Moves
     {
         #region Properties
 
+        public bool IsSandboxed { get; set; }
         
         public string Name { get; set; }
 

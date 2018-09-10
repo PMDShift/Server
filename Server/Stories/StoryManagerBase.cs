@@ -95,7 +95,9 @@ namespace Server.Stories
 
             string query = "SELECT revision, " +
                 "name, " +
-                "story_start " +
+                "story_start, " +
+                "is_sandboxed, " +
+                "zone_id " +
                 "FROM story WHERE story.num = \'" + storyNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -104,6 +106,8 @@ namespace Server.Stories
                 story.Revision = row["revision"].ValueString.ToInt();
                 story.Name = row["name"].ValueString;
                 story.StoryStart = row["story_start"].ValueString.ToInt();
+                story.IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                story.ZoneID = row["zone_id"].ValueString.ToInt();
             }
 
             query = "SELECT segment, " +
@@ -163,7 +167,9 @@ namespace Server.Stories
                     database.CreateColumn(false, "num", storyNum.ToString()),
                     database.CreateColumn(false, "revision", stories[storyNum].Revision.ToString()),
                     database.CreateColumn(false, "name", stories[storyNum].Name),
-                    database.CreateColumn(false, "story_start", stories[storyNum].StoryStart.ToString())
+                    database.CreateColumn(false, "story_start", stories[storyNum].StoryStart.ToString()),
+                    database.CreateColumn(false, "is_sandboxed", stories[storyNum].IsSandboxed.ToIntString()),
+                    database.CreateColumn(false, "zone_id", stories[storyNum].ZoneID.ToString())
                 });
 
                 for (int i = 0; i < stories[storyNum].Segments.Count; i++)

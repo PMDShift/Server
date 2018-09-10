@@ -83,7 +83,8 @@ namespace Server.Evolutions
                 evolution.Evolutions.Add(evoNum, new Evolution());
 
             string query = "SELECT name, " +
-                "species " +
+                "species, " +
+                "is_sandboxed " +
                 "FROM evolution WHERE evolution.num = \'" + evoNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -91,6 +92,7 @@ namespace Server.Evolutions
             {
                 evolution[evoNum].Name = row["name"].ValueString;
                 evolution[evoNum].Species = row["species"].ValueString.ToInt();
+                evolution[evoNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
             }
 
             query = "SELECT branch, " +
@@ -133,10 +135,11 @@ namespace Server.Evolutions
                 database.ExecuteNonQuery("DELETE FROM evolution_branch WHERE num = \'" + evoNum + "\'");
 
                 database.UpdateOrInsert("evolution", new IDataColumn[] {
-                database.CreateColumn(false, "num", evoNum.ToString()),
-                database.CreateColumn(false, "name", evolution[evoNum].Name),
-                database.CreateColumn(false, "species", evolution[evoNum].Species.ToString())
-            });
+                    database.CreateColumn(false, "num", evoNum.ToString()),
+                    database.CreateColumn(false, "name", evolution[evoNum].Name),
+                    database.CreateColumn(false, "species", evolution[evoNum].Species.ToString()),
+                    database.CreateColumn(false, "is_sandboxed", evolution[evoNum].IsSandboxed.ToIntString())
+                });
 
                 for (int i = 0; i < evolution[evoNum].Branches.Count; i++)
                 {

@@ -140,7 +140,8 @@ namespace Server.Moves
                 "landed_anim_type, " +
                 "landed_anim_index, " +
                 "landed_anim_speed, " +
-                "landed_anim_cycle " +
+                "landed_anim_cycle, " +
+                "is_sandboxed " +
                 "FROM move WHERE move.num = \'" + moveNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -178,6 +179,7 @@ namespace Server.Moves
                 moves[moveNum].DefenderAnim.AnimationIndex = row["landed_anim_index"].ValueString.ToInt();
                 moves[moveNum].DefenderAnim.FrameSpeed = row["landed_anim_speed"].ValueString.ToInt();
                 moves[moveNum].DefenderAnim.Repetitions = row["landed_anim_cycle"].ValueString.ToInt();
+                moves[moveNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
             }
         }
 
@@ -245,6 +247,7 @@ namespace Server.Moves
                     database.CreateColumn(false, "landed_anim_index", moves[moveNum].DefenderAnim.AnimationIndex.ToString()),
                     database.CreateColumn(false, "landed_anim_speed", moves[moveNum].DefenderAnim.FrameSpeed.ToString()),
                     database.CreateColumn(false, "landed_anim_cycle", moves[moveNum].DefenderAnim.Repetitions.ToString()),
+                    database.CreateColumn(false, "is_sandboxed", moves[moveNum].IsSandboxed.ToIntString())
                 });
 
                 database.EndTransaction();

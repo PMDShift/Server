@@ -32,7 +32,8 @@ namespace DataManager.Maps
                 "map_switchovers.UpMap, map_switchovers.DownMap, map_switchovers.LeftMap, map_switchovers.RightMap, " +
                 "map_data.Name, map_data.Moral, map_data.Music, map_data.Indoors, map_data.Weather, " +
                 "map_data.Darkness, map_data.HungerEnabled, map_data.RecruitmentEnabled, map_data.ExpEnabled, map_data.TimeLimit, " +
-                "map_data.MinNpcs, map_data.MaxNpcs, map_data.NpcSpawnTime " +
+                "map_data.MinNpcs, map_data.MaxNpcs, map_data.NpcSpawnTime, " +
+                "map_data.IsSandboxed, map_data.ZoneID " +
                 "FROM map_data " +
                 "JOIN map_general ON map_general.MapID = map_data.MapID " +
                 "JOIN map_switchovers ON map_switchovers.MapID = map_data.MapID " +
@@ -63,6 +64,7 @@ namespace DataManager.Maps
                     rawMap.MinNpcs = Convert.ToInt32(row[counter++].Value);
                     rawMap.MaxNpcs = Convert.ToInt32(row[counter++].Value);
                     rawMap.NpcSpawnTime = Convert.ToInt32(row[counter++].Value);
+                    rawMap.IsSandboxed = Convert.ToBoolean(row[counter++].Value);
 
                     rawMap.Tile = new Tile[rawMap.MaxX + 1, rawMap.MaxY + 1];
                 } else {
@@ -609,7 +611,9 @@ namespace DataManager.Maps
                 database.CreateColumn(false, "TimeLimit", rawMap.TimeLimit.ToString()),
                 database.CreateColumn(false, "MinNpcs", rawMap.MinNpcs.ToString()),
                 database.CreateColumn(false, "MaxNpcs", rawMap.MaxNpcs.ToString()),
-                database.CreateColumn(false, "NpcSpawnTime", rawMap.NpcSpawnTime.ToString())
+                database.CreateColumn(false, "NpcSpawnTime", rawMap.NpcSpawnTime.ToString()),
+                database.CreateColumn(false, "IsSandboxed", rawMap.IsSandboxed.ToIntString()),
+                database.CreateColumn(false, "ZoneID", rawMap.ZoneID.ToString())
             });
 
             // Save map switchovers

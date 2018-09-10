@@ -34,6 +34,8 @@ namespace Server.Evolutions
         
         public List<EvolutionBranch> Branches { get; set; }
 
+        public bool IsSandboxed { get; set; }
+
         #endregion Properties
 
         //#region Methods

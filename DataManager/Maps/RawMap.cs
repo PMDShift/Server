@@ -33,6 +33,9 @@ namespace DataManager.Maps
             Tile = new Tile[MaxX + 1, MaxY + 1];
         }
 
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
+
         public int Down {
             get;
             set;

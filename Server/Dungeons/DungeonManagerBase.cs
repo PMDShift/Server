@@ -75,7 +75,9 @@ namespace Server.Dungeons
             Dungeon dungeon = new Dungeon();
 
             string query = "SELECT name, " +
-                "rescue " +
+                "rescue, " +
+                "is_sandboxed, " +
+                "zone_id " +
                 "FROM dungeon WHERE dungeon.num = \'" + dungeonNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -83,6 +85,8 @@ namespace Server.Dungeons
             {
                 dungeon.Name = row["name"].ValueString;
                 dungeon.AllowsRescue = row["rescue"].ValueString.ToBool();
+                dungeon.IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                dungeon.ZoneID = row["zone_id"].ValueString.ToInt();
             }
 
             query = "SELECT map_id, " +
@@ -156,10 +160,12 @@ namespace Server.Dungeons
                 database.ExecuteNonQuery("DELETE FROM dungeon_script WHERE num = \'" + dungeonNum + "\'");
 
                 database.UpdateOrInsert("dungeon", new IDataColumn[] {
-                database.CreateColumn(false, "num", dungeonNum.ToString()),
-                database.CreateColumn(false, "name", dungeons[dungeonNum].Name),
-                database.CreateColumn(false, "rescue", dungeons[dungeonNum].AllowsRescue.ToIntString())
-            });
+                    database.CreateColumn(false, "num", dungeonNum.ToString()),
+                    database.CreateColumn(false, "name", dungeons[dungeonNum].Name),
+                    database.CreateColumn(false, "rescue", dungeons[dungeonNum].AllowsRescue.ToIntString()),
+                    database.CreateColumn(false, "is_sandboxed", dungeons[dungeonNum].IsSandboxed.ToIntString()),
+                    database.CreateColumn(false, "zone_id", dungeons[dungeonNum].ZoneID.ToString())
+                });
 
                 for (int i = 0; i < dungeons[dungeonNum].StandardMaps.Count; i++)
                 {

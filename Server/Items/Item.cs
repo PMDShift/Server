@@ -55,5 +55,8 @@ namespace Server.Items
         public int AddEXP { get; set; }
         public int AttackSpeed { get; set; }
         public int RecruitBonus { get; set; }
+
+        public bool IsSandboxed { get; set; }
+        public int ZoneID { get; set; }
     }
 }

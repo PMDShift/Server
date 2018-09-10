@@ -83,7 +83,9 @@ namespace Server.Shops
 
             string query = "SELECT name, " +
                 "greeting, " +
-                "farewell " +
+                "farewell, " +
+                "is_sandboxed, " +
+                "zone_id " +
                 "FROM shop WHERE shop.num = \'" + shopNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -92,6 +94,8 @@ namespace Server.Shops
                 shops[shopNum].Name = row["name"].ValueString;
                 shops[shopNum].JoinSay = row["greeting"].ValueString;
                 shops[shopNum].LeaveSay = row["farewell"].ValueString;
+                shops[shopNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
+                shops[shopNum].ZoneID = row["zone_id"].ValueString.ToInt();
             }
 
             query = "SELECT trade_num, " +
@@ -128,11 +132,13 @@ namespace Server.Shops
                 database.ExecuteNonQuery("DELETE FROM shop_trade WHERE num = \'" + shopNum + "\'");
 
                 database.UpdateOrInsert("shop", new IDataColumn[] {
-                database.CreateColumn(false, "num", shopNum.ToString()),
-                database.CreateColumn(false, "name", shops[shopNum].Name),
-                database.CreateColumn(false, "greeting", shops[shopNum].JoinSay),
-                database.CreateColumn(false, "farewell", shops[shopNum].LeaveSay)
-            });
+                    database.CreateColumn(false, "num", shopNum.ToString()),
+                    database.CreateColumn(false, "name", shops[shopNum].Name),
+                    database.CreateColumn(false, "greeting", shops[shopNum].JoinSay),
+                    database.CreateColumn(false, "farewell", shops[shopNum].LeaveSay),
+                    database.CreateColumn(false, "is_sandboxed", shops[shopNum].IsSandboxed.ToIntString()),
+                    database.CreateColumn(false, "zone_id", shops[shopNum].ZoneID.ToString()),
+                });
 
                 for (int i = 0; i < Constants.MAX_TRADES; i++)
                 {
