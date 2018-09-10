@@ -312,9 +312,13 @@ namespace Script
 					case "/roll":
 						{
 							int roll = 0;
-							if (int.TryParse(joinedArgs, out roll))
+							if (int.TryParse(joinedArgs, out roll) && roll > 0)
 							{
-								Messenger.PlayerMsg(client, $"Rolling (1-{roll}): {Server.Math.Rand(1, roll + 1)}", Text.Yellow);
+								Messenger.MapMsg(client.Player.MapID, $"{client.Player.Name} rolled {Server.Math.Rand(1, roll + 1)} (1-{roll})", Text.Teammate);
+							}
+							else
+							{
+								Messenger.PlayerMsg(client, "That is not a valid roll.", Text.Unselectable);
 							}
 						}
 						break;
