@@ -3587,6 +3587,10 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this move (move not sandboxed).", Text.BrightRed);
                                 return;
                             }
+                            if (Moves.MoveManager.Moves[n].IsBeingReviewed) {
+                                Messenger.PlayerMsg(client, "You can't make edits to this move, it is currently under review.", Text.BrightRed);
+                                return;
+                            }
 
                             Move move = new Move();
 
