@@ -2528,7 +2528,7 @@ namespace Script
                         {
                             if (!string.IsNullOrEmpty(client.Player.GuildName) && !string.IsNullOrEmpty(joinedArgs) && client.Player.Muted == false)
                             {
-                                OnChatMessageRecieved(client, joinedArgs, Enums.ChatMessageType.Guild);
+                                joinedArgs = OnChatMessageRecieved(client, joinedArgs, Enums.ChatMessageType.Guild);
                                 Server.Logging.ChatLogger.AppendToChatLog("Guild Chat/" + client.Player.GuildName, client.Player.Name + ": " + joinedArgs);
                                 /*
                                 List<System.Drawing.Color> textChoices = new List<System.Drawing.Color>();

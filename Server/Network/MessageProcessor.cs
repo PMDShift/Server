@@ -684,7 +684,7 @@ namespace Server.Network
                     case "broadcastmsg":
                         if (CanSayMsg(client, parse[1]))
                         {
-                            Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Global);
+                            var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Global);
 
                             Logging.ChatLogger.AppendToChatLog("Global", client.Player.Name + ": " + parse[1]);
 
@@ -694,13 +694,13 @@ namespace Server.Network
                                 playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
                             }
 
-                            Messenger.GlobalMsg("[Global] " + playerName + ": " + parse[1], Text.DarkGrey);
+                            Messenger.GlobalMsg("[Global] " + playerName + ": " + updatedMessage, Text.DarkGrey);
                         }
                         break;
                     case "saymsg":
                         if (CanSayMsg(client, parse[1]))
                         {
-                            Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Map);
+                            var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Map);
 
                             Logging.ChatLogger.AppendToChatLog("Maps/Map " + client.Player.MapID, client.Player.Name + ": " + parse[1]);
 
@@ -713,15 +713,15 @@ namespace Server.Network
                             PacketHitList hitList = null;
                             PacketHitList.MethodStart(ref hitList);
                             IMap playerMap = client.Player.GetCurrentMap();
-                            hitList.AddPacketToMap(playerMap, PacketBuilder.CreateChatMsg(playerName + ": " + parse[1], Text.White));
-                            hitList.AddPacketToMap(playerMap, PacketBuilder.CreateSpeechBubble(parse[1], client));
+                            hitList.AddPacketToMap(playerMap, PacketBuilder.CreateChatMsg(playerName + ": " + updatedMessage, Text.White));
+                            hitList.AddPacketToMap(playerMap, PacketBuilder.CreateSpeechBubble(updatedMessage, client));
                             PacketHitList.MethodEnded(ref hitList);
                         }
                         break;
                     case "emotemsg":
                         if (CanSayMsg(client, parse[1]))
                         {
-                            Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.MeMsg);
+                            var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.MeMsg);
 
                             Logging.ChatLogger.AppendToChatLog("Maps/Map " + client.Player.MapID, "(MeMsg) " + client.Player.Name + " " + parse[1]);
 
@@ -731,7 +731,7 @@ namespace Server.Network
                                 playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
                             }
 
-                            Messenger.MapMsg(client.Player.MapID, playerName + " " + parse[1], Text.Blue);
+                            Messenger.MapMsg(client.Player.MapID, playerName + " " + updatedMessage, Text.Blue);
                         }
                         break;
                     case "globalmsg":
@@ -739,7 +739,7 @@ namespace Server.Network
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
-                                Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Announcement);
+                                var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Announcement);
 
                                 Logging.ChatLogger.AppendToChatLog("Global", "(Announcement) " + client.Player.Name + ": " + parse[1]);
 
@@ -749,7 +749,7 @@ namespace Server.Network
                                     playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
                                 }
 
-                                Messenger.GlobalMsg("(Announcement) " + playerName + ": " + parse[1], Text.Green);
+                                Messenger.GlobalMsg("(Announcement) " + playerName + ": " + updatedMessage, Text.Green);
                             }
                         }
                         break;
@@ -759,7 +759,7 @@ namespace Server.Network
                             if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
 
-                                Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Staff);
+                                var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Staff);
 
                                 Logging.ChatLogger.AppendToChatLog("Staff", client.Player.Name + ": " + parse[1]);
 
@@ -769,14 +769,14 @@ namespace Server.Network
                                     playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
                                 }
 
-                                Messenger.AdminMsg("[Staff] " + playerName + ": " + parse[1], Text.Cyan);
+                                Messenger.AdminMsg("[Staff] " + playerName + ": " + updatedMessage, Text.Cyan);
                             }
                         }
                         break;
                     case "guildmsg":
                         if (CanSayMsg(client, parse[1]) && !string.IsNullOrEmpty(client.Player.GuildName))
                         {
-                            Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Guild);
+                            var updatedMessage = Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Guild);
 
                             //Messenger.PlayerMsg(client, client.Player[client].mName + " (" + client.Player[client].mGuildName + ") " + parse[1], Text.Green);
                             Logging.ChatLogger.AppendToChatLog("Guild Chat/" + client.Player.GuildName, "(" + client.Player.GuildName + ") " + client.Player.Name + parse[1]);
@@ -791,7 +791,7 @@ namespace Server.Network
                             {
                                 if (i.Player.GuildName == client.Player.GuildName)
                                 {
-                                    Messenger.PlayerMsg(i, "(" + client.Player.GuildName + ") " + playerName + parse[1], Text.Green);
+                                    Messenger.PlayerMsg(i, "(" + client.Player.GuildName + ") " + playerName + updatedMessage, Text.Green);
                                 }
                             }
                         }
@@ -824,7 +824,7 @@ namespace Server.Network
                                 }
                                 else
                                 {
-                                    Scripting.ScriptManager.InvokeSub("OnChatMessageRecieved", client, parse[2], Enums.ChatMessageType.PM);
+                                    var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[2], Enums.ChatMessageType.PM);
 
                                     Logging.ChatLogger.AppendToChatLog("PM/" + client.Player.Name, "(" + client.Player.Name + " tells " + msgto.Player.Name + ") " + parse[2]);
 
@@ -840,8 +840,8 @@ namespace Server.Network
                                         playerToName = "[c][" + Ranks.GetRankColor(msgto.Player.Access).ToArgb() + "]" + msgto.Player.Name + "[/c]";
                                     }
 
-                                    Messenger.PlayerMsg(client, "You tell " + playerToName + ", '" + parse[2] + "'", Text.Pink);
-                                    Messenger.PlayerMsg(msgto, playerName + " tells you, '" + parse[2] + "'", Text.Pink);
+                                    Messenger.PlayerMsg(client, "You tell " + playerToName + ", '" + updatedMessage + "'", Text.Pink);
+                                    Messenger.PlayerMsg(msgto, playerName + " tells you, '" + updatedMessage + "'", Text.Pink);
                                 }
 
                             }
