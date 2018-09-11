@@ -615,6 +615,8 @@ namespace Server.Network
                 packet.AppendParameter("");
             }
 
+            packet.AppendParameter(map.YouTubeMusicID);
+
             for (y = 0; y <= map.MaxY; y++) {
                 for (x = 0; x <= map.MaxX; x++) {
                     packet.AppendParameters(map.Tile[x, y].Ground.ToString(),

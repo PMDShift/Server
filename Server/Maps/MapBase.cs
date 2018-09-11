@@ -59,6 +59,11 @@ namespace Server.Maps
             set { rawMap.ZoneID = value; }
         }
 
+        public string YouTubeMusicID {
+            get { return rawMap.YouTubeMusicID; }
+            set { rawMap.YouTubeMusicID = value; }
+        }
+
         public int Down {
             get { return rawMap.Down; }
             set { rawMap.Down = value; }
