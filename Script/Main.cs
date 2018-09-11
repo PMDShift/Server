@@ -240,7 +240,7 @@ namespace Script {
             }
         }
 
-        public static void OnChatMessageRecieved(Client client, string message, Enums.ChatMessageType msgType) {
+        public static string OnChatMessageRecieved(Client client, string message, Enums.ChatMessageType msgType) {
             try {
             	if (message.Length > 500) {
             		// Lets start off small. Autoban if spamming.
@@ -374,25 +374,30 @@ namespace Script {
                 };
                 for (int i = 0; i < triggerWords.Length; i++) {
                     if (message.ToLower().Equals(triggerWords[i]) || message.ToLower().Contains(" " + triggerWords[i] + " ")) {
-                    	string locationMsg = "";
-                    	if (msgType == Enums.ChatMessageType.Map) {
-                    		locationMsg = "on map " + client.Player.MapID + " (" + client.Player.Map.Name + ")";
-                    	} else if (msgType == Enums.ChatMessageType.Guild) {
-                    		locationMsg = "in (" + client.Player.GuildName + ") guild chat";
-                    	} else if (msgType == Enums.ChatMessageType.PM) {
-                    		locationMsg = "in PM";
-                    	} else if (msgType == Enums.ChatMessageType.Global) {
-                    		locationMsg = "on global";
-                    	}
-                        Messenger.AdminMsg("[Staff] Word Filter: " + client.Player.Name + " " + locationMsg + " said:\n\"" + message + "\"", System.Drawing.Color.Orange);
-                        break;
+
+                        var replacementString = new string('*', triggerWords[i].Length);
+                        message = message.Replace(triggerWords[i], replacementString, StringComparison.OrdinalIgnoreCase);
+
+                    	//string locationMsg = "";
+                    	//if (msgType == Enums.ChatMessageType.Map) {
+                    	//	locationMsg = "on map " + client.Player.MapID + " (" + client.Player.Map.Name + ")";
+                    	//} else if (msgType == Enums.ChatMessageType.Guild) {
+                    	//	locationMsg = "in (" + client.Player.GuildName + ") guild chat";
+                    	//} else if (msgType == Enums.ChatMessageType.PM) {
+                    	//	locationMsg = "in PM";
+                    	//} else if (msgType == Enums.ChatMessageType.Global) {
+                    	//	locationMsg = "on global";
+                    	//}
+                     //   Messenger.AdminMsg("[Staff] Word Filter: " + client.Player.Name + " " + locationMsg + " said:\n\"" + message + "\"", System.Drawing.Color.Orange);
+                     //   break;
                     }
                 }
-                
-                
+
             } catch (Exception ex) {
                 Messenger.AdminMsg("Error: OnChatMessageReceived", Text.Black);
             }
+
+            return message;
         }
 
         public static void CharAdded(Client client, string name, int charNum) {
