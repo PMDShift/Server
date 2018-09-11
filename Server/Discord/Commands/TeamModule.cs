@@ -19,6 +19,8 @@ namespace Server.Discord.Commands
             "Moves",
             "Coding",
 
+            "Spoilers",
+
             // Subteams
             "Maps",
             "NPCs",
