@@ -2684,9 +2684,11 @@ namespace Server.Network
                                 ((Map)map).Instanced = parse[n + 21].ToBool();
                             }
 
+                            map.YouTubeMusicID = parse[n + 22];
+
                             map.Tile = new TileCollection(map.BaseMap, map.MaxX, map.MaxY);
 
-                            n += 22;
+                            n += 23;
 
                             for (Y = 0; Y <= map.MaxY; Y++)
                             {

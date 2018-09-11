@@ -34,6 +34,8 @@ namespace Server.Maps
         bool IsSandboxed { get; set; }
         int ZoneID { get; set; }
 
+        string YouTubeMusicID { get; set; }
+
         TickCount ActivationTime {
             get;
             set;

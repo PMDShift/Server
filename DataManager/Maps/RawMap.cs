@@ -36,6 +36,8 @@ namespace DataManager.Maps
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
+        public string YouTubeMusicID { get; set; }
+
         public int Down {
             get;
             set;
