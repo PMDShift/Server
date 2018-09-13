@@ -88,7 +88,7 @@ namespace Server.Stories
             }
         }
 
-        public static void LoadStory(int storyNum, MySql database)
+        public static void LoadStory(int storyNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (stories.Stories.ContainsKey(storyNum) == false)
                 stories.Stories.Add(storyNum, new Story(storyNum.ToString()));
@@ -155,7 +155,7 @@ namespace Server.Stories
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
 
                 database.BeginTransaction();
 

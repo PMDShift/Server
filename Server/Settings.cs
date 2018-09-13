@@ -156,7 +156,7 @@ namespace Server
 
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT id, message " +
                     "FROM title WHERE title.id = 'GameName' OR title.id = 'MOTD' OR title.id = 'GameNameShort'";
@@ -235,7 +235,7 @@ namespace Server
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT num, news_time, message " +
                     "FROM news WHERE news.num > (SELECT COUNT(num) FROM news) - 10";
@@ -254,7 +254,7 @@ namespace Server
             //save motd
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
 
                 database.UpdateOrInsert("title", new IDataColumn[] {
                     database.CreateColumn(true, "id", "MOTD"),
@@ -271,7 +271,7 @@ namespace Server
 
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
 
                 database.AddRow("news", new IDataColumn[] {
                     database.CreateColumn(false, "message", newNews)

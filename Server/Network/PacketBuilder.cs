@@ -1,33 +1,22 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Xml;
-
-using Items;
-
-using Maps;
-
-using Missions;
-
-using Moves;
-
-using Npcs;
-
-using Players;
-
-using Scripting;
-
-using Shops;
-
-using Stories;
-
-using WonderMails;
-using RDungeons;
-using Dungeons;
-using Evolutions;
-using Emoticons;
+using Server.Items;
+using Server.Maps;
+using Server.Missions;
+using Server.Moves;
+using Server.Npcs;
+using Server.Players;
+using Server.Scripting;
+using Server.Shops;
+using Server.Stories;
+using Server.WonderMails;
+using Server.RDungeons;
+using Server.Dungeons;
+using Server.Evolutions;
+using Server.Emoticons;
 using PMDCP.Sockets;
 using Server.Players.Parties;
 using PMDCP.Core;
@@ -50,9 +39,6 @@ using Server.Database;
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
 
 namespace Server.Network
 {

@@ -352,7 +352,7 @@ namespace Server.Players.Parties
             }
         }
 
-        public static List<string> LoadPartyIDList(MySql database)
+        public static List<string> LoadPartyIDList(PMDCP.DatabaseConnector.MySql.MySql database)
         {
             List<string> idList = new List<string>();
 
@@ -373,7 +373,7 @@ namespace Server.Players.Parties
             return idList;
         }
 
-        public static Party LoadParty(MySql database, string partyID)
+        public static Party LoadParty(PMDCP.DatabaseConnector.MySql.MySql database, string partyID)
         {
             Party partyData = new Party(partyID);
 
@@ -391,7 +391,7 @@ namespace Server.Players.Parties
             return partyData;
         }
 
-        public static Party LoadCharacterParty(MySql database, string charID)
+        public static Party LoadCharacterParty(PMDCP.DatabaseConnector.MySql.MySql database, string charID)
         {
             string partyID = "";
 
@@ -427,7 +427,7 @@ namespace Server.Players.Parties
             return partyData;
         }
 
-        public static void LoadParty(MySql database, Party partyData)
+        public static void LoadParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             string query = "SELECT parties.CharID " +
                 "FROM parties " +
@@ -442,7 +442,7 @@ namespace Server.Players.Parties
             }
         }
 
-        public static void SaveParty(MySql database, Party partyData)
+        public static void SaveParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             database.ExecuteNonQuery("DELETE FROM parties WHERE PartyID = \'" + partyData.PartyID + "\'");
             //database.DeleteRow("friends", "CharID = \'" + playerData.CharID + "\'");
@@ -457,7 +457,7 @@ namespace Server.Players.Parties
             }
         }
 
-        public static void DeleteParty(MySql database, Party partyData)
+        public static void DeleteParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             database.ExecuteNonQuery("DELETE FROM parties WHERE PartyID = \'" + partyData.PartyID + "\'");
         }

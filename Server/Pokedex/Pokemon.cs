@@ -67,7 +67,7 @@ namespace Server.Pokedex
 
         public void Load(DatabaseConnection dbConnection)
         {
-            MySql database = dbConnection.Database;
+            var database = dbConnection.Database;
 
             string query = "SELECT pokedex_pokemon.PokemonName, pokedex_pokemon.SpeciesName, " +
                 "pokedex_pokemon.GrowthGroup, pokedex_pokemon.EggGroup1, pokedex_pokemon.EggGroup2 " +

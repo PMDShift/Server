@@ -66,7 +66,7 @@ namespace Server.Npcs
             }
         }
 
-        public static void LoadNpc(int npcNum, MySql database)
+        public static void LoadNpc(int npcNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (npcs.Npcs.ContainsKey(npcNum) == false)
                 npcs.Npcs.Add(npcNum, new Npc());
@@ -160,7 +160,7 @@ namespace Server.Npcs
                 npcs.Npcs.Add(npcNum, new Npc());
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
                 database.ExecuteNonQuery("DELETE FROM npc WHERE num = \'" + npcNum + "\'");
                 database.ExecuteNonQuery("DELETE FROM npc_drop WHERE npc_num = \'" + npcNum + "\'");

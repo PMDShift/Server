@@ -103,7 +103,7 @@ namespace Server.Moves
             standardAttack.Sound = -1;
         }
 
-        public static void LoadMove(int moveNum, MySql database)
+        public static void LoadMove(int moveNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (moves.Moves.ContainsKey(moveNum) == false)
                 moves.Moves.Add(moveNum, new Move());
@@ -208,7 +208,7 @@ namespace Server.Moves
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
 
                 database.ExecuteNonQuery("DELETE FROM move WHERE num = \'" + moveNum + "\'");

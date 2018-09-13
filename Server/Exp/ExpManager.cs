@@ -72,7 +72,7 @@ namespace Server.Exp
             {
                 try
                 {
-                    MySql database = dbConnection.Database;
+                    var database = dbConnection.Database;
 
                     string query = "SELECT * " +
                         "FROM experience";

@@ -65,7 +65,7 @@ namespace Server.Items
             }
         }
 
-        public static void LoadItem(int itemNum, MySql database)
+        public static void LoadItem(int itemNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (items.Items.ContainsKey(itemNum) == false)
                 items.Items.Add(itemNum, new Item());
@@ -163,7 +163,7 @@ namespace Server.Items
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
                 database.ExecuteNonQuery("DELETE FROM item WHERE num = \'" + itemNum + "\'");
 

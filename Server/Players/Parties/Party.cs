@@ -103,7 +103,7 @@ namespace Server.Players.Parties
                             {
                                 int diff = giver.Player.GetActiveRecruit().Level - i.Player.GetActiveRecruit().Level;
                                 lowestBound -= diff * diff * 100 / 5;
-                                int distance = Math.Max(Math.Abs(giver.Player.X - i.Player.X), Math.Abs(giver.Player.Y - i.Player.Y));
+                                int distance = System.Math.Max(System.Math.Abs(giver.Player.X - i.Player.X), System.Math.Abs(giver.Player.Y - i.Player.Y));
 
                                 if (distance > 40)
                                     distance = 40;
