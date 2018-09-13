@@ -52,6 +52,39 @@ namespace Server.Discord.Commands
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
         }
 
+        [Command("list")]
+        [Summary("View a list of your assigned zones.")]
+        public async Task ListAsync()
+        {
+            string characterID;
+            using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                characterID = PlayerDataManager.FindLinkedDiscordCharacter(dbConnection.Database, Context.User.Id);
+            }
+
+            if (string.IsNullOrEmpty(characterID))
+            {
+                await Context.Channel.SendMessageAsync("You have not linked your Discord account with your in-game account yet. Unable to list zones.");
+                return;
+            }
+
+            var responseBuilder = new StringBuilder();
+            responseBuilder.AppendLine("**Your zones:**");
+
+            for (var i = 0; i < ZoneManager.Zones.Count; i++)
+            {
+                var zone = ZoneManager.Zones[i];
+
+                var zoneMember = zone.Members.Where(x => x.CharacterID == characterID).FirstOrDefault();
+                if (zoneMember != null)
+                {
+                    responseBuilder.AppendLine($"{i}. `{zone.Name}` - {zoneMember.Access}");
+                }
+            }
+
+            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
         [Command("create")]
         [Summary("Create a new zone.")]
         [RequireOwner]
