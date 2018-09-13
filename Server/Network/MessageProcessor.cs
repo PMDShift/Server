@@ -4268,9 +4268,11 @@ namespace Server.Network
                             else
                             {
                                 int n = parse[1].ToInt(-1);
+                                var isShiny = parse[2].ToBool();
                                 if (n > -1)
                                 {
                                     client.Player.GetActiveRecruit().SetSpecies(n);
+                                    client.Player.GetActiveRecruit().Shiny = isShiny ? Enums.Coloration.Shiny : Enums.Coloration.Normal;
                                     Messenger.SendPlayerData(client);
                                     Messenger.SendActiveTeam(client);
                                     Messenger.SendStats(client);
@@ -4288,10 +4290,12 @@ namespace Server.Network
                             else
                             {
                                 int n = parse[2].ToInt(-1);
+                                var isShiny = parse[3].ToBool();
                                 Client player = ClientManager.FindClient(parse[1]);
                                 if (n > -1 && player != null)
                                 {
                                     player.Player.GetActiveRecruit().SetSpecies(n);
+                                    player.Player.GetActiveRecruit().Shiny = isShiny ? Enums.Coloration.Shiny : Enums.Coloration.Normal;
                                     Messenger.SendPlayerData(player);
                                     Messenger.SendActiveTeam(player);
                                     Messenger.SendStats(player);
