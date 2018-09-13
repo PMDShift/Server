@@ -62,6 +62,7 @@ namespace Server.RDungeons
             rDungeonMap.RDungeonIndex = dungeonIndex;
             rDungeonMap.RDungeonFloor = floorNum;
             rDungeonMap.IsSandboxed = dungeon.IsSandboxed;
+            rDungeonMap.ZoneID = dungeon.ZoneID;
 
             RDungeonMap map = new RDungeonMap(rDungeonMap);
 
