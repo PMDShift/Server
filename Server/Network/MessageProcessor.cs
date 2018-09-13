@@ -1171,8 +1171,16 @@ namespace Server.Network
                                                 else if (NpcManager.Npcs[map.ActiveNpc[i].Num].RecruitRate != 0)
                                                 {
                                                     int recruitRate = NpcManager.Npcs[map.ActiveNpc[i].Num].RecruitRate;
+
+                                                    if (map.ActiveNpc[i].Shiny == Enums.Coloration.Shiny)
+                                                    {
+                                                        Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! Recruit it!", Text.Yellow);
+                                                    } else
+                                                    {
+                                                        Messenger.PlayerMsg(client, "You have a " + (recruitRate / 10f) + "% of recruiting " + NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "!", Text.Yellow);
+                                                    }
+
                                                     //Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "'s recruit rate is " + NpcManager.Npcs[map.ActiveNpc[i].Num].RecruitRate + " (+" + client.Player.GetRecruitBonus() + ")", Text.Yellow);
-                                                    Messenger.PlayerMsg(client, "You have a " + (recruitRate / 10f) + "% of recruiting " + NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "!", Text.Yellow);
                                                 }
                                                 else
                                                 {

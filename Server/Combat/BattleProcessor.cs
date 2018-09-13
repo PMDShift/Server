@@ -2728,9 +2728,21 @@ namespace Server.Combat
 
                             int recruitRate = NpcManager.Npcs[defender.Num].RecruitRate;
 
-                            if (Math.Rand(1, 1001) < (recruitRate + bonus))
+                            var mapNPC = (MapNpc)defender;
+                            if (mapNPC.Shiny == Enums.Coloration.Shiny)
                             {
-                                ((Recruit)setup.Attacker).Owner.Player.AddToRequested((MapNpc)defender);
+                                if (recruitRate + bonus > 0)
+                                {
+                                    // Always recruit shinies if the adjusted recruit rate is above 0
+                                    ((Recruit)setup.Attacker).Owner.Player.AddToRequested((MapNpc)defender);
+                                }
+                            }
+                            else
+                            {
+                                if (Math.Rand(1, 1001) < (recruitRate + bonus))
+                                {
+                                    ((Recruit)setup.Attacker).Owner.Player.AddToRequested((MapNpc)defender);
+                                }
                             }
                         }
                     }

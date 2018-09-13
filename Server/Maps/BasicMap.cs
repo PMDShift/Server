@@ -389,7 +389,7 @@ namespace Server.Maps
                 ActiveNpc[npcSlot].CalculateOriginalAbility();
                 //ActiveNpc[npcSlot].CalculateOriginalMobility();
 
-                if (Server.Math.Rand(0, 1000) < 1)
+                if (Server.Math.Rand(0, 4096) < System.Math.Max(PlayersOnMap.Count, 5))
                 {
                     ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
                 }
