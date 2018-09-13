@@ -1,4 +1,5 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -29,14 +30,11 @@
 
 namespace Server.WonderMails
 {
-    using System;
-
     /// <summary>
     /// Description of RewardItem.
     /// </summary>
     public class MissionRewardData
     {
-
         public int ItemNum
         {
             get;
@@ -55,8 +53,8 @@ namespace Server.WonderMails
             set;
         }
 
-        public MissionRewardData() {
+        public MissionRewardData()
+        {
         }
-        
     }
 }

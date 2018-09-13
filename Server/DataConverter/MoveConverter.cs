@@ -20,9 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Server.DataConverter {
-    public class MoveConverter {
-        public static void ConvertV1ToV2(int num) {
+namespace Server.DataConverter
+{
+    public class MoveConverter
+    {
+        public static void ConvertV1ToV2(int num)
+        {
             DataConverter.Moves.V2.Move moveV2 = new Server.DataConverter.Moves.V2.Move();
 
             DataConverter.Moves.V1.Move moveV1 = Server.DataConverter.Moves.V1.MoveManager.LoadMove(num);
@@ -48,7 +51,8 @@ namespace Server.DataConverter {
             Moves.V2.MoveManager.SaveMove(moveV2, num);
         }
 
-        public static void ConvertV2ToV3(int num) {
+        public static void ConvertV2ToV3(int num)
+        {
             DataConverter.Moves.V3.Move moveV3 = new Server.DataConverter.Moves.V3.Move();
 
             DataConverter.Moves.V2.Move moveV2 = Server.DataConverter.Moves.V2.MoveManager.LoadMove(num);
@@ -82,7 +86,8 @@ namespace Server.DataConverter {
             Moves.V3.MoveManager.SaveMove(moveV3, num);
         }
 
-        public static void ConvertV3ToV4(int num) {
+        public static void ConvertV3ToV4(int num)
+        {
             DataConverter.Moves.V4.Move moveV4 = new Server.DataConverter.Moves.V4.Move();
 
             DataConverter.Moves.V3.Move moveV3 = Server.DataConverter.Moves.V3.MoveManager.LoadMove(num);
@@ -108,7 +113,7 @@ namespace Server.DataConverter {
             moveV4.KeyItem = moveV3.KeyItem;
 
             moveV4.Sound = moveV3.Sound;
-            
+
             moveV4.AttackerAnim.AnimationType = Enums.MoveAnimationType.Normal;
             moveV4.AttackerAnim.AnimationIndex = -1;
             moveV4.AttackerAnim.FrameSpeed = 60;
@@ -127,7 +132,8 @@ namespace Server.DataConverter {
             Moves.V4.MoveManager.SaveMove(moveV4, num);
         }
 
-        public static void ConvertV4ToV5(int num) {
+        public static void ConvertV4ToV5(int num)
+        {
             DataConverter.Moves.V5.Move moveV5 = new Server.DataConverter.Moves.V5.Move();
 
             DataConverter.Moves.V4.Move moveV4 = Server.DataConverter.Moves.V4.MoveManager.LoadMove(num);

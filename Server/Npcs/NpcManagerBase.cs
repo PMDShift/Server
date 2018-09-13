@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Npcs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class NpcManagerBase
     {
         #region Fields
@@ -43,7 +42,8 @@ namespace Server.Npcs
 
         #region Properties
 
-        public static NpcCollection Npcs {
+        public static NpcCollection Npcs
+        {
             get { return npcs; }
         }
 
@@ -53,7 +53,8 @@ namespace Server.Npcs
 
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -131,7 +132,8 @@ namespace Server.Npcs
             }
         }
 
-        public static void LoadNpcs(object object1) {
+        public static void LoadNpcs(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 for (int i = 1; i <= npcs.MaxNpcs; i++)
@@ -198,7 +200,6 @@ namespace Server.Npcs
                 }
                 database.EndTransaction();
             }
-
         }
 
         public static int AddNpc()

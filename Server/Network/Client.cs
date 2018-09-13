@@ -61,7 +61,7 @@ namespace Server.Network
             this.tcpID = tcpID;
             this.tcpClient = tcpClient;
             this.tcpClient.CustomHeaderSize = GetCustomPacketHeaderSize();
-            this.packetModifiers = new PacketModifiers();
+            packetModifiers = new PacketModifiers();
 
             //database = new MySql("localhost", 3306, "test", "root", "test");
 
@@ -151,7 +151,7 @@ namespace Server.Network
         void tcpClient_ConnectionBroken(object sender, EventArgs e)
         {
             //lock (this) {
-            if (this.isInitialized && this.player != null)
+            if (isInitialized && player != null)
             {
                 if (this.Player.LoggingOut == false)
                 {
@@ -176,7 +176,6 @@ namespace Server.Network
                                     player.TournamentMatchUp.EndMatchUp(player.TournamentMatchUp.SelectOtherMember(this).Client.Player.CharID);
                                 }
                                 tourny.RemoveRegisteredPlayer(this);
-
                             }
                             Scripting.ScriptManager.InvokeSub("LeftGame", this);
 
@@ -199,7 +198,6 @@ namespace Server.Network
                     }
                     finally
                     {
-
                         //Players.PlayerID.RemovePlayerFromIndexList(tcpID);
 
 

@@ -28,32 +28,40 @@ namespace Server.Maps
         DataManager.Maps.MapDump rawMap;
         MapItem[] mapItems;
 
-        public ActiveItemCollection(DataManager.Maps.MapDump rawMap) {
+        public ActiveItemCollection(DataManager.Maps.MapDump rawMap)
+        {
             this.rawMap = rawMap;
             mapItems = new MapItem[rawMap.ActiveItem.Length];
-            for (int i = 0; i < mapItems.Length; i++) {
+            for (int i = 0; i < mapItems.Length; i++)
+            {
                 mapItems[i] = new MapItem(rawMap.ActiveItem[i]);
-                if (mapItems[i].Num == 0) {
+                if (mapItems[i].Num == 0)
+                {
                     mapItems[i].Num = -1;
                 }
             }
         }
 
-        public int Length {
+        public int Length
+        {
             get { return mapItems.Length; }
         }
 
-        public MapItem this[int index] {
-            get {
+        public MapItem this[int index]
+        {
+            get
+            {
                 return mapItems[index];
             }
-            set {
+            set
+            {
                 mapItems[index] = value;
                 rawMap.ActiveItem[index] = value.RawItem;
             }
         }
 
-        public System.Collections.IEnumerator GetEnumerator() {
+        public System.Collections.IEnumerator GetEnumerator()
+        {
             return mapItems.GetEnumerator();
         }
     }

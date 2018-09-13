@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Server.Network;
+using System.Xml;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,14 +25,6 @@
 
 namespace Server.Events.Player.TriggerEvents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Server.Network;
-    using System.Xml;
-
     public class MapLoadTriggerEvent : ITriggerEvent
     {
         #region Fields
@@ -41,12 +40,13 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Constructors
 
-        internal MapLoadTriggerEvent() {
-
+        internal MapLoadTriggerEvent()
+        {
         }
 
         public MapLoadTriggerEvent(string id, TriggerEventAction action, int triggerCommand, bool autoRemove,
-            Client client, string mapID) {
+            Client client, string mapID)
+        {
             this.id = id;
             this.action = action;
             this.triggerCommand = triggerCommand;
@@ -59,27 +59,33 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Properties
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
-        public string MapID {
+        public string MapID
+        {
             get { return mapID; }
         }
 
-        public TriggerEventTrigger Trigger {
+        public TriggerEventTrigger Trigger
+        {
             get { return TriggerEventTrigger.MapLoad; }
         }
 
-        public int TriggerCommand {
+        public int TriggerCommand
+        {
             get { return triggerCommand; }
         }
 
-        public TriggerEventAction Action {
+        public TriggerEventAction Action
+        {
             get { return action; }
         }
 
-        public bool AutoRemove {
+        public bool AutoRemove
+        {
             get { return autoRemove; }
         }
 
@@ -87,22 +93,29 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Methods
 
-        public bool CanInvokeTrigger() {
-            if (client.Player.MapID == mapID) {
+        public bool CanInvokeTrigger()
+        {
+            if (client.Player.MapID == mapID)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public void InvokeTrigger() {
+        public void InvokeTrigger()
+        {
             TriggerEventHelper.InvokeGenericTrigger(this, client);
-            if (autoRemove) {
+            if (autoRemove)
+            {
                 client.Player.RemoveTriggerEvent(this);
             }
         }
 
-        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client) {
+        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client)
+        {
             this.client = client;
 
             id = triggerEvent.Items.GetValue("ID");
@@ -113,7 +126,8 @@ namespace Server.Events.Player.TriggerEvents
             mapID = triggerEvent.Items.GetValue("MapID");
         }
 
-        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent) {
+        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent)
+        {
             triggerEvent.Items.Clear();
 
             triggerEvent.Items.Add("Type", ((int)Trigger).ToString());

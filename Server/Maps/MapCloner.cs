@@ -25,12 +25,16 @@ namespace Server.Maps
 {
     public class MapCloner
     {
-        public static void CloneMapTiles(IMap sourceMap, IMap destinationMap) {
+        public static void CloneMapTiles(IMap sourceMap, IMap destinationMap)
+        {
             destinationMap.Name = sourceMap.Name;
             CloneMapTileProperties(sourceMap, destinationMap);
-            for (int Y = 0; Y <= destinationMap.MaxY; Y++) {
-                for (int X = 0; X <= destinationMap.MaxX; X++) {
-                    if (destinationMap.Tile[X, Y] == null) {
+            for (int Y = 0; Y <= destinationMap.MaxY; Y++)
+            {
+                for (int X = 0; X <= destinationMap.MaxX; X++)
+                {
+                    if (destinationMap.Tile[X, Y] == null)
+                    {
                         destinationMap.Tile[X, Y] = new Tile(new DataManager.Maps.Tile());
                     }
                     destinationMap.Tile[X, Y].Ground = sourceMap.Tile[X, Y].Ground;
@@ -65,7 +69,8 @@ namespace Server.Maps
             }
         }
 
-        public static void CloneTile(IMap map, int x, int y, Tile tile) {
+        public static void CloneTile(IMap map, int x, int y, Tile tile)
+        {
             tile.Ground = map.Tile[x, y].Ground;
             tile.GroundAnim = map.Tile[x, y].GroundAnim;
             tile.Mask = map.Tile[x, y].Mask;
@@ -94,11 +99,12 @@ namespace Server.Maps
             tile.FAnimSet = map.Tile[x, y].FAnimSet;
             tile.Fringe2Set = map.Tile[x, y].Fringe2Set;
             tile.F2AnimSet = map.Tile[x, y].F2AnimSet;
-            
         }
 
-        public static void CloneMapNpcs(IMap sourceMap, IMap destinationMap) {
-            for (int i = 0; i < sourceMap.Npc.Count; i++) {
+        public static void CloneMapNpcs(IMap sourceMap, IMap destinationMap)
+        {
+            for (int i = 0; i < sourceMap.Npc.Count; i++)
+            {
                 MapNpcPreset newNpc = new MapNpcPreset();
                 newNpc.NpcNum = sourceMap.Npc[i].NpcNum;
                 newNpc.MinLevel = sourceMap.Npc[i].MinLevel;
@@ -114,7 +120,8 @@ namespace Server.Maps
             }
         }
 
-        public static void CloneMapGeneralProperties(IMap sourceMap, IMap destinationMap) {
+        public static void CloneMapGeneralProperties(IMap sourceMap, IMap destinationMap)
+        {
             destinationMap.Up = sourceMap.Up;
             destinationMap.Down = sourceMap.Down;
             destinationMap.Left = sourceMap.Left;
@@ -135,11 +142,13 @@ namespace Server.Maps
             destinationMap.NpcSpawnTime = sourceMap.NpcSpawnTime;
         }
 
-        public static void CloneMapTileProperties(IMap sourceMap, IMap destinationMap) {
+        public static void CloneMapTileProperties(IMap sourceMap, IMap destinationMap)
+        {
             destinationMap.Tile = new TileCollection(destinationMap.BaseMap, sourceMap.MaxX, sourceMap.MaxY);
         }
 
-        public static InstancedMap CreateInstancedMap(IMap sourceMap) {
+        public static InstancedMap CreateInstancedMap(IMap sourceMap)
+        {
             DataManager.Maps.InstancedMap dmInstancedMap = new DataManager.Maps.InstancedMap(MapManager.GenerateMapID("i"));
             InstancedMap iMap = new InstancedMap(dmInstancedMap);
             CloneMapTileProperties(sourceMap, iMap);

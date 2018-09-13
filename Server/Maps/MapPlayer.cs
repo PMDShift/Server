@@ -29,17 +29,21 @@ namespace Server.Maps
         Client client;
 
         public string PlayerID { get; private set; }
-        public Client Client {
-            get {
-                if (client == null) {
+        public Client Client
+        {
+            get
+            {
+                if (client == null)
+                {
                     client = ClientManager.FindClientFromCharID(PlayerID);
                 }
                 return client;
             }
             set { client = value; }
         }
-            
-        public MapPlayer(string playerID, Client client) {
+
+        public MapPlayer(string playerID, Client client)
+        {
             this.PlayerID = playerID;
             this.Client = client;
         }

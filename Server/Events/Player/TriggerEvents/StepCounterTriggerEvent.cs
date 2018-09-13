@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Server.Network;
+using System.Xml;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,14 +25,6 @@
 
 namespace Server.Events.Player.TriggerEvents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Server.Network;
-    using System.Xml;
-
     public class StepCounterTriggerEvent : ITriggerEvent
     {
         #region Fields
@@ -42,12 +41,13 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Constructors
 
-        internal StepCounterTriggerEvent() {
-
+        internal StepCounterTriggerEvent()
+        {
         }
 
         public StepCounterTriggerEvent(string id, TriggerEventAction action, int triggerCommand, bool autoRemove,
-            Client client, int steps) {
+            Client client, int steps)
+        {
             this.id = id;
             this.action = action;
             this.triggerCommand = triggerCommand;
@@ -55,39 +55,46 @@ namespace Server.Events.Player.TriggerEvents
             this.client = client;
             this.steps = steps;
 
-            this.stepsCounted = 0;
+            stepsCounted = 0;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
-        public int Steps {
+        public int Steps
+        {
             get { return steps; }
         }
 
-        public int StepsCounted {
+        public int StepsCounted
+        {
             get { return stepsCounted; }
             set { stepsCounted = value; }
         }
 
-        public TriggerEventTrigger Trigger {
+        public TriggerEventTrigger Trigger
+        {
             get { return TriggerEventTrigger.StepCounter; }
         }
 
-        public int TriggerCommand {
+        public int TriggerCommand
+        {
             get { return triggerCommand; }
         }
 
-        public TriggerEventAction Action {
+        public TriggerEventAction Action
+        {
             get { return action; }
         }
 
-        public bool AutoRemove {
+        public bool AutoRemove
+        {
             get { return autoRemove; }
         }
 
@@ -95,23 +102,30 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Methods
 
-        public bool CanInvokeTrigger() {
-            if (stepsCounted >= steps) {
+        public bool CanInvokeTrigger()
+        {
+            if (stepsCounted >= steps)
+            {
                 stepsCounted = 0;
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public void InvokeTrigger() {
+        public void InvokeTrigger()
+        {
             TriggerEventHelper.InvokeGenericTrigger(this, client);
-            if (autoRemove) {
+            if (autoRemove)
+            {
                 client.Player.RemoveTriggerEvent(this);
             }
         }
 
-        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client) {
+        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client)
+        {
             this.client = client;
 
             id = triggerEvent.Items.GetValue("ID");
@@ -123,7 +137,8 @@ namespace Server.Events.Player.TriggerEvents
             stepsCounted = triggerEvent.Items.GetValue("StepsCounted").ToInt();
         }
 
-        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent) {
+        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent)
+        {
             triggerEvent.Items.Clear();
 
             triggerEvent.Items.Add("Type", ((int)Trigger).ToString());

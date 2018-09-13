@@ -1,4 +1,9 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +23,6 @@
 
 namespace Server.Pokedex
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using Server.Database;
-
-
     public class Pokedex
     {
         #region Fields
@@ -44,7 +42,8 @@ namespace Server.Pokedex
 
         #region Methods
 
-        public static void CreateDataFiles() {
+        public static void CreateDataFiles()
+        {
             //for (int i = 0; i < pokemon.Length; i++) {
             //    if (!IO.IO.FileExists(IO.Paths.PokedexFolder + i.ToString() + ".xml")) {
             //        SavePokemon(i);
@@ -52,44 +51,58 @@ namespace Server.Pokedex
             //}
         }
 
-        public static Pokemon GetPokemon(int id) {
+        public static Pokemon GetPokemon(int id)
+        {
             return pokemon[id];
         }
 
-        public static PokemonForm GetPokemonForm(int id) {
+        public static PokemonForm GetPokemonForm(int id)
+        {
             return GetPokemonForm(id, 0);
         }
 
-        public static PokemonForm GetPokemonForm(int id, int form) {
-            if (pokemon[id].Forms.Count > form) {
+        public static PokemonForm GetPokemonForm(int id, int form)
+        {
+            if (pokemon[id].Forms.Count > form)
+            {
                 return pokemon[id].Forms[form];
-            } else {
+            }
+            else
+            {
                 return pokemon[id].Forms[0];
             }
         }
 
-        public static int GetUpdatedSprite(int oldSprite) {
-            if (spriteReorderList != null) {
+        public static int GetUpdatedSprite(int oldSprite)
+        {
+            if (spriteReorderList != null)
+            {
                 // This means we found a sprite update...
                 return spriteReorderList.GetKey(oldSprite);
-            } else {
+            }
+            else
+            {
                 return oldSprite;
             }
         }
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             pokemon = new Pokemon[Constants.TOTAL_POKEMON + 1];
-            for (int i = 0; i < pokemon.Length; i++) {
+            for (int i = 0; i < pokemon.Length; i++)
+            {
                 pokemon[i] = new Pokemon();
                 pokemon[i].ID = i;
             }
             //CreateDataFiles();
         }
 
-        public static void LoadAllPokemon() {
-
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
-                for (int i = 0; i < pokemon.Length; i++) {
+        public static void LoadAllPokemon()
+        {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
+                for (int i = 0; i < pokemon.Length; i++)
+                {
                     LoadPokemon(dbConnection, i);
                     //if (spriteReorderList != null) {
                     //    pokemon[i].Sprite = spriteReorderList.GetKey(pokemon[i].Sprite);
@@ -106,7 +119,8 @@ namespace Server.Pokedex
                 LoadComplete(null, null);
         }
 
-        public static void LoadPokemon(DatabaseConnection dbConnection, int id) {
+        public static void LoadPokemon(DatabaseConnection dbConnection, int id)
+        {
             //if (IO.IO.FileExists(IO.Paths.PokedexFolder + id.ToString() + ".xml")) {
             pokemon[id].Load(dbConnection);
             //}
@@ -118,16 +132,20 @@ namespace Server.Pokedex
         }
         */
 
-        public static Pokemon FindByName(string name) {
-            for (int i = 1; i < pokemon.Length; i++) {
-                if (pokemon[i].Name.ToLower() == name.ToLower()) {
+        public static Pokemon FindByName(string name)
+        {
+            for (int i = 1; i < pokemon.Length; i++)
+            {
+                if (pokemon[i].Name.ToLower() == name.ToLower())
+                {
                     return pokemon[i];
                 }
             }
             return null;
         }
 
-        public static Pokemon FindBySprite(int sprite) {
+        public static Pokemon FindBySprite(int sprite)
+        {
             //for (int i = 1; i < pokemon.Length; i++) {
             //    foreach (PokemonForm form in pokemon[i].Forms) {
             //        for (int j = 0; j < 2; j++) {
@@ -165,10 +183,13 @@ namespace Server.Pokedex
         //    return null;
         //}
 
-        public static List<Pokemon> FindAllByName(string startOfName) {
+        public static List<Pokemon> FindAllByName(string startOfName)
+        {
             List<Pokemon> list = new List<Pokemon>();
-            for (int i = 1; i < pokemon.Length; i++) {
-                if (pokemon[i].Name.ToLower().StartsWith(startOfName.ToLower())) {
+            for (int i = 1; i < pokemon.Length; i++)
+            {
+                if (pokemon[i].Name.ToLower().StartsWith(startOfName.ToLower()))
+                {
                     list.Add(pokemon[i]);
                 }
             }

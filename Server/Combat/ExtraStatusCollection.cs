@@ -30,63 +30,86 @@ namespace Server.Combat
 {
     public class ExtraStatusCollection
     {
-
         private List<ExtraStatus> extraStatus;
         ReaderWriterLockSlim rwLock;
 
-        public ExtraStatusCollection() {
+        public ExtraStatusCollection()
+        {
             extraStatus = new List<ExtraStatus>();
             rwLock = new ReaderWriterLockSlim();
         }
 
-        public void Add(ExtraStatus status) {
+        public void Add(ExtraStatus status)
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 extraStatus.Add(status);
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 extraStatus.Clear();
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
         }
 
-        public void Remove(ExtraStatus status) {
+        public void Remove(ExtraStatus status)
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 extraStatus.Remove(status);
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
         }
 
-        public ExtraStatus GetStatus(string statusName) {
+        public ExtraStatus GetStatus(string statusName)
+        {
             rwLock.EnterReadLock();
-            try {
-                foreach (ExtraStatus vs in extraStatus) {
-                    if (vs.Name == statusName) {
+            try
+            {
+                foreach (ExtraStatus vs in extraStatus)
+                {
+                    if (vs.Name == statusName)
+                    {
                         return vs;
                     }
                 }
                 return null;
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
         }
 
-        public List<ExtraStatus> GetStatuses(params string[] statusNames) {
+        public List<ExtraStatus> GetStatuses(params string[] statusNames)
+        {
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 List<ExtraStatus> statuses = new List<ExtraStatus>((statusNames.Length > extraStatus.Count) ? statusNames.Length : extraStatus.Count);
-                foreach (ExtraStatus vs in extraStatus) {
-                    for (int i = 0; i < statusNames.Length; i++) {
-                        if (vs.Name == statusNames[i]) {
+                foreach (ExtraStatus vs in extraStatus)
+                {
+                    for (int i = 0; i < statusNames.Length; i++)
+                    {
+                        if (vs.Name == statusNames[i])
+                        {
                             statuses.Add(vs);
                             break;
                         }
@@ -94,41 +117,55 @@ namespace Server.Combat
                 }
 
                 return statuses;
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
         }
 
-        public int Count {
-            get {
+        public int Count
+        {
+            get
+            {
                 rwLock.EnterReadLock();
-                try {
+                try
+                {
                     return extraStatus.Count;
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitReadLock();
                 }
             }
         }
 
-        public ExtraStatus this[int index] {
-            get {
+        public ExtraStatus this[int index]
+        {
+            get
+            {
                 rwLock.EnterReadLock();
-                try {
+                try
+                {
                     return extraStatus[index];
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitReadLock();
                 }
             }
-            set {
+            set
+            {
                 rwLock.EnterWriteLock();
-                try {
+                try
+                {
                     extraStatus[index] = value;
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitWriteLock();
                 }
             }
         }
-
-
     }
 }

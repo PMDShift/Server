@@ -52,7 +52,7 @@ namespace Server.DataConverter.Moves.V3
                             move.RangeType = (Enums.MoveRange)parse[6].ToInt();
                             move.Range = parse[7].ToInt();
                             move.TargetType = (Enums.MoveTarget)parse[8].ToInt();
-                            
+
                             move.Data1 = parse[9].ToInt();
                             move.Data2 = parse[10].ToInt();
                             move.Data3 = parse[11].ToInt();
@@ -61,12 +61,12 @@ namespace Server.DataConverter.Moves.V3
                             move.AdditionalEffectData2 = parse[14].ToInt();
                             move.AdditionalEffectData3 = parse[15].ToInt();
                             move.PerPlayer = parse[16].ToBool();
-                            
+
                             move.IsKey = parse[17].ToBool();
                             move.KeyItem = parse[18].ToInt();
 
                             move.Sound = parse[19].ToInt();
-                            
+
                             move.Big = parse[20].ToBool();
                             move.SpellAnim = parse[21].ToInt();
                             move.SpellTime = parse[22].ToInt();

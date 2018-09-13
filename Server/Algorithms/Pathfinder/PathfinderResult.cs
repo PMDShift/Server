@@ -28,19 +28,23 @@ namespace Server.Algorithms.Pathfinder
         private int tileCount;
         private bool isPath;
 
-        public List<Enums.Direction> Path {
+        public List<Enums.Direction> Path
+        {
             get { return path; }
         }
 
-        public int TileCount {
+        public int TileCount
+        {
             get { return tileCount; }
         }
 
-        public bool IsPath {
+        public bool IsPath
+        {
             get { return isPath; }
         }
 
-        internal PathfinderResult(List<Enums.Direction> path, bool isPath) {
+        internal PathfinderResult(List<Enums.Direction> path, bool isPath)
+        {
             this.path = path;
             tileCount = path.Count;
             this.isPath = isPath;

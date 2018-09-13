@@ -31,7 +31,8 @@ namespace Server.DataConverter.Stories.V2
 
         #region Constructors
 
-        public Story() {
+        public Story()
+        {
             ExitAndContinue = new List<int>();
         }
 
@@ -39,32 +40,38 @@ namespace Server.DataConverter.Stories.V2
 
         #region Properties
 
-        public int MaxSegments {
+        public int MaxSegments
+        {
             get;
             set;
         }
 
-        public string Name {
+        public string Name
+        {
             get;
             set;
         }
 
-        public int Revision {
+        public int Revision
+        {
             get;
             set;
         }
 
-        public StorySegment[] Segments {
+        public StorySegment[] Segments
+        {
             get;
             set;
         }
 
-        public int StoryStart {
+        public int StoryStart
+        {
             get;
             set;
         }
 
-        public int Version {
+        public int Version
+        {
             get;
             set;
         }
@@ -73,7 +80,8 @@ namespace Server.DataConverter.Stories.V2
 
         #region Methods
 
-        public void UpdateStorySegments() {
+        public void UpdateStorySegments()
+        {
             Segments = new StorySegment[MaxSegments + 1];
         }
 

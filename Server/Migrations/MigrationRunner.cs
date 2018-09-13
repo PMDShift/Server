@@ -11,21 +11,26 @@ namespace Server.Migrations
 {
     public class MigrationRunner
     {
-        public static void MigrateDatabase() {
+        public static void MigrateDatabase()
+        {
             var playersServiceProvider = CreateServices(DatabaseID.Players);
-            using (var scope = playersServiceProvider.CreateScope()) {
+            using (var scope = playersServiceProvider.CreateScope())
+            {
                 UpdateDatabase(scope.ServiceProvider);
             }
 
             var dataServiceProvider = CreateServices(DatabaseID.Data);
-            using (var scope = dataServiceProvider.CreateScope()) {
+            using (var scope = dataServiceProvider.CreateScope())
+            {
                 UpdateDatabase(scope.ServiceProvider);
             }
         }
 
-        private static IServiceProvider CreateServices(DatabaseID databaseID) {
+        private static IServiceProvider CreateServices(DatabaseID databaseID)
+        {
             string tag;
-            switch (databaseID) {
+            switch (databaseID)
+            {
                 case DatabaseID.Players:
                     tag = "players";
                     break;
@@ -58,14 +63,17 @@ namespace Server.Migrations
                 .BuildServiceProvider(false);
         }
 
-        private static void UpdateDatabase(IServiceProvider serviceProvider) {
+        private static void UpdateDatabase(IServiceProvider serviceProvider)
+        {
             // Instantiate the runner
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
-            try {
+            try
+            {
                 // Execute the migrations
                 runner.MigrateUp();
-            } catch { }
+            }
+            catch { }
         }
     }
 }

@@ -26,16 +26,20 @@ namespace Server.Stories
     {
         List<StorySegment> segments;
 
-        public List<StorySegment> Segments {
+        public List<StorySegment> Segments
+        {
             get { return segments; }
         }
 
-        public StoryBuilderSegment() {
+        public StoryBuilderSegment()
+        {
             segments = new List<StorySegment>();
         }
 
-        public void AppendToStory(Story story) {
-            for (int i = 0; i < segments.Count; i++) {
+        public void AppendToStory(Story story)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
                 story.Segments.Add(segments[i]);
             }
         }

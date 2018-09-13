@@ -29,46 +29,58 @@ namespace Server.Players
 
         bool updated = false;
 
-        public Characters.InventoryItem BaseInventoryItem {
+        public Characters.InventoryItem BaseInventoryItem
+        {
             get { return baseInventoryItem; }
         }
 
-        public InventoryItem() {
-            this.baseInventoryItem = new Characters.InventoryItem();
+        public InventoryItem()
+        {
+            baseInventoryItem = new Characters.InventoryItem();
         }
 
-        public InventoryItem(Characters.InventoryItem baseInventoryItem) {
+        public InventoryItem(Characters.InventoryItem baseInventoryItem)
+        {
             this.baseInventoryItem = baseInventoryItem;
         }
 
-        public int Num {
+        public int Num
+        {
             get { return baseInventoryItem.Num; }
-            set {
+            set
+            {
                 baseInventoryItem.Num = value;
                 updated = true;
             }
         }
 
-        public int Amount {
+        public int Amount
+        {
             get { return baseInventoryItem.Amount; }
-            set { 
+            set
+            {
                 baseInventoryItem.Amount = value;
                 updated = true;
             }
         }
 
-        public bool Sticky {
+        public bool Sticky
+        {
             get { return baseInventoryItem.Sticky; }
-            set {
+            set
+            {
                 baseInventoryItem.Sticky = value;
                 updated = true;
             }
         }
 
-        public string Tag {
+        public string Tag
+        {
             get { return baseInventoryItem.Tag; }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     value = "";
                 }
                 baseInventoryItem.Tag = value;
@@ -77,9 +89,11 @@ namespace Server.Players
             }
         }
 
-        public bool Updated {
+        public bool Updated
+        {
             get { return updated; }
-            internal set {
+            internal set
+            {
                 updated = value;
             }
         }

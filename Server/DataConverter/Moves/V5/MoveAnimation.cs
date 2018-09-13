@@ -21,9 +21,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Server.DataConverter.Moves.V5 {
-    public class MoveAnimation {
-
+namespace Server.DataConverter.Moves.V5
+{
+    public class MoveAnimation
+    {
         public Enums.MoveAnimationType AnimationType { get; set; }
 
         public int AnimationIndex { get; set; }

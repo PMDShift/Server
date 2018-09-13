@@ -77,8 +77,10 @@ namespace Server.Missions
         //    return builder.ToString();
         //}
 
-        public static int DetermineMissionExpReward(Enums.JobDifficulty difficulty) {
-            switch (difficulty) {
+        public static int DetermineMissionExpReward(Enums.JobDifficulty difficulty)
+        {
+            switch (difficulty)
+            {
                 case Enums.JobDifficulty.E:
                     return 10;
                 case Enums.JobDifficulty.D:
@@ -96,13 +98,13 @@ namespace Server.Missions
                 case Enums.JobDifficulty.TwoStar:
                     return 250;
                 case Enums.JobDifficulty.ThreeStar:
-                    return 400 ;
+                    return 400;
                 case Enums.JobDifficulty.FourStar:
-                    return 600 ;
+                    return 600;
                 case Enums.JobDifficulty.FiveStar:
-                    return 800 ;
+                    return 800;
                 case Enums.JobDifficulty.SixStar:
-                    return 1000 ;
+                    return 1000;
                 case Enums.JobDifficulty.SevenStar:
                     return 1200;
                 case Enums.JobDifficulty.EightStar:
@@ -114,8 +116,10 @@ namespace Server.Missions
             }
         }
 
-        public static string DifficultyToString(Enums.JobDifficulty difficulty) {
-            switch (difficulty) {
+        public static string DifficultyToString(Enums.JobDifficulty difficulty)
+        {
+            switch (difficulty)
+            {
                 case Enums.JobDifficulty.E:
                     return "E";
                 case Enums.JobDifficulty.D:
@@ -151,8 +155,10 @@ namespace Server.Missions
             }
         }
 
-        public static int DetermineMissionExpRequirement(Enums.ExplorerRank rank) {
-            switch (rank) {
+        public static int DetermineMissionExpRequirement(Enums.ExplorerRank rank)
+        {
+            switch (rank)
+            {
                 case Enums.ExplorerRank.Normal:
                     return 0;
                 case Enums.ExplorerRank.Bronze:
@@ -186,8 +192,10 @@ namespace Server.Missions
 
 
 
-        public static string RankToString(Enums.ExplorerRank rank) {
-            switch (rank) {
+        public static string RankToString(Enums.ExplorerRank rank)
+        {
+            switch (rank)
+            {
                 case Enums.ExplorerRank.Normal:
                 case Enums.ExplorerRank.Bronze:
                 case Enums.ExplorerRank.Silver:
@@ -210,94 +218,104 @@ namespace Server.Missions
             }
         }
 
-        public static void ExplorerRankUp(Client client) {
+        public static void ExplorerRankUp(Client client)
+        {
             bool invUpdated = false;
             bool bankUpdated = false;
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
-                while (client.Player.MissionExp >= DetermineMissionExpRequirement(client.Player.ExplorerRank + 1) && DetermineMissionExpRequirement(client.Player.ExplorerRank + 1) != -1) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                while (client.Player.MissionExp >= DetermineMissionExpRequirement(client.Player.ExplorerRank + 1) && DetermineMissionExpRequirement(client.Player.ExplorerRank + 1) != -1)
+                {
                     client.Player.ExplorerRank++;
                     Messenger.PlayerMsg(client, "Your team is now " + RankToString(client.Player.ExplorerRank) + " Rank!  Congratulations!", Text.Yellow);
 
-                    switch (client.Player.ExplorerRank) {
-                        case Enums.ExplorerRank.Bronze: {
+                    switch (client.Player.ExplorerRank)
+                    {
+                        case Enums.ExplorerRank.Bronze:
+                            {
                                 client.Player.SetMaxInv(dbConnection, 30, false);
                                 invUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now carry up to 30 items in your bag!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Silver: {
+                        case Enums.ExplorerRank.Silver:
+                            {
                                 client.Player.SetMaxBank(dbConnection, 200, false);
                                 bankUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now store up to 200 items in your storage!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Gold: {
+                        case Enums.ExplorerRank.Gold:
+                            {
                                 client.Player.SetMaxInv(dbConnection, 40, false);
                                 invUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now carry up to 40 items in your bag!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Diamond: {
+                        case Enums.ExplorerRank.Diamond:
+                            {
                                 client.Player.SetMaxBank(dbConnection, 300, false);
                                 bankUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now store up to 300 items in your storage!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Super: {
+                        case Enums.ExplorerRank.Super:
+                            {
                                 client.Player.SetMaxInv(dbConnection, 50, false);
                                 invUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now carry up to 50 items in your bag!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Ultra: {
+                        case Enums.ExplorerRank.Ultra:
+                            {
                                 client.Player.SetMaxBank(dbConnection, 500, false);
                                 bankUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now store up to 500 items in your storage!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Hyper: {
+                        case Enums.ExplorerRank.Hyper:
+                            {
                                 client.Player.SetMaxBank(dbConnection, 700, false);
                                 bankUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now store up to 700 items in your storage!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.Master: {
+                        case Enums.ExplorerRank.Master:
+                            {
                                 client.Player.SetMaxBank(dbConnection, 1000, false);
                                 bankUpdated = true;
                                 Messenger.PlayerMsg(client, "You can now store up to 1000 items in your storage!", Text.Yellow);
                             }
                             break;
-                        case Enums.ExplorerRank.MasterX: {
-
+                        case Enums.ExplorerRank.MasterX:
+                            {
                             }
                             break;
-                        case Enums.ExplorerRank.MasterXX: {
-
+                        case Enums.ExplorerRank.MasterXX:
+                            {
                             }
                             break;
-                        case Enums.ExplorerRank.MasterXXX: {
-
+                        case Enums.ExplorerRank.MasterXXX:
+                            {
                             }
                             break;
-                        case Enums.ExplorerRank.Guildmaster: {
-
+                        case Enums.ExplorerRank.Guildmaster:
+                            {
                             }
                             break;
                     }
-
                 }
 
-                if (invUpdated) {
+                if (invUpdated)
+                {
                     client.Player.SaveInventory(dbConnection);
                 }
-                if (bankUpdated) {
+                if (bankUpdated)
+                {
                     client.Player.SaveBank(dbConnection);
                 }
             }
-
         }
-
-
     }
 }

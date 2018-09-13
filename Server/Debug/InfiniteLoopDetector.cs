@@ -27,12 +27,14 @@ namespace Server.Debug
         string location;
         int loopCount;
 
-        public InfiniteLoopDetector(string location) {
+        public InfiniteLoopDetector(string location)
+        {
             loopCount = 0;
             this.location = location;
         }
 
-        public void IncrementLoopCount() {
+        public void IncrementLoopCount()
+        {
             loopCount++;
 
             //if (loopCount == 10000) {

@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -17,95 +20,108 @@
 
 namespace Server.DataConverter.Moves.V2
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class Move
     {
         #region Properties
 
-        public bool Big {
+        public bool Big
+        {
             get;
             set;
         }
 
-        public int Data1 {
+        public int Data1
+        {
             get;
             set;
         }
 
-        public int Data2 {
+        public int Data2
+        {
             get;
             set;
         }
 
-        public int Data3 {
+        public int Data3
+        {
             get;
             set;
         }
 
-        public Enums.MoveType EffectType {
+        public Enums.MoveType EffectType
+        {
             get;
             set;
         }
 
-        public bool IsKey {
+        public bool IsKey
+        {
             get;
             set;
         }
 
-        public int KeyItem {
+        public int KeyItem
+        {
             get;
             set;
         }
 
-        public int LevelReq {
+        public int LevelReq
+        {
             get;
             set;
         }
 
-        public int MaxPP {
+        public int MaxPP
+        {
             get;
             set;
         }
 
-        public Enums.PokemonType MoveType {
+        public Enums.PokemonType MoveType
+        {
             get;
             set;
         }
 
-        public string Name {
+        public string Name
+        {
             get;
             set;
         }
 
-        public Enums.MoveRange Range {
+        public Enums.MoveRange Range
+        {
             get;
             set;
         }
 
-        public int Sound {
+        public int Sound
+        {
             get;
             set;
         }
 
-        public int SpellAnim {
+        public int SpellAnim
+        {
             get;
             set;
         }
 
-        public int SpellDone {
+        public int SpellDone
+        {
             get;
             set;
         }
 
-        public int SpellTime {
+        public int SpellTime
+        {
             get;
             set;
         }
 
-        public Enums.MoveTarget TargetType {
+        public Enums.MoveTarget TargetType
+        {
             get;
             set;
         }

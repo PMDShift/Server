@@ -19,8 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Server.DataConverter.Npcs.V7 {
-    public class Npc {
+namespace Server.DataConverter.Npcs.V7
+{
+    public class Npc
+    {
         public string Name { get; set; }
         public string AttackSay { get; set; }
 
@@ -42,11 +44,13 @@ namespace Server.DataConverter.Npcs.V7 {
 
         public string AIScript { get; set; }
 
-        public Npc() {
+        public Npc()
+        {
             Name = "";
             AttackSay = "";
             Drops = new NpcDrop[Constants.MAX_NPC_DROPS];
-            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++) {
+            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++)
+            {
                 Drops[i] = new NpcDrop();
             }
             Moves = new int[4];

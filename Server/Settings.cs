@@ -1,4 +1,12 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+using System.IO;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -19,15 +27,6 @@
 
 namespace Server
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Xml;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-    using System.IO;
-
     public class Settings
     {
         public static string GameName { get; set; }
@@ -55,7 +54,8 @@ namespace Server
 
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             XmlWriterSettings = new System.Xml.XmlWriterSettings();
             XmlWriterSettings.OmitXmlDeclaration = false;
             XmlWriterSettings.IndentChars = "  ";
@@ -65,38 +65,50 @@ namespace Server
             News = new List<string>();
         }
 
-        public static void LoadConfig() {
-            using (XmlReader reader = XmlReader.Create(Path.Combine(IO.Paths.DataFolder, "config.xml"))) {
-                while (reader.Read()) {
-                    if (reader.IsStartElement()) {
-                        switch (reader.Name) {
+        public static void LoadConfig()
+        {
+            using (XmlReader reader = XmlReader.Create(Path.Combine(IO.Paths.DataFolder, "config.xml")))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        switch (reader.Name)
+                        {
                             case "GamePort":
-                                if (reader.Read()) {
+                                if (reader.Read())
+                                {
                                     GamePort = reader.ReadString().ToInt();
                                 }
                                 break;
                             case "DatabaseIP":
-                                if (reader.Read()) {
+                                if (reader.Read())
+                                {
                                     DatabaseIP = reader.ReadString();
                                 }
                                 break;
                             case "DatabasePort":
-                                if (reader.Read()) {
+                                if (reader.Read())
+                                {
                                     DatabasePort = reader.ReadString().ToInt();
                                 }
                                 break;
                             case "DatabaseUser":
-                                if (reader.Read()) {
+                                if (reader.Read())
+                                {
                                     DatabaseUser = reader.ReadString();
                                 }
                                 break;
                             case "DatabasePassword":
-                                if (reader.Read()) {
+                                if (reader.Read())
+                                {
                                     DatabasePassword = reader.ReadString();
                                 }
                                 break;
-                            case "DiscordBotToken": {
-                                    if (reader.Read()) {
+                            case "DiscordBotToken":
+                                {
+                                    if (reader.Read())
+                                    {
                                         DiscordBotToken = reader.ReadString();
                                     }
                                 }
@@ -107,57 +119,68 @@ namespace Server
             }
 
             var gamePortEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_GAME_PORT");
-            if (!string.IsNullOrEmpty(gamePortEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(gamePortEnvironmentVariable))
+            {
                 GamePort = gamePortEnvironmentVariable.ToInt();
             }
 
             var databaseIPEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_IP");
-            if (!string.IsNullOrEmpty(databaseIPEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(databaseIPEnvironmentVariable))
+            {
                 DatabaseIP = databaseIPEnvironmentVariable;
             }
 
             var databasePortEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_PORT");
-            if (!string.IsNullOrEmpty(databasePortEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(databasePortEnvironmentVariable))
+            {
                 DatabasePort = databasePortEnvironmentVariable.ToInt();
             }
 
             var databaseUserEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_USER");
-            if (!string.IsNullOrEmpty(databaseUserEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(databaseUserEnvironmentVariable))
+            {
                 DatabaseUser = databaseUserEnvironmentVariable;
             }
 
             var databasePasswordEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DATABASE_PASSWORD");
-            if (!string.IsNullOrEmpty(databasePasswordEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(databasePasswordEnvironmentVariable))
+            {
                 DatabasePassword = databasePasswordEnvironmentVariable;
             }
 
             var discordBotTokenEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DISCORD_BOT_TOKEN");
-            if (!string.IsNullOrEmpty(discordBotTokenEnvironmentVariable)) {
+            if (!string.IsNullOrEmpty(discordBotTokenEnvironmentVariable))
+            {
                 DiscordBotToken = discordBotTokenEnvironmentVariable;
             }
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
                 MySql database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT id, message " +
                     "FROM title WHERE title.id = 'GameName' OR title.id = 'MOTD' OR title.id = 'GameNameShort'";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
-                    switch (columnCollection["id"].ValueString) {
-                        case "GameName": {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
+                {
+                    switch (columnCollection["id"].ValueString)
+                    {
+                        case "GameName":
+                            {
                                 GameName = columnCollection["message"].ValueString;
                             }
                             break;
-                        case "GameNameShort": {
+                        case "GameNameShort":
+                            {
                                 GameNameShort = columnCollection["message"].ValueString;
                             }
                             break;
-                        case "MOTD": {
+                        case "MOTD":
+                            {
                                 MOTD = columnCollection["message"].ValueString;
                             }
                             break;
                     }
-
                 }
 
                 query = "SELECT id, val " +
@@ -169,29 +192,37 @@ namespace Server
                    "OR start_value.id = 'StartX' " +
                    "OR start_value.id = 'StartY'";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
-                    switch (columnCollection["id"].ValueString) {
-                        case "Crossroads": {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
+                {
+                    switch (columnCollection["id"].ValueString)
+                    {
+                        case "Crossroads":
+                            {
                                 Crossroads = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "NewCharForm": {
+                        case "NewCharForm":
+                            {
                                 NewCharForm = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "NewCharSpecies": {
+                        case "NewCharSpecies":
+                            {
                                 NewCharSpecies = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartMap": {
+                        case "StartMap":
+                            {
                                 StartMap = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartX": {
+                        case "StartX":
+                            {
                                 StartX = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
-                        case "StartY": {
+                        case "StartY":
+                            {
                                 StartY = columnCollection["val"].ValueString.ToInt();
                             }
                             break;
@@ -200,14 +231,17 @@ namespace Server
             }
         }
 
-        public static void LoadNews() {
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
+        public static void LoadNews()
+        {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
                 MySql database = dbConnection.Database;
                 //load most recent news
                 string query = "SELECT num, news_time, message " +
                     "FROM news WHERE news.num > (SELECT COUNT(num) FROM news) - 10";
 
-                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
+                foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query))
+                {
                     int num = columnCollection["num"].ValueString.ToInt();
 
                     News.Add("[" + columnCollection["news_time"].ValueString + "] " + columnCollection["message"].ValueString);
@@ -215,31 +249,33 @@ namespace Server
             }
         }
 
-        public static void SaveMOTD() {
+        public static void SaveMOTD()
+        {
             //save motd
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
                 MySql database = dbConnection.Database;
 
                 database.UpdateOrInsert("title", new IDataColumn[] {
                     database.CreateColumn(true, "id", "MOTD"),
                     database.CreateColumn(false, "message", MOTD)
                 });
-
             }
         }
 
-        public static void AddNews(string newNews) {
+        public static void AddNews(string newNews)
+        {
             string date = DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss");
 
             News.Add("[" + date + "] " + newNews);
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
                 MySql database = dbConnection.Database;
 
                 database.AddRow("news", new IDataColumn[] {
                     database.CreateColumn(false, "message", newNews)
                 });
-
             }
         }
     }

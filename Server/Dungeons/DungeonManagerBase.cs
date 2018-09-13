@@ -37,15 +37,18 @@ namespace Server.Dungeons
 
         #endregion Events
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             dungeons = new DungeonCollection();
         }
 
-        public static DungeonCollection Dungeons {
+        public static DungeonCollection Dungeons
+        {
             get { return dungeons; }
         }
 
-        public static void LoadDungeons(object object1) {
+        public static void LoadDungeons(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 string query = "SELECT COUNT(num) FROM dungeon";
@@ -141,7 +144,8 @@ namespace Server.Dungeons
             dungeons.Dungeons.Add(dungeonNum, dungeon);
         }
 
-        public static void AddDungeon() {
+        public static void AddDungeon()
+        {
             SaveDungeon(dungeons.Count);
         }
 

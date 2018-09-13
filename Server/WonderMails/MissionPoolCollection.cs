@@ -20,9 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Server.WonderMails {
-    public class MissionPoolCollection {
-
+namespace Server.WonderMails
+{
+    public class MissionPoolCollection
+    {
         #region Fields
 
         List<MissionPool> missionPools;
@@ -31,7 +32,8 @@ namespace Server.WonderMails {
 
         #region Constructors
 
-        public MissionPoolCollection() {
+        public MissionPoolCollection()
+        {
             missionPools = new List<MissionPool>();
         }
 
@@ -39,11 +41,13 @@ namespace Server.WonderMails {
 
         #region Properties
 
-        public List<MissionPool> MissionPools {
+        public List<MissionPool> MissionPools
+        {
             get { return missionPools; }
         }
 
-        public int Count {
+        public int Count
+        {
             get { return missionPools.Count; }
         }
 
@@ -51,12 +55,12 @@ namespace Server.WonderMails {
 
         #region Indexers
 
-        public MissionPool this[int index] {
+        public MissionPool this[int index]
+        {
             get { return missionPools[index]; }
             set { missionPools[index] = value; }
         }
 
         #endregion Indexers
-
     }
 }

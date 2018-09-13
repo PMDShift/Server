@@ -40,38 +40,47 @@ namespace Server.Debug
         long cpuTimeStart;
         long cpuTimeEnd;
 
-        public ThreadCPUWatcher() {
+        public ThreadCPUWatcher()
+        {
         }
 
-        public ThreadCPUWatcher(Int16 nativeThreadID) {
+        public ThreadCPUWatcher(Int16 nativeThreadID)
+        {
         }
 
-        public bool IsRunning {
+        public bool IsRunning
+        {
             get { return watcherRunning; }
         }
 
-        public long CPUusage {
+        public long CPUusage
+        {
             get { return percentage; }
         }
 
-        public void StopWatcher(long elapsedMilliseconds) {
+        public void StopWatcher(long elapsedMilliseconds)
+        {
             watcherRunning = false;
 
             cpuTimeEnd = GetThreadTimes();
 
             long cpuDiff = (cpuTimeEnd - cpuTimeStart) / 10000;
-            if (elapsedMilliseconds > 0) {
+            if (elapsedMilliseconds > 0)
+            {
                 percentage = (long)((cpuDiff / elapsedMilliseconds) * 100);
-            } else {
+            }
+            else
+            {
                 percentage = 0;
             }
 
             if (percentage > 100) percentage = 100;
 
-            Thread.EndThreadAffinity(); 
+            Thread.EndThreadAffinity();
         }
 
-        public void Start() {
+        public void Start()
+        {
             System.Threading.Thread.BeginThreadAffinity();
 
             watcherRunning = true;
@@ -79,7 +88,8 @@ namespace Server.Debug
             cpuTimeStart = GetThreadTimes();
         }
 
-        private long GetThreadTimes() {
+        private long GetThreadTimes()
+        {
             IntPtr threadHandle = GetCurrentThread();
 
             long notIntersting;
@@ -98,6 +108,5 @@ namespace Server.Debug
             long result = kernelTime + userTime;
             return result;
         }
-
     }
 }

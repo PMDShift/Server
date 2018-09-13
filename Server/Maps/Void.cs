@@ -27,115 +27,141 @@ namespace Server.Maps
 {
     public class Void : BasicMap, IMap
     {
-        public Enums.MapType MapType {
+        public Enums.MapType MapType
+        {
             get { return Enums.MapType.Void; }
         }
 
-        public int Down {
+        public int Down
+        {
             get { return 0; }
             set { }
         }
 
-        public int Left {
+        public int Left
+        {
             get { return 0; }
             set { }
         }
 
-        public string MapID {
+        public string MapID
+        {
             get { return "void-" + owner.CharID; }
             set { }
         }
 
-        public string IDPrefix {
+        public string IDPrefix
+        {
             get { return "void"; }
         }
 
-        public Enums.MapMoral Moral {
+        public Enums.MapMoral Moral
+        {
             get { return Enums.MapMoral.None; }
             set { }
         }
 
-        public string Music {
+        public string Music
+        {
             get;
             set;
         }
 
-        public string Name {
+        public string Name
+        {
             get { return ""; }
             set { }
         }
 
-        public string Owner {
+        public string Owner
+        {
             get { return ""; }
             set { }
         }
 
-        public int Revision {
+        public int Revision
+        {
             get { return 1; }
             set { }
         }
 
-        public int Right {
+        public int Right
+        {
             get { return 0; }
             set { }
         }
 
-        public int Up {
+        public int Up
+        {
             get { return 0; }
             set { }
         }
 
-        public bool HungerEnabled {
+        public bool HungerEnabled
+        {
             get { return false; }
             set { }
         }
 
-        public void Save() {
+        public void Save()
+        {
             // No saving The Void!
         }
 
-        public void Save(string filePath) {
+        public void Save(string filePath)
+        {
             // No saving The Void!
         }
 
-        public bool Load() {
+        public bool Load()
+        {
             return true;
         }
 
-        public bool Load(string filePath) {
+        public bool Load(string filePath)
+        {
             return true;
         }
 
-        public void RemakePlayersList() {
+        public void RemakePlayersList()
+        {
             PlayersOnMap.Clear();
             PlayersOnMap.Add(owner.CharID);
         }
 
-        public Player PlayerOwner {
+        public Player PlayerOwner
+        {
             get { return owner; }
         }
 
-        public bool Cacheable {
+        public bool Cacheable
+        {
             get { return false; }
         }
 
-        public bool IsProcessingComplete() {
+        public bool IsProcessingComplete()
+        {
             if (Npc.Count < 1) return true;
 
             int npcsActive = 0;
 
 
-            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-                if (ActiveNpc[i].Num > 0) {
+            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++)
+            {
+                if (ActiveNpc[i].Num > 0)
+                {
                     npcsActive++;
                     // An npc is still dead, so processing of this map is incomplete
 
                 }
             }
 
-            if (npcsActive >= MaxNpcs) {
+            if (npcsActive >= MaxNpcs)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -143,7 +169,8 @@ namespace Server.Maps
         public bool SafeExit { get; set; }
         Player owner;
         public Void(Player owner)
-            : base(new DataManager.Maps.MapDump("void-" + owner.CharID, Constants.MAX_MAP_NPCS, Constants.MAX_MAP_ITEMS)) {
+            : base(new DataManager.Maps.MapDump("void-" + owner.CharID, Constants.MAX_MAP_NPCS, Constants.MAX_MAP_ITEMS))
+        {
             this.owner = owner;
             RemakePlayersList();
             MaxX = 19;

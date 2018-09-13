@@ -1,4 +1,16 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using PMDCP.Sockets;
+
+using Server.Combat;
+using Server.Items;
+using Server.Moves;
+using Server.Network;
+using Server.Npcs;
+using Server.Players;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,19 +30,6 @@
 
 namespace Server.Maps
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    using PMDCP.Sockets;
-
-    using Server.Combat;
-    using Server.Items;
-    using Server.Moves;
-    using Server.Network;
-    using Server.Npcs;
-    using Server.Players;
-
     public class MapNpc : MapNpcBase, Combat.ICharacter
     {
         #region Fields
@@ -44,13 +43,13 @@ namespace Server.Maps
         #region Constructors
 
         public MapNpc(string mapID, DataManager.Maps.MapNpc rawNpc)
-            : base(rawNpc) {
-            
-
+            : base(rawNpc)
+        {
             SpeedLimit = Enums.Speed.Running;
 
             Moves = new Players.RecruitMove[4];
-            for (int i = 0; i < Moves.Length; i++) {
+            for (int i = 0; i < Moves.Length; i++)
+            {
                 Moves[i] = new Players.RecruitMove(RawNpc.Moves[i]);
             }
 
@@ -62,7 +61,8 @@ namespace Server.Maps
             heldItem = new InventoryItem(RawNpc.HeldItem);
 
             VolatileStatus = new ExtraStatusCollection();
-            for (int i = 0; i < RawNpc.VolatileStatus.Count; i++) {
+            for (int i = 0; i < RawNpc.VolatileStatus.Count; i++)
+            {
                 VolatileStatus.Add(new ExtraStatus(RawNpc.VolatileStatus[i]));
             }
             MapID = mapID;
@@ -73,19 +73,20 @@ namespace Server.Maps
             //CalculateOriginalType();
             //CalculateOriginalAbility();
             //CalculateOriginalMobility();
-            if (Num > 0) {
+            if (Num > 0)
+            {
                 LoadActiveItemList();
             }
         }
 
         public MapNpc(string mapID, int mapSlot)
-            : base(new DataManager.Maps.MapNpc(mapSlot)) {
-            
-
+            : base(new DataManager.Maps.MapNpc(mapSlot))
+        {
             SpeedLimit = Enums.Speed.Running;
 
             Moves = new Players.RecruitMove[4];
-            for (int i = 0; i < Moves.Length; i++) {
+            for (int i = 0; i < Moves.Length; i++)
+            {
                 Moves[i] = new Players.RecruitMove(RawNpc.Moves[i]);
             }
 
@@ -97,7 +98,8 @@ namespace Server.Maps
             heldItem = new InventoryItem(RawNpc.HeldItem);
 
             VolatileStatus = new ExtraStatusCollection();
-            for (int i = 0; i < RawNpc.VolatileStatus.Count; i++) {
+            for (int i = 0; i < RawNpc.VolatileStatus.Count; i++)
+            {
                 VolatileStatus.Add(new ExtraStatus(RawNpc.VolatileStatus[i]));
             }
             MapID = mapID;
@@ -110,11 +112,13 @@ namespace Server.Maps
 
         #region Properties
 
-        public Enums.CharacterType CharacterType {
+        public Enums.CharacterType CharacterType
+        {
             get { return Enums.CharacterType.MapNpc; }
         }
 
-        public bool Confused {
+        public bool Confused
+        {
             //get { return rawNpc.ConfusionStepCounter; }
             //set { rawNpc.ConfusionStepCounter = value; }
             get;
@@ -123,21 +127,30 @@ namespace Server.Maps
 
         public bool Visible { get; set; }
 
-        public InventoryItem HeldItem {
-            get {
-                if (heldItem.Num < 0) {
+        public InventoryItem HeldItem
+        {
+            get
+            {
+                if (heldItem.Num < 0)
+                {
                     return null;
-                } else {
+                }
+                else
+                {
                     return heldItem;
                 }
             }
-            set {
-                if (value == null) {
+            set
+            {
+                if (value == null)
+                {
                     heldItem.Num = -1;
                     heldItem.Amount = 0;
                     heldItem.Sticky = false;
                     heldItem.Tag = "";
-                } else {
+                }
+                else
+                {
                     heldItem.Num = value.Num;
                     heldItem.Amount = value.Amount;
                     heldItem.Sticky = value.Sticky;
@@ -146,82 +159,101 @@ namespace Server.Maps
             }
         }
 
-        public bool HitByMove {
+        public bool HitByMove
+        {
             get;
             set;
         }
 
-        public override int HP {
-            get {
+        public override int HP
+        {
+            get
+            {
                 return base.HP;
             }
-            set {
-                if (base.HP != lastHP) {
+            set
+            {
+                if (base.HP != lastHP)
+                {
                     lastHP = base.HP;
                     hpChanged = true;
                 }
-                if (value > MaxHP) {
+                if (value > MaxHP)
+                {
                     value = MaxHP;
                 }
                 base.HP = value;
-
             }
         }
 
-        public bool HPChanged {
+        public bool HPChanged
+        {
             get { return hpChanged; }
         }
 
-        public int HPStepCounter {
+        public int HPStepCounter
+        {
             get { return RawNpc.HPStepCounter; }
             set { RawNpc.HPStepCounter = value; }
         }
 
 
-        public List<int> ActiveItems {
+        public List<int> ActiveItems
+        {
             get;
             set;
         }
 
 
-        public string MapID {
+        public string MapID
+        {
             get;
             set;
         }
 
-        public int MapSlot {
+        public int MapSlot
+        {
             get { return RawNpc.MapSlot; }
         }
 
-        public int Species {
+        public int Species
+        {
             get { return Npcs.NpcManager.Npcs[Num].Species; }
         }
 
-        public Enums.Speed SpeedLimit {
+        public Enums.Speed SpeedLimit
+        {
             get;
             set;
         }
 
-        public Enums.StatusAilment StatusAilment {
+        public Enums.StatusAilment StatusAilment
+        {
             get { return (Enums.StatusAilment)RawNpc.StatusAilment; }
             set { RawNpc.StatusAilment = (byte)value; }
         }
 
-        public int StatusAilmentCounter {
+        public int StatusAilmentCounter
+        {
             get { return RawNpc.StatusAilmentCounter; }
             set { RawNpc.StatusAilmentCounter = value; }
         }
 
-        public Client Target {
+        public Client Target
+        {
             get;
             set;
         }
 
-        public int UseableMoveCount {
-            get {
+        public int UseableMoveCount
+        {
+            get
+            {
                 int counter = 0;
-                for (int i = 0; i < Moves.Length; i++) {
-                    if (Moves[i].MoveNum > -1 && Moves[i].CurrentPP > 0) {
+                for (int i = 0; i < Moves.Length; i++)
+                {
+                    if (Moves[i].MoveNum > -1 && Moves[i].CurrentPP > 0)
+                    {
                         counter++;
                     }
                 }
@@ -229,7 +261,8 @@ namespace Server.Maps
             }
         }
 
-        public ExtraStatusCollection VolatileStatus {
+        public ExtraStatusCollection VolatileStatus
+        {
             get;
             set;
         }
@@ -238,14 +271,17 @@ namespace Server.Maps
 
         #region Methods
 
-        public void Save() {
+        public void Save()
+        {
             RawNpc.VolatileStatus = new List<DataManager.Characters.VolatileStatus>();
-            for (int i = 0; i < VolatileStatus.Count; i++) {
+            for (int i = 0; i < VolatileStatus.Count; i++)
+            {
                 RawNpc.VolatileStatus.Add(VolatileStatus[i].RawVolatileStatus);
             }
         }
 
-        public void RefreshActiveItemList() {
+        public void RefreshActiveItemList()
+        {
             MaxHPBoost = 0;
             //add PP
             AtkBoost = 0;
@@ -259,17 +295,20 @@ namespace Server.Maps
             LoadActiveItemList();
         }
 
-        public void LoadActiveItemList() {
+        public void LoadActiveItemList()
+        {
             //add held item, if applicable
 
-            if (HeldItem != null && !HeldItem.Sticky && MeetsReqs(HeldItem.Num)) {
+            if (HeldItem != null && !HeldItem.Sticky && MeetsReqs(HeldItem.Num))
+            {
                 AddToActiveItemList(HeldItem.Num);
             }
-
         }
 
-        public void AddToActiveItemList(int itemNum) {
-            if (!ActiveItems.Contains(itemNum)) {
+        public void AddToActiveItemList(int itemNum)
+        {
+            if (!ActiveItems.Contains(itemNum))
+            {
                 //add to active items list
                 ActiveItems.Add(itemNum);
 
@@ -285,14 +324,17 @@ namespace Server.Maps
 
                 Scripting.ScriptManager.InvokeFunction("OnItemActivated", itemNum, this);
 
-                if (ItemManager.Items[HeldItem.Num].AddHP != 0) {
+                if (ItemManager.Items[HeldItem.Num].AddHP != 0)
+                {
                     //SendHPToMap(TODO
                 }
             }
         }
 
-        public void RemoveFromActiveItemList(int itemNum) {
-            if (ActiveItems.Contains(itemNum)) {
+        public void RemoveFromActiveItemList(int itemNum)
+        {
+            if (ActiveItems.Contains(itemNum))
+            {
                 //remove from active items list
                 ActiveItems.Remove(itemNum);
 
@@ -309,11 +351,11 @@ namespace Server.Maps
                 Scripting.ScriptManager.InvokeFunction("OnItemDeactivated", itemNum, this);
 
 
-                if (ItemManager.Items[HeldItem.Num].AddHP != 0) {
+                if (ItemManager.Items[HeldItem.Num].AddHP != 0)
+                {
                     //SendHPToMap(TODO
                 }
             }
-
         }
 
         public void CalculateOriginalForm()
@@ -321,7 +363,8 @@ namespace Server.Maps
             // Does nothing?
         }
 
-        public void CalculateOriginalAbility() {
+        public void CalculateOriginalAbility()
+        {
             Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(Species, Form);
             Ability1 = pokemon.Ability1;
             Ability2 = pokemon.Ability2;
@@ -354,16 +397,18 @@ namespace Server.Maps
         //}
 
 
-        public void CalculateOriginalSpecies() {
-
+        public void CalculateOriginalSpecies()
+        {
         }
 
-        public void CalculateOriginalSprite() {
+        public void CalculateOriginalSprite()
+        {
             //Sprite = Pokedex.Pokedex.GetPokemonForm(Species, Form).Sprite[(int)Shiny, (int)Sex];
             Sprite = Species;
         }
 
-        public void CalculateOriginalStats() {
+        public void CalculateOriginalStats()
+        {
             Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(Species, Form);
             BaseMaxHP = pokemon.GetMaxHP(Level);
             BaseAtk = pokemon.GetAtt(Level);
@@ -373,27 +418,35 @@ namespace Server.Maps
             BaseSpd = pokemon.GetSpd(Level);
         }
 
-        public void CalculateOriginalType() {
+        public void CalculateOriginalType()
+        {
             Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(Species, Form);
             Type1 = pokemon.Type1;
             Type2 = pokemon.Type2;
         }
 
-        public void GenerateHeldItem() {
+        public void GenerateHeldItem()
+        {
             //add sticky?
             List<InventoryItem> possibleDrops = new List<InventoryItem>();
-            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++) {
-                if (NpcManager.Npcs[Num].Drops[i].ItemNum > 0) {
-                    if (NpcManager.Npcs[Num].Drops[i].Chance == 1) {
+            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++)
+            {
+                if (NpcManager.Npcs[Num].Drops[i].ItemNum > 0)
+                {
+                    if (NpcManager.Npcs[Num].Drops[i].Chance == 1)
+                    {
                         InventoryItem drop = new InventoryItem();
                         drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                         drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
                         drop.Tag = NpcManager.Npcs[Num].Drops[i].Tag;
                         possibleDrops.Add(drop);
-                    } else {
-                        if (NpcManager.Npcs[Num].Drops[i].Chance > 0) {
-
-                            if (Server.Math.Rand(0, NpcManager.Npcs[Num].Drops[i].Chance + 1) == 0) {
+                    }
+                    else
+                    {
+                        if (NpcManager.Npcs[Num].Drops[i].Chance > 0)
+                        {
+                            if (Server.Math.Rand(0, NpcManager.Npcs[Num].Drops[i].Chance + 1) == 0)
+                            {
                                 InventoryItem drop = new InventoryItem();
                                 drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                                 drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
@@ -404,26 +457,37 @@ namespace Server.Maps
                     }
                 }
             }
-            if (possibleDrops.Count > 0) {
+            if (possibleDrops.Count > 0)
+            {
                 GiveItem(possibleDrops[Server.Math.Rand(0, possibleDrops.Count)]);
             }
         }
 
-        public void GenerateMoveset() {
+        public void GenerateMoveset()
+        {
             Npcs.Npc npc = Npcs.NpcManager.Npcs[Num];
             Pokedex.PokemonForm pokemon = null;
             List<int> validLevelUpMoves = new List<int>();
-            for (int i = 0; i < Moves.Length; i++) {
-                if (npc.Moves[i] == -1) {
-                    if (npc.Species > -1) {
+            for (int i = 0; i < Moves.Length; i++)
+            {
+                if (npc.Moves[i] == -1)
+                {
+                    if (npc.Species > -1)
+                    {
                         pokemon = Pokedex.Pokedex.GetPokemonForm(npc.Species, Form);
-                    } else {
+                    }
+                    else
+                    {
                         return;
                     }
-                    if (pokemon != null) {
-                        if (validLevelUpMoves.Count == 0) {
-                            for (int n = 0; n < pokemon.LevelUpMoves.Count; n++) {
-                                if (pokemon.LevelUpMoves[n].Level <= this.Level) {
+                    if (pokemon != null)
+                    {
+                        if (validLevelUpMoves.Count == 0)
+                        {
+                            for (int n = 0; n < pokemon.LevelUpMoves.Count; n++)
+                            {
+                                if (pokemon.LevelUpMoves[n].Level <= this.Level)
+                                {
                                     validLevelUpMoves.Add(n);
                                 }
                             }
@@ -432,18 +496,24 @@ namespace Server.Maps
                     break;
                 }
             }
-            for (int i = 0; i < Moves.Length; i++) {
-                if (npc.Moves[i] == -1) {
-                    if (validLevelUpMoves.Count > 0) {
+            for (int i = 0; i < Moves.Length; i++)
+            {
+                if (npc.Moves[i] == -1)
+                {
+                    if (validLevelUpMoves.Count > 0)
+                    {
                         int levelUpMoveSelected = Server.Math.Rand(0, validLevelUpMoves.Count);
                         Moves[i].MoveNum = pokemon.LevelUpMoves[validLevelUpMoves[levelUpMoveSelected]].Move;
-                        if (Moves[i].MoveNum > -1) {
+                        if (Moves[i].MoveNum > -1)
+                        {
                             Moves[i].MaxPP = Server.Moves.MoveManager.Moves[Moves[i].MoveNum].MaxPP;
                             Moves[i].CurrentPP = Moves[i].MaxPP;
                         }
                         validLevelUpMoves.RemoveAt(levelUpMoveSelected);
                     }
-                } else if (npc.Moves[i] > 0) {
+                }
+                else if (npc.Moves[i] > 0)
+                {
                     // Move is preset in the npc editor
                     Moves[i].MoveNum = npc.Moves[i];
                     Moves[i].MaxPP = Server.Moves.MoveManager.Moves[Moves[i].MoveNum].MaxPP;
@@ -452,19 +522,25 @@ namespace Server.Maps
             }
         }
 
-        public bool HasActiveItem(int itemNum) {
-            if (HeldItem != null && HeldItem.Num == itemNum && ActiveItems.Contains(itemNum)) {
+        public bool HasActiveItem(int itemNum)
+        {
+            if (HeldItem != null && HeldItem.Num == itemNum && ActiveItems.Contains(itemNum))
+            {
                 return true;
             }
             return false;
         }
 
-        public bool IsInRangeOfAllies(IMap currentMap, Move move, int moveSlot) {
-            for (int i = 0; i < currentMap.ActiveNpc.Length; i++) {
-                if (currentMap.ActiveNpc[i].Num > 0) {
+        public bool IsInRangeOfAllies(IMap currentMap, Move move, int moveSlot)
+        {
+            for (int i = 0; i < currentMap.ActiveNpc.Length; i++)
+            {
+                if (currentMap.ActiveNpc[i].Num > 0)
+                {
                     if (MoveProcessor.IsInRange(move.RangeType, move.Range, this.X, this.Y,
                                      this.Direction,
-                                     currentMap.ActiveNpc[i].X, currentMap.ActiveNpc[i].Y)) {
+                                     currentMap.ActiveNpc[i].X, currentMap.ActiveNpc[i].Y))
+                    {
                         return true;
                     }
                 }
@@ -472,13 +548,16 @@ namespace Server.Maps
             return false;
         }
 
-        public bool IsInRangeOfFoes(IMap currentMap, Move move, int moveSlot) {
+        public bool IsInRangeOfFoes(IMap currentMap, Move move, int moveSlot)
+        {
             // Check if any players are in range
-            foreach (Client i in currentMap.GetClients()) {
+            foreach (Client i in currentMap.GetClients())
+            {
                 // Check if the target player is in range
                 if (MoveProcessor.IsInRange(move.RangeType, move.Range, this.X, this.Y,
                     this.Direction,
-                    i.Player.X, i.Player.Y)) {
+                    i.Player.X, i.Player.Y))
+                {
                     // They are in range, attack them
                     return true;
                 }
@@ -486,19 +565,25 @@ namespace Server.Maps
             return false;
         }
 
-        public void MapDropItem(int val, Client playerFor) {
-            if (HeldItem != null) {
+        public void MapDropItem(int val, Client playerFor)
+        {
+            if (HeldItem != null)
+            {
                 IMap currentMap = MapManager.RetrieveActiveMap(MapID);
                 int i = currentMap.FindOpenItemSlot();
 
-                if (i != -1) {
-                    
-                    if (currentMap != null) {
-                        if (val >= HeldItem.Amount) {
+                if (i != -1)
+                {
+                    if (currentMap != null)
+                    {
+                        if (val >= HeldItem.Amount)
+                        {
                             currentMap.SpawnItemSlot(i, HeldItem.Num, HeldItem.Amount, HeldItem.Sticky, false, HeldItem.Tag, X, Y, playerFor);
                             RemoveFromActiveItemList(HeldItem.Num);
                             HeldItem = null;
-                        } else {
+                        }
+                        else
+                        {
                             currentMap.SpawnItemSlot(i, HeldItem.Num, val, false, false, HeldItem.Tag, X, Y, playerFor);
                             HeldItem.Amount -= val;
                         }
@@ -508,30 +593,39 @@ namespace Server.Maps
             }
         }
 
-        public void MapGetItem() {
+        public void MapGetItem()
+        {
             int i = 0;
 
             IMap map = MapManager.RetrieveActiveMap(MapID);
 
-            for (i = 0; i < Constants.MAX_MAP_ITEMS; i++) {
+            for (i = 0; i < Constants.MAX_MAP_ITEMS; i++)
+            {
                 // See if theres even an item here
-                if ((map.ActiveItem[i].Num >= 0) & (map.ActiveItem[i].Num < Items.ItemManager.Items.MaxItems)) {
+                if ((map.ActiveItem[i].Num >= 0) & (map.ActiveItem[i].Num < Items.ItemManager.Items.MaxItems))
+                {
                     // Check if item is at the same location as the player
-                    if ((map.ActiveItem[i].X == X) & (map.ActiveItem[i].Y == Y)) {
+                    if ((map.ActiveItem[i].X == X) & (map.ActiveItem[i].Y == Y))
+                    {
                         // Open slot available?
-                        if (HeldItem == null) {
+                        if (HeldItem == null)
+                        {
                             // Set item in players inventory
                             InventoryItem newItem = new InventoryItem();
                             newItem.Num = map.ActiveItem[i].Num;
                             newItem.Sticky = map.ActiveItem[i].Sticky;
                             newItem.Tag = map.ActiveItem[i].Tag;
 
-                            if (ItemManager.Items[map.ActiveItem[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[map.ActiveItem[i].Num].StackCap > 0) {
+                            if (ItemManager.Items[map.ActiveItem[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[map.ActiveItem[i].Num].StackCap > 0)
+                            {
                                 newItem.Amount = map.ActiveItem[i].Value;
-                                if (newItem.Amount > ItemManager.Items[map.ActiveItem[i].Num].StackCap) {
+                                if (newItem.Amount > ItemManager.Items[map.ActiveItem[i].Num].StackCap)
+                                {
                                     newItem.Amount = ItemManager.Items[map.ActiveItem[i].Num].StackCap;
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 newItem.Amount = 0;
                             }
 
@@ -543,22 +637,26 @@ namespace Server.Maps
 
                             Scripting.ScriptManager.InvokeSub("OnPickupItem", this, -1, HeldItem);
                             return;
-                        } else {
-                            if (map.ActiveItem[i].Num == HeldItem.Num && (ItemManager.Items[map.ActiveItem[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[map.ActiveItem[i].Num].StackCap > 0)) {
+                        }
+                        else
+                        {
+                            if (map.ActiveItem[i].Num == HeldItem.Num && (ItemManager.Items[map.ActiveItem[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[map.ActiveItem[i].Num].StackCap > 0))
+                            {
                                 HeldItem.Amount += map.ActiveItem[i].Value;
-                                if (HeldItem.Amount > ItemManager.Items[map.ActiveItem[i].Num].StackCap) {
+                                if (HeldItem.Amount > ItemManager.Items[map.ActiveItem[i].Num].StackCap)
+                                {
                                     HeldItem.Amount = ItemManager.Items[map.ActiveItem[i].Num].StackCap;
                                 }
                                 HeldItem.Sticky = map.ActiveItem[i].Sticky;
                             }
                         }
-
                     }
                 }
             }
         }
 
-        public bool MeetsReqs(int itemNum) {
+        public bool MeetsReqs(int itemNum)
+        {
             /*
             if (BaseAtk + AtkBonus < ItemManager.Items[itemNum].AttackReq) {
                 return false;
@@ -581,18 +679,20 @@ namespace Server.Maps
             }
             */
             //if (ItemManager.Items[itemNum].ScriptedReq > -1) {
-                return Scripting.ScriptManager.InvokeFunction("ScriptedReq", this, itemNum).ToBool();
+            return Scripting.ScriptManager.InvokeFunction("ScriptedReq", this, itemNum).ToBool();
             //}
 
             //return true;
         }
 
-        public void SendHPToMap(PacketHitList packetList, IMap map, int mapNpcNum) {
+        public void SendHPToMap(PacketHitList packetList, IMap map, int mapNpcNum)
+        {
             PacketBuilder.AppendNpcHP(map, packetList, mapNpcNum);
             hpChanged = false;
         }
 
-        public void GiveHeldItem(int num, int val, string tag, bool sticky) {
+        public void GiveHeldItem(int num, int val, string tag, bool sticky)
+        {
             InventoryItem newItem = new InventoryItem();
             newItem.Num = num;
             newItem.Amount = val;
@@ -604,35 +704,47 @@ namespace Server.Maps
 
 
 
-        public void GiveItem(InventoryItem item) {
+        public void GiveItem(InventoryItem item)
+        {
             HeldItem = item;
-            if (!HeldItem.Sticky && MeetsReqs(HeldItem.Num)) {
+            if (!HeldItem.Sticky && MeetsReqs(HeldItem.Num))
+            {
                 AddToActiveItemList(HeldItem.Num);
             }
         }
 
-        public void TakeHeldItem(int val) {
+        public void TakeHeldItem(int val)
+        {
             bool takeItem = false;
-            if (HeldItem != null) {
-                if (ItemManager.Items[HeldItem.Num].Type == Enums.ItemType.Currency || ItemManager.Items[HeldItem.Num].StackCap > 0) {
+            if (HeldItem != null)
+            {
+                if (ItemManager.Items[HeldItem.Num].Type == Enums.ItemType.Currency || ItemManager.Items[HeldItem.Num].StackCap > 0)
+                {
                     // Is what we are trying to take away more then what they have?  If so just set it to zero
-                    if (val >= HeldItem.Amount) {
+                    if (val >= HeldItem.Amount)
+                    {
                         takeItem = true;
-                    } else {
+                    }
+                    else
+                    {
                         HeldItem.Amount = HeldItem.Amount - val;
                     }
-                } else {
+                }
+                else
+                {
                     takeItem = true;
                 }
 
-                if (takeItem) {
+                if (takeItem)
+                {
                     RemoveFromActiveItemList(HeldItem.Num);
                     HeldItem = null;
                 }
             }
         }
 
-        public void ThrowHeldItem() {
+        public void ThrowHeldItem()
+        {
             BattleSetup setup = new BattleSetup();
 
             setup.Attacker = this;
@@ -642,8 +754,10 @@ namespace Server.Maps
             BattleProcessor.FinalizeAction(setup);
         }
 
-        public void UseHeldItem() {
-            if (HeldItem == null) {
+        public void UseHeldItem()
+        {
+            if (HeldItem == null)
+            {
                 return;
             }
 
@@ -660,7 +774,8 @@ namespace Server.Maps
         //    BattleProcessor.MoveHitCharacter(this, this, moveNum);
         //    Messenger.SpellAnim(moveNum, this.MapID, this.X, this.Y);
         //}
-        public void UseMove(int moveSlot) {
+        public void UseMove(int moveSlot)
+        {
             BattleSetup setup = new BattleSetup();
 
             setup.Attacker = this;
@@ -671,34 +786,42 @@ namespace Server.Maps
             BattleProcessor.FinalizeAction(setup);
         }
 
-        public void UseMoveOnAllies(BattleSetup setup, TargetCollection targets) {
+        public void UseMoveOnAllies(BattleSetup setup, TargetCollection targets)
+        {
             //List<ICharacter> targets = MoveProcessor.GetTargetsInRange(setup.Move.RangeType, setup.Move.Range, setup.AttackerMap, this, X, Y, Direction);
             Move move = setup.SetdownMove();
 
-            foreach (ICharacter i in targets.Friends) {
-                if (i.CharacterType == Enums.CharacterType.MapNpc && ((MapNpc)i).Num <= 0) {
-
-                } else {
+            foreach (ICharacter i in targets.Friends)
+            {
+                if (i.CharacterType == Enums.CharacterType.MapNpc && ((MapNpc)i).Num <= 0)
+                {
+                }
+                else
+                {
                     setup.Defender = i;
                     BattleProcessor.MoveHitCharacter(setup);
                     setup.SetupMove(move);
-                    if (setup.Cancel) {
+                    if (setup.Cancel)
+                    {
                         return;
                     }
                 }
             }
         }
 
-        public void UseMoveOnFoes(BattleSetup setup, TargetCollection targets) {
+        public void UseMoveOnFoes(BattleSetup setup, TargetCollection targets)
+        {
             // Attack any players that are on the map
             //List<ICharacter> targets = MoveProcessor.GetTargetsInRange(setup.Move.RangeType, setup.Move.Range, setup.AttackerMap, this, X, Y, Direction);
             Move move = setup.SetdownMove();
 
-            foreach (ICharacter i in targets.Foes) {
+            foreach (ICharacter i in targets.Foes)
+            {
                 setup.Defender = i;
                 BattleProcessor.MoveHitCharacter(setup);
                 setup.SetupMove(move);
-                if (setup.Cancel) {
+                if (setup.Cancel)
+                {
                     return;
                 }
             }

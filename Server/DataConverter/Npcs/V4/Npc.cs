@@ -45,11 +45,13 @@ namespace Server.DataConverter.Npcs.V4
 
         public string AIScript { get; set; }
 
-        public Npc() {
+        public Npc()
+        {
             Name = "";
             AttackSay = "";
             Drops = new NpcDrop[Constants.MAX_NPC_DROPS];
-            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++) {
+            for (int i = 0; i < Constants.MAX_NPC_DROPS; i++)
+            {
                 Drops[i] = new NpcDrop();
             }
         }

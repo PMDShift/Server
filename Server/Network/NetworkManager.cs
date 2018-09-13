@@ -29,28 +29,32 @@ namespace Server.Network
     {
         static TcpListener<TcpClientIdentifier> tcpListener;
 
-        public static TcpListener<TcpClientIdentifier> TcpListener {
+        public static TcpListener<TcpClientIdentifier> TcpListener
+        {
             get { return NetworkManager.tcpListener; }
         }
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             ClientManager.Initialize();
 
             tcpListener = new TcpListener<TcpClientIdentifier>(new TcpClientIDGenerator());
             tcpListener.ConnectionReceived += new EventHandler<ConnectionReceivedEventArgs>(tcpListener_ConnectionReceived);
         }
 
-        static void tcpListener_ConnectionReceived(object sender, ConnectionReceivedEventArgs e) {
+        static void tcpListener_ConnectionReceived(object sender, ConnectionReceivedEventArgs e)
+        {
             ClientManager.AddNewClient((TcpClientIdentifier)e.ID, e.TcpClient);
         }
 
-        public static TcpClient GetTcpClient(TcpClientIdentifier clientID) {
+        public static TcpClient GetTcpClient(TcpClientIdentifier clientID)
+        {
             return tcpListener.ClientCollection.GetTcpClient(clientID);
         }
 
-        public static bool IsPlaying(Client client) {
+        public static bool IsPlaying(Client client)
+        {
             return true;
         }
-
     }
 }

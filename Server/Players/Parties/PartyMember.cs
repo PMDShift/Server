@@ -1,4 +1,9 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Server.Network;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,12 +23,6 @@
 
 namespace Server.Players.Parties
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    using Server.Network;
-
     public class PartyMember
     {
         #region Fields
@@ -35,7 +34,8 @@ namespace Server.Players.Parties
 
         #region Constructors
 
-        public PartyMember(string playerID) {
+        public PartyMember(string playerID)
+        {
             this.playerID = playerID;
             expShared = true;
         }
@@ -44,11 +44,13 @@ namespace Server.Players.Parties
 
         #region Properties
 
-        public string PlayerID {
+        public string PlayerID
+        {
             get { return playerID; }
         }
 
-        public bool ExpShared {
+        public bool ExpShared
+        {
             get { return expShared; }
             set { expShared = value; }
         }

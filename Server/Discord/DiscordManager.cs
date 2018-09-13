@@ -15,11 +15,13 @@ namespace Server.Discord
         DiscordSocketClient client;
         IServiceProvider services;
 
-        public void Run(string token) {
+        public void Run(string token)
+        {
             RunAsync(token).GetAwaiter().GetResult();
         }
 
-        public async Task RunAsync(string token) {
+        public async Task RunAsync(string token)
+        {
             client = new DiscordSocketClient();
             commands = new CommandService();
 
@@ -36,7 +38,8 @@ namespace Server.Discord
             await Task.Delay(-1);
         }
 
-        private async Task HandleCommandAsync(SocketMessage messageParam) {
+        private async Task HandleCommandAsync(SocketMessage messageParam)
+        {
             // Don't process the command if it was a System Message
             var message = messageParam as SocketUserMessage;
             if (message == null) return;

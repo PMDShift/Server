@@ -44,9 +44,11 @@ namespace Server
 
         public static Stopwatch LiveTime { get; set; }
 
-        public static string ServerStatus {
+        public static string ServerStatus
+        {
             get { return serverStatus; }
-            set {
+            set
+            {
                 serverStatus = value;
                 PacketHitList hitList = null;
                 PacketHitList.MethodStart(ref hitList);

@@ -23,12 +23,14 @@ using System.Xml;
 using PMDCP.DatabaseConnector.MySql;
 using Server.Database;
 
-namespace Server.Pokedex {
-    public class PokemonForm {
-
+namespace Server.Pokedex
+{
+    public class PokemonForm
+    {
         #region Constructors
 
-        public PokemonForm() {
+        public PokemonForm()
+        {
             //PreferredGummy = new List<Gummy>();
             LevelUpMoves = new List<LevelUpMove>();
             TMMoves = new List<int>();
@@ -115,16 +117,20 @@ namespace Server.Pokedex {
         /// </summary>
         /// <param name="moveToFind">The move to look for.</param>
         /// <returns></returns>
-        public int FindMoveLevel(int moveToFind) {
-            for (int i = 0; i < LevelUpMoves.Count; i++) {
-                if (LevelUpMoves[i].Move == moveToFind) {
+        public int FindMoveLevel(int moveToFind)
+        {
+            for (int i = 0; i < LevelUpMoves.Count; i++)
+            {
+                if (LevelUpMoves[i].Move == moveToFind)
+                {
                     return LevelUpMoves[i].Level;
                 }
             }
             return -1;
         }
 
-        public int FindLevelMove(int levelLearned) {
+        public int FindLevelMove(int levelLearned)
+        {
             for (int i = 0; i < LevelUpMoves.Count; i++)
             {
                 if (LevelUpMoves[i].Level == levelLearned)
@@ -135,60 +141,81 @@ namespace Server.Pokedex {
             return -1;
         }
 
-        public bool CanRelearnLevelUpMove(int moveToTest, int level) {
+        public bool CanRelearnLevelUpMove(int moveToTest, int level)
+        {
             int moveLevel = FindMoveLevel(moveToTest);
-            if (moveLevel > -1 && moveLevel <= level) {
+            if (moveLevel > -1 && moveLevel <= level)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        
+
         public int GetMaxHP(int level)
         {
-        	if (BaseHP > 1) {
-        		//return BaseHP*(level + 6)/50 + level *3/2 + 6;
+            if (BaseHP > 1)
+            {
+                //return BaseHP*(level + 6)/50 + level *3/2 + 6;
                 return (BaseHP + 100) * (level + 1) / 70 + 10;
-        	} else {
-        		return (level / 5 + 1);
-        	}
+            }
+            else
+            {
+                return (level / 5 + 1);
+            }
         }
 
-        public int GetMaxHPLimit() {
-            if (BaseHP > 1) {
-            int scaledStat = 1530 * BaseHP / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
+        public int GetMaxHPLimit()
+        {
+            if (BaseHP > 1)
+            {
+                int scaledStat = 1530 * BaseHP / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 return 41;
             }
         }
 
-        public int GetAtt(int level) {
+        public int GetAtt(int level)
+        {
             //return ((((BaseAtt / 2) + 45) * level / 100) + 5);
             return (BaseAtt + 100) * (level + 1) / 70 + 10;
         }
 
-        public int GetAttLimit() {
-            if (BaseHP > 1) {
+        public int GetAttLimit()
+        {
+            if (BaseHP > 1)
+            {
                 int scaledStat = 1530 * BaseAtt / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 int scaledStat = 1325 * BaseAtt / (BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
             }
         }
 
-        public int GetDef(int level) {
+        public int GetDef(int level)
+        {
             //return (((BaseDef / 2) + 20) * level / 100) + 3;
             return (BaseDef + 100) * (level + 1) / 70 + 10;
         }
 
-        public int GetDefLimit() {
-            if (BaseHP > 1) {
+        public int GetDefLimit()
+        {
+            if (BaseHP > 1)
+            {
                 int scaledStat = 1530 * BaseDef / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 int scaledStat = 1325 * BaseDef / (BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
             }
@@ -200,11 +227,15 @@ namespace Server.Pokedex {
             return (BaseSpAtt + 100) * (level + 1) / 70 + 10;
         }
 
-        public int GetSpAttLimit() {
-            if (BaseHP > 1) {
+        public int GetSpAttLimit()
+        {
+            if (BaseHP > 1)
+            {
                 int scaledStat = 1530 * BaseSpAtt / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 int scaledStat = 1325 * BaseSpAtt / (BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
             }
@@ -216,11 +247,15 @@ namespace Server.Pokedex {
             return (BaseSpDef + 100) * (level + 1) / 70 + 10;
         }
 
-        public int GetSpDefLimit() {
-            if (BaseHP > 1) {
+        public int GetSpDefLimit()
+        {
+            if (BaseHP > 1)
+            {
                 int scaledStat = 1530 * BaseSpDef / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 int scaledStat = 1325 * BaseSpDef / (BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
             }
@@ -232,46 +267,60 @@ namespace Server.Pokedex {
             return (BaseSpd + 100) * (level + 1) / 70 + 10;
         }
 
-        public int GetSpdLimit() {
-            if (BaseHP > 1) {
+        public int GetSpdLimit()
+        {
+            if (BaseHP > 1)
+            {
                 int scaledStat = 1530 * BaseSpd / (BaseHP + BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
-            } else {
+            }
+            else
+            {
                 int scaledStat = 1325 * BaseSpd / (BaseAtt + BaseDef + BaseSpAtt + BaseSpDef + BaseSpd);
                 return (scaledStat + 100) * (100 + 1) / 70 + 10;
             }
         }
 
-        public int GetRewardExp(int level) {
+        public int GetRewardExp(int level)
+        {
             return (((BaseRewardExp * 3 / 5) * (level - 1) / 10) + (BaseRewardExp * 3 / 5)) * 1;
         }
 
-        public bool HasLevelUpMove(int level) {
-            for (int i = 0; i < LevelUpMoves.Count; i++) {
-                if (LevelUpMoves[i].Level == level) {
+        public bool HasLevelUpMove(int level)
+        {
+            for (int i = 0; i < LevelUpMoves.Count; i++)
+            {
+                if (LevelUpMoves[i].Level == level)
+                {
                     return true;
                 }
             }
             return false;
         }
 
-        public Enums.Sex GenerateLegalSex() {
-            if (MaleRatio + FemaleRatio <= 0) {
+        public Enums.Sex GenerateLegalSex()
+        {
+            if (MaleRatio + FemaleRatio <= 0)
+            {
                 return Enums.Sex.Genderless;
-            } else if (Server.Math.Rand(0, MaleRatio + FemaleRatio) < MaleRatio) {
+            }
+            else if (Server.Math.Rand(0, MaleRatio + FemaleRatio) < MaleRatio)
+            {
                 return Enums.Sex.Male;
-            } else {
+            }
+            else
+            {
                 return Enums.Sex.Female;
             }
-
         }
 
-        public void LoadAppearance(DatabaseConnection dbConnection, int ID, int formNum) {
+        public void LoadAppearance(DatabaseConnection dbConnection, int ID, int formNum)
+        {
             //MySql database = dbConnection.Database;
 
-            
+
             //for (int i = 0; i < 3; i++) {
-                
+
             //    string query = "SELECT pokedex_pokemonappearance.Sprite, pokedex_pokemonappearance.Mugshot " +
             //    "FROM pokedex_pokemonappearance " +
             //    "WHERE pokedex_pokemonappearance.DexNum = \'" + ID + "\' " +

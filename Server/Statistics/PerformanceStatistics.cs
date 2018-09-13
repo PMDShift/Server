@@ -29,18 +29,23 @@ namespace Server.Statistics
 {
     class PerformanceStatistics
     {
-        public static void GatherStatistics() {
-            
+        public static void GatherStatistics()
+        {
         }
 
-        public static void DumpStatistics() {
+        public static void DumpStatistics()
+        {
             int playerCount = 0;
             int staffCount = 0;
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.Player != null) {
-                    if (i.IsPlaying()) {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.Player != null)
+                {
+                    if (i.IsPlaying())
+                    {
                         playerCount++;
-                        if (Players.Ranks.IsAllowed(i, Enums.Rank.Monitor)) {
+                        if (Players.Ranks.IsAllowed(i, Enums.Rank.Monitor))
+                        {
                             staffCount++;
                         }
                     }
@@ -54,7 +59,8 @@ namespace Server.Statistics
             long workingSet = serverProcess.WorkingSet64;
             long elapsedHours = (long)Globals.LiveTime.Elapsed.TotalHours;
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
                 dbConnection.Database.AddRow("stats_performance", new IDataColumn[] {
                     dbConnection.Database.CreateColumn(false, "Time", DateTime.UtcNow.ToString()),
                     dbConnection.Database.CreateColumn(false, "PlayerCount", playerCount.ToString()),

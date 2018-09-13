@@ -27,6 +27,5 @@ namespace Server.Dungeons
         Enums.MapType DungeonMapType { get; }
         bool IsBadGoalMap { get; set; }
         Enums.JobDifficulty Difficulty { get; set; }
-        
     }
 }

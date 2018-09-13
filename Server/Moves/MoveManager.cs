@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Moves
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class MoveManager
     {
         #region Fields
@@ -45,7 +44,8 @@ namespace Server.Moves
 
         #region Properties
 
-        public static MoveCollection Moves {
+        public static MoveCollection Moves
+        {
             get { return moves; }
         }
 
@@ -55,7 +55,6 @@ namespace Server.Moves
             {
                 return standardAttack;
             }
-
         }
 
         #endregion Properties
@@ -73,7 +72,8 @@ namespace Server.Moves
         */
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -82,7 +82,6 @@ namespace Server.Moves
 
                 int count = row["COUNT(num)"].ValueString.ToInt();
                 moves = new MoveCollection(count);
-
             }
             standardAttack = new Move();
 
@@ -183,7 +182,8 @@ namespace Server.Moves
             }
         }
 
-        public static void LoadMoves(object object1) {
+        public static void LoadMoves(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 try

@@ -38,15 +38,18 @@ namespace Server.RDungeons
 
         #endregion Events
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             rdungeons = new RDungeonCollection();
         }
 
-        public static RDungeonCollection RDungeons {
+        public static RDungeonCollection RDungeons
+        {
             get { return rdungeons; }
         }
 
-        public static void LoadRDungeons(Object object1) {
+        public static void LoadRDungeons(Object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 try
@@ -736,7 +739,6 @@ namespace Server.RDungeons
                 if (columnCollections2 == null) columnCollections2 = new List<DataColumnCollection>();
                 foreach (DataColumnCollection columnCollection2 in columnCollections2)
                 {
-
                     int weatherInd = columnCollection2["weather_index"].ValueString.ToInt();
                     Enums.Weather weather = (Enums.Weather)columnCollection2["weather_type"].ValueString.ToInt();
 
@@ -772,7 +774,8 @@ namespace Server.RDungeons
 
         #region Saving
 
-        public static int AddRDungeon() {
+        public static int AddRDungeon()
+        {
             int index = rdungeons.Count;
             SaveRDungeon(index);
             return index;
@@ -830,7 +833,7 @@ namespace Server.RDungeons
                     database.CreateColumn(false, "crater_min", rdungeons[dungeonNum].Floors[i].Options.CraterMinLength.ToString()),
                     database.CreateColumn(false, "crater_max", rdungeons[dungeonNum].Floors[i].Options.CraterMaxLength.ToString()),
                     database.CreateColumn(false, "crater_fuzz", rdungeons[dungeonNum].Floors[i].Options.CraterFuzzy.ToIntString()),
-                    
+
                     database.CreateColumn(false, "npc_respawn", rdungeons[dungeonNum].Floors[i].NpcSpawnTime.ToString()),
                     database.CreateColumn(false, "npc_min", rdungeons[dungeonNum].Floors[i].NpcMin.ToString()),
                     database.CreateColumn(false, "npc_max", rdungeons[dungeonNum].Floors[i].NpcMax.ToString()),
@@ -1152,7 +1155,6 @@ namespace Server.RDungeons
                     database.CreateColumn(false, "string3", rdungeons[dungeonNum].Floors[i].Options.Chambers[j].String3),
                     });
                     }
-
                 }
 
                 database.EndTransaction();
@@ -1160,6 +1162,5 @@ namespace Server.RDungeons
         }
 
         #endregion
-
     }
 }

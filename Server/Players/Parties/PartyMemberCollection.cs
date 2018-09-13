@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Server.Network;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Players.Parties
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Server.Network;
-
     public class PartyMemberCollection
     {
         #region Fields
@@ -36,7 +35,8 @@ namespace Server.Players.Parties
 
         #region Constructors
 
-        public PartyMemberCollection() {
+        public PartyMemberCollection()
+        {
             members = new List<PartyMember>();
             leader = null;
         }
@@ -45,7 +45,8 @@ namespace Server.Players.Parties
 
         #region Properties
 
-        public int Count {
+        public int Count
+        {
             get { return members.Count; }
         }
 
@@ -53,28 +54,39 @@ namespace Server.Players.Parties
 
         #region Methods
 
-        public bool Add(Client client) {
-            if (CanAddToParty(client)) {
+        public bool Add(Client client)
+        {
+            if (CanAddToParty(client))
+            {
                 Add(client.Player.CharID);
                 SwitchOutExtraMembers();
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public void SwitchOutExtraMembers() {
-            foreach (Client client in GetMemberClients()) {
-                switch (members.Count) {
-                    case 2: {
-                            if (client.Player.ActiveSlot == 2 || client.Player.ActiveSlot == 3) {
+        public void SwitchOutExtraMembers()
+        {
+            foreach (Client client in GetMemberClients())
+            {
+                switch (members.Count)
+                {
+                    case 2:
+                        {
+                            if (client.Player.ActiveSlot == 2 || client.Player.ActiveSlot == 3)
+                            {
                                 client.Player.SwapActiveRecruit(0, true);
                             }
                         }
                         break;
                     case 3:
-                    case 4: {
-                            if (client.Player.ActiveSlot != 0) {
+                    case 4:
+                        {
+                            if (client.Player.ActiveSlot != 0)
+                            {
                                 client.Player.SwapActiveRecruit(0, true);
                             }
                         }
@@ -83,97 +95,128 @@ namespace Server.Players.Parties
             }
         }
 
-        public bool CanAddToParty(Client client) {
+        public bool CanAddToParty(Client client)
+        {
             // If there are less than 4 members
-            if (members.Count < 4) {
+            if (members.Count < 4)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public bool CanRemoveFromParty(Client client) {
+        public bool CanRemoveFromParty(Client client)
+        {
             return true;
         }
 
-        public IEnumerable<Client> GetMemberClients() {
-            for (int i = 0; i < members.Count; i++) {
+        public IEnumerable<Client> GetMemberClients()
+        {
+            for (int i = 0; i < members.Count; i++)
+            {
                 Client client = ClientManager.FindClientFromCharID(members[i].PlayerID);
-                if (client != null) {
+                if (client != null)
+                {
                     yield return client;
                 }
             }
         }
-        
-        public Client GetLeader() {
-        	return ClientManager.FindClientFromCharID(leader);
+
+        public Client GetLeader()
+        {
+            return ClientManager.FindClientFromCharID(leader);
         }
 
-        public bool IsLeaderInParty() {
-            if (string.IsNullOrEmpty(leader)) {
+        public bool IsLeaderInParty()
+        {
+            if (string.IsNullOrEmpty(leader))
+            {
                 return false;
             }
             return IsPlayerInParty(leader);
         }
 
-        public bool Remove(Client client) {
-            if (CanRemoveFromParty(client)) {
+        public bool Remove(Client client)
+        {
+            if (CanRemoveFromParty(client))
+            {
                 Remove(client.Player.CharID);
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        private void Add(string playerID) {
-            if (IsPlayerInParty(playerID) == false) {
+        private void Add(string playerID)
+        {
+            if (IsPlayerInParty(playerID) == false)
+            {
                 members.Add(new PartyMember(playerID));
-                if (string.IsNullOrEmpty(leader)) {
+                if (string.IsNullOrEmpty(leader))
+                {
                     leader = playerID;
                 }
             }
         }
 
-        public bool IsPlayerInParty(string playerID) {
-            for (int i = 0; i < members.Count; i++) {
-                if (members[i].PlayerID == playerID) {
+        public bool IsPlayerInParty(string playerID)
+        {
+            for (int i = 0; i < members.Count; i++)
+            {
+                if (members[i].PlayerID == playerID)
+                {
                     return true;
                 }
             }
             return false;
         }
 
-        public PartyMember FindMember(string playerID) {
-            for (int i = 0; i < members.Count; i++) {
-                if (members[i].PlayerID == playerID) {
+        public PartyMember FindMember(string playerID)
+        {
+            for (int i = 0; i < members.Count; i++)
+            {
+                if (members[i].PlayerID == playerID)
+                {
                     return members[i];
                 }
             }
             return null;
         }
 
-        public int GetMemberSlot(string playerID) {
-            for (int i = 0; i < members.Count; i++) {
-                if (members[i].PlayerID == playerID) {
+        public int GetMemberSlot(string playerID)
+        {
+            for (int i = 0; i < members.Count; i++)
+            {
+                if (members[i].PlayerID == playerID)
+                {
                     return i;
                 }
             }
             return -1;
         }
 
-        public int GetMemberSlot(PartyMember member) {
+        public int GetMemberSlot(PartyMember member)
+        {
             return members.IndexOf(member);
         }
 
-        private void Remove(string playerID) {
-            if (IsPlayerInParty(playerID)) {
-                for (int i = 0; i < members.Count; i++) {
-                    if (members[i].PlayerID == playerID) {
+        private void Remove(string playerID)
+        {
+            if (IsPlayerInParty(playerID))
+            {
+                for (int i = 0; i < members.Count; i++)
+                {
+                    if (members[i].PlayerID == playerID)
+                    {
                         members.RemoveAt(i);
                         break;
                     }
                 }
-
             }
         }
 

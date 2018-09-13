@@ -34,7 +34,8 @@ namespace Server.Stories
 
         #region Constructors
 
-        public StoryCollection(int maxStories) {
+        public StoryCollection(int maxStories)
+        {
             if (maxStories == 0)
                 maxStories = 50;
             this.maxStories = maxStories;
@@ -45,11 +46,13 @@ namespace Server.Stories
 
         #region Properties
 
-        public ListPair<int, Story> Stories {
+        public ListPair<int, Story> Stories
+        {
             get { return stories; }
         }
 
-        public int MaxStories {
+        public int MaxStories
+        {
             get { return maxStories; }
         }
 
@@ -57,7 +60,8 @@ namespace Server.Stories
 
         #region Indexers
 
-        public Story this[int index] {
+        public Story this[int index]
+        {
             get { return stories[index]; }
         }
 

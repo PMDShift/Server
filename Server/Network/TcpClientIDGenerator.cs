@@ -26,7 +26,8 @@ namespace Server.Network
 {
     public class TcpClientIDGenerator : ITcpIDGenerator<TcpClientIdentifier>
     {
-        public TcpClientIdentifier GenerateID(TcpClient tcpClient) {
+        public TcpClientIdentifier GenerateID(TcpClient tcpClient)
+        {
             return new TcpClientIdentifier(tcpClient.Socket.RemoteEndPoint);
         }
     }

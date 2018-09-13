@@ -89,139 +89,176 @@ namespace Server.Players
 
         public ulong PendingDiscordId { get; set; }
 
-        public bool SavingLocked {
+        public bool SavingLocked
+        {
             get;
             set;
         }
 
-        public StoryHelper StoryHelper {
+        public StoryHelper StoryHelper
+        {
             get { return storyHelper; }
         }
 
-        public bool Loaded {
+        public bool Loaded
+        {
             get { return loaded; }
         }
 
-        public string Email {
-            get {
+        public string Email
+        {
+            get
+            {
                 return playerData.Email;
             }
             set { playerData.Email = value; }
         }
 
-        public bool LoggingOut {
+        public bool LoggingOut
+        {
             get;
             set;
         }
 
-        public Enums.ExpKitModules ActiveExpKitModule {
+        public Enums.ExpKitModules ActiveExpKitModule
+        {
             get { return activeExpKitModule; }
-            internal set {
+            internal set
+            {
                 activeExpKitModule = value;
             }
         }
 
-        public CustomMenus.CustomMenuManager CustomMenuManager {
-            get {
+        public CustomMenus.CustomMenuManager CustomMenuManager
+        {
+            get
+            {
                 return customMenuManager;
             }
         }
 
-        public Recruit RequestedRecruit {
+        public Recruit RequestedRecruit
+        {
             get { return requestedRecruit; }
-            internal set {
+            internal set
+            {
                 requestedRecruit = value;
             }
         }
 
-        public IExPlayer ExPlayer {
+        public IExPlayer ExPlayer
+        {
             get;
             set;
         }
 
-        public Scripting.TimerCollection Timers {
+        public Scripting.TimerCollection Timers
+        {
             get { return timers; }
-            internal set {
+            internal set
+            {
                 timers = value;
             }
         }
 
-        public bool InUninstancedWarp {
+        public bool InUninstancedWarp
+        {
             get { return uninstancedWarp; }
-            internal set {
+            internal set
+            {
                 uninstancedWarp = value;
             }
         }
 
-        public Server.WonderMails.MissionBoard MissionBoard {
+        public Server.WonderMails.MissionBoard MissionBoard
+        {
             get { return missionBoard; }
         }
 
-        public Server.Statistics.PlayerStatistics Statistics {
+        public Server.Statistics.PlayerStatistics Statistics
+        {
             get { return statistics; }
         }
 
-        public PlayerData PlayerData {
+        public PlayerData PlayerData
+        {
             get { return playerData; }
         }
 
-        public AvailableExpKitModuleCollection AvailableExpKitModules {
+        public AvailableExpKitModuleCollection AvailableExpKitModules
+        {
             get { return availableExpKitModules; }
         }
 
-        public string QuestionID {
+        public string QuestionID
+        {
             get { return questionID; }
-            internal set {
+            internal set
+            {
                 questionID = value;
             }
         }
 
         MatchUp tournamentMatchUp;
-        public MatchUp TournamentMatchUp {
+        public MatchUp TournamentMatchUp
+        {
             get { return tournamentMatchUp; }
-            internal set {
+            internal set
+            {
                 tournamentMatchUp = value;
             }
         }
         Tournament tournament;
-        public Tournaments.Tournament Tournament {
+        public Tournaments.Tournament Tournament
+        {
             get { return tournament; }
-            internal set {
+            internal set
+            {
                 tournament = value;
             }
         }
         MatchUp tournamentSpectatingMatchUp;
-        public MatchUp TournamentSpectatingMatchUp {
+        public MatchUp TournamentSpectatingMatchUp
+        {
             get { return tournamentSpectatingMatchUp; }
-            set {
+            set
+            {
                 tournamentSpectatingMatchUp = value;
             }
         }
 
-        public int SetTradeItem {
+        public int SetTradeItem
+        {
             get { return setTradeItem; }
-            internal set {
+            internal set
+            {
                 setTradeItem = value;
             }
         }
 
-        public int SetTradeAmount {
+        public int SetTradeAmount
+        {
             get { return setTradeAmount; }
-            internal set {
+            internal set
+            {
                 setTradeAmount = value;
             }
         }
 
-        public string TradePartner {
+        public string TradePartner
+        {
             get { return tradePartner; }
-            internal set {
+            internal set
+            {
                 tradePartner = value;
             }
         }
 
-        public bool ReadyToTrade {
+        public bool ReadyToTrade
+        {
             get { return readyToTrade; }
-            internal set {
+            internal set
+            {
                 readyToTrade = value;
             }
         }
@@ -231,55 +268,67 @@ namespace Server.Players
         //    set;
         //}
 
-        public int BellyStepCounter {
+        public int BellyStepCounter
+        {
             get;
             set;
         }
 
-        public int HPStepCounter {
+        public int HPStepCounter
+        {
             get;
             set;
         }
 
-        public bool GettingMap {
+        public bool GettingMap
+        {
             get;
             set;
         }
 
         public Enums.Speed SpeedLimit { get { return GetActiveRecruit().SpeedLimit; } }
 
-        public bool Veteran {
+        public bool Veteran
+        {
             get { return playerData.Veteran; }
             set { playerData.Veteran = value; }
         }
 
-        public bool Solid {
+        public bool Solid
+        {
             get { return playerData.Solid; }
             set { playerData.Solid = value; }
         }
 
-        public int SegmentToStart {
+        public int SegmentToStart
+        {
             get { return segmentToStart; }
-            internal set {
+            internal set
+            {
                 segmentToStart = value;
             }
         }
 
-        public bool MovementLocked {
+        public bool MovementLocked
+        {
             get { return movementLocked; }
             set { movementLocked = value; }
         }
 
-        public Enums.GuildRank GuildAccess {
+        public Enums.GuildRank GuildAccess
+        {
             get { return (Enums.GuildRank)playerData.GuildAccess; }
-            set {
+            set
+            {
                 playerData.GuildAccess = (byte)value;
             }
         }
 
-        public string Status {
+        public string Status
+        {
             get { return playerData.Status; }
-            set {
+            set
+            {
                 playerData.Status = value;
             }
         }
@@ -291,9 +340,12 @@ namespace Server.Players
         //    }
         //}
 
-        public IMap Map {
-            get {
-                if (cachedMap == null || cachedMap.MapID != MapID) {
+        public IMap Map
+        {
+            get
+            {
+                if (cachedMap == null || cachedMap.MapID != MapID)
+                {
                     cachedMap = MapManager.RetrieveActiveMap(MapID);
                 }
 
@@ -301,146 +353,183 @@ namespace Server.Players
             }
         }
 
-        public bool Hunted {
+        public bool Hunted
+        {
             get;
             set;
         }
 
-        public bool ProtectionOff {
+        public bool ProtectionOff
+        {
             get;
             set;
         }
 
-        public bool Dead {
+        public bool Dead
+        {
             get { return playerData.Dead; }
             set { playerData.Dead = value; }
         }
 
-        public bool LoggedIn {
+        public bool LoggedIn
+        {
             get { return loggedIn; }
             internal set { loggedIn = value; }
         }
 
-        public string GuildName {
-            get {
+        public string GuildName
+        {
+            get
+            {
                 return playerData.GuildName;
             }
-            set {
+            set
+            {
                 playerData.GuildName = value;
             }
         }
 
-        public string PartyID {
+        public string PartyID
+        {
             get { return partyID; }
-            internal set {
+            internal set
+            {
                 partyID = value;
             }
         }
 
         public bool Muted { get; set; }
 
-        public StoryPlaybackCache StoryPlaybackCache {
+        public StoryPlaybackCache StoryPlaybackCache
+        {
             get { return storyPlaybackCache; }
         }
 
-        public bool LoadingStory {
+        public bool LoadingStory
+        {
             get { return loadingStory; }
-            internal set {
+            internal set
+            {
                 loadingStory = value;
             }
         }
 
-        public Story CurrentChapter {
-            get {
+        public Story CurrentChapter
+        {
+            get
+            {
                 if (playerData.CurrentChapter != "-1" && (currentChapter == null || currentChapter.ID != playerData.CurrentChapter))
                 {
                     currentChapter = StoryManager.Stories.Stories[playerData.CurrentChapter.ToInt()];
                 }
                 return currentChapter;
             }
-            set {
-                if (value != null) {
+            set
+            {
+                if (value != null)
+                {
                     playerData.CurrentChapter = value.ID;
-                } else {
+                }
+                else
+                {
                     playerData.CurrentChapter = "-1";
                 }
                 currentChapter = value;
             }
         }
 
-        public int CurrentSegment {
+        public int CurrentSegment
+        {
             get { return playerData.CurrentSegment; }
             set { playerData.CurrentSegment = value; }
         }
 
-        public Client Client {
+        public Client Client
+        {
             get { return client; }
         }
 
-        public string Name {
+        public string Name
+        {
             get { return playerData.Name; }
             set { playerData.Name = value; }
         }
 
-        public int MaxInv {
+        public int MaxInv
+        {
             get { return playerData.MaxInv; }
-            internal set {
+            internal set
+            {
                 playerData.MaxInv = value;
             }
         }
 
-        public int MaxBank {
+        public int MaxBank
+        {
             get { return playerData.MaxBank; }
-            internal set {
+            internal set
+            {
                 playerData.MaxBank = value;
             }
         }
 
         public bool CanSwapActiveRecruit { get; set; }
 
-        public string AccountName {
+        public string AccountName
+        {
             get { return accountName; }
-            internal set {
+            internal set
+            {
                 accountName = value;
             }
         }
 
-        public string CharID {
+        public string CharID
+        {
             get { return playerData.CharID; }
         }
 
-        public int MissionExp {
+        public int MissionExp
+        {
             get { return playerData.MissionExp; }
             set { playerData.MissionExp = value; }
         }
 
-        public int ActiveSlot {
+        public int ActiveSlot
+        {
             get { return playerData.ActiveSlot; }
             set { playerData.ActiveSlot = value; }
         }
 
-        public Inventory Inventory {
-            get {
+        public Inventory Inventory
+        {
+            get
+            {
                 return inventory;
             }
         }
 
-        public Inventory Bank {
-            get {
+        public Inventory Bank
+        {
+            get
+            {
                 return bank;
             }
         }
 
-        public WonderMailTasks JobList {
+        public WonderMailTasks JobList
+        {
             get { return jobList; }
         }
 
-        public bool InMapEditor {
+        public bool InMapEditor
+        {
             get;
             set;
         }
 
-        public bool InScriptEditor {
+        public bool InScriptEditor
+        {
             get;
             set;
         }
@@ -448,22 +537,29 @@ namespace Server.Players
         public TickCount AttackTimer { get; set; }
         public TickCount PauseTimer { get; set; }
 
-        public Recruit[] Team {
+        public Recruit[] Team
+        {
             get { return team; }
         }
 
-        public string MapID {
+        public string MapID
+        {
             get { return playerData.Map; }
-            set {
+            set
+            {
                 playerData.Map = value;
             }
         }
 
-        public PlayerFriendsList Friends {
-            get {
+        public PlayerFriendsList Friends
+        {
+            get
+            {
                 // Load the friends list on demand!
-                if (playerData.Friends.Loaded == false) {
-                    using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+                if (playerData.Friends.Loaded == false)
+                {
+                    using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+                    {
                         PlayerDataManager.LoadPlayerFriendsList(dbConnection.Database, playerData);
                     }
                 }
@@ -471,74 +567,92 @@ namespace Server.Players
             }
         }
 
-        public int X {
+        public int X
+        {
             get { return playerData.X; }
             set { playerData.X = value; }
         }
 
-        public int Y {
+        public int Y
+        {
             get { return playerData.Y; }
             set { playerData.Y = value; }
         }
 
-        public Enums.Direction Direction {
+        public Enums.Direction Direction
+        {
             get { return (Enums.Direction)playerData.Direction; }
             set { playerData.Direction = (byte)value; }
         }
 
-        public Enums.ExplorerRank ExplorerRank {
+        public Enums.ExplorerRank ExplorerRank
+        {
             get { return explorerRank; }
             set { explorerRank = value; }
         }
 
-        private ListPair<int, bool> StoryChapters {
-            get {
+        private ListPair<int, bool> StoryChapters
+        {
+            get
+            {
                 return playerData.StoryChapters;
             }
         }
 
-        public List<GoalPoint> ActiveGoalPoints {
+        public List<GoalPoint> ActiveGoalPoints
+        {
             get { return goalPoints; }
             internal set { goalPoints = value; }
         }
 
-        public List<Events.Player.TriggerEvents.ITriggerEvent> TriggerEvents {
-            get {
+        public List<Events.Player.TriggerEvents.ITriggerEvent> TriggerEvents
+        {
+            get
+            {
                 return triggerEvents;
             }
         }
 
-        internal ListPair<int, byte> RecruitList {
-            get {
+        internal ListPair<int, byte> RecruitList
+        {
+            get
+            {
                 return playerData.RecruitList;
             }
         }
 
-        internal int MissionCompletions {
+        internal int MissionCompletions
+        {
             get { return playerData.MissionCompletions; }
             set { playerData.MissionCompletions = value; }
         }
 
-        internal ListPair<int, int> DungeonCompletionCounts {
-            get {
+        internal ListPair<int, int> DungeonCompletionCounts
+        {
+            get
+            {
                 return playerData.DungeonCompletionCounts;
             }
         }
 
-        public Enums.Rank Access {
+        public Enums.Rank Access
+        {
             get { return (Enums.Rank)playerData.Access; }
-            set {
+            set
+            {
                 playerData.Access = (byte)value;
             }
         }
 
         #endregion Properties
 
-        public bool LoadCharacter(DatabaseConnection dbConnection, int characterSlot) {
+        public bool LoadCharacter(DatabaseConnection dbConnection, int characterSlot)
+        {
             dataLock.EnterReadLock();
             bool result = false;
             string characterID = PlayerDataManager.RetrieveAccountCharacterID(dbConnection.Database, accountName, characterSlot);
-            if (!string.IsNullOrEmpty(characterID)) {
+            if (!string.IsNullOrEmpty(characterID))
+            {
                 playerData = new PlayerData(characterID);
                 PlayerDataManager.LoadPlayerData(dbConnection.Database, playerData);
                 PlayerDataManager.LoadPlayerStatistics(dbConnection.Database, playerData);
@@ -551,15 +665,21 @@ namespace Server.Players
                 bank = new Inventory(playerData.Bank);
 
                 // Load available ExpKit modules
-                if (string.IsNullOrEmpty(playerData.AvailableModules)) {
+                if (string.IsNullOrEmpty(playerData.AvailableModules))
+                {
                     AddEnabledExpKitModules();
-                } else {
+                }
+                else
+                {
                     string[] modules = playerData.AvailableModules.Split(';');
                     availableExpKitModules = new AvailableExpKitModuleCollection(modules.Length);
                     AddEnabledExpKitModules();
-                    for (int i = 0; i < modules.Length; i++) {
-                        if (modules[i].IsNumeric()) {
-                            if (availableExpKitModules.Contains((Enums.ExpKitModules)modules[i].ToInt()) == false) {
+                    for (int i = 0; i < modules.Length; i++)
+                    {
+                        if (modules[i].IsNumeric())
+                        {
+                            if (availableExpKitModules.Contains((Enums.ExpKitModules)modules[i].ToInt()) == false)
+                            {
                                 availableExpKitModules.Add(new AvailableExpKitModule((Enums.ExpKitModules)modules[i].ToInt(), false));
                             }
                         }
@@ -589,36 +709,49 @@ namespace Server.Players
 
                 // Load player team
                 team = new Recruit[playerData.TeamMembers.Length];
-                for (int i = 0; i < playerData.TeamMembers.Length; i++) {
+                for (int i = 0; i < playerData.TeamMembers.Length; i++)
+                {
                     team[i] = new Recruit(client);
                 }
-                for (int i = 0; i < playerData.TeamMembers.Length; i++) {
-                    if (playerData.TeamMembers[i].RecruitIndex != -1) {
+                for (int i = 0; i < playerData.TeamMembers.Length; i++)
+                {
+                    if (playerData.TeamMembers[i].RecruitIndex != -1)
+                    {
                         RecruitData recruitData = PlayerDataManager.LoadPlayerRecruit(dbConnection.Database, CharID, playerData.TeamMembers[i].RecruitIndex, playerData.TeamMembers[i].UsingTempStats);
-                        if (recruitData != null) {
+                        if (recruitData != null)
+                        {
                             team[i].LoadFromRecruitData(recruitData, playerData.TeamMembers[i].RecruitIndex);
-                        } else {
+                        }
+                        else
+                        {
                             playerData.TeamMembers[i].RecruitIndex = -1;
                         }
                     }
                 }
 
-                for (int i = 0; i < playerData.TeamMembers.Length; i++) {
-                    if (team[i].RecruitIndex != -1) {
+                for (int i = 0; i < playerData.TeamMembers.Length; i++)
+                {
+                    if (team[i].RecruitIndex != -1)
+                    {
                         team[i].LoadActiveItemList();
                     }
                 }
 
                 // Set the explorer rank
-                while (ExplorerRank != Enums.ExplorerRank.Guildmaster && MissionExp >= MissionManager.DetermineMissionExpRequirement(ExplorerRank + 1)) {
+                while (ExplorerRank != Enums.ExplorerRank.Guildmaster && MissionExp >= MissionManager.DetermineMissionExpRequirement(ExplorerRank + 1))
+                {
                     ExplorerRank++;
                 }
 
-                if (MapID.IsNumeric()) {
+                if (MapID.IsNumeric())
+                {
                     int mapNum = MapID.ToInt();
-                    if (mapNum == -2) {
+                    if (mapNum == -2)
+                    {
                         MapID = MapManager.GenerateMapID(Settings.Crossroads);
-                    } else {
+                    }
+                    else
+                    {
                         MapID = "s" + MapID;
                     }
                 }
@@ -634,22 +767,27 @@ namespace Server.Players
             return result;
         }
 
-        private void LoadTriggerEvents() {
-            for (int i = 0; i < playerData.TriggerEvents.Count; i++) {
+        private void LoadTriggerEvents()
+        {
+            for (int i = 0; i < playerData.TriggerEvents.Count; i++)
+            {
                 Server.Events.Player.TriggerEvents.TriggerEventTrigger type = (Server.Events.Player.TriggerEvents.TriggerEventTrigger)playerData.TriggerEvents[i].Items.GetValue("Type").ToInt();
                 Server.Events.Player.TriggerEvents.ITriggerEvent triggerEvent = Events.Player.TriggerEvents.TriggerEventHelper.CreateTriggerEventInstance(type);
                 triggerEvent.Load(playerData.TriggerEvents[i], client);
                 triggerEvents.Add(triggerEvent);
             }
-
         }
 
-        public void SaveCharacterData(DatabaseConnection dbConnection) {
-            if (loaded && !SavingLocked) {
+        public void SaveCharacterData(DatabaseConnection dbConnection)
+        {
+            if (loaded && !SavingLocked)
+            {
                 dataLock.EnterWriteLock();
 
-                try {
-                    if (playerData.AvailableModules == null) {
+                try
+                {
+                    if (playerData.AvailableModules == null)
+                    {
                         playerData.AvailableModules = "";
                     }
                     PlayerDataManager.SavePlayerAvailableExpKitModules(dbConnection.Database, playerData);
@@ -669,8 +807,10 @@ namespace Server.Players
 
                     // Save inventory
                     ListPair<int, Characters.InventoryItem> updatedInventory = new ListPair<int, Characters.InventoryItem>();
-                    for (int i = 1; i <= Inventory.Count; i++) {
-                        if (Inventory[i].Updated) {
+                    for (int i = 1; i <= Inventory.Count; i++)
+                    {
+                        if (Inventory[i].Updated)
+                        {
                             updatedInventory.Add(i, Inventory[i].BaseInventoryItem);
                             Inventory[i].Updated = false;
                         }
@@ -679,8 +819,10 @@ namespace Server.Players
 
                     // Save bank
                     ListPair<int, Characters.InventoryItem> updatedBank = new ListPair<int, Characters.InventoryItem>();
-                    for (int i = 1; i <= Bank.Count; i++) {
-                        if (Bank[i].Updated) {
+                    for (int i = 1; i <= Bank.Count; i++)
+                    {
+                        if (Bank[i].Updated)
+                        {
                             updatedBank.Add(i, Bank[i].BaseInventoryItem);
                             Bank[i].Updated = false;
                         }
@@ -690,7 +832,8 @@ namespace Server.Players
 
                     // Save trigger events
                     playerData.TriggerEvents.Clear();
-                    for (int i = 0; i < triggerEvents.Count; i++) {
+                    for (int i = 0; i < triggerEvents.Count; i++)
+                    {
                         PlayerDataTriggerEvent triggerEvent = new PlayerDataTriggerEvent();
                         triggerEvents[i].Save(triggerEvent);
                         playerData.TriggerEvents.Add(triggerEvent);
@@ -698,47 +841,60 @@ namespace Server.Players
                     PlayerDataManager.SavePlayerTriggerEvents(dbConnection.Database, playerData);
 
                     // Save team
-                    for (int i = 0; i < team.Length; i++) {
+                    for (int i = 0; i < team.Length; i++)
+                    {
                         playerData.TeamMembers[i].RecruitIndex = team[i].RecruitIndex;
                         playerData.TeamMembers[i].UsingTempStats = team[i].InTempMode;
-                        if (team[i].Loaded) {
+                        if (team[i].Loaded)
+                        {
                             team[i].Save(dbConnection);
                         }
                     }
                     PlayerDataManager.SavePlayerTeam(dbConnection.Database, playerData);
 
                     IMap map = GetCurrentMap();
-                    if (map != null && (map.MapType == Enums.MapType.Instanced || map.MapType == Enums.MapType.RDungeonMap || map.MapType == Enums.MapType.House)) {
+                    if (map != null && (map.MapType == Enums.MapType.Instanced || map.MapType == Enums.MapType.RDungeonMap || map.MapType == Enums.MapType.House))
+                    {
                         map.Save();
                         //mInstancedMapManager.SaveActiveMap();
                     }
-                    lock (mapsToDelete) {
+                    lock (mapsToDelete)
+                    {
                         AI.AIProcessor.mapGC.AddMaps(mapsToDelete);
                         mapsToDelete.Clear();
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     ServerConsole.WriteLine("Map: " + MapID + System.Environment.NewLine + ex.ToString());
-                } finally {
+                }
+                finally
+                {
                     dataLock.ExitWriteLock();
                 }
             }
         }
 
-        public void AddMapToDelete(string mapID) {
-            lock (mapsToDelete) {
+        public void AddMapToDelete(string mapID)
+        {
+            lock (mapsToDelete)
+            {
                 mapsToDelete.Add(mapID);
             }
         }
 
-        public void SaveInventory(DatabaseConnection dbConnection) {
+        public void SaveInventory(DatabaseConnection dbConnection)
+        {
             PlayerDataManager.SavePlayerInventory(dbConnection.Database, playerData);
         }
 
-        public void SaveBank(DatabaseConnection dbConnection) {
+        public void SaveBank(DatabaseConnection dbConnection)
+        {
             PlayerDataManager.SavePlayerBank(dbConnection.Database, playerData);
         }
 
-        public Player(Client client) {
+        public Player(Client client)
+        {
             this.client = client;
 
             dataLock = new ReaderWriterLockSlim();

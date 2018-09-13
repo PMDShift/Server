@@ -30,29 +30,40 @@ namespace Server.Players
     {
         Player owner;
 
-        public StoryHelper(Player owner) {
+        public StoryHelper(Player owner)
+        {
             this.owner = owner;
         }
 
-        private void VerifyDirectory(string directory) {
-            if (Directory.Exists(directory)) {
+        private void VerifyDirectory(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
                 Directory.CreateDirectory(directory);
             }
         }
 
-        public void SaveSetting(string key, string value) {
-            if (owner.PlayerData.StoryHelperStateSettings.ContainsKey(key) == false) {
+        public void SaveSetting(string key, string value)
+        {
+            if (owner.PlayerData.StoryHelperStateSettings.ContainsKey(key) == false)
+            {
                 owner.PlayerData.StoryHelperStateSettings.Add(key, value);
-            } else {
+            }
+            else
+            {
                 owner.PlayerData.StoryHelperStateSettings.SetValue(key, value);
             }
         }
 
-        public string ReadSetting(string key) {
+        public string ReadSetting(string key)
+        {
             int index = owner.PlayerData.StoryHelperStateSettings.IndexOfKey(key);
-            if (index > -1) {
+            if (index > -1)
+            {
                 return owner.PlayerData.StoryHelperStateSettings.ValueByIndex(index);
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }

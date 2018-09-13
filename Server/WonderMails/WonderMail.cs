@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Text;
+using DataManager.Players;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -30,10 +33,6 @@
 
 namespace Server.WonderMails
 {
-    using System;
-    using System.Text;
-    using DataManager.Players;
-
     /// <summary>
     /// Description of WonderMail.
     /// </summary>
@@ -47,7 +46,8 @@ namespace Server.WonderMails
 
         #region Constructors
 
-        public WonderMail(PlayerDataJobListItem baseJobItem) {
+        public WonderMail(PlayerDataJobListItem baseJobItem)
+        {
             this.baseJobItem = baseJobItem;
         }
 
@@ -57,22 +57,26 @@ namespace Server.WonderMails
 
         public PlayerDataJobListItem RawMission { get { return baseJobItem; } }
 
-        public int MissionClientIndex {
+        public int MissionClientIndex
+        {
             get { return baseJobItem.MissionClientIndex; }
             set { baseJobItem.MissionClientIndex = value; }
         }
 
-        public int TargetIndex {
+        public int TargetIndex
+        {
             get { return baseJobItem.TargetIndex; }
             set { baseJobItem.TargetIndex = value; }
         }
 
-        public int RewardIndex {
+        public int RewardIndex
+        {
             get { return baseJobItem.RewardIndex; }
             set { baseJobItem.RewardIndex = value; }
         }
 
-        public Enums.MissionType MissionType {
+        public Enums.MissionType MissionType
+        {
             get { return (Enums.MissionType)baseJobItem.MissionType; }
             set { baseJobItem.MissionType = (int)value; }
         }
@@ -80,7 +84,8 @@ namespace Server.WonderMails
         /// <summary>
         /// Item number if Mission Type is Item Retrieval. If Escort, pokemon number.
         /// </summary>
-        public int Data1 {
+        public int Data1
+        {
             get { return baseJobItem.Data1; }
             set { baseJobItem.Data1 = value; }
         }
@@ -88,39 +93,46 @@ namespace Server.WonderMails
         /// <summary>
         /// Item amount if Mission Type is Item Retrieval.
         /// </summary>
-        public int Data2 {
+        public int Data2
+        {
             get { return baseJobItem.Data2; }
             set { baseJobItem.Data2 = value; }
         }
 
-        public int DungeonIndex {
+        public int DungeonIndex
+        {
             get { return baseJobItem.DungeonIndex; }
             set { baseJobItem.DungeonIndex = value; }
         }
 
         //map number or RDungeon index
-        public int GoalMapIndex {
+        public int GoalMapIndex
+        {
             get { return baseJobItem.GoalMapIndex; }
             set { baseJobItem.GoalMapIndex = value; }
         }
 
         //floor for an RDungeon, 0 otherwise
-        public bool RDungeon {
+        public bool RDungeon
+        {
             get { return baseJobItem.RDungeon; }
             set { baseJobItem.RDungeon = value; }
         }
 
-        public int StartStoryScript {
+        public int StartStoryScript
+        {
             get { return baseJobItem.StartStoryScript; }
             set { baseJobItem.StartStoryScript = value; }
         }
 
-        public int WinStoryScript {
+        public int WinStoryScript
+        {
             get { return baseJobItem.WinStoryScript; }
             set { baseJobItem.WinStoryScript = value; }
         }
 
-        public int LoseStoryScript {
+        public int LoseStoryScript
+        {
             get { return baseJobItem.LoseStoryScript; }
             set { baseJobItem.LoseStoryScript = value; }
         }
@@ -135,7 +147,5 @@ namespace Server.WonderMails
         public int Mugshot { get; set; }
 
         #endregion Properties
-
-        
     }
 }

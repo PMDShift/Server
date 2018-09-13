@@ -1,4 +1,12 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using Server.Network;
+using PMDCP.Core;
+using System.Threading;
+using System.IO;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,15 +26,6 @@
 
 namespace Server.Players
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Xml;
-    using Server.Network;
-    using PMDCP.Core;
-    using System.Threading;
-    using System.IO;
-
     class PlayerID
     {
         #region Fields
@@ -45,27 +44,33 @@ namespace Server.Players
 
         #region Properties
 
-        public static string LastAccountID {
+        public static string LastAccountID
+        {
             get { return lastAccountStringID + lastAccountIntID.ToString(); }
         }
 
-        public static string LastAccountStringID {
+        public static string LastAccountStringID
+        {
             get { return lastAccountStringID; }
         }
 
-        public static ulong LastAccountUlongID {
+        public static ulong LastAccountUlongID
+        {
             get { return lastAccountIntID; }
         }
 
-        public static string LastPlayerID {
+        public static string LastPlayerID
+        {
             get { return lastPlayerStringID + lastPlayerIntID.ToString(); }
         }
 
-        public static string LastPlayerStringID {
+        public static string LastPlayerStringID
+        {
             get { return lastPlayerStringID; }
         }
 
-        public static ulong LastPlayerUlongID {
+        public static ulong LastPlayerUlongID
+        {
             get { return lastPlayerIntID; }
         }
 
@@ -76,7 +81,8 @@ namespace Server.Players
         /// <summary>
         /// Initializes this module
         /// </summary>
-        public static void Initialize() {
+        public static void Initialize()
+        {
             playerIDToTcpIDList = new ListPair<string, TcpClientIdentifier>();
         }
 
@@ -85,16 +91,23 @@ namespace Server.Players
         /// </summary>
         /// <param name="playerID">The id of the player to find</param>
         /// <returns>The players index if found; otherwise, returns -1</returns>
-        public static TcpClientIdentifier FindTcpID(string playerID) {
+        public static TcpClientIdentifier FindTcpID(string playerID)
+        {
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 int index = playerIDToTcpIDList.IndexOfKey(playerID);
-                if (index > -1) {
+                if (index > -1)
+                {
                     return playerIDToTcpIDList.ValueByIndex(index);
-                } else {
+                }
+                else
+                {
                     return null;
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
         }
@@ -104,21 +117,27 @@ namespace Server.Players
         /// </summary>
         /// <param name="playerID">The id of the player to add</param>
         /// <param name="tcpID">The id of the tcp client to add</param>
-        public static void AddPlayerToIndexList(string playerID, TcpClientIdentifier tcpID) {
+        public static void AddPlayerToIndexList(string playerID, TcpClientIdentifier tcpID)
+        {
             rwLock.EnterUpgradeableReadLock();
-            try {
+            try
+            {
                 int index = playerIDToTcpIDList.IndexOfKey(playerID);
-                if (index == -1) {
-
+                if (index == -1)
+                {
                     rwLock.EnterWriteLock();
-                    try {
+                    try
+                    {
                         playerIDToTcpIDList.Add(playerID, tcpID);
-                    } finally {
+                    }
+                    finally
+                    {
                         rwLock.ExitWriteLock();
                     }
-
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitUpgradeableReadLock();
             }
         }
@@ -127,21 +146,27 @@ namespace Server.Players
         /// Removes a player from the index list based on the players id
         /// </summary>
         /// <param name="playerID">The id of the player to remove</param>
-        public static void RemovePlayerFromIndexList(string playerID) {
+        public static void RemovePlayerFromIndexList(string playerID)
+        {
             rwLock.EnterUpgradeableReadLock();
-            try {
+            try
+            {
                 int index = playerIDToTcpIDList.IndexOfKey(playerID);
-                if (index > -1) {
-
+                if (index > -1)
+                {
                     rwLock.EnterWriteLock();
-                    try {
+                    try
+                    {
                         playerIDToTcpIDList.RemoveAt(index);
-                    } finally {
+                    }
+                    finally
+                    {
                         rwLock.ExitWriteLock();
                     }
-
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitUpgradeableReadLock();
             }
         }
@@ -150,14 +175,19 @@ namespace Server.Players
         /// Removes a player from the index list based on the players index
         /// </summary>
         /// <param name="index">The index of the player to remove</param>
-        public static void RemovePlayerFromIndexList(TcpClientIdentifier tcpID) {
+        public static void RemovePlayerFromIndexList(TcpClientIdentifier tcpID)
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 int index = playerIDToTcpIDList.IndexOfValue(tcpID);
-                if (index > -1) {
+                if (index > -1)
+                {
                     playerIDToTcpIDList.RemoveAt(index);
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
         }
@@ -166,11 +196,15 @@ namespace Server.Players
         /// Generates a new, unique ID used for player accounts
         /// </summary>
         /// <returns></returns>
-        public static string GenerateAccountID() {
-            if (lastAccountIntID == ulong.MaxValue) {
+        public static string GenerateAccountID()
+        {
+            if (lastAccountIntID == ulong.MaxValue)
+            {
                 lastAccountStringID = IncrementStringID(lastAccountStringID);
                 lastAccountIntID = 0;
-            } else {
+            }
+            else
+            {
                 lastAccountIntID++;
             }
             SaveIDInfo();
@@ -181,11 +215,15 @@ namespace Server.Players
         /// Generates a new, unique ID used for player characters
         /// </summary>
         /// <returns></returns>
-        public static string GeneratePlayerID() {
-            if (lastPlayerIntID == ulong.MaxValue) {
+        public static string GeneratePlayerID()
+        {
+            if (lastPlayerIntID == ulong.MaxValue)
+            {
                 lastPlayerStringID = IncrementStringID(lastPlayerStringID);
                 lastPlayerIntID = 0;
-            } else {
+            }
+            else
+            {
                 lastPlayerIntID++;
             }
             SaveIDInfo();
@@ -197,8 +235,10 @@ namespace Server.Players
         /// </summary>
         /// <param name="lastID">The ID to increment</param>
         /// <returns>The incremented ID</returns>
-        public static string IncrementStringID(string lastID) {
-            switch (lastID.Substring(lastID.Length - 1, 1)) {
+        public static string IncrementStringID(string lastID)
+        {
+            switch (lastID.Substring(lastID.Length - 1, 1))
+            {
                 case "a":
                     return CombineIDs(lastID, new string('b', 1));
                 case "b":
@@ -259,31 +299,41 @@ namespace Server.Players
         /// <summary>
         /// Loads the ID settings from the configuration file
         /// </summary>
-        public static void LoadIDInfo() {
+        public static void LoadIDInfo()
+        {
             // Check if the configuration file exists, if not, create it
-            if (IO.IO.FileExists(Path.Combine(IO.Paths.DataFolder, "playerid.dat")) == false) {
+            if (IO.IO.FileExists(Path.Combine(IO.Paths.DataFolder, "playerid.dat")) == false)
+            {
                 SaveIDInfo();
             }
             // Decrypt the configuration file into a string
             Security.Encryption crypt = new Security.Encryption(ENCRYPTION_KEY);
             string xmlData = System.Text.Encoding.Unicode.GetString(crypt.DecryptBytes(System.IO.File.ReadAllBytes(Path.Combine(IO.Paths.DataFolder, "playerid.dat"))));
-            using (XmlTextReader reader = new XmlTextReader(new System.IO.StringReader(xmlData))) {
-                while (reader.Read()) {
-                    if (reader.IsStartElement()) {
-                        switch (reader.Name) {
-                            case "LastPlayerStringID": {
+            using (XmlTextReader reader = new XmlTextReader(new System.IO.StringReader(xmlData)))
+            {
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        switch (reader.Name)
+                        {
+                            case "LastPlayerStringID":
+                                {
                                     lastPlayerStringID = reader.ReadString();
                                 }
                                 break;
-                            case "LastPlayerIntID": {
+                            case "LastPlayerIntID":
+                                {
                                     lastPlayerIntID = reader.ReadString().ToUlng();
                                 }
                                 break;
-                            case "LastAccountStringID": {
+                            case "LastAccountStringID":
+                                {
                                     lastAccountStringID = reader.ReadString();
                                 }
                                 break;
-                            case "LastAccountIntID": {
+                            case "LastAccountIntID":
+                                {
                                     lastAccountIntID = reader.ReadString().ToUlng();
                                 }
                                 break;
@@ -296,10 +346,12 @@ namespace Server.Players
         /// <summary>
         /// Saves the ID settings to the configuration file
         /// </summary>
-        public static void SaveIDInfo() {
+        public static void SaveIDInfo()
+        {
             StringBuilder output = new StringBuilder();
             // Write a new xml document to the 'output' StringBuilder
-            using (XmlWriter writer = XmlWriter.Create(output, Settings.XmlWriterSettings)) {
+            using (XmlWriter writer = XmlWriter.Create(output, Settings.XmlWriterSettings))
+            {
                 writer.WriteStartDocument();
                 // Write the root node
                 writer.WriteStartElement("ID");
@@ -327,10 +379,14 @@ namespace Server.Players
             System.IO.File.WriteAllBytes(Path.Combine(IO.Paths.DataFolder, "playerid.dat"), crypt.EncryptBytes(System.Text.Encoding.Unicode.GetBytes(output.ToString())));
         }
 
-        private static string CombineIDs(string lastID, string newID) {
-            if (lastID.Length - 1 > 0) {
+        private static string CombineIDs(string lastID, string newID)
+        {
+            if (lastID.Length - 1 > 0)
+            {
                 return lastID.Substring(0, lastID.Length - 1) + newID;
-            } else {
+            }
+            else
+            {
                 return newID;
             }
         }

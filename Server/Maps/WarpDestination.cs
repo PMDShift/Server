@@ -28,7 +28,8 @@ namespace Server.Maps
         public int X { get; set; }
         public int Y { get; set; }
 
-        public WarpDestination(string mapID, int x, int y) {
+        public WarpDestination(string mapID, int x, int y)
+        {
             this.MapID = mapID;
             this.X = x;
             this.Y = y;

@@ -9,7 +9,8 @@ namespace Server.Migrations
     [Migration(1536475056)]
     public class AddDiscordDataToPlayers : AutoReversingMigration
     {
-        public override void Up() {
+        public override void Up()
+        {
             Create.Column("CanLinkDiscord").OnTable("characteristics").AsBoolean();
             Create.Column("LinkedDiscordId").OnTable("characteristics").AsInt64();
         }

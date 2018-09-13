@@ -260,7 +260,8 @@ namespace Server.DataConverter.RDungeons.V4
         public List<RDungeonTrap> SpecialTiles { get; set; }
         public List<Enums.Weather> Weather { get; set; }
 
-        public RDungeonFloor() {
+        public RDungeonFloor()
+        {
             GroundTile = new Tile(new DataManager.Maps.Tile());
             HallTile = new Tile(new DataManager.Maps.Tile());
             WaterTile = new Tile(new DataManager.Maps.Tile());

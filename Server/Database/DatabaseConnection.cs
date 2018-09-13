@@ -32,24 +32,32 @@ namespace Server.Database
         Client client;
         DatabaseID databaseID;
 
-        public PMDCP.DatabaseConnector.MySql.MySql Database {
-            get {
-                if (!disposed) {
+        public PMDCP.DatabaseConnector.MySql.MySql Database
+        {
+            get
+            {
+                if (!disposed)
+                {
                     return database;
-                } else {
+                }
+                else
+                {
                     throw new ObjectDisposedException("database", "Database connection has been disposed.");
                 }
             }
         }
 
-        public DatabaseConnection(DatabaseID databaseID) : this(databaseID, true) {
+        public DatabaseConnection(DatabaseID databaseID) : this(databaseID, true)
+        {
         }
 
-        public DatabaseConnection(DatabaseID databaseID, bool openConnection) {
+        public DatabaseConnection(DatabaseID databaseID, bool openConnection)
+        {
             this.databaseID = databaseID;
 
             string databaseName = DetermineDatabaseName(databaseID);
-            if (!string.IsNullOrEmpty(databaseName)) {
+            if (!string.IsNullOrEmpty(databaseName))
+            {
 #if !DEBUG
                 database = new PMDCP.DatabaseConnector.MySql.MySql(Settings.DatabaseIP, Settings.DatabasePort, databaseName, Settings.DatabaseUser, Settings.DatabasePassword);
                  
@@ -58,30 +66,38 @@ namespace Server.Database
 #endif
             }
 
-            if (openConnection) {
+            if (openConnection)
+            {
                 database.OpenConnection();
             }
         }
 
-        private string DetermineDatabaseName(DatabaseID databaseID) {
-            switch (databaseID) {
-                case DatabaseID.Players: {
+        private string DetermineDatabaseName(DatabaseID databaseID)
+        {
+            switch (databaseID)
+            {
+                case DatabaseID.Players:
+                    {
                         return "mdx_players";
                     }
-                case DatabaseID.Data: {
+                case DatabaseID.Data:
+                    {
                         return "mdx_data";
                     }
-                default: {
+                default:
+                    {
                         return null;
                     }
             }
         }
 
         bool disposed;
-        public void Dispose() {
-            if (!disposed) {
-
-                if (database != null) {
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                if (database != null)
+                {
                     database.CloseConnection();
                 }
 

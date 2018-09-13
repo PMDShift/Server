@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Stories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class StoryManagerBase
     {
         #region Fields
@@ -43,7 +42,8 @@ namespace Server.Stories
 
         #region Properties
 
-        public static StoryCollection Stories {
+        public static StoryCollection Stories
+        {
             get { return stories; }
         }
 
@@ -52,7 +52,8 @@ namespace Server.Stories
         #region Methods
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -69,7 +70,6 @@ namespace Server.Stories
         {
             try
             {
-
                 using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
                 {
                     for (int i = 0; i <= stories.MaxStories; i++)
@@ -80,9 +80,10 @@ namespace Server.Stories
                     }
                     if (LoadComplete != null)
                         LoadComplete(null, null);
-
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Exceptions.ErrorLogger.WriteToErrorLog(ex);
             }
         }
@@ -119,7 +120,6 @@ namespace Server.Stories
             if (columnCollections == null) columnCollections = new List<DataColumnCollection>();
             foreach (DataColumnCollection columnCollection in columnCollections)
             {
-
                 StorySegment segment = new StorySegment();
 
                 int segmentNum = columnCollection["segment"].ValueString.ToInt();

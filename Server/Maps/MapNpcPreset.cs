@@ -26,55 +26,66 @@ namespace Server.Maps
     {
         DataManager.Maps.MapNpcPreset rawNpc;
 
-        public DataManager.Maps.MapNpcPreset RawNpcPreset {
+        public DataManager.Maps.MapNpcPreset RawNpcPreset
+        {
             get { return rawNpc; }
         }
 
-        public int SpawnX {
+        public int SpawnX
+        {
             get { return rawNpc.SpawnX; }
             set { rawNpc.SpawnX = value; }
         }
 
-        public int SpawnY {
+        public int SpawnY
+        {
             get { return rawNpc.SpawnY; }
             set { rawNpc.SpawnY = value; }
         }
 
 
-        public int NpcNum {
+        public int NpcNum
+        {
             get { return rawNpc.NpcNum; }
             set { rawNpc.NpcNum = value; }
         }
 
-        public int MinLevel {
+        public int MinLevel
+        {
             get { return rawNpc.MinLevel; }
             set { rawNpc.MinLevel = value; }
         }
-        public int MaxLevel {
+        public int MaxLevel
+        {
             get { return rawNpc.MaxLevel; }
             set { rawNpc.MaxLevel = value; }
         }
 
-        public int AppearanceRate {
+        public int AppearanceRate
+        {
             get { return rawNpc.AppearanceRate; }
             set { rawNpc.AppearanceRate = value; }
         }
 
-        public Enums.StatusAilment StartStatus {
+        public Enums.StatusAilment StartStatus
+        {
             get { return (Enums.StatusAilment)rawNpc.StartStatus; }
             set { rawNpc.StartStatus = (int)value; }
         }
-        public int StartStatusCounter {
+        public int StartStatusCounter
+        {
             get { return rawNpc.StartStatusCounter; }
             set { rawNpc.StartStatusCounter = value; }
         }
-        public int StartStatusChance {
+        public int StartStatusChance
+        {
             get { return rawNpc.StartStatusChance; }
             set { rawNpc.StartStatusChance = value; }
         }
 
-        public MapNpcPreset() {
-            this.rawNpc = new DataManager.Maps.MapNpcPreset();
+        public MapNpcPreset()
+        {
+            rawNpc = new DataManager.Maps.MapNpcPreset();
 
             NpcNum = 0;
             SpawnX = -1;
@@ -84,7 +95,8 @@ namespace Server.Maps
             AppearanceRate = 100;
         }
 
-        public MapNpcPreset(DataManager.Maps.MapNpcPreset rawNpc) {
+        public MapNpcPreset(DataManager.Maps.MapNpcPreset rawNpc)
+        {
             this.rawNpc = rawNpc;
         }
     }

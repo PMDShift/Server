@@ -34,7 +34,8 @@ namespace Server.Npcs
 
         #region Constructors
 
-        public NpcCollection(int maxNpcs) {
+        public NpcCollection(int maxNpcs)
+        {
             if (maxNpcs == 0)
                 maxNpcs = 50;
             this.maxNpcs = maxNpcs;
@@ -45,11 +46,13 @@ namespace Server.Npcs
 
         #region Properties
 
-        public ListPair<int, Npc> Npcs {
+        public ListPair<int, Npc> Npcs
+        {
             get { return npcs; }
         }
 
-        public int MaxNpcs {
+        public int MaxNpcs
+        {
             get { return maxNpcs; }
         }
 
@@ -57,7 +60,8 @@ namespace Server.Npcs
 
         #region Indexers
 
-        public Npc this[int index] {
+        public Npc this[int index]
+        {
             get { return npcs[index]; }
             set { npcs[index] = value; }
         }

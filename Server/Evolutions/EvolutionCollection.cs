@@ -1,4 +1,8 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.Core;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,11 +22,6 @@
 
 namespace Server.Evolutions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.Core;
-
     public class EvolutionCollection
     {
         #region Fields
@@ -39,7 +38,7 @@ namespace Server.Evolutions
             if (maxEvos == 0)
                 maxEvos = 50;
             this.maxEvos = maxEvos;
-            evolutions = new ListPair<int,Evolution>();
+            evolutions = new ListPair<int, Evolution>();
         }
 
         #endregion Constructors

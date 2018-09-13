@@ -1,4 +1,8 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,11 +22,6 @@
 
 namespace Server.Players
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     public class CharacterInformation
     {
         #region Fields
@@ -36,7 +35,8 @@ namespace Server.Players
 
         #region Constructors
 
-        public CharacterInformation(string name, string account, int slot, string id) {
+        public CharacterInformation(string name, string account, int slot, string id)
+        {
             this.name = name;
             this.account = account;
             this.slot = slot;
@@ -47,21 +47,26 @@ namespace Server.Players
 
         #region Properties
 
-        public string Account {
+        public string Account
+        {
             get { return account; }
         }
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return name;
             }
         }
 
-        public int Slot {
+        public int Slot
+        {
             get { return slot; }
         }
 

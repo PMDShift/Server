@@ -35,7 +35,8 @@ namespace Server.Processing
         PlayerEventQueue eventQueue;
         Client ownerClient;
 
-        public PlayerEventThread(Client ownerClient) {
+        public PlayerEventThread(Client ownerClient)
+        {
             playerThread = new Thread(new ThreadStart(ProcessQueuedEvents));
             resetEvent = new ManualResetEvent(false);
             eventQueue = new PlayerEventQueue();
@@ -45,24 +46,30 @@ namespace Server.Processing
             playerThread.Start();
         }
 
-        public void HandleClientDisconnect() {
+        public void HandleClientDisconnect()
+        {
             quitFlag = true;
         }
 
-        private void ProcessQueuedEvents() {
-            while (!quitFlag) {
-                if (eventQueue.Empty()) {
+        private void ProcessQueuedEvents()
+        {
+            while (!quitFlag)
+            {
+                if (eventQueue.Empty())
+                {
                     resetEvent.WaitOne();
                     resetEvent.Reset();
                 }
-                if (eventQueue.Empty() == false) {
+                if (eventQueue.Empty() == false)
+                {
                     activeEvent = eventQueue.Dequeue();
                     Network.MessageProcessor.ProcessData(ownerClient, activeEvent.Data);
                 }
             }
         }
 
-        public void AddEvent(PlayerEvent playerEvent) {
+        public void AddEvent(PlayerEvent playerEvent)
+        {
             eventQueue.Enqueue(playerEvent);
             resetEvent.Set();
         }

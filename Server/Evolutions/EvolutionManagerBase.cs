@@ -38,7 +38,8 @@ namespace Server.Evolutions
 
         #endregion Events
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -50,13 +51,15 @@ namespace Server.Evolutions
             }
         }
 
-        public static EvolutionCollection Evolutions {
+        public static EvolutionCollection Evolutions
+        {
             get { return evolution; }
         }
 
         #region Loading
 
-        public static void LoadEvos(object object1) {
+        public static void LoadEvos(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 for (int i = 0; i <= evolution.MaxEvos; i++)

@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Server.Network;
+using System.Xml;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,14 +25,6 @@
 
 namespace Server.Events.Player.TriggerEvents
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Server.Network;
-    using System.Xml;
-
     public class SteppedOnTileTriggerEvent : ITriggerEvent
     {
         #region Fields
@@ -43,12 +42,13 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Constructors
 
-        internal SteppedOnTileTriggerEvent() {
-
+        internal SteppedOnTileTriggerEvent()
+        {
         }
 
         public SteppedOnTileTriggerEvent(string id, TriggerEventAction action, int triggerCommand, bool autoRemove,
-            Client client, string mapID, int x, int y) {
+            Client client, string mapID, int x, int y)
+        {
             this.id = id;
             this.action = action;
             this.triggerCommand = triggerCommand;
@@ -63,35 +63,43 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Properties
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
-        public string MapID {
+        public string MapID
+        {
             get { return mapID; }
         }
 
-        public int X {
+        public int X
+        {
             get { return x; }
         }
 
-        public int Y {
+        public int Y
+        {
             get { return y; }
         }
 
-        public TriggerEventTrigger Trigger {
+        public TriggerEventTrigger Trigger
+        {
             get { return TriggerEventTrigger.SteppedOnTile; }
         }
 
-        public int TriggerCommand {
+        public int TriggerCommand
+        {
             get { return triggerCommand; }
         }
 
-        public bool AutoRemove {
+        public bool AutoRemove
+        {
             get { return autoRemove; }
         }
 
-        public TriggerEventAction Action {
+        public TriggerEventAction Action
+        {
             get { return action; }
         }
 
@@ -99,22 +107,29 @@ namespace Server.Events.Player.TriggerEvents
 
         #region Methods
 
-        public bool CanInvokeTrigger() {
-            if (client.Player.MapID == mapID && client.Player.X == x && client.Player.Y == y) {
+        public bool CanInvokeTrigger()
+        {
+            if (client.Player.MapID == mapID && client.Player.X == x && client.Player.Y == y)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public void InvokeTrigger() {
+        public void InvokeTrigger()
+        {
             TriggerEventHelper.InvokeGenericTrigger(this, client);
-            if (autoRemove) {
+            if (autoRemove)
+            {
                 client.Player.RemoveTriggerEvent(this);
             }
         }
 
-        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client) {
+        public void Load(DataManager.Players.PlayerDataTriggerEvent triggerEvent, Client client)
+        {
             this.client = client;
 
             id = triggerEvent.Items.GetValue("ID");
@@ -127,7 +142,8 @@ namespace Server.Events.Player.TriggerEvents
             y = triggerEvent.Items.GetValue("Y").ToInt();
         }
 
-        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent) {
+        public void Save(DataManager.Players.PlayerDataTriggerEvent triggerEvent)
+        {
             triggerEvent.Items.Clear();
 
             triggerEvent.Items.Add("Type", ((int)Trigger).ToString());

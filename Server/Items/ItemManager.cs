@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Items
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class ItemManager
     {
         #region Fields

@@ -31,7 +31,6 @@ namespace Server.Missions
 
         public void DetermineGoalPoint(IMap map)
         {
-            
             // We'll try 100 times to randomly select a tile
             for (int i = 0; i < 100; i++)
             {
@@ -50,21 +49,19 @@ namespace Server.Missions
             // Didn't select anything, so now we'll just try to find a free tile
             //if (!selected)
             //{
-                for (int Y = 0; Y <= map.MaxY; Y++)
+            for (int Y = 0; Y <= map.MaxY; Y++)
+            {
+                for (int X = 0; X <= map.MaxX; X++)
                 {
-                    for (int X = 0; X <= map.MaxX; X++)
+                    if (map.Tile[X, Y].Type == Enums.TileType.Walkable)
                     {
-                        if (map.Tile[X, Y].Type == Enums.TileType.Walkable)
-                        {
-                            GoalX = X;
-                            GoalY = Y;
-                            return;
-                        }
+                        GoalX = X;
+                        GoalY = Y;
+                        return;
                     }
                 }
+            }
             //}
         }
-
-        
     }
 }

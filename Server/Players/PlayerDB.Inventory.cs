@@ -29,12 +29,18 @@ using Server.Maps;
 using PMDCP.Sockets;
 using Server.Database;
 
-namespace Server.Players {
-    public partial class Player {
-        public bool IsInvFull() {
-            if (FindInvSlot(-1) == -1) {
+namespace Server.Players
+{
+    public partial class Player
+    {
+        public bool IsInvFull()
+        {
+            if (FindInvSlot(-1) == -1)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
@@ -57,17 +63,23 @@ namespace Server.Players {
         //        return false;
         //}
 
-        public void CheckAllHeldItems() {
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (team[i].Loaded) {
+        public void CheckAllHeldItems()
+        {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (team[i].Loaded)
+                {
                     team[i].CheckHeldItem();
                 }
             }
         }
 
-        public int GetItemSlotHolder(int itemSlot) {
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (team[i].Loaded && team[i].HeldItemSlot == itemSlot) {
+        public int GetItemSlotHolder(int itemSlot)
+        {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (team[i].Loaded && team[i].HeldItemSlot == itemSlot)
+                {
                     return i;
                 }
             }
@@ -75,13 +87,17 @@ namespace Server.Players {
             return -1;
         }
 
-        public bool HasItemHeld(int itemNum) {
+        public bool HasItemHeld(int itemNum)
+        {
             return HasItemHeld(itemNum, false);
         }
 
-        public bool HasItemHeld(int itemNum, bool stickyCheck) {
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (team[i].Loaded && team[i].HeldItem != null && team[i].HeldItem.Num == itemNum && (!stickyCheck || !team[i].HeldItem.Sticky)) {
+        public bool HasItemHeld(int itemNum, bool stickyCheck)
+        {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (team[i].Loaded && team[i].HeldItem != null && team[i].HeldItem.Num == itemNum && (!stickyCheck || !team[i].HeldItem.Sticky))
+                {
                     return true;
                 }
             }
@@ -89,9 +105,12 @@ namespace Server.Players {
             return false;
         }
 
-        public bool HasItemHeldBy(int itemNum, Enums.PokemonType type) {
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (team[i] != null && team[i].HeldItem != null && team[i].HeldItem.Num == itemNum && (team[i].Type1 == type || team[i].Type2 == type)) {
+        public bool HasItemHeldBy(int itemNum, Enums.PokemonType type)
+        {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (team[i] != null && team[i].HeldItem != null && team[i].HeldItem.Num == itemNum && (team[i].Type1 == type || team[i].Type2 == type))
+                {
                     return true;
                 }
             }
@@ -105,7 +124,8 @@ namespace Server.Players {
         /// <param name="itemnum">The item num.</param>
         /// <param name="amount">Amount to take.</param>
         /// <returns><c>true</c> if the item was successfully taken, otherwise <c>false</c></returns>
-        public bool TakeItem(int itemnum, int amount) {
+        public bool TakeItem(int itemnum, int amount)
+        {
             return TakeItem(itemnum, amount, true);
         }
 
@@ -116,16 +136,21 @@ namespace Server.Players {
         /// <param name="amount">Amount to take.</param>
         /// <param name="ignoreSticky">if set to <c>true</c>, the item will be taken even if it is sticky.</param>
         /// <returns><c>true</c> if the item was successfully taken, otherwise <c>false</c></returns>
-        public bool TakeItem(int itemNum, int amount, bool ignoreSticky) {
+        public bool TakeItem(int itemNum, int amount, bool ignoreSticky)
+        {
             // Check for subscript out of range
-            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems) {
+            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems)
+            {
                 return false;
             }
 
-            for (int i = 1; i <= Inventory.Count; i++) {
-                if (Inventory.ContainsKey(i)) {
+            for (int i = 1; i <= Inventory.Count; i++)
+            {
+                if (Inventory.ContainsKey(i))
+                {
                     // Check to see if the player has the item
-                    if (Inventory[i].Num == itemNum) {
+                    if (Inventory[i].Num == itemNum)
+                    {
                         return TakeItemSlot(i, amount, ignoreSticky);
                     }
                 }
@@ -140,29 +165,37 @@ namespace Server.Players {
         /// <param name="amount">Amount to take.</param>
         /// <param name="ignoreSticky">if set to <c>true</c>, the item will be taken even if it is sticky.</param>
         /// <returns><c>true</c> if the item was successfully taken, otherwise <c>false</c></returns>
-        public bool TakeItemSlot(int slot, int amount, bool ignoreSticky) {
+        public bool TakeItemSlot(int slot, int amount, bool ignoreSticky)
+        {
             if (amount < 0) return false;
             bool result = false;
-            if (slot < 1 || slot > MaxInv) {
+            if (slot < 1 || slot > MaxInv)
+            {
                 return false;
             }
-            if (Inventory.ContainsKey(slot) && Inventory[slot].Num > 0) {
+            if (Inventory.ContainsKey(slot) && Inventory[slot].Num > 0)
+            {
                 bool TakeItem = false;
                 int itemNum = Inventory[slot].Num;
-                if (ignoreSticky || !Inventory[slot].Sticky) {
-                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.Currency || ItemManager.Items[itemNum].StackCap > 0) {
+                if (ignoreSticky || !Inventory[slot].Sticky)
+                {
+                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.Currency || ItemManager.Items[itemNum].StackCap > 0)
+                    {
                         // Is what we are trying to take away more then what they have?  If so just set it to zero
-                        if (amount >= Inventory[slot].Amount) {
+                        if (amount >= Inventory[slot].Amount)
+                        {
                             TakeItem = true;
-                        } else {
+                        }
+                        else
+                        {
                             Inventory[slot].Amount = Inventory[slot].Amount - amount;
                             Messenger.SendInventoryUpdate(client, slot);
 
                             result = true;
                         }
-                    } else {
-
-
+                    }
+                    else
+                    {
                         TakeItem = true;
 
                         //n = ItemManager.Items[Inventory[i].Num].Type;
@@ -172,7 +205,8 @@ namespace Server.Players {
                         //}
                     }
 
-                    if (TakeItem == true) {
+                    if (TakeItem == true)
+                    {
                         result = true;
 
                         // Check to see if its held by anyone
@@ -190,13 +224,15 @@ namespace Server.Players {
                         //mInventory[i].Dur = 0;
 
                         //check if it's held-in-bag, and if it was the last functional copy
-                        if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && HasItem(itemNum, true) == 0) {
-                            for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
-                                if (team[j].Loaded) {
+                        if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && HasItem(itemNum, true) == 0)
+                        {
+                            for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                            {
+                                if (team[j].Loaded)
+                                {
                                     //the function auto-checks if it's in the activeItemlist to begin with
                                     team[j].RemoveFromActiveItemList(itemNum);
                                 }
-
                             }
                         }
 
@@ -208,52 +244,66 @@ namespace Server.Players {
             return result;
         }
 
-        public bool GiveItem(int itemNum, int amount) {
+        public bool GiveItem(int itemNum, int amount)
+        {
             // Check for subscript out of range
             return GiveItem(itemNum, amount, false);
         }
 
-        public bool GiveItem(int itemNum, int amount, string tag) {
+        public bool GiveItem(int itemNum, int amount, string tag)
+        {
             // Check for subscript out of range
             return GiveItem(itemNum, amount, tag, false);
         }
 
-        public bool GiveItem(int itemNum, int amount, bool sticky) {
+        public bool GiveItem(int itemNum, int amount, bool sticky)
+        {
             // Check for subscript out of range
             return GiveItem(itemNum, amount, "", sticky);
         }
 
-        public bool GiveItem(int itemNum, int amount, string tag, bool sticky) {
+        public bool GiveItem(int itemNum, int amount, string tag, bool sticky)
+        {
             bool result = false;
             // Check for subscript out of range
-            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems) {
+            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems)
+            {
                 return false;
             }
             int i = FindInvSlot(itemNum, amount);
-            if (i == -1) {
+            if (i == -1)
+            {
                 Messenger.PlayerMsg(client, "Your inventory is full.", Text.BrightRed);
                 result = false;
-            } else {
+            }
+            else
+            {
                 Inventory[i].Num = itemNum;
-                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency) {
+                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency)
+                {
                     Inventory[i].Amount += amount;
-                    if (Inventory[i].Amount > ItemManager.Items[itemNum].StackCap) {
+                    if (Inventory[i].Amount > ItemManager.Items[itemNum].StackCap)
+                    {
                         Inventory[i].Amount = ItemManager.Items[itemNum].StackCap;
                     }
-                } else {
+                }
+                else
+                {
                     Inventory[i].Amount = 0;
                 }
 
                 Inventory[i].Sticky = sticky;
                 Inventory[i].Tag = tag;
 
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && !sticky) {
-                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
-                        if (team[j].Loaded && team[j].MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && !sticky)
+                {
+                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                    {
+                        if (team[j].Loaded && team[j].MeetsReqs(itemNum))
+                        {
                             //the function auto-checks if it's in the activeItemlist to begin with
                             team[j].AddToActiveItemList(itemNum);
                         }
-
                     }
                 }
                 Messenger.SendInventoryUpdate(client, i);
@@ -263,26 +313,35 @@ namespace Server.Players {
             return result;
         }
 
-        public int FindInvSlot(int itemNum) {
+        public int FindInvSlot(int itemNum)
+        {
             return FindInvSlot(itemNum, 1);
         }
 
-        public int FindInvSlot(int itemNum, int amount) {
-            
-            
-            if (itemNum != -1) {
-                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency) {
-                    if (amount > ItemManager.Items[itemNum].StackCap) {
+        public int FindInvSlot(int itemNum, int amount)
+        {
+            if (itemNum != -1)
+            {
+                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency)
+                {
+                    if (amount > ItemManager.Items[itemNum].StackCap)
+                    {
                         return -1;
                     }
                 }
 
-                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency) {
-                    for (int i = 1; i <= Inventory.Count; i++) {
-                        if (Inventory[i].Num == itemNum) {
-                            if (Inventory[i].Amount + amount > ItemManager.Items[itemNum].StackCap) {
+                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency)
+                {
+                    for (int i = 1; i <= Inventory.Count; i++)
+                    {
+                        if (Inventory[i].Num == itemNum)
+                        {
+                            if (Inventory[i].Amount + amount > ItemManager.Items[itemNum].StackCap)
+                            {
                                 return -1;
-                            } else {
+                            }
+                            else
+                            {
                                 return i;
                             }
                         }
@@ -291,29 +350,40 @@ namespace Server.Players {
             }
 
             //search for any empty space
-            for (int i = 1; i <= Inventory.Count; i++) {
-                if (Inventory[i].Num == 0) {
+            for (int i = 1; i <= Inventory.Count; i++)
+            {
+                if (Inventory[i].Num == 0)
+                {
                     return i;
                 }
             }
             return -1;
         }
 
-        public int FindBankSlot(int itemNum, int amount) {
-            
-            if (itemNum != -1) {
-                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency) {
-                    if (amount > ItemManager.Items[itemNum].StackCap) {
+        public int FindBankSlot(int itemNum, int amount)
+        {
+            if (itemNum != -1)
+            {
+                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency)
+                {
+                    if (amount > ItemManager.Items[itemNum].StackCap)
+                    {
                         return -1;
                     }
                 }
 
-                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency) {
-                    for (int i = 1; i <= Bank.Count; i++) {
-                        if (Bank[i].Num == itemNum) {
-                            if (Bank[i].Amount + amount > ItemManager.Items[itemNum].StackCap) {
+                if (ItemManager.Items[itemNum].StackCap > 0 || ItemManager.Items[itemNum].Type == Enums.ItemType.Currency)
+                {
+                    for (int i = 1; i <= Bank.Count; i++)
+                    {
+                        if (Bank[i].Num == itemNum)
+                        {
+                            if (Bank[i].Amount + amount > ItemManager.Items[itemNum].StackCap)
+                            {
                                 return -1;
-                            } else {
+                            }
+                            else
+                            {
                                 return i;
                             }
                             return i;
@@ -322,28 +392,38 @@ namespace Server.Players {
                 }
             }
 
-            for (int i = 1; i <= Bank.Count; i++) {
-                if (Bank[i].Num == 0) {
+            for (int i = 1; i <= Bank.Count; i++)
+            {
+                if (Bank[i].Num == 0)
+                {
                     return i;
                 }
             }
             return -1;
         }
 
-        public int HasItem(int itemNum) {
+        public int HasItem(int itemNum)
+        {
             return HasItem(itemNum, false);
         }
 
-        public int HasItem(int itemNum, bool stickyCheck) {
-            if (client.IsPlaying() == false || itemNum < 0 || itemNum >= ItemManager.Items.MaxItems) {
+        public int HasItem(int itemNum, bool stickyCheck)
+        {
+            if (client.IsPlaying() == false || itemNum < 0 || itemNum >= ItemManager.Items.MaxItems)
+            {
                 return 0;
             }
 
-            for (int i = 1; i <= Inventory.Count; i++) {
-                if (Inventory[i].Num == itemNum && (!stickyCheck || !Inventory[i].Sticky)) {
-                    if (ItemManager.Items[Inventory[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[i].Num].StackCap > 0) {
+            for (int i = 1; i <= Inventory.Count; i++)
+            {
+                if (Inventory[i].Num == itemNum && (!stickyCheck || !Inventory[i].Sticky))
+                {
+                    if (ItemManager.Items[Inventory[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[i].Num].StackCap > 0)
+                    {
                         return Inventory[i].Amount;
-                    } else {
+                    }
+                    else
+                    {
                         return 1;
                     }
                 }
@@ -355,58 +435,74 @@ namespace Server.Players {
         /// Only for the active recruit
         /// </summary>
         /// <param name="invNum"></param>
-        public void HoldItem(int invNum) {
+        public void HoldItem(int invNum)
+        {
             int ownItem = -1;
-            if (GetItemSlotHolder(invNum) > -1) {
-                if (Inventory[invNum].Sticky) {
+            if (GetItemSlotHolder(invNum) > -1)
+            {
+                if (Inventory[invNum].Sticky)
+                {
                     Messenger.PlayerMsg(client, "The " + ItemManager.Items[Inventory[invNum].Num].Name + " is all sticky!  You can't get it off!", Text.BrightRed);
                     return;
-                } else {
+                }
+                else
+                {
                     RemoveItem(invNum, false, false);
                 }
             }
 
             //remove any item the active recruit may already be holding
-            if (GetActiveRecruit().HeldItemSlot != -1) {
+            if (GetActiveRecruit().HeldItemSlot != -1)
+            {
                 //make sure the already held item isn't sticky
-                if (GetActiveRecruit().HeldItem.Sticky) {
+                if (GetActiveRecruit().HeldItem.Sticky)
+                {
                     Messenger.PlayerMsg(client, "The " + ItemManager.Items[GetActiveRecruit().HeldItem.Num].Name + " is all sticky!  You can't get it off!", Text.BrightRed);
                     return;
-                } else {
+                }
+                else
+                {
                     ownItem = GetActiveRecruit().HeldItemSlot;
                     RemoveItem(GetActiveRecruit().HeldItemSlot, false, false);
-
                 }
             }
             GetActiveRecruit().HeldItemSlot = invNum;
 
-            if (!Inventory[invNum].Sticky) {
+            if (!Inventory[invNum].Sticky)
+            {
                 int itemNum = Inventory[invNum].Num;
 
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetActiveRecruit().MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetActiveRecruit().MeetsReqs(itemNum))
+                {
                     GetActiveRecruit().AddToActiveItemList(itemNum);
                 }
 
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty) {
-                    for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                        if (Team[i] != null && Team[i].MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty)
+                {
+                    for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+                    {
+                        if (Team[i] != null && Team[i].MeetsReqs(itemNum))
+                        {
                             Team[i].AddToActiveItemList(itemNum);
                         }
                     }
                 }
             }
             Messenger.SendWornEquipment(client);
-            if (ownItem != -1) {
+            if (ownItem != -1)
+            {
                 Messenger.SendInventoryUpdate(client, ownItem);
             }
             Messenger.SendInventoryUpdate(client, invNum);
         }
 
-        public bool RemoveItem(int invNum) {
+        public bool RemoveItem(int invNum)
+        {
             return RemoveItem(invNum, false);
         }
 
-        public bool RemoveItem(int invNum, bool ignoreSticky) {
+        public bool RemoveItem(int invNum, bool ignoreSticky)
+        {
             return RemoveItem(invNum, ignoreSticky, true);
         }
 
@@ -416,104 +512,130 @@ namespace Server.Players {
         /// <param name="invNum"></param>
         /// <param name="ignoreSticky"></param>
         /// <param name="updateItem"></param>
-        public bool RemoveItem(int invNum, bool ignoreSticky, bool updateItem) {
+        public bool RemoveItem(int invNum, bool ignoreSticky, bool updateItem)
+        {
             // Prevent hacking
-            if (invNum < 1 || invNum > MaxInv) {
+            if (invNum < 1 || invNum > MaxInv)
+            {
                 Messenger.HackingAttempt(client, "Invalid InvNum");
                 return false;
             }
 
-            if (Inventory[invNum].Sticky && !ignoreSticky) {
+            if (Inventory[invNum].Sticky && !ignoreSticky)
+            {
                 Messenger.PlayerMsg(client, "The " + ItemManager.Items[Inventory[invNum].Num].Name + " is all sticky!  You can't get it off!", Text.BrightRed);
                 return false;
             }
 
 
             bool removed = false;
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (Team[i] != null && Team[i].HeldItemSlot == invNum) {
-
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (Team[i] != null && Team[i].HeldItemSlot == invNum)
+                {
                     removed = true;
                     Team[i].HeldItemSlot = -1;
                     int itemNum = Inventory[invNum].Num;
 
-                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held) {
+                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held)
+                    {
                         Team[i].RemoveFromActiveItemList(itemNum);
                     }
 
-                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty && !HasItemHeld(itemNum, true)) {
-                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
-                            if (Team[j] != null) {
+                    if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty && !HasItemHeld(itemNum, true))
+                    {
+                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                        {
+                            if (Team[j] != null)
+                            {
                                 Team[j].RemoveFromActiveItemList(itemNum);
                             }
                         }
                     }
-
                 }
             }
-            if (updateItem && removed) {
+            if (updateItem && removed)
+            {
                 Messenger.SendWornEquipment(client);
                 Messenger.SendInventoryUpdate(client, invNum);
             }
             return removed;
         }
 
-        public void SetItemSticky(int invNum, bool sticky) {
+        public void SetItemSticky(int invNum, bool sticky)
+        {
             // Prevent hacking
-            if (invNum < 1 || invNum > MaxInv) {
+            if (invNum < 1 || invNum > MaxInv)
+            {
                 Messenger.HackingAttempt(client, "Invalid InvNum");
                 return;
             }
 
-            if (sticky && !Inventory[invNum].Sticky) {
+            if (sticky && !Inventory[invNum].Sticky)
+            {
                 Inventory[invNum].Sticky = true;
 
                 int itemNum = Inventory[invNum].Num;
                 //held item
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetItemSlotHolder(invNum) > -1) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetItemSlotHolder(invNum) > -1)
+                {
                     Team[GetItemSlotHolder(invNum)].RemoveFromActiveItemList(itemNum);
                 }
 
                 //held-in-party, check for remaining functional copies
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty) {
-                    if (!HasItemHeld(itemNum, true)) {
-                        for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty)
+                {
+                    if (!HasItemHeld(itemNum, true))
+                    {
+                        for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+                        {
                             Team[i].RemoveFromActiveItemList(itemNum);
                         }
                     }
                 }
 
                 //held-in-bag item, check for remaining functional copies
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && HasItem(itemNum, true) == 0) {
-                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag && HasItem(itemNum, true) == 0)
+                {
+                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                    {
                         //the following function auto-checks if it's in the activeItemlist to begin with
                         Team[j].RemoveFromActiveItemList(itemNum);
                     }
                 }
-
-            } else if (!sticky && Inventory[invNum].Sticky) { //cleanse
+            }
+            else if (!sticky && Inventory[invNum].Sticky)
+            { //cleanse
                 Inventory[invNum].Sticky = false;
                 int itemNum = Inventory[invNum].Num;
                 //held item
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetItemSlotHolder(invNum) > -1) {
-                    if (Team[GetItemSlotHolder(invNum)].MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.Held && GetItemSlotHolder(invNum) > -1)
+                {
+                    if (Team[GetItemSlotHolder(invNum)].MeetsReqs(itemNum))
+                    {
                         Team[GetItemSlotHolder(invNum)].AddToActiveItemList(itemNum);
                     }
                 }
 
                 //held-in-party
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty && GetItemSlotHolder(invNum) > -1) {
-                    for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                        if (Team[i] != null && Team[i].MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldByParty && GetItemSlotHolder(invNum) > -1)
+                {
+                    for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+                    {
+                        if (Team[i] != null && Team[i].MeetsReqs(itemNum))
+                        {
                             Team[i].AddToActiveItemList(itemNum);
                         }
                     }
                 }
 
                 //held-in-bag item
-                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag) {
-                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
-                        if (Team[j] != null && Team[j].MeetsReqs(itemNum)) {
+                if (ItemManager.Items[itemNum].Type == Enums.ItemType.HeldInBag)
+                {
+                    for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                    {
+                        if (Team[j] != null && Team[j].MeetsReqs(itemNum))
+                        {
                             //the following function auto-checks if it's in the activeItemlist to begin with
                             Team[j].AddToActiveItemList(itemNum);
                         }
@@ -524,8 +646,10 @@ namespace Server.Players {
             Messenger.SendInventoryUpdate(client, invNum);
         }
 
-        public void UseItem(InventoryItem item, int invNum) {
-            if (Dead) {
+        public void UseItem(InventoryItem item, int invNum)
+        {
+            if (Dead)
+            {
                 return;
             }
 
@@ -538,8 +662,8 @@ namespace Server.Players {
             Combat.BattleProcessor.FinalizeAction(setup);
         }
 
-        public void ThrowItem(InventoryItem item, int invNum) {
-
+        public void ThrowItem(InventoryItem item, int invNum)
+        {
             Combat.BattleSetup setup = new Combat.BattleSetup();
 
             setup.Attacker = GetActiveRecruit();
@@ -549,14 +673,18 @@ namespace Server.Players {
             Combat.BattleProcessor.FinalizeAction(setup);
         }
 
-        public void SetMaxInv(DatabaseConnection dbConnection, int max) {
+        public void SetMaxInv(DatabaseConnection dbConnection, int max)
+        {
             SetMaxInv(dbConnection, max, true);
         }
 
-        public void SetMaxInv(DatabaseConnection dbConnection, int max, bool saveInv) {
+        public void SetMaxInv(DatabaseConnection dbConnection, int max, bool saveInv)
+        {
             MaxInv = max;
-            for (int i = 1; i <= MaxInv; i++) {
-                if (!Inventory.ContainsKey(i)) {
+            for (int i = 1; i <= MaxInv; i++)
+            {
+                if (!Inventory.ContainsKey(i))
+                {
                     Characters.InventoryItem invItem = new Characters.InventoryItem();
                     playerData.Inventory.Add(i, invItem);
                     Inventory.Add(i, new InventoryItem(invItem));
@@ -565,41 +693,51 @@ namespace Server.Players {
             Messenger.SendInventory(client);
             //really that easy?
 
-            if (saveInv) {
+            if (saveInv)
+            {
                 PlayerDataManager.SavePlayerInventory(dbConnection.Database, playerData);
             }
         }
 
-        public bool TakeBankItem(int slot, int amount) {
+        public bool TakeBankItem(int slot, int amount)
+        {
             //int i = 0;
             //int n = 0;
             bool TakeBankItem = false;
             bool result = false;
 
             // Check for subscript out of range
-            if (slot <= 0 || slot > MaxBank) {
+            if (slot <= 0 || slot > MaxBank)
+            {
                 return false;
             }
 
             //for (i = 1; i <= MaxBank; i++) {
             // Check to see if the player has the item
             //    if (Bank[i].Num == itemNum) {
-            if (ItemManager.Items[Bank[slot].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Bank[slot].Num].StackCap > 0) {
+            if (ItemManager.Items[Bank[slot].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Bank[slot].Num].StackCap > 0)
+            {
                 // Is what we are trying to take away more then what they have? If so just set it to zero
-                if (amount >= Bank[slot].Amount) {
+                if (amount >= Bank[slot].Amount)
+                {
                     TakeBankItem = true;
-                } else {
+                }
+                else
+                {
                     Bank[slot].Amount -= amount;
                     Messenger.SendBankUpdate(client, slot);
                     result = true;
                 }
-            } else {
+            }
+            else
+            {
                 // Check to see if its any sort of ArmorSlot/WeaponSlot ~unneeded for takebankitem
                 // Check if its not an equipable weapon, and if it isn't then take it away ~ irrelevant
                 TakeBankItem = true;
             }
 
-            if (TakeBankItem == true) {
+            if (TakeBankItem == true)
+            {
                 Bank[slot].Num = 0;
                 Bank[slot].Amount = 0;
                 Bank[slot].Sticky = false;
@@ -608,7 +746,6 @@ namespace Server.Players {
                 // Send the Bank update
                 Messenger.SendBankUpdate(client, slot);
                 result = true;
-
             }
             //    }
             //}
@@ -617,34 +754,43 @@ namespace Server.Players {
             return result;
         }
 
-        public bool GiveBankItem(int itemNum, int amount, string tag, int bankSlot) {
+        public bool GiveBankItem(int itemNum, int amount, string tag, int bankSlot)
+        {
             // Check for subscript out of range
-            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems || bankSlot > Bank.Count) {
+            if (itemNum < 0 || itemNum >= ItemManager.Items.MaxItems || bankSlot > Bank.Count)
+            {
                 return false;
             }
 
             // Check to see if Bankentory is full
-            if (bankSlot != -1) {
+            if (bankSlot != -1)
+            {
                 Bank[bankSlot].Num = itemNum;
                 Bank[bankSlot].Amount += amount;
                 Bank[bankSlot].Tag = tag;
 
                 return true;
-            } else {
+            }
+            else
+            {
                 Messenger.StorageMessage(client, "Storage full!");
 
                 return false;
             }
         }
 
-        public void SetMaxBank(DatabaseConnection dbConnection, int max) {
+        public void SetMaxBank(DatabaseConnection dbConnection, int max)
+        {
             SetMaxBank(dbConnection, max, true);
         }
 
-        public void SetMaxBank(DatabaseConnection dbConnection, int max, bool saveBank) {
+        public void SetMaxBank(DatabaseConnection dbConnection, int max, bool saveBank)
+        {
             MaxBank = max;
-            for (int i = 1; i <= MaxBank; i++) {
-                if (!Bank.ContainsKey(i)) {
+            for (int i = 1; i <= MaxBank; i++)
+            {
+                if (!Bank.ContainsKey(i))
+                {
                     Characters.InventoryItem invItem = new Characters.InventoryItem();
                     playerData.Bank.Add(i, invItem);
                     Bank.Add(i, new InventoryItem(invItem));
@@ -653,7 +799,8 @@ namespace Server.Players {
             //no need to send bank
             //really that easy?
 
-            if (saveBank) {
+            if (saveBank)
+            {
                 PlayerDataManager.SavePlayerBank(dbConnection.Database, playerData);
             }
         }

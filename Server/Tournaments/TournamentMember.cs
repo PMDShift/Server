@@ -32,32 +32,39 @@ namespace Server.Tournaments
         bool active;
         bool admin;
 
-        public bool Admin {
+        public bool Admin
+        {
             get { return admin; }
             set { admin = value; }
         }
 
-        public Client Client {
+        public Client Client
+        {
             get { return client; }
         }
 
-        public bool Active {
+        public bool Active
+        {
             get { return active; }
-            set {
+            set
+            {
                 active = value;
             }
         }
 
-        public TournamentMember() {
-            this.active = true;
-            this.admin = false;
+        public TournamentMember()
+        {
+            active = true;
+            admin = false;
         }
 
-        public Tournament GetTournamentInstance() {
+        public Tournament GetTournamentInstance()
+        {
             return TournamentManager.Tournaments[tournament];
         }
 
-        public TournamentMember(Tournament tournament, Client client) {
+        public TournamentMember(Tournament tournament, Client client)
+        {
             this.tournament = tournament.ID;
             this.client = client;
         }

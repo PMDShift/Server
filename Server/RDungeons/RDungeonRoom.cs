@@ -1,4 +1,8 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,11 +22,6 @@
 
 namespace Server.RDungeons
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     public class RDungeonRoom
     {
         #region Fields
@@ -36,7 +35,8 @@ namespace Server.RDungeons
 
         #region Constructors
 
-        public RDungeonRoom(int x, int y, int width, int height) {
+        public RDungeonRoom(int x, int y, int width, int height)
+        {
             this.x = x;
             this.y = y;
             this.width = width;
@@ -47,34 +47,39 @@ namespace Server.RDungeons
 
         #region Properties
 
-        public int Height {
+        public int Height
+        {
             get { return height; }
             set { height = value; }
         }
 
-        public int Width {
+        public int Width
+        {
             get { return width; }
             set { width = value; }
         }
 
-        public int X {
+        public int X
+        {
             get { return x; }
             set { x = value; }
         }
 
-        public int Y {
+        public int Y
+        {
             get { return y; }
             set { y = value; }
         }
 
         #endregion Properties
 
-        public bool IsInRoom(int x, int y) {
+        public bool IsInRoom(int x, int y)
+        {
             return (
                x >= this.x &&
                y >= this.y &&
-               x - this.x <= this.width &&
-               y - this.y <= this.height
+               x - this.x <= width &&
+               y - this.y <= height
                );
         }
     }

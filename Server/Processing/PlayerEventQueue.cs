@@ -27,23 +27,28 @@ namespace Server.Processing
     {
         Queue<PlayerEvent> queue;
 
-        public PlayerEventQueue() {
+        public PlayerEventQueue()
+        {
             queue = new Queue<PlayerEvent>();
         }
 
-        public PlayerEvent Dequeue() {
+        public PlayerEvent Dequeue()
+        {
             return queue.Dequeue();
         }
 
-        public void Enqueue(PlayerEvent playerEvent) {
+        public void Enqueue(PlayerEvent playerEvent)
+        {
             queue.Enqueue(playerEvent);
         }
 
-        public bool Empty() {
+        public bool Empty()
+        {
             return Count == 0;
         }
 
-        public int Count {
+        public int Count
+        {
             get { return queue.Count; }
         }
     }

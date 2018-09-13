@@ -25,6 +25,5 @@ namespace Server.Players
 {
     public interface IExPlayer
     {
-
     }
 }

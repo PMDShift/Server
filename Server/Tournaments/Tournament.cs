@@ -34,19 +34,23 @@ namespace Server.Tournaments
         string name;
         TournamentRules rules;
 
-        public string Name {
+        public string Name
+        {
             get { return name; }
         }
 
-        public WarpDestination Hub {
+        public WarpDestination Hub
+        {
             get { return hub; }
         }
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
-        public bool TournamentStarted {
+        public bool TournamentStarted
+        {
             get { return tournamentStarted; }
         }
 
@@ -58,29 +62,36 @@ namespace Server.Tournaments
 
         int playersNeeded = 2;
 
-        public int PlayersNeeded {
+        public int PlayersNeeded
+        {
             get { return playersNeeded; }
-            set {
-                if (value < 2) {
+            set
+            {
+                if (value < 2)
+                {
                     value = 2;
                 }
                 playersNeeded = value;
             }
         }
 
-        public List<MatchUp> ActiveMatchups {
+        public List<MatchUp> ActiveMatchups
+        {
             get { return activeMatchups; }
         }
 
-        public TournamentMemberCollection RegisteredMembers {
+        public TournamentMemberCollection RegisteredMembers
+        {
             get { return registeredMembers; }
         }
 
-        public TournamentRules Rules {
+        public TournamentRules Rules
+        {
             get { return rules; }
         }
 
-        public Tournament(string id, string name, WarpDestination hub) {
+        public Tournament(string id, string name, WarpDestination hub)
+        {
             this.id = id;
             this.name = name;
             this.hub = hub;
@@ -92,21 +103,26 @@ namespace Server.Tournaments
             rules = new TournamentRules();
         }
 
-        public void AddCombatMap(string mapID) {
+        public void AddCombatMap(string mapID)
+        {
             combatMaps.Add(mapID);
         }
 
-        public void WarpToHub(Client client) {
-            if (hubMap == null) {
+        public void WarpToHub(Client client)
+        {
+            if (hubMap == null)
+            {
                 hubMap = MapCloner.CreateInstancedMap(MapManager.RetrieveMap(hub.MapID));
             }
             Messenger.PlayerWarp(client, hubMap, hub.X, hub.Y);
         }
 
-        public void CancelTournament(string reason) {
+        public void CancelTournament(string reason)
+        {
             Scripting.ScriptManager.InvokeSub("OnTournamentCanceled", this, reason);
 
-            for (int i = registeredMembers.Count - 1; i >= 0; i--) {
+            for (int i = registeredMembers.Count - 1; i >= 0; i--)
+            {
                 WarpToHub(registeredMembers[i].Client);
                 registeredMembers[i].Client.Player.Tournament = null;
                 registeredMembers[i].Client.Player.TournamentMatchUp = null;
@@ -115,26 +131,33 @@ namespace Server.Tournaments
             TournamentManager.RemoveTournament(this);
         }
 
-        public void RemoveRegisteredPlayer(Client client) {
-            if (registeredMembers.Contains(client.Player.CharID)) {
+        public void RemoveRegisteredPlayer(Client client)
+        {
+            if (registeredMembers.Contains(client.Player.CharID))
+            {
                 registeredMembers.Remove(client);
                 client.Player.Tournament = null;
 
                 bool tournyHasAdmin = false;
-                for (int i = 0; i < RegisteredMembers.Count; i++) {
-                    if (RegisteredMembers[i].Admin) {
+                for (int i = 0; i < RegisteredMembers.Count; i++)
+                {
+                    if (RegisteredMembers[i].Admin)
+                    {
                         tournyHasAdmin = true;
                         break;
                     }
                 }
-                if (tournyHasAdmin == false) {
+                if (tournyHasAdmin == false)
+                {
                     CancelTournament("All tournament organizers have left!");
                 }
             }
         }
 
-        public void RegisterSpectator(Client client) {
-            if (registeredMembers.Contains(client.Player.CharID) == false) {
+        public void RegisterSpectator(Client client)
+        {
+            if (registeredMembers.Contains(client.Player.CharID) == false)
+            {
                 TournamentMember member = new TournamentMember(this, client);
                 client.Player.Tournament = this;
                 member.Active = false;
@@ -143,9 +166,12 @@ namespace Server.Tournaments
             }
         }
 
-        public void RegisterPlayer(Client client) {
-            if (tournamentStarted == false) {
-                if (registeredMembers.Count < playersNeeded && registeredMembers.Contains(client.Player.CharID) == false) {
+        public void RegisterPlayer(Client client)
+        {
+            if (tournamentStarted == false)
+            {
+                if (registeredMembers.Count < playersNeeded && registeredMembers.Contains(client.Player.CharID) == false)
+                {
                     TournamentMember member = new TournamentMember(this, client);
                     client.Player.Tournament = this;
                     member.Active = true;
@@ -155,9 +181,12 @@ namespace Server.Tournaments
             }
         }
 
-        public void RegisterPlayer(TournamentMember member) {
-            if (tournamentStarted == false) {
-                if (registeredMembers.Count < playersNeeded) {
+        public void RegisterPlayer(TournamentMember member)
+        {
+            if (tournamentStarted == false)
+            {
+                if (registeredMembers.Count < playersNeeded)
+                {
                     member.Client.Player.Tournament = this;
                     registeredMembers.Add(member);
                     OnPlayerRegistered(member);
@@ -165,53 +194,69 @@ namespace Server.Tournaments
             }
         }
 
-        private void OnPlayerRegistered(TournamentMember member) {
+        private void OnPlayerRegistered(TournamentMember member)
+        {
             Scripting.ScriptManager.InvokeSub("OnPlayerRegisteredInTournament", this, member, !member.Active);
         }
 
-        private void StartTournamentIfReady() {
-            if (IsReadyToStart()) {
+        private void StartTournamentIfReady()
+        {
+            if (IsReadyToStart())
+            {
                 StartRound(new MatchUpRules());
             }
         }
 
-        public int CountRemainingPlayers() {
+        public int CountRemainingPlayers()
+        {
             int activePlayerCount = 0;
-            for (int i = 0; i < registeredMembers.Count; i++) {
-                if (registeredMembers[i].Active) {
+            for (int i = 0; i < registeredMembers.Count; i++)
+            {
+                if (registeredMembers[i].Active)
+                {
                     activePlayerCount++;
                 }
             }
             return activePlayerCount;
         }
 
-        public bool IsReadyToStart() {
-            if (registeredMembers.Count == playersNeeded) {
+        public bool IsReadyToStart()
+        {
+            if (registeredMembers.Count == playersNeeded)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public void StartRound(MatchUpRules matchUpRules) {
-            if (!tournamentStarted) {
+        public void StartRound(MatchUpRules matchUpRules)
+        {
+            if (!tournamentStarted)
+            {
                 tournamentStarted = true;
             }
             bool evenPlayerCount = (CountRemainingPlayers() % 2 == 0);
             TournamentMemberCollection membersWaitList = registeredMembers.Clone() as TournamentMemberCollection;
             // Remove inactive players from wait list
-            for (int i = membersWaitList.Count - 1; i >= 0; i--) {
-                if (membersWaitList[i].Active == false) {
+            for (int i = membersWaitList.Count - 1; i >= 0; i--)
+            {
+                if (membersWaitList[i].Active == false)
+                {
                     membersWaitList.RemoveAt(i);
                 }
             }
-            if (!evenPlayerCount) {
+            if (!evenPlayerCount)
+            {
                 int skipIndex = MathFunctions.Rand(0, membersWaitList.Count);
                 membersWaitList.RemoveAt(skipIndex);
             }
-            this.activeMatchups.Clear();
+            activeMatchups.Clear();
             // Continue making match-ups until all players have been accounted for
-            while (membersWaitList.Count > 0) {
+            while (membersWaitList.Count > 0)
+            {
                 int playerOneIndex = MathFunctions.Rand(0, membersWaitList.Count);
                 TournamentMember playerOne = membersWaitList[playerOneIndex];
                 membersWaitList.RemoveAt(playerOneIndex);
@@ -223,7 +268,7 @@ namespace Server.Tournaments
                 MatchUp matchUp = new MatchUp(GenerateUniqueMatchUpID(), this, playerOne, playerTwo);
                 matchUp.Rules = matchUpRules;
 
-                this.activeMatchups.Add(matchUp);
+                activeMatchups.Add(matchUp);
 
                 int combatMapIndex = MathFunctions.Rand(0, combatMaps.Count);
                 InstancedMap iMap = MapCloner.CreateInstancedMap(MapManager.RetrieveMap(combatMaps[combatMapIndex]));
@@ -231,45 +276,56 @@ namespace Server.Tournaments
             }
         }
 
-        internal void MatchUpComplete(MatchUp matchUp) {
-            this.activeMatchups.Remove(matchUp);
+        internal void MatchUpComplete(MatchUp matchUp)
+        {
+            activeMatchups.Remove(matchUp);
 
-            if (this.activeMatchups.Count == 0) {
+            if (activeMatchups.Count == 0)
+            {
                 // All match-ups have been completed, and winners were determined
 
                 int remainingPlayersCount = CountRemainingPlayers() + 1;
-                if (remainingPlayersCount == 1) {
+                if (remainingPlayersCount == 1)
+                {
                     // Only one player left, so this player wins the tournament!
                     TournamentMember winner = null;
                     // Find the winning player instance
-                    for (int i = 0; i < registeredMembers.Count; i++) {
-                        if (registeredMembers[i].Active) {
+                    for (int i = 0; i < registeredMembers.Count; i++)
+                    {
+                        if (registeredMembers[i].Active)
+                        {
                             winner = registeredMembers[i];
                         }
                     }
-                    if (winner != null) {
+                    if (winner != null)
+                    {
                         TournamentComplete(winner);
                     }
-                } else if (remainingPlayersCount > 1) {
+                }
+                else if (remainingPlayersCount > 1)
+                {
                     // We have more than one player, continue the match-ups
 
                     Scripting.ScriptManager.InvokeSub("OnTournamentRoundComplete", this);
                 }
-
             }
         }
 
-        internal void TournamentComplete(TournamentMember winner) {
+        internal void TournamentComplete(TournamentMember winner)
+        {
             Scripting.ScriptManager.InvokeSub("OnTournamentComplete", this, winner);
         }
 
-        private string GenerateUniqueMatchUpID() {
+        private string GenerateUniqueMatchUpID()
+        {
             string testID;
-            while (true) {
+            while (true)
+            {
                 // Generate a new ID
                 testID = Security.PasswordGen.Generate(16);
                 // Check if the same ID is already in use
-                if (!IsMatchUpIDInUse(testID)) {
+                if (!IsMatchUpIDInUse(testID))
+                {
                     // If it isn't, our generated ID is useable!
                     return testID;
                 }
@@ -277,14 +333,16 @@ namespace Server.Tournaments
             }
         }
 
-        private bool IsMatchUpIDInUse(string idToTest) {
-            for (int i = 0; i < activeMatchups.Count; i++) {
-                if (activeMatchups[i].ID == idToTest) {
+        private bool IsMatchUpIDInUse(string idToTest)
+        {
+            for (int i = 0; i < activeMatchups.Count; i++)
+            {
+                if (activeMatchups[i].ID == idToTest)
+                {
                     return true;
                 }
             }
             return false;
         }
-
     }
 }

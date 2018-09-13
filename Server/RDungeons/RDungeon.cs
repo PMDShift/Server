@@ -28,23 +28,23 @@ namespace Server.RDungeons
         public Enums.Direction Direction { get; set; }
         public bool Recruitment { get; set; }
         public bool Exp { get; set; }
-        public int WindTimer { get; set;}
+        public int WindTimer { get; set; }
         public int DungeonIndex { get; set; }
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
         public List<RDungeonFloor> Floors { get; set; }
 
-        
+
 
         public int RDungeonIndex;
 
 
-        public RDungeon(int rDungeonIndex) {
+        public RDungeon(int rDungeonIndex)
+        {
             RDungeonIndex = rDungeonIndex;
             DungeonName = "";
             Floors = new List<RDungeonFloor>();
-            
         }
     }
 }

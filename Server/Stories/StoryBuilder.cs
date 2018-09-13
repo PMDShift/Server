@@ -24,11 +24,13 @@ namespace Server.Stories
 {
     public class StoryBuilder
     {
-        public static StoryBuilderSegment BuildStory() {
+        public static StoryBuilderSegment BuildStory()
+        {
             return new StoryBuilderSegment();
         }
 
-        public static void AppendSaySegment(StoryBuilderSegment story, string text, int mugshot, int speed, int pauseLocation) {
+        public static void AppendSaySegment(StoryBuilderSegment story, string text, int mugshot, int speed, int pauseLocation)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.Say;
             segment.AddParameter("Text", text);
@@ -38,28 +40,32 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendPauseAction(StoryBuilderSegment story, int length) {
+        public static void AppendPauseAction(StoryBuilderSegment story, int length)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.Pause;
             segment.AddParameter("Length", length.ToString());
             story.Segments.Add(segment);
         }
 
-        public static void AppendWaitForMapAction(StoryBuilderSegment story, string map) {
+        public static void AppendWaitForMapAction(StoryBuilderSegment story, string map)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.WaitForMap;
             segment.AddParameter("MapID", map);
             story.Segments.Add(segment);
         }
 
-        public static void AppendMapVisibilityAction(StoryBuilderSegment story, bool visible) {
+        public static void AppendMapVisibilityAction(StoryBuilderSegment story, bool visible)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.MapVisibility;
             segment.AddParameter("Visible", visible.ToString());
             story.Segments.Add(segment);
         }
 
-        public static void AppendPlayMusicAction(StoryBuilderSegment story, string file, bool honorSettings, bool loop) {
+        public static void AppendPlayMusicAction(StoryBuilderSegment story, string file, bool honorSettings, bool loop)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.PlayMusic;
             segment.AddParameter("File", file);
@@ -68,13 +74,15 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendStopMusicAction(StoryBuilderSegment story) {
+        public static void AppendStopMusicAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.StopMusic;
             story.Segments.Add(segment);
         }
 
-        public static void AppendShowImageAction(StoryBuilderSegment story, string file, string imageID, int x, int y) {
+        public static void AppendShowImageAction(StoryBuilderSegment story, string file, string imageID, int x, int y)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ShowImage;
             segment.AddParameter("File", file);
@@ -84,14 +92,16 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendHideImageAction(StoryBuilderSegment story, string imageID) {
+        public static void AppendHideImageAction(StoryBuilderSegment story, string imageID)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.HideImage;
             segment.AddParameter("ImageID", imageID);
             story.Segments.Add(segment);
         }
 
-        public static void AppendWarpAction(StoryBuilderSegment story, string mapID, int x, int y) {
+        public static void AppendWarpAction(StoryBuilderSegment story, string mapID, int x, int y)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.Warp;
             segment.AddParameter("MapID", mapID);
@@ -100,27 +110,31 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendPlayerPadlockAction(StoryBuilderSegment story, string state) {
+        public static void AppendPlayerPadlockAction(StoryBuilderSegment story, string state)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.PlayerPadlock;
             segment.AddParameter("MovementState", state);
             story.Segments.Add(segment);
         }
 
-        public static void AppendShowBackgroundAction(StoryBuilderSegment story, string file) {
+        public static void AppendShowBackgroundAction(StoryBuilderSegment story, string file)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ShowBackground;
             segment.AddParameter("File", file);
             story.Segments.Add(segment);
         }
 
-        public static void AppendHideBackgroundAction(StoryBuilderSegment story) {
+        public static void AppendHideBackgroundAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.HideBackground;
             story.Segments.Add(segment);
         }
 
-        public static void AppendCreateFNPCAction(StoryBuilderSegment story, string id, string parentMapID, int x, int y, int sprite) {
+        public static void AppendCreateFNPCAction(StoryBuilderSegment story, string id, string parentMapID, int x, int y, int sprite)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.CreateFNPC;
             segment.AddParameter("ID", id);
@@ -131,7 +145,8 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendMoveFNPCAction(StoryBuilderSegment story, string id, int x, int y, Enums.Speed speed, bool pause) {
+        public static void AppendMoveFNPCAction(StoryBuilderSegment story, string id, int x, int y, Enums.Speed speed, bool pause)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.MoveFNPC;
             segment.AddParameter("ID", id);
@@ -142,7 +157,8 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendWarpFNPCAction(StoryBuilderSegment story, string id, int x, int y) {
+        public static void AppendWarpFNPCAction(StoryBuilderSegment story, string id, int x, int y)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.WarpFNPC;
             segment.AddParameter("ID", id);
@@ -151,7 +167,8 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendChangeFNPCDirAction(StoryBuilderSegment story, string id, Enums.Direction direction) {
+        public static void AppendChangeFNPCDirAction(StoryBuilderSegment story, string id, Enums.Direction direction)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ChangeFNPCDir;
             segment.AddParameter("ID", id);
@@ -159,14 +176,16 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendDeleteFNPCAction(StoryBuilderSegment story, string id) {
+        public static void AppendDeleteFNPCAction(StoryBuilderSegment story, string id)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.DeleteFNPC;
             segment.AddParameter("ID", id);
             story.Segments.Add(segment);
         }
 
-        public static void AppendRunScriptAction(StoryBuilderSegment story, int scriptIndex, string param1, string param2, string param3, bool pause) {
+        public static void AppendRunScriptAction(StoryBuilderSegment story, int scriptIndex, string param1, string param2, string param3, bool pause)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.RunScript;
             segment.AddParameter("ScriptIndex", scriptIndex.ToString());
@@ -177,19 +196,22 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendHidePlayersAction(StoryBuilderSegment story) {
+        public static void AppendHidePlayersAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.HidePlayers;
             story.Segments.Add(segment);
         }
 
-        public static void AppendShowPlayersAction(StoryBuilderSegment story) {
+        public static void AppendShowPlayersAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ShowPlayers;
             story.Segments.Add(segment);
         }
 
-        public static void AppendFNPCEmotionAction(StoryBuilderSegment story, string id, int emotion) {
+        public static void AppendFNPCEmotionAction(StoryBuilderSegment story, string id, int emotion)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.FNPCEmotion;
             segment.AddParameter("ID", id);
@@ -197,26 +219,30 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendChangeWeatherAction(StoryBuilderSegment story, Enums.Weather weather) {
+        public static void AppendChangeWeatherAction(StoryBuilderSegment story, Enums.Weather weather)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ChangeWeather;
             segment.AddParameter("Weather", ((int)weather).ToString());
             story.Segments.Add(segment);
         }
 
-        public static void AppendHideNPCsAction(StoryBuilderSegment story) {
+        public static void AppendHideNPCsAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.HideNPCs;
             story.Segments.Add(segment);
         }
 
-        public static void AppendShowNPCsAction(StoryBuilderSegment story) {
+        public static void AppendShowNPCsAction(StoryBuilderSegment story)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.ShowNPCs;
             story.Segments.Add(segment);
         }
 
-        public static void AppendGoToSegmentAction(StoryBuilderSegment story, int segment) {
+        public static void AppendGoToSegmentAction(StoryBuilderSegment story, int segment)
+        {
             StorySegment tempSegment = new StorySegment();
             tempSegment.Action = Enums.StoryAction.GoToSegment;
             tempSegment.AddParameter("Segment", segment.ToString());
@@ -224,7 +250,8 @@ namespace Server.Stories
             story.Segments.Add(tempSegment);
         }
 
-        public static void AppendAskQuestionAction(StoryBuilderSegment story, string question, int segmentOnYes, int segmentOnNo, int mugshot) {
+        public static void AppendAskQuestionAction(StoryBuilderSegment story, string question, int segmentOnYes, int segmentOnNo, int mugshot)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.AskQuestion;
             segment.AddParameter("Question", question);
@@ -235,7 +262,8 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendAskQuestionAction(StoryBuilderSegment story, string question, string questionID, int mugshot, string[] options) {
+        public static void AppendAskQuestionAction(StoryBuilderSegment story, string question, string questionID, int mugshot, string[] options)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.AskQuestion;
             segment.AddParameter("Question", question);
@@ -243,7 +271,8 @@ namespace Server.Stories
             segment.AddParameter("SegmentOnNo", "-1");
             segment.AddParameter("Mugshot", mugshot.ToString());
             StringBuilder optionsString = new StringBuilder();
-            for (int i = 0; i < options.Length; i++) {
+            for (int i = 0; i < options.Length; i++)
+            {
                 optionsString.Append(options[i]);
                 optionsString.Append("\\");
             }
@@ -253,7 +282,8 @@ namespace Server.Stories
             story.Segments.Add(segment);
         }
 
-        public static void AppendMovePlayerAction(StoryBuilderSegment story, int targetX, int targetY, Enums.Speed speed, bool pause) {
+        public static void AppendMovePlayerAction(StoryBuilderSegment story, int targetX, int targetY, Enums.Speed speed, bool pause)
+        {
             StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.MovePlayer;
             segment.AddParameter("X", targetX.ToString());

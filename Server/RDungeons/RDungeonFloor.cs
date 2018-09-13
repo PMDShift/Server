@@ -26,24 +26,24 @@ namespace Server.RDungeons
     public class RDungeonFloor
     {
         GeneratorOptions options;
-			
-        public GeneratorOptions Options { get {return options;} }
-			
-        
+
+        public GeneratorOptions Options { get { return options; } }
+
+
         public int Darkness { get; set; }
 
-        
+
 
         public Enums.RFloorGoalType GoalType { get; set; }
 
         public int GoalMap { get; set; }
         public int GoalX { get; set; }
         public int GoalY { get; set; }
-        
+
         public string Music { get; set; }
-        
-        
-        
+
+
+
         #region Terrain Variables
 
         public int StairsX { get; set; }
@@ -97,12 +97,12 @@ namespace Server.RDungeons
         public int mRowCenterSheet { get; set; }
         public int mRowRightX { get; set; }
         public int mRowRightSheet { get; set; }
-        
+
         public int mGroundAltX { get; set; }
         public int mGroundAltSheet { get; set; }
         public int mGroundAlt2X { get; set; }
         public int mGroundAlt2Sheet { get; set; }
-        
+
         public int mTopLeftAltX { get; set; }
         public int mTopLeftAltSheet { get; set; }
         public int mTopCenterAltX { get; set; }
@@ -150,8 +150,8 @@ namespace Server.RDungeons
         public int mRowCenterAltSheet { get; set; }
         public int mRowRightAltX { get; set; }
         public int mRowRightAltSheet { get; set; }
-        
-        
+
+
         public int mWaterX { get; set; }
         public int mWaterSheet { get; set; }
         public int mWaterAnimX { get; set; }
@@ -199,7 +199,7 @@ namespace Server.RDungeons
         public int mShoreInnerLeftSheet { get; set; }
         public int mShoreSurroundedX { get; set; }
         public int mShoreSurroundedSheet { get; set; }
-        
+
         public int mShoreTopLeftAnimX { get; set; }
         public int mShoreTopLeftAnimSheet { get; set; }
         public int mShoreTopRightAnimX { get; set; }
@@ -244,7 +244,7 @@ namespace Server.RDungeons
         public int mShoreSurroundedAnimSheet { get; set; }
 
         #endregion
-        
+
         public Tile GroundTile { get; set; }
         public Tile HallTile { get; set; }
         public Tile WaterTile { get; set; }
@@ -253,9 +253,9 @@ namespace Server.RDungeons
         public int NpcSpawnTime { get; set; }
         public int NpcMin { get; set; }
         public int NpcMax { get; set; }
-        
+
         public List<RDungeonItem> Items { get; set; }
-        public List <MapNpcPreset> Npcs { get; set; }
+        public List<MapNpcPreset> Npcs { get; set; }
         public List<RDungeonTrap> SpecialTiles { get; set; }
         public List<Enums.Weather> Weather { get; set; }
 

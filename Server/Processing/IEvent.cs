@@ -26,6 +26,5 @@ namespace Server.Processing
     interface IEvent
     {
         string Command { get; }
-
     }
 }

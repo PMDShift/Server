@@ -34,13 +34,17 @@ namespace Server
         static ManualResetEvent resetEvent;
         public static event EventHandler LoadComplete;
 
-        public static void LoadServer() {
-            Globals.CommandLine = CommandProcessor.ParseCommand(Environment.CommandLine); 
+        public static void LoadServer()
+        {
+            Globals.CommandLine = CommandProcessor.ParseCommand(Environment.CommandLine);
             string startFolder;
             int overridePath = Globals.CommandLine.FindCommandArg("-overridepath");
-            if (overridePath > -1) {
+            if (overridePath > -1)
+            {
                 startFolder = Globals.CommandLine[overridePath + 1];
-            } else {
+            }
+            else
+            {
                 startFolder = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             }
 
@@ -60,7 +64,8 @@ namespace Server
             Thread t = new Thread(new ParameterizedThreadStart(LoadServerBackground));
             t.Start();
 
-            if (!string.IsNullOrEmpty(Settings.DiscordBotToken)) {
+            if (!string.IsNullOrEmpty(Settings.DiscordBotToken))
+            {
                 var discordThread = new Thread(new ThreadStart(() =>
                 {
                     new DiscordManager().Run(Settings.DiscordBotToken);
@@ -78,7 +83,8 @@ namespace Server
             await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, Settings.GamePort, Settings.GamePort, "Temporary"));
         }
 
-        private static void LoadServerBackground(Object param) {
+        private static void LoadServerBackground(Object param)
+        {
             Migrations.MigrationRunner.MigrateDatabase();
 
             System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(LoadDatasBackground));
@@ -98,7 +104,8 @@ namespace Server
                 LoadComplete(null, EventArgs.Empty);
         }
 
-        private static void LoadDatasBackground(object data) {
+        private static void LoadDatasBackground(object data)
+        {
             //ThreadManager.SetMaxThreads(Settings.MaxWorkerThreads, Settings.MaxCompletionThreads);
             // Load pokedex
             //Pokedex.Pokedex.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Pokedex... " + e.Percent.ToString() + "%"); };

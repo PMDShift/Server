@@ -26,55 +26,64 @@ namespace Server.Players
 {
     class PlayerPet
     {
-        public int Sprite {
+        public int Sprite
+        {
             get;
             set;
         }
 
-        public Enums.Direction Direction {
+        public Enums.Direction Direction
+        {
             get;
             set;
         }
 
-        public bool Attacking {
+        public bool Attacking
+        {
             get;
             set;
         }
 
-        public System.Drawing.Point Offset {
+        public System.Drawing.Point Offset
+        {
             get;
             set;
         }
 
-        public System.Drawing.Point Location {
+        public System.Drawing.Point Location
+        {
             get;
             set;
         }
 
-        public int AttackTimer {
+        public int AttackTimer
+        {
             get;
             set;
         }
 
-        public int X {
+        public int X
+        {
             get { return Location.X; }
             set { Location = new Point(value, Location.Y); }
         }
 
-        public int Y {
+        public int Y
+        {
             get { return Location.Y; }
             set { Location = new Point(Location.X, value); }
         }
 
-        public bool Confused {
+        public bool Confused
+        {
             get;
             set;
         }
 
-        public Enums.StatusAilment StatusAilment {
+        public Enums.StatusAilment StatusAilment
+        {
             get;
             set;
         }
-
     }
 }

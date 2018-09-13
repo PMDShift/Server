@@ -9,7 +9,8 @@ namespace Server.Migrations
     [Migration(1536556533)]
     public class SetupDataSandboxColumns : AutoReversingMigration
     {
-        public override void Up() {
+        public override void Up()
+        {
             Create.Column("IsSandboxed").OnTable("map_data").AsBoolean().NotNullable().WithDefaultValue(true);
             Create.Column("ZoneID").OnTable("map_data").AsInt32().Nullable();
 

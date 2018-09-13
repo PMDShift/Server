@@ -28,7 +28,7 @@ namespace Server.Moves
 
         public bool IsSandboxed { get; set; }
         public bool IsBeingReviewed { get; set; }
-        
+
         public string Name { get; set; }
 
         public int MaxPP { get; set; }
@@ -81,11 +81,12 @@ namespace Server.Moves
 
         public MoveAnimation DefenderAnim { get; set; }
 
-        
+
 
         #endregion Properties
 
-        public Move() {
+        public Move()
+        {
             AttackerAnim = new MoveAnimation();
             TravelingAnim = new MoveAnimation();
             DefenderAnim = new MoveAnimation();

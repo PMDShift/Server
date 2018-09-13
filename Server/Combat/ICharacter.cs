@@ -23,8 +23,10 @@ using Server.Players;
 using Server.Maps;
 using Server.Moves;
 
-namespace Server.Combat {
-    public interface ICharacter {
+namespace Server.Combat
+{
+    public interface ICharacter
+    {
         Enums.CharacterType CharacterType { get; }
         Enums.Sex Sex { get; set; }
         Enums.Coloration Shiny { get; set; }
@@ -44,7 +46,7 @@ namespace Server.Combat {
         bool Confused { get; set; }
         bool Visible { get; set; }
         ExtraStatusCollection VolatileStatus { get; set; }
-        
+
 
         string Ability1 { get; set; }
         string Ability2 { get; set; }
