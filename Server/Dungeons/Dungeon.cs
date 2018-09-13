@@ -31,7 +31,8 @@ namespace Server.Dungeons
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
-        public List<StandardDungeonMap> StandardMaps {
+        public List<StandardDungeonMap> StandardMaps
+        {
             get { return standardMaps; }
         }
         public List<RandomDungeonMap> RandomMaps
@@ -43,7 +44,8 @@ namespace Server.Dungeons
 
         public ListPair<int, string> ScriptList { get; set; }
 
-        public Dungeon() {
+        public Dungeon()
+        {
             standardMaps = new List<StandardDungeonMap>();
             randomMaps = new List<RandomDungeonMap>();
             Name = "";

@@ -31,12 +31,16 @@ namespace Server.Discord.Commands
 
         [Command("join")]
         [Summary("Join a development team.")]
-        public async Task JoinAsync(string teamName) {
-            foreach (var team in teams) {
-                if (team.ToLower() == teamName.ToLower()) {
+        public async Task JoinAsync(string teamName)
+        {
+            foreach (var team in teams)
+            {
+                if (team.ToLower() == teamName.ToLower())
+                {
                     var role = Context.Guild.Roles.Where(x => x.Name == team).FirstOrDefault();
 
-                    if (role != null) {
+                    if (role != null)
+                    {
                         await (Context.User as IGuildUser).AddRoleAsync(role);
                     }
                 }
@@ -45,12 +49,16 @@ namespace Server.Discord.Commands
 
         [Command("leave")]
         [Summary("Leave a development team.")]
-        public async Task LeaveAsync(string teamName) {
-            foreach (var team in teams) {
-                if (team.ToLower() == teamName.ToLower()) {
+        public async Task LeaveAsync(string teamName)
+        {
+            foreach (var team in teams)
+            {
+                if (team.ToLower() == teamName.ToLower())
+                {
                     var role = Context.Guild.Roles.Where(x => x.Name == team).FirstOrDefault();
 
-                    if (role != null) {
+                    if (role != null)
+                    {
                         await (Context.User as IGuildUser).RemoveRoleAsync(role);
                     }
                 }
@@ -59,12 +67,14 @@ namespace Server.Discord.Commands
 
         [Command("list")]
         [Summary("List all of the available teams.")]
-        public async Task ListAsync() {
+        public async Task ListAsync()
+        {
             var responseBuilder = new StringBuilder();
 
             responseBuilder.AppendLine("**Available Teams:**");
             responseBuilder.AppendLine();
-            foreach (var team in teams) {
+            foreach (var team in teams)
+            {
                 responseBuilder.AppendLine(team);
             }
 

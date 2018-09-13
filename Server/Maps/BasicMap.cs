@@ -1,4 +1,15 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+
+using Server.Items;
+using Server.Npcs;
+using Server.Players;
+using Server.Network;
+using PMDCP.Sockets;
+using System.Threading;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,30 +29,20 @@
 
 namespace Server.Maps
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Text;
-
-    using Server.Items;
-    using Server.Npcs;
-    using Server.Players;
-    using Server.Network;
-    using PMDCP.Sockets;
-    using System.Threading;
-
     public class BasicMap : MapBase
     {
         DataManager.Maps.MapDump mapDump;
 
-        public DataManager.Maps.MapDump BaseMap {
+        public DataManager.Maps.MapDump BaseMap
+        {
             get { return mapDump; }
         }
 
         #region Constructors
 
         public BasicMap(DataManager.Maps.MapDump mapDump)
-            : base(mapDump) {
+            : base(mapDump)
+        {
             this.mapDump = mapDump;
 
             this.PlayersOnMap = new MapPlayersCollection();
@@ -57,7 +58,7 @@ namespace Server.Maps
         //public BasicMap(string mapID)
         //    : base(mapID) {
         //    this.IsSaving = false;
-            
+
         //    Darkness = -1;
         //    TimeLimit = -1;
         //}
@@ -66,22 +67,26 @@ namespace Server.Maps
 
         #region Properties
 
-        public TickCount ActivationTime {
+        public TickCount ActivationTime
+        {
             get;
             set;
         }
 
-        public bool ProcessingPaused {
+        public bool ProcessingPaused
+        {
             get;
             set;
         }
 
-        public ActiveItemCollection ActiveItem {
+        public ActiveItemCollection ActiveItem
+        {
             get;
             set;
         }
 
-        public ActiveNpcCollection ActiveNpc {
+        public ActiveNpcCollection ActiveNpc
+        {
             get;
             set;
         }
@@ -90,12 +95,14 @@ namespace Server.Maps
 
         public TickCount NpcSpawnWait { get; set; }
 
-        public bool IsSaving {
+        public bool IsSaving
+        {
             get;
             set;
         }
 
-        public MapPlayersCollection PlayersOnMap {
+        public MapPlayersCollection PlayersOnMap
+        {
             get;
             set;
         }
@@ -104,14 +111,18 @@ namespace Server.Maps
 
         public bool TempChange { get; set; }
 
-        public override Enums.Weather Weather {
-            get {
+        public override Enums.Weather Weather
+        {
+            get
+            {
                 return base.Weather;
             }
-            set {
+            set
+            {
                 Enums.Weather oldWeather = base.Weather;
                 base.Weather = value;
-                if (MapManager.IsMapActive(MapID)) {
+                if (MapManager.IsMapActive(MapID))
+                {
                     Scripting.ScriptManager.InvokeFunction("OnWeatherChange", MapManager.RetrieveActiveMap(MapID), oldWeather, value);
                 }
             }
@@ -121,27 +132,34 @@ namespace Server.Maps
 
         #region Methods
 
-        public void ClearActiveNpc(int npcSlot) {
+        public void ClearActiveNpc(int npcSlot)
+        {
             ActiveNpc[npcSlot] = new MapNpc(MapID, npcSlot);
         }
 
-        public void ClearActiveItem(int itemSlot) {
+        public void ClearActiveItem(int itemSlot)
+        {
             ActiveItem[itemSlot] = new MapItem(new DataManager.Maps.MapItem());
             ActiveItem[itemSlot].Num = -1;
         }
 
-        public int FindOpenItemSlot() {
-            for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++) {
-                if (ActiveItem[i].Num == -1) {
+        public int FindOpenItemSlot()
+        {
+            for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
+            {
+                if (ActiveItem[i].Num == -1)
+                {
                     return i;
                 }
             }
             return -1;
         }
 
-        public void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor) {
+        public void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor)
+        {
             // Check for subscript out of range
-            if (itemNum < 0 || itemNum > ItemManager.Items.MaxItems) {
+            if (itemNum < 0 || itemNum > ItemManager.Items.MaxItems)
+            {
                 return;
             }
 
@@ -152,29 +170,36 @@ namespace Server.Maps
         }
 
 
-        public void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor) {
+        public void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor)
+        {
             // Check for subscript out of range
-            if (itemSlot < 0 || itemSlot > Constants.MAX_MAP_ITEMS || itemNum < -1 || itemNum > ItemManager.Items.MaxItems) {
+            if (itemSlot < 0 || itemSlot > Constants.MAX_MAP_ITEMS || itemNum < -1 || itemNum > ItemManager.Items.MaxItems)
+            {
                 return;
             }
 
-            if (itemSlot != -1) {
+            if (itemSlot != -1)
+            {
                 ActiveItem[itemSlot].Num = itemNum;
                 ActiveItem[itemSlot].Value = itemVal;
                 ActiveItem[itemSlot].Sticky = sticky;
                 ActiveItem[itemSlot].Hidden = hidden;
                 ActiveItem[itemSlot].Tag = tag;
-                if (playerFor == null) {
+                if (playerFor == null)
+                {
                     ActiveItem[itemSlot].TimeDropped = new TickCount(0);
                     ActiveItem[itemSlot].PlayerFor = "";
-                } else {
+                }
+                else
+                {
                     ActiveItem[itemSlot].TimeDropped = Core.GetTickCount();
                     ActiveItem[itemSlot].PlayerFor = playerFor.Player.CharID;
                 }
 
                 ActiveItem[itemSlot].X = x;
                 ActiveItem[itemSlot].Y = y;
-                if (!hidden) {
+                if (!hidden)
+                {
                     Messenger.SendDataToMap(MapID, PacketBuilder.CreateItemSpawnPacket(itemSlot, itemNum, itemVal, sticky, x, y));
                 }
             }
@@ -182,23 +207,35 @@ namespace Server.Maps
 
 
 
-        public void SpawnItems() {
+        public void SpawnItems()
+        {
             // Spawn what we have
-            for (int Y = 0; Y <= MaxY; Y++) {
-                for (int X = 0; X <= MaxX; X++) {
+            for (int Y = 0; Y <= MaxY; Y++)
+            {
+                for (int X = 0; X <= MaxX; X++)
+                {
                     // Check if the tile type is an item or a saved tile in case someone drops something
 
-                    if ((Tile[X, Y].Type == Enums.TileType.Item)) {
+                    if ((Tile[X, Y].Type == Enums.TileType.Item))
+                    {
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically
-                        if ((ItemManager.Items[Tile[X, Y].Data1].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data1].StackCap > 0) && Tile[X, Y].Data2 <= 0) {
+                        if ((ItemManager.Items[Tile[X, Y].Data1].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data1].StackCap > 0) && Tile[X, Y].Data2 <= 0)
+                        {
                             SpawnItem(Tile[X, Y].Data1, 1, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, X, Y, null);
-                        } else {
+                        }
+                        else
+                        {
                             SpawnItem(Tile[X, Y].Data1, Tile[X, Y].Data2, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, X, Y, null);
                         }
-                    } else if (Tile[X, Y].Type == Enums.TileType.DropShop && Tile[X, Y].Data2 > 0) {
-                        if ((ItemManager.Items[Tile[X, Y].Data2].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data2].StackCap > 0) && Tile[X, Y].Data2 <= 0) {
+                    }
+                    else if (Tile[X, Y].Type == Enums.TileType.DropShop && Tile[X, Y].Data2 > 0)
+                    {
+                        if ((ItemManager.Items[Tile[X, Y].Data2].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data2].StackCap > 0) && Tile[X, Y].Data2 <= 0)
+                        {
                             SpawnItem(Tile[X, Y].Data2, 1, false, false, Tile[X, Y].String2, X, Y, null);
-                        } else {
+                        }
+                        else
+                        {
                             SpawnItem(Tile[X, Y].Data2, Tile[X, Y].Data3, false, false, Tile[X, Y].String2, X, Y, null);
                         }
                     }
@@ -206,32 +243,41 @@ namespace Server.Maps
             }
         }
 
-        public int FindOpenNpcSlot() {
-            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-                if (ActiveNpc[i].Num == 0) {
+        public int FindOpenNpcSlot()
+        {
+            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++)
+            {
+                if (ActiveNpc[i].Num == 0)
+                {
                     return i;
                 }
             }
             return -1;
         }
 
-        public void SpawnNpc() {
+        public void SpawnNpc()
+        {
             SpawnNpc(false);
         }
 
-        public void SpawnNpc(bool checkSight) {
+        public void SpawnNpc(bool checkSight)
+        {
             if (Npc.Count <= 0) return;
 
-            if (SpawnMarker >= Npc.Count) {
+            if (SpawnMarker >= Npc.Count)
+            {
                 SpawnMarker = Npc.Count - 1;
             }
 
-            for (int i = 0; i < 100; i++) {
-                if (Server.Math.Rand(0, 100) < Npc[SpawnMarker].AppearanceRate && WillSpawnNow(Npc[SpawnMarker])) {
+            for (int i = 0; i < 100; i++)
+            {
+                if (Server.Math.Rand(0, 100) < Npc[SpawnMarker].AppearanceRate && WillSpawnNow(Npc[SpawnMarker]))
+                {
                     break;
                 }
                 SpawnMarker++;
-                if (SpawnMarker >= Npc.Count) {
+                if (SpawnMarker >= Npc.Count)
+                {
                     SpawnMarker = 0;
                 }
             }
@@ -240,36 +286,47 @@ namespace Server.Maps
 
             SpawnMarker++;
 
-            if (SpawnMarker >= Npc.Count) {
+            if (SpawnMarker >= Npc.Count)
+            {
                 SpawnMarker = 0;
             }
         }
 
-        public bool WillSpawnNow(MapNpcPreset npc) {
+        public bool WillSpawnNow(MapNpcPreset npc)
+        {
             int NPCNum = npc.NpcNum;
             if (NPCNum <= 0) return false;
 
-            switch (Globals.ServerTime) {
-                case Enums.Time.Dawn: {
-                        if (NpcManager.Npcs[NPCNum].SpawnsAtDawn) {
+            switch (Globals.ServerTime)
+            {
+                case Enums.Time.Dawn:
+                    {
+                        if (NpcManager.Npcs[NPCNum].SpawnsAtDawn)
+                        {
                             return true;
                         }
                     }
                     break;
-                case Enums.Time.Day: {
-                        if (NpcManager.Npcs[NPCNum].SpawnsAtDay) {
+                case Enums.Time.Day:
+                    {
+                        if (NpcManager.Npcs[NPCNum].SpawnsAtDay)
+                        {
                             return true;
                         }
                     }
                     break;
-                case Enums.Time.Dusk: {
-                        if (NpcManager.Npcs[NPCNum].SpawnsAtDusk) {
+                case Enums.Time.Dusk:
+                    {
+                        if (NpcManager.Npcs[NPCNum].SpawnsAtDusk)
+                        {
                             return true;
                         }
                     }
                     break;
-                case Enums.Time.Night: {
-                        if (NpcManager.Npcs[NPCNum].SpawnsAtNight) {
+                case Enums.Time.Night:
+                    {
+                        if (NpcManager.Npcs[NPCNum].SpawnsAtNight)
+                        {
                             return true;
                         }
                     }
@@ -279,11 +336,13 @@ namespace Server.Maps
             return false;
         }
 
-        public void SpawnNpc(MapNpcPreset npc) {
+        public void SpawnNpc(MapNpcPreset npc)
+        {
             SpawnNpc(npc, false);
         }
 
-        public void SpawnNpc(MapNpcPreset npc, bool checkSight) {
+        public void SpawnNpc(MapNpcPreset npc, bool checkSight)
+        {
             int NPCNum = 0;
             int X = 0;
             int Y = 0;
@@ -292,13 +351,14 @@ namespace Server.Maps
             // Check for empty NPC slot
             int npcSlot = FindOpenNpcSlot();
 
-            if (npcSlot < 0 || npcSlot >= Constants.MAX_MAP_NPCS) {
+            if (npcSlot < 0 || npcSlot >= Constants.MAX_MAP_NPCS)
+            {
                 return;
             }
 
             NPCNum = npc.NpcNum;
-            if (NPCNum > 0) {
-
+            if (NPCNum > 0)
+            {
                 ActiveNpc[npcSlot].Num = NPCNum;
                 ActiveNpc[npcSlot].Target = null;
 
@@ -313,7 +373,8 @@ namespace Server.Maps
 
                 //if (Npc[npcSlot].MinLevel == -1) {
                 //Npc[npcSlot].MinLevel = NpcManager.Npcs[Npc[npcSlot].NpcNum].RecruitLevel;
-                if (npc.MinLevel <= 0) {
+                if (npc.MinLevel <= 0)
+                {
                     npc.MinLevel = 1;
                     npc.MaxLevel = 1;
                 }// else {
@@ -328,46 +389,56 @@ namespace Server.Maps
                 ActiveNpc[npcSlot].CalculateOriginalAbility();
                 //ActiveNpc[npcSlot].CalculateOriginalMobility();
 
-                if (Server.Math.Rand(0, 1000) < 1) 
+                if (Server.Math.Rand(0, 1000) < 1)
                 {
                     ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
                 }
-               
+
                 ActiveNpc[npcSlot].HP = ActiveNpc[npcSlot].MaxHP;
 
                 ActiveNpc[npcSlot].Direction = (Enums.Direction)Server.Math.Rand(0, 4);
 
                 ActiveNpc[npcSlot].GenerateMoveset();
 
-                if (Moral == Enums.MapMoral.None) {
+                if (Moral == Enums.MapMoral.None)
+                {
                     ActiveNpc[npcSlot].GenerateHeldItem();
                 }
 
-                if (Server.Math.Rand(0, 100) < npc.StartStatusChance) {
+                if (Server.Math.Rand(0, 100) < npc.StartStatusChance)
+                {
                     ActiveNpc[npcSlot].StatusAilment = npc.StartStatus;
                     ActiveNpc[npcSlot].StatusAilmentCounter = npc.StartStatusCounter;
                 }
 
-                if (npc.SpawnX < 0 | npc.SpawnY < 0) {
+                if (npc.SpawnX < 0 | npc.SpawnY < 0)
+                {
                     // We'll try 100 times to randomly place the sprite
-                    for (int i = 1; i <= 50; i++) {
-                        if (Tile[X, Y].Type == Enums.TileType.Walkable || Tile[X, Y].Type == Enums.TileType.Slow) {
-
-                            if (checkSight) {
+                    for (int i = 1; i <= 50; i++)
+                    {
+                        if (Tile[X, Y].Type == Enums.TileType.Walkable || Tile[X, Y].Type == Enums.TileType.Slow)
+                        {
+                            if (checkSight)
+                            {
                                 bool seen = false;
-                                foreach (Client client in GetClients()) {
-                                    if (CanCharacterSeeDestination(client.Player.GetActiveRecruit(), X, Y)) {
+                                foreach (Client client in GetClients())
+                                {
+                                    if (CanCharacterSeeDestination(client.Player.GetActiveRecruit(), X, Y))
+                                    {
                                         seen = true;
                                         break;
                                     }
                                 }
-                                if (!seen) {
+                                if (!seen)
+                                {
                                     ActiveNpc[npcSlot].X = X;
                                     ActiveNpc[npcSlot].Y = Y;
                                     Spawned = true;
                                     break;
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 ActiveNpc[npcSlot].X = X;
                                 ActiveNpc[npcSlot].Y = Y;
                                 Spawned = true;
@@ -376,20 +447,23 @@ namespace Server.Maps
                         }
                     }
 
-                    for (int i = 1; i <= 50; i++) {
+                    for (int i = 1; i <= 50; i++)
+                    {
                         X = Server.Math.Rand(0, MaxX + 1);
                         Y = Server.Math.Rand(0, MaxY + 1);
 
                         // Check if the tile is walkable
-                        if (Tile[X, Y].Type == Enums.TileType.Walkable) {
-
+                        if (Tile[X, Y].Type == Enums.TileType.Walkable)
+                        {
                             ActiveNpc[npcSlot].X = X;
                             ActiveNpc[npcSlot].Y = Y;
                             Spawned = true;
                             break;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     // We no longer subtract one because Rand is ListIndex -1.
                     ActiveNpc[npcSlot].X = npc.SpawnX;
                     ActiveNpc[npcSlot].Y = npc.SpawnY;
@@ -397,10 +471,14 @@ namespace Server.Maps
                 }
 
                 // Didn't spawn, so now we'll just try to find a free tile
-                if (!Spawned) {
-                    for (Y = 0; Y <= MaxY; Y++) {
-                        for (X = 0; X <= MaxX; X++) {
-                            if (Tile[X, Y].Type == Enums.TileType.Walkable) {
+                if (!Spawned)
+                {
+                    for (Y = 0; Y <= MaxY; Y++)
+                    {
+                        for (X = 0; X <= MaxX; X++)
+                        {
+                            if (Tile[X, Y].Type == Enums.TileType.Walkable)
+                            {
                                 ActiveNpc[npcSlot].X = X;
                                 ActiveNpc[npcSlot].Y = Y;
                                 Spawned = true;
@@ -410,7 +488,8 @@ namespace Server.Maps
                 }
 
                 // If we suceeded in spawning then send it to everyone
-                if (Spawned) {
+                if (Spawned)
+                {
                     PacketHitList hitlist = null;
                     PacketHitList.MethodStart(ref hitlist);
                     PacketBuilder.AppendNpcSpawn(MapManager.RetrieveActiveMap(MapID), hitlist, npcSlot);
@@ -419,28 +498,29 @@ namespace Server.Maps
 
                     PacketHitList.MethodEnded(ref hitlist);
                 }
-
-
             }
-
         }
 
 
 
 
 
-        public void SpawnNpcs() {
+        public void SpawnNpcs()
+        {
             int startNum = Server.Math.Rand(MinNpcs, MaxNpcs + 1);
-            for (int i = 0; i < startNum; i++) {
+            for (int i = 0; i < startNum; i++)
+            {
                 SpawnNpc();
             }
         }
 
-        public void RemoveNpc(int mapNpcNum) {
+        public void RemoveNpc(int mapNpcNum)
+        {
             Npc[mapNpcNum] = new MapNpcPreset();
         }
 
-        public bool IsNpcSlotEmpty(int mapNpcNum) {
+        public bool IsNpcSlotEmpty(int mapNpcNum)
+        {
             return (ActiveNpc[mapNpcNum].Num == 0);
         }
 
@@ -463,36 +543,48 @@ namespace Server.Maps
         //    }
         //}
 
-        public void RemakePlayersList() {
+        public void RemakePlayersList()
+        {
             PlayersOnMap.Clear();
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying() && i.Player.MapID == this.MapID) {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying() && i.Player.MapID == this.MapID)
+                {
                     PlayersOnMap.Add(i.Player.CharID);
                 }
             }
         }
 
-        public IEnumerable<Client> GetClients() {
-            foreach (MapPlayer playerOnMap in PlayersOnMap.GetPlayers()) {
+        public IEnumerable<Client> GetClients()
+        {
+            foreach (MapPlayer playerOnMap in PlayersOnMap.GetPlayers())
+            {
                 //Client client = ClientManager.FindClientFromCharID(playerOnMap);
-                if (playerOnMap.Client != null && playerOnMap.Client.IsPlaying() && playerOnMap.Client.Player.MapID == this.MapID) {
+                if (playerOnMap.Client != null && playerOnMap.Client.IsPlaying() && playerOnMap.Client.Player.MapID == this.MapID)
+                {
                     yield return playerOnMap.Client;
                 }
             }
         }
 
-        public IEnumerable<Client> GetSurroundingClients(IMap map) {
+        public IEnumerable<Client> GetSurroundingClients(IMap map)
+        {
             // Return all of the clients on the current map
-            foreach (Client i in map.GetClients()) {
+            foreach (Client i in map.GetClients())
+            {
                 yield return i;
             }
             // Return all of the clients on the surrounding maps
-            for (int n = 1; n < 9; n++) {
+            for (int n = 1; n < 9; n++)
+            {
                 bool borderingMapActive = MapManager.IsBorderingMapLoaded(map, (Enums.MapID)n);
-                if (borderingMapActive && SeamlessWorldHelper.IsMapSeamless(map, (Enums.MapID)n)) {
+                if (borderingMapActive && SeamlessWorldHelper.IsMapSeamless(map, (Enums.MapID)n))
+                {
                     IMap borderingMap = MapManager.RetrieveBorderingMap(map, (Enums.MapID)n, true);
-                    if (borderingMap != null) {
-                        foreach (Client i in borderingMap.GetClients()) {
+                    if (borderingMap != null)
+                    {
+                        foreach (Client i in borderingMap.GetClients())
+                        {
                             yield return i;
                         }
                     }
@@ -501,7 +593,8 @@ namespace Server.Maps
         }
 
         public void SetAttribute(int x, int y, Enums.TileType tileType, int data1, int data2, int data3,
-            string string1, string string2, string string3) {
+            string string1, string string2, string string3)
+        {
             Tile[x, y].Data1 = data1;
             Tile[x, y].Data2 = data2;
             Tile[x, y].Data3 = data3;
@@ -511,12 +604,15 @@ namespace Server.Maps
             Tile[x, y].String3 = string3;
         }
 
-        public void SetTile(int x, int y, int tileX, int tileY, int tileset, int layer) {
+        public void SetTile(int x, int y, int tileX, int tileY, int tileset, int layer)
+        {
             SetTile(x, y, tileY * 14 + tileX, tileset, layer);
         }
 
-        public void SetTile(int x, int y, int tileNum, int tileset, int layer) {
-            switch (layer) {
+        public void SetTile(int x, int y, int tileNum, int tileset, int layer)
+        {
+            switch (layer)
+            {
                 case 0:
                     Tile[x, y].Ground = tileNum;
                     Tile[x, y].GroundSet = tileset;
@@ -556,16 +652,19 @@ namespace Server.Maps
             }
         }
 
-        public void SetNpcSpawnPoint(int npcSlot, int spawnX, int spawnY) {
+        public void SetNpcSpawnPoint(int npcSlot, int spawnX, int spawnY)
+        {
             Npc[npcSlot].SpawnX = spawnX;
             Npc[npcSlot].SpawnY = spawnY;
         }
 
-        public void SetNpc(int npcSlot, int npcNum) {
+        public void SetNpc(int npcSlot, int npcNum)
+        {
             Npc[npcSlot].NpcNum = npcNum;
         }
 
-        private bool CanCharacterSeeDestination(Combat.ICharacter viewer, int targetX, int targetY) {
+        private bool CanCharacterSeeDestination(Combat.ICharacter viewer, int targetX, int targetY)
+        {
             int viewerX = viewer.X;
             int viewerY = viewer.Y;
 
@@ -582,13 +681,17 @@ namespace Server.Maps
             if (targetY < viewerY - 7) return false;
 
             int darkness;
-            if (viewer.Darkness > -2) {
+            if (viewer.Darkness > -2)
+            {
                 darkness = viewer.Darkness;
-            } else {
+            }
+            else
+            {
                 darkness = Darkness;
             }
 
-            if (darkness > -1) {
+            if (darkness > -1)
+            {
                 int distance = (int)System.Math.Floor(2 * System.Math.Sqrt(System.Math.Pow(viewer.X - targetX, 2) + System.Math.Pow(viewer.Y - targetY, 2)));
                 if (distance > darkness - 1) return false;
             }

@@ -34,7 +34,8 @@ namespace Server.Shops
 
         #region Constructors
 
-        public ShopCollection(int maxShops) {
+        public ShopCollection(int maxShops)
+        {
             if (maxShops == 0)
                 maxShops = 50;
             this.maxShops = maxShops;
@@ -45,11 +46,13 @@ namespace Server.Shops
 
         #region Properties
 
-        public ListPair<int, Shop> Shops {
+        public ListPair<int, Shop> Shops
+        {
             get { return shops; }
         }
 
-        public int MaxShops {
+        public int MaxShops
+        {
             get { return maxShops; }
         }
 
@@ -57,7 +60,8 @@ namespace Server.Shops
 
         #region Indexers
 
-        public Shop this[int index] {
+        public Shop this[int index]
+        {
             get { return shops[index]; }
             set { shops[index] = value; }
         }

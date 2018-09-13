@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+using Server.Zones;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +25,6 @@
 
 namespace Server.Npcs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class NpcManagerBase
     {
         #region Fields
@@ -43,7 +43,8 @@ namespace Server.Npcs
 
         #region Properties
 
-        public static NpcCollection Npcs {
+        public static NpcCollection Npcs
+        {
             get { return npcs; }
         }
 
@@ -53,7 +54,8 @@ namespace Server.Npcs
 
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -65,7 +67,7 @@ namespace Server.Npcs
             }
         }
 
-        public static void LoadNpc(int npcNum, MySql database)
+        public static void LoadNpc(int npcNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (npcs.Npcs.ContainsKey(npcNum) == false)
                 npcs.Npcs.Add(npcNum, new Npc());
@@ -131,7 +133,8 @@ namespace Server.Npcs
             }
         }
 
-        public static void LoadNpcs(object object1) {
+        public static void LoadNpcs(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 for (int i = 1; i <= npcs.MaxNpcs; i++)
@@ -158,7 +161,7 @@ namespace Server.Npcs
                 npcs.Npcs.Add(npcNum, new Npc());
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
                 database.ExecuteNonQuery("DELETE FROM npc WHERE num = \'" + npcNum + "\'");
                 database.ExecuteNonQuery("DELETE FROM npc_drop WHERE npc_num = \'" + npcNum + "\'");
@@ -198,7 +201,6 @@ namespace Server.Npcs
                 }
                 database.EndTransaction();
             }
-
         }
 
         public static int AddNpc()
@@ -206,6 +208,25 @@ namespace Server.Npcs
             int index = npcs.MaxNpcs;
             SaveNpc(index);
             return index;
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM npc WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.NPCs
+                });
+            }
+
+            return results;
         }
 
         #endregion Methods

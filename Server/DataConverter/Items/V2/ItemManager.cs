@@ -51,7 +51,7 @@ namespace Server.DataConverter.Items.V2
                             item.Data1 = parse[5].ToInt();
                             item.Data2 = parse[6].ToInt();
                             item.Data3 = parse[7].ToInt();
-                            
+
 
                             item.Price = parse[8].ToInt();
                             item.Stackable = parse[9].ToBool();

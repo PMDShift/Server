@@ -30,33 +30,39 @@ namespace Server.Debug
         string currentSectionName;
         string codeSection;
 
-        public CodeTimer(string codeSection) {
+        public CodeTimer(string codeSection)
+        {
             stopwatch = new Stopwatch();
             resultsCollection = new Dictionary<string, TimeSpan>();
-            this.codeSection = codeSection; 
+            this.codeSection = codeSection;
         }
 
-        public void StartTimingSection(string sectionName) {
-            this.currentSectionName = sectionName;
+        public void StartTimingSection(string sectionName)
+        {
+            currentSectionName = sectionName;
             stopwatch.Start();
         }
 
-        public void EndTimingSection() {
+        public void EndTimingSection()
+        {
             stopwatch.Stop();
-            resultsCollection.Add(this.currentSectionName, stopwatch.Elapsed);
+            resultsCollection.Add(currentSectionName, stopwatch.Elapsed);
             stopwatch.Reset();
         }
 
-        public string GetResults() {
+        public string GetResults()
+        {
             long totalTicks = 0;
-            foreach (TimeSpan timeSpan in resultsCollection.Values) {
+            foreach (TimeSpan timeSpan in resultsCollection.Values)
+            {
                 totalTicks += timeSpan.Ticks;
             }
             StringBuilder resultString = new StringBuilder();
             resultString.Append("--- ");
-            resultString.Append(this.codeSection);
+            resultString.Append(codeSection);
             resultString.AppendLine(" ---");
-            foreach (string sectionName in resultsCollection.Keys) {
+            foreach (string sectionName in resultsCollection.Keys)
+            {
                 // Append section name
                 resultString.Append("[");
                 resultString.Append(sectionName);

@@ -27,7 +27,8 @@ namespace Server.Maps
     {
         #region Properties
 
-        DataManager.Maps.MapDump BaseMap {
+        DataManager.Maps.MapDump BaseMap
+        {
             get;
         }
 
@@ -36,21 +37,25 @@ namespace Server.Maps
 
         string YouTubeMusicID { get; set; }
 
-        TickCount ActivationTime {
+        TickCount ActivationTime
+        {
             get;
             set;
         }
 
-        bool ProcessingPaused {
+        bool ProcessingPaused
+        {
             get;
             set;
         }
 
-        Enums.MapType MapType {
+        Enums.MapType MapType
+        {
             get;
         }
 
-        ActiveItemCollection ActiveItem {
+        ActiveItemCollection ActiveItem
+        {
             get;
             set;
         }
@@ -61,140 +66,167 @@ namespace Server.Maps
         int NpcSpawnTime { get; set; }
         TickCount NpcSpawnWait { get; set; }
 
-        ActiveNpcCollection ActiveNpc {
+        ActiveNpcCollection ActiveNpc
+        {
             get;
             set;
         }
 
         int SpawnMarker { get; set; }
 
-        bool IsSaving {
+        bool IsSaving
+        {
             get;
             set;
         }
 
-        MapPlayersCollection PlayersOnMap {
+        MapPlayersCollection PlayersOnMap
+        {
             get;
         }
 
-        int Down {
-            get;
-            set;
-        }
-
-        bool Indoors {
+        int Down
+        {
             get;
             set;
         }
 
-        int Left {
+        bool Indoors
+        {
             get;
             set;
         }
 
-        string MapID {
+        int Left
+        {
+            get;
+            set;
+        }
+
+        string MapID
+        {
             get;
             set;
         }
 
         string IDPrefix { get; }
 
-        int MaxX {
+        int MaxX
+        {
             get;
             set;
         }
 
-        int MaxY {
+        int MaxY
+        {
             get;
             set;
         }
 
-        Enums.MapMoral Moral {
+        Enums.MapMoral Moral
+        {
             get;
             set;
         }
 
-        string Music {
+        string Music
+        {
             get;
             set;
         }
 
-        string Name {
+        string Name
+        {
             get;
             set;
         }
 
-        MapNpcPresetCollection Npc {
+        MapNpcPresetCollection Npc
+        {
             get;
             set;
         }
 
-        int OriginalDarkness {
+        int OriginalDarkness
+        {
             get;
             set;
         }
 
-        int Darkness {
+        int Darkness
+        {
             get;
             set;
         }
 
-        int Revision {
+        int Revision
+        {
             get;
             set;
         }
 
-        int Right {
+        int Right
+        {
             get;
             set;
         }
 
-        TileCollection Tile {
+        TileCollection Tile
+        {
             get;
             set;
         }
 
-        int Up {
+        int Up
+        {
             get;
             set;
         }
 
-        Enums.Weather Weather {
+        Enums.Weather Weather
+        {
             get;
             set;
         }
 
-        int TimeLimit {
+        int TimeLimit
+        {
             get;
             set;
         }
 
-        int DungeonIndex {
+        int DungeonIndex
+        {
             get;
             set;
         }
 
-        bool HungerEnabled {
+        bool HungerEnabled
+        {
             get;
             set;
         }
 
-        bool RecruitEnabled {
+        bool RecruitEnabled
+        {
             get;
             set;
         }
 
-        bool ExpEnabled {
+        bool ExpEnabled
+        {
             get;
             set;
         }
 
-        bool TempChange {
+        bool TempChange
+        {
             get;
             set;
         }
 
-        bool Cacheable {
+        bool Cacheable
+        {
             get;
         }
 

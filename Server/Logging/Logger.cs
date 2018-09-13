@@ -29,32 +29,39 @@ namespace Server.Logging
     public class Logger
     {
         const int LOG_THRESHOLD = 1000;
-        
+
         private static int logAmount;
 
         private static ConcurrentDictionary<string, StringBuilder> logs;
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             logs = new ConcurrentDictionary<string, StringBuilder>();
         }
 
-        public static void AppendToLog(string logFilePath, string dataToAppend) {
+        public static void AppendToLog(string logFilePath, string dataToAppend)
+        {
             AppendToLog(logFilePath, dataToAppend, true);
         }
 
-        public static void AppendToLog(string logFilePath, string dataToAppend, bool includeDate) {
+        public static void AppendToLog(string logFilePath, string dataToAppend, bool includeDate)
+        {
             StringBuilder log = logs.GetOrAdd(logFilePath, new StringBuilder());
 
 
-            if (includeDate) {
+            if (includeDate)
+            {
                 log.AppendLine("[" + DateTime.Now.ToString() + "] " + dataToAppend);
-            } else {
+            }
+            else
+            {
                 log.AppendLine(dataToAppend);
             }
 
             logAmount++;
 
-            if (logAmount > LOG_THRESHOLD) {
+            if (logAmount > LOG_THRESHOLD)
+            {
                 SaveLogs();
                 logAmount = 0;
             }
@@ -73,22 +80,27 @@ namespace Server.Logging
             //}
         }
 
-        public static void SaveLogs() {
-            foreach (string key in logs.Keys) {
+        public static void SaveLogs()
+        {
+            foreach (string key in logs.Keys)
+            {
                 StringBuilder log;
-                if (logs.TryGetValue(key, out log)) {
+                if (logs.TryGetValue(key, out log))
+                {
                     string logFilePath = key;
-                    if (logFilePath.StartsWith("/")) {
+                    if (logFilePath.StartsWith("/"))
+                    {
                         logFilePath = Path.Combine(IO.Paths.LogsFolder, logFilePath.Substring(1, logFilePath.Length - 1));
                     }
-                    if (System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(logFilePath)) == false) {
+                    if (System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(logFilePath)) == false)
+                    {
                         System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logFilePath));
                     }
-                    using (StreamWriter writer = new StreamWriter(logFilePath, true)) {
+                    using (StreamWriter writer = new StreamWriter(logFilePath, true))
+                    {
                         writer.Write(log);
                     }
                 }
-
             }
             logs.Clear();
         }

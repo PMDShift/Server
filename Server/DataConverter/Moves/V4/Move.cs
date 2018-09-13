@@ -20,9 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Server.DataConverter.Moves.V4 {
-    public class Move {
-
+namespace Server.DataConverter.Moves.V4
+{
+    public class Move
+    {
         #region Properties
 
 
@@ -80,7 +81,8 @@ namespace Server.DataConverter.Moves.V4 {
 
         #endregion Properties
 
-        public Move() {
+        public Move()
+        {
             AttackerAnim = new MoveAnimation();
             TravelingAnim = new MoveAnimation();
             DefenderAnim = new MoveAnimation();

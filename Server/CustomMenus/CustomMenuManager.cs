@@ -29,35 +29,45 @@ namespace Server.CustomMenus
         Client Client;
         Dictionary<string, CustomMenu> mMenus;
 
-        internal CustomMenuManager(Client client) {
+        internal CustomMenuManager(Client client)
+        {
             Client = client;
             mMenus = new Dictionary<string, CustomMenu>();
         }
 
-        public CustomMenu CreateMenu(string menuName, string backgroundImagePath, bool closeable) {
+        public CustomMenu CreateMenu(string menuName, string backgroundImagePath, bool closeable)
+        {
             return new CustomMenu(menuName, backgroundImagePath, closeable);
         }
 
-        public void AddMenu(CustomMenu menuToAdd) {
-            if (mMenus.ContainsKey(menuToAdd.MenuName) == false) {
+        public void AddMenu(CustomMenu menuToAdd)
+        {
+            if (mMenus.ContainsKey(menuToAdd.MenuName) == false)
+            {
                 mMenus.Add(menuToAdd.MenuName, menuToAdd);
             }
         }
 
-        public void SendMenu(string menuName) {
-            if (mMenus.ContainsKey(menuName)) {
+        public void SendMenu(string menuName)
+        {
+            if (mMenus.ContainsKey(menuName))
+            {
                 mMenus[menuName].SendMenuTo(Client);
             }
         }
 
-        public bool IsMenuOpen(string menuName) {
+        public bool IsMenuOpen(string menuName)
+        {
             return mMenus.ContainsKey(menuName);
         }
 
         // TODO: Add subs to scripts
-        internal void ProcessTCP(string[] parse) {
-            if (IsMenuOpen(parse[1])) {
-                switch (parse[0].ToLower()) {
+        internal void ProcessTCP(string[] parse)
+        {
+            if (IsMenuOpen(parse[1]))
+            {
+                switch (parse[0].ToLower())
+                {
                     case "picclick":
                         ScriptManager.InvokeSub("MenuPicClicked", Client, parse[1], parse[2].ToInt());
                         break;

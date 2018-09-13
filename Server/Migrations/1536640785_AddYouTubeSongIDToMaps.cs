@@ -9,7 +9,8 @@ namespace Server.Migrations
     [Migration(1536640785)]
     public class AddYouTubeSongIDToMaps : AutoReversingMigration
     {
-        public override void Up() {
+        public override void Up()
+        {
             Create.Column("youtube_music_id").OnTable("map_data").AsString().NotNullable().WithDefaultValue("");
         }
     }

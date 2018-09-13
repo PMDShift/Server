@@ -24,9 +24,10 @@ using PMDCP.DatabaseConnector;
 using PMDCP.DatabaseConnector.MySql;
 using Server.Database;
 
-namespace Server.WonderMails {
-    public class WonderMailManager {
-
+namespace Server.WonderMails
+{
+    public class WonderMailManager
+    {
         static MissionPoolCollection missionPools;
 
 
@@ -38,23 +39,31 @@ namespace Server.WonderMails {
 
         #endregion Events
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             missionPools = new MissionPoolCollection();
         }
 
-        public static MissionPoolCollection Missions {
+        public static MissionPoolCollection Missions
+        {
             get { return missionPools; }
         }
 
-        public static void LoadMissionPools(object object1) {
+        public static void LoadMissionPools(object object1)
+        {
             int count = Enum.GetValues(typeof(Enums.JobDifficulty)).Length;
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data)) {
-                for (int i = 0; i < count; i++) {
-                    try {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    try
+                    {
                         LoadMissionPool(dbConnection, i);
                         if (LoadUpdate != null)
                             LoadUpdate(null, new LoadingUpdateEventArgs(i, count - 1));
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         Exceptions.ErrorLogger.WriteToErrorLog(ex, "Loading MissionPool #" + i.ToString());
                     }
                 }
@@ -63,7 +72,8 @@ namespace Server.WonderMails {
                 LoadComplete(null, null);
         }
 
-        public static void LoadMissionPool(DatabaseConnection dbConnection, int difficulty) {
+        public static void LoadMissionPool(DatabaseConnection dbConnection, int difficulty)
+        {
             MissionPool missionPool = new MissionPool();
             var database = dbConnection.Database;
 
@@ -91,7 +101,7 @@ namespace Server.WonderMails {
                 data.NpcNum = column["NpcNum"].ValueString.ToInt();
                 missionPool.Enemies.Add(data);
             }
-            
+
             query = "SELECT mission_reward.ItemNum, mission_reward.ItemAmount, mission_reward.ItemTag " +
                 "FROM mission_reward " +
                 "WHERE mission_reward.Rank = \'" + difficulty + "\'  " +
@@ -115,14 +125,15 @@ namespace Server.WonderMails {
             var database = dbConnection.Database;
 
             database.ExecuteNonQuery("DELETE FROM mission_client WHERE Rank = \'" + difficulty + "\'");
-            
-            for (int i = 0; i < missionPools.MissionPools[difficulty].MissionClients.Count; i++) {
+
+            for (int i = 0; i < missionPools.MissionPools[difficulty].MissionClients.Count; i++)
+            {
                 MissionClientData data = missionPools.MissionPools[difficulty].MissionClients[i];
-                
             }
 
             database.ExecuteNonQuery("DELETE FROM mission_enemy WHERE Rank = \'" + difficulty + "\'");
-            for (int i = 0; i < missionPools.MissionPools[difficulty].Enemies.Count; i++) {
+            for (int i = 0; i < missionPools.MissionPools[difficulty].Enemies.Count; i++)
+            {
                 MissionEnemyData data = missionPools.MissionPools[difficulty].Enemies[i];
 
                 database.AddRow("mission_enemy", new IDataColumn[] {
@@ -133,7 +144,8 @@ namespace Server.WonderMails {
             }
 
             database.ExecuteNonQuery("DELETE FROM mission_reward WHERE Rank = \'" + difficulty + "\'");
-            for (int i = 0; i < missionPools.MissionPools[difficulty].Rewards.Count; i++) {
+            for (int i = 0; i < missionPools.MissionPools[difficulty].Rewards.Count; i++)
+            {
                 MissionRewardData data = missionPools.MissionPools[difficulty].Rewards[i];
 
 

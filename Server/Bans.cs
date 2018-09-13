@@ -31,7 +31,7 @@ namespace Server
 {
     public class Bans
     {
-    // Bans a player
+        // Bans a player
         public static void BanPlayer(DatabaseConnection dbConnection, string ip, string bannedID, string bannedAccount,
             string bannedMac, string bannedUUID, string bannerID, string bannerIP, string unbanDate, Enums.BanType banType)
         {
@@ -49,46 +49,61 @@ namespace Server
             dbConnection.Database.UpdateOrInsert("bans", columns);
         }
 
-        public static Enums.BanType IsIPBanned(DatabaseConnection dbConnection, Client client) {
+        public static Enums.BanType IsIPBanned(DatabaseConnection dbConnection, Client client)
+        {
             string ipToTest = client.IP.ToString();
             return IsBanned(dbConnection, Enums.BanMethod.PlayerIP, ipToTest);
         }
 
-        public static Enums.BanType IsMacBanned(DatabaseConnection dbConnection, Client client) {
+        public static Enums.BanType IsMacBanned(DatabaseConnection dbConnection, Client client)
+        {
             if (client.MacAddress == "") return Enums.BanType.None;
             return IsBanned(dbConnection, Enums.BanMethod.PlayerMAC, client.MacAddress);
         }
 
-        public static Enums.BanType IsCharacterBanned(DatabaseConnection dbConnection, string id) {
+        public static Enums.BanType IsCharacterBanned(DatabaseConnection dbConnection, string id)
+        {
             return IsBanned(dbConnection, Enums.BanMethod.PlayerID, id);
         }
 
-        public static Enums.BanType IsBanned(DatabaseConnection dbConnection, Enums.BanMethod banMethod, string value) {
+        public static Enums.BanType IsBanned(DatabaseConnection dbConnection, Enums.BanMethod banMethod, string value)
+        {
             IDataColumn[] columns = RetrieveField(dbConnection, "UnbanDate", banMethod, value);
             IDataColumn[] dataColumns = RetrieveField(dbConnection, "BanType", banMethod, value);
-            if (columns != null) {
+            if (columns != null)
+            {
                 string unbanDate = (string)columns[0].Value;
-                if (unbanDate == "-----") {
+                if (unbanDate == "-----")
+                {
                     // It's a permanent ban.
                     return (Enums.BanType)((int)dataColumns[0].Value);
-                } else {
+                }
+                else
+                {
                     // It's a temp ban
                     DateTime dtUnbanDate = DateTime.Parse(unbanDate);
-                    if (DateTime.Now > dtUnbanDate) {
+                    if (DateTime.Now > dtUnbanDate)
+                    {
                         RemoveBan(dbConnection, banMethod, value);
                         return Enums.BanType.None;
-                    } else {
+                    }
+                    else
+                    {
                         return (Enums.BanType)((int)dataColumns[0].Value);
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // columns was null, which means their entry was not found
                 return Enums.BanType.None;
             }
         }
 
-        private static string SelectColumnForBanMethod(Enums.BanMethod banMethod) {
-            switch (banMethod) {
+        private static string SelectColumnForBanMethod(Enums.BanMethod banMethod)
+        {
+            switch (banMethod)
+            {
                 case Enums.BanMethod.PlayerIP:
                     return "BannedPlayerIP";
                 case Enums.BanMethod.PlayerMAC:
@@ -100,23 +115,26 @@ namespace Server
             }
         }
 
-        public static void RemoveBan(DatabaseConnection dbConnection, Enums.BanMethod banMethod, string value) {
+        public static void RemoveBan(DatabaseConnection dbConnection, Enums.BanMethod banMethod, string value)
+        {
             var column = SelectColumnForBanMethod(banMethod);
 
             dbConnection.Database.DeleteRow("bans", $"{column} = @Value", new { Value = value });
         }
 
-        private static IDataColumn[] RetrieveField(DatabaseConnection dbConnection, string fieldToRetrieve, Enums.BanMethod banMethod, string valueToSearch) {
+        private static IDataColumn[] RetrieveField(DatabaseConnection dbConnection, string fieldToRetrieve, Enums.BanMethod banMethod, string valueToSearch)
+        {
             var column = SelectColumnForBanMethod(banMethod);
 
             IDataColumn[] columns = dbConnection.Database.RetrieveRow("bans", fieldToRetrieve, column + "=\"" + valueToSearch + "\"");
-            if (columns != null) {
+            if (columns != null)
+            {
                 return columns;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
-
-
     }
 }

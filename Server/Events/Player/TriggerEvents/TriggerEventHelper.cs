@@ -27,21 +27,27 @@ namespace Server.Events.Player.TriggerEvents
 {
     public class TriggerEventHelper
     {
-        public static void InvokeGenericTrigger(ITriggerEvent triggerEvent, Client client) {
-            switch (triggerEvent.Action) {
-                case TriggerEventAction.PlayStory: {
-                    StoryManager.PlayStory(client, triggerEvent.TriggerCommand);
+        public static void InvokeGenericTrigger(ITriggerEvent triggerEvent, Client client)
+        {
+            switch (triggerEvent.Action)
+            {
+                case TriggerEventAction.PlayStory:
+                    {
+                        StoryManager.PlayStory(client, triggerEvent.TriggerCommand);
                     }
                     break;
-                case TriggerEventAction.RunScript: {
-                    Scripting.ScriptManager.InvokeSub("TriggerEventScript", client, triggerEvent);
+                case TriggerEventAction.RunScript:
+                    {
+                        Scripting.ScriptManager.InvokeSub("TriggerEventScript", client, triggerEvent);
                     }
                     break;
             }
         }
 
-        internal static ITriggerEvent CreateTriggerEventInstance(TriggerEventTrigger triggerEvent) {
-            switch (triggerEvent) {
+        internal static ITriggerEvent CreateTriggerEventInstance(TriggerEventTrigger triggerEvent)
+        {
+            switch (triggerEvent)
+            {
                 case TriggerEventTrigger.MapLoad:
                     return new MapLoadTriggerEvent();
                 case TriggerEventTrigger.SteppedOnTile:

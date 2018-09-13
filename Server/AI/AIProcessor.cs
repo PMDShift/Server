@@ -35,14 +35,17 @@ namespace Server.AI
         public static readonly int MapTTL = 10000;
         public static MapGC mapGC;
 
-        internal static void InitGameLoop() {
+        internal static void InitGameLoop()
+        {
             ThreadManager.StartOnThreadParams(new System.Threading.WaitCallback(ProcessAI), Constants.GAME_SPEED);
         }
 
-        internal static void ProcessAI(Object obj) {
+        internal static void ProcessAI(Object obj)
+        {
             // Get the game speed
             int loopPause = (int)obj;
-            if (loopPause == 0) {
+            if (loopPause == 0)
+            {
                 loopPause = 500;
             }
             Events.World.TimedEventManager.Initialize();
@@ -61,12 +64,16 @@ namespace Server.AI
             mapGCTimedEvent.SetInterval(Core.GetTickCount(), 1 * 60 * 1000);
             Events.World.TimedEventManager.TimedEvents.Add(mapGCTimedEvent);
 
-            do {
-                try {
-                    if (tickCount != null) {
+            do
+            {
+                try
+                {
+                    if (tickCount != null)
+                    {
                         int timePassed = Core.GetTickCount().Tick - tickCount.Tick;
 
-                        if (timePassed < loopPause) {
+                        if (timePassed < loopPause)
+                        {
                             loopDetector.IncrementLoopCount();
                         }
                     }
@@ -78,7 +85,8 @@ namespace Server.AI
                     // Now that we have a list of all active maps, lets process the AI on each one
                     //Parallel.ForEach(activeMaps, map =>
                     //{
-                    foreach (IMap map in activeMaps) {
+                    foreach (IMap map in activeMaps)
+                    {
                         MapAIProcessingTask aiProcessingTask = new MapAIProcessingTask(map);
                         aiProcessingTask.ProcessAIThreadPoolCallback(null);
                         //ThreadPool.QueueUserWorkItem(new WaitCallback(aiProcessingTask.ProcessAIThreadPoolCallback));
@@ -90,34 +98,45 @@ namespace Server.AI
 
                     // Pauses the loop for the time specified
                     System.Threading.Thread.Sleep(loopPause);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Server.Exceptions.ErrorLogger.WriteToErrorLog(ex, "AIProcessor");
                 }
             } while (true);
         }
 
-        public static bool MoveNpcInDirection(Enums.Direction direction, IMap map, Client target, PacketHitList packetList, int mapNpcSlot) {
-            switch (direction) {
-                case Enums.Direction.Up: {
+        public static bool MoveNpcInDirection(Enums.Direction direction, IMap map, Client target, PacketHitList packetList, int mapNpcSlot)
+        {
+            switch (direction)
+            {
+                case Enums.Direction.Up:
+                    {
                         return MoveNpcUp(map, target, packetList, mapNpcSlot);
                     }
-                case Enums.Direction.Down: {
+                case Enums.Direction.Down:
+                    {
                         return MoveNpcDown(map, target, packetList, mapNpcSlot);
                     }
-                case Enums.Direction.Left: {
+                case Enums.Direction.Left:
+                    {
                         return MoveNpcLeft(map, target, packetList, mapNpcSlot);
                     }
-                case Enums.Direction.Right: {
+                case Enums.Direction.Right:
+                    {
                         return MoveNpcRight(map, target, packetList, mapNpcSlot);
                     }
             }
             return false;
         }
 
-        public static bool MoveNpcUp(IMap map, Client target, PacketHitList packetList, int mapNpcSlot) {
+        public static bool MoveNpcUp(IMap map, Client target, PacketHitList packetList, int mapNpcSlot)
+        {
             // Up
-            if (map.ActiveNpc[mapNpcSlot].Y > target.Player.Y) {
-                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Up)) {
+            if (map.ActiveNpc[mapNpcSlot].Y > target.Player.Y)
+            {
+                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Up))
+                {
                     MovementProcessor.NpcMove(packetList, map, mapNpcSlot, map.ActiveNpc[mapNpcSlot].Direction, Enums.Speed.Walking);
                     return true;
                 }
@@ -125,10 +144,13 @@ namespace Server.AI
             return false;
         }
 
-        public static bool MoveNpcDown(IMap map, Client target, PacketHitList packetList, int mapNpcSlot) {
+        public static bool MoveNpcDown(IMap map, Client target, PacketHitList packetList, int mapNpcSlot)
+        {
             // Down
-            if (map.ActiveNpc[mapNpcSlot].Y < target.Player.Y) {
-                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Down)) {
+            if (map.ActiveNpc[mapNpcSlot].Y < target.Player.Y)
+            {
+                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Down))
+                {
                     MovementProcessor.NpcMove(packetList, map, mapNpcSlot, map.ActiveNpc[mapNpcSlot].Direction, Enums.Speed.Walking);
                     return true;
                 }
@@ -136,10 +158,13 @@ namespace Server.AI
             return false;
         }
 
-        public static bool MoveNpcLeft(IMap map, Client target, PacketHitList packetList, int mapNpcSlot) {
+        public static bool MoveNpcLeft(IMap map, Client target, PacketHitList packetList, int mapNpcSlot)
+        {
             // Left
-            if (map.ActiveNpc[mapNpcSlot].X > target.Player.X) {
-                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Left)) {
+            if (map.ActiveNpc[mapNpcSlot].X > target.Player.X)
+            {
+                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Left))
+                {
                     MovementProcessor.NpcMove(packetList, map, mapNpcSlot, map.ActiveNpc[mapNpcSlot].Direction, Enums.Speed.Walking);
                     return true;
                 }
@@ -147,21 +172,18 @@ namespace Server.AI
             return false;
         }
 
-        public static bool MoveNpcRight(IMap map, Client target, PacketHitList packetList, int mapNpcSlot) {
+        public static bool MoveNpcRight(IMap map, Client target, PacketHitList packetList, int mapNpcSlot)
+        {
             // Right
-            if (map.ActiveNpc[mapNpcSlot].X < target.Player.X) {
-                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Right)) {
+            if (map.ActiveNpc[mapNpcSlot].X < target.Player.X)
+            {
+                if (MovementProcessor.CanNpcMove(map, mapNpcSlot, Enums.Direction.Right))
+                {
                     MovementProcessor.NpcMove(packetList, map, mapNpcSlot, map.ActiveNpc[mapNpcSlot].Direction, Enums.Speed.Walking);
                     return true;
                 }
             }
             return false;
         }
-
-
-
-
-
-
     }
 }

@@ -12,10 +12,12 @@ namespace Server.Discord.Commands
     {
         [Command("team")]
         [Summary("Displays your current ingame team.")]
-        public async Task TeamAsync() {
+        public async Task TeamAsync()
+        {
             var client = ClientManager.FindClient(Context.User.Id);
 
-            if (client == null) {
+            if (client == null)
+            {
                 await Context.Channel.SendMessageAsync("Unable to display team data. Make sure you are online and your account is connected.");
                 return;
             }
@@ -24,14 +26,18 @@ namespace Server.Discord.Commands
             infoBuilder.AppendLine("Current Team:");
             infoBuilder.AppendLine();
 
-            for (var i = 0; i < client.Player.Team.Length; i++) {
+            for (var i = 0; i < client.Player.Team.Length; i++)
+            {
                 var recruit = client.Player.Team[i];
 
-                if (recruit.Loaded) {
+                if (recruit.Loaded)
+                {
                     var pokemon = Pokedex.Pokedex.GetPokemon(recruit.Species);
 
                     infoBuilder.AppendLine($"Slot {i + 1}: {pokemon.Name}, Level {recruit.Level}");
-                } else {
+                }
+                else
+                {
                     infoBuilder.AppendLine($"Slot {i + 1}: Empty");
                 }
             }

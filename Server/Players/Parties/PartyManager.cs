@@ -1,4 +1,16 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using PMDCP.Core;
+using PMDCP.DatabaseConnector;
+using PMDCP.DatabaseConnector.MySql;
+
+using Server.Network;
+using System.Threading;
+using Server.Database;
+using Server.Maps;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,19 +30,6 @@
 
 namespace Server.Players.Parties
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    using PMDCP.Core;
-    using PMDCP.DatabaseConnector;
-    using PMDCP.DatabaseConnector.MySql;
-
-    using Server.Network;
-    using System.Threading;
-    using Server.Database;
-    using Server.Maps;
-
     public class PartyManager
     {
         #region Fields
@@ -42,32 +41,42 @@ namespace Server.Players.Parties
 
         #region Methods
 
-        public static int CountActiveParties() {
+        public static int CountActiveParties()
+        {
             int count = 0;
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 count = parties.Count;
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
             return count;
         }
 
-        public static void CreateNewParty(Client leader) {
+        public static void CreateNewParty(Client leader)
+        {
             PacketHitList hitlist = null;
             PacketHitList.MethodStart(ref hitlist);
             List<string> partyIDs = new List<string>();
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 partyIDs = LoadPartyIDList(dbConnection.Database);
             }
 
-            if (leader.Player.PartyID == null) {
+            if (leader.Player.PartyID == null)
+            {
                 string partyID = null;
                 rwLock.EnterWriteLock();
-                try {
-                    while (true) {
+                try
+                {
+                    while (true)
+                    {
                         string tempID = Security.PasswordGen.Generate(10, 15);
-                        if (partyIDs.Contains(tempID) == false) {
+                        if (partyIDs.Contains(tempID) == false)
+                        {
                             partyID = tempID;
                             break;
                         }
@@ -75,32 +84,43 @@ namespace Server.Players.Parties
                     Party party = new Party(partyID, leader);
                     leader.Player.PartyID = partyID;
                     parties.Add(partyID, party);
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitWriteLock();
                 }
                 leader.Player.AddExpKitModule(new AvailableExpKitModule(Enums.ExpKitModules.Party, true));
                 PacketBuilder.AppendPartyMemberDataFor(leader, hitlist, 0);
                 hitlist.AddPacket(leader, PacketBuilder.CreateChatMsg("You have created a new party!", Text.BrightGreen));
-            } else {
+            }
+            else
+            {
                 hitlist.AddPacket(leader, PacketBuilder.CreateChatMsg("You are already in a party!", Text.BrightRed));
             }
 
             PacketHitList.MethodEnded(ref hitlist);
         }
 
-        public static void DisbandParty(Party party) {
+        public static void DisbandParty(Party party)
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 int partyIndex = parties.IndexOfValue(party);
-                if (partyIndex > -1) {
+                if (partyIndex > -1)
+                {
                     parties.RemoveAt(partyIndex);
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
-            
-            foreach (Client client in party.GetOnlineMemberClients()) {
-                if (client.IsPlaying()) {
+
+            foreach (Client client in party.GetOnlineMemberClients())
+            {
+                if (client.IsPlaying())
+                {
                     client.Player.RemoveExpKitModule(Enums.ExpKitModules.Party);
                     client.Player.PartyID = null;
                     Messenger.SendDisbandPartyTo(client);
@@ -109,56 +129,76 @@ namespace Server.Players.Parties
             }
         }
 
-        public static Party FindParty(string partyID) {
+        public static Party FindParty(string partyID)
+        {
             Party party = null;
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 int partyIndex = parties.IndexOfKey(partyID);
-                if (partyIndex > -1) {
+                if (partyIndex > -1)
+                {
                     party = parties.ValueByIndex(partyIndex);
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
             return party;
         }
 
-        public static Party FindPlayerParty(Client client) {
-            if (client != null) {
-                if (!string.IsNullOrEmpty(client.Player.PartyID)) {
+        public static Party FindPlayerParty(Client client)
+        {
+            if (client != null)
+            {
+                if (!string.IsNullOrEmpty(client.Player.PartyID))
+                {
                     return FindParty(client.Player.PartyID);
-                } else {
+                }
+                else
+                {
                     return null;
                 }
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             parties = new ListPair<string, Party>();
         }
 
-        public static void JoinParty(string partyID, Client client) {
+        public static void JoinParty(string partyID, Client client)
+        {
             JoinParty(FindParty(partyID), client);
         }
 
-        public static void JoinParty(Party party, Client client) {
+        public static void JoinParty(Party party, Client client)
+        {
             PacketHitList hitlist = null;
             PacketHitList.MethodStart(ref hitlist);
 
-            if (party != null) {
+            if (party != null)
+            {
                 Client leader = party.GetLeader();
-                if (Combat.MoveProcessor.IsInAreaRange(1, client.Player.X, client.Player.Y, leader.Player.X, leader.Player.Y)) {
-                    if (party.AddToParty(client)) {
+                if (Combat.MoveProcessor.IsInAreaRange(1, client.Player.X, client.Player.Y, leader.Player.X, leader.Player.Y))
+                {
+                    if (party.AddToParty(client))
+                    {
                         client.Player.PartyID = party.PartyID;
                         client.Player.AddExpKitModule(new AvailableExpKitModule(Enums.ExpKitModules.Party, true));
                         hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have joined the party!", Text.BrightGreen));
                         //PartyMember member = party.FindMember(client.Player.CharID);
                         int slot = party.GetMemberSlot(client.Player.CharID);
                         //Messenger.SendPartyMemberData(client, member, slot);
-                        foreach (Client i in party.GetOnlineMemberClients()) {
-                            if (i.IsPlaying() && i != client) {
+                        foreach (Client i in party.GetOnlineMemberClients())
+                        {
+                            if (i.IsPlaying() && i != client)
+                            {
                                 //PartyMember teamMember = party.Members.FindMember(i.Player.CharID);
                                 //int teamMemberSlot = party.Members.GetMemberSlot(i.Player.CharID);
                                 //Messenger.SendPartyMemberData(client, teamMember, teamMemberSlot);
@@ -167,10 +207,14 @@ namespace Server.Players.Parties
                             }
                             PacketBuilder.AppendPartyMemberData(i, hitlist, slot);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You couldn't join the party!", Text.BrightRed));
                     }
-                } else {
+                }
+                else
+                {
                     Messenger.PlayerMsg(client, "You need to stand next to the leader to join the party!", Text.BrightRed);
                 }
             }
@@ -178,68 +222,83 @@ namespace Server.Players.Parties
             PacketHitList.MethodEnded(ref hitlist);
         }
 
-        public static void RemoveFromParty(string clientID) {
+        public static void RemoveFromParty(string clientID)
+        {
             Party partyData = null;
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 partyData = LoadCharacterParty(dbConnection.Database, clientID);
             }
 
-            if (partyData != null) {
-
+            if (partyData != null)
+            {
                 partyData.Remove(clientID);
 
                 PerformPartyChecks(partyData);
             }
         }
 
-        public static void RemoveFromParty(string partyID, Client client) {
+        public static void RemoveFromParty(string partyID, Client client)
+        {
             RemoveFromParty(FindParty(partyID), client);
         }
 
-        public static void RemoveFromParty(Party party, Client client) {
-            if (party != null) {
+        public static void RemoveFromParty(Party party, Client client)
+        {
+            if (party != null)
+            {
                 //if (CanBeRemovedFromParty(party, client)) {
-                    int slot = party.GetMemberSlot(client.Player.CharID);
-                    
-                    party.Remove(client);
-                    client.Player.PartyID = null;
-                    client.Player.RemoveExpKitModule(Enums.ExpKitModules.Party);
-                    Messenger.PlayerMsg(client, "You have been removed from your party!", Text.Black);
-                    Messenger.SendLeftParty(party, slot);
-                    Messenger.PartyMsg(party, client.Player.Name + " has been removed from the party!", Text.BrightGreen);
-                    if (slot == 0 && party.IsLeaderInParty()) {
-                        Client client2 = party.GetLeader();
-                        if (client2 != null) {
-                            Messenger.PartyMsg(party, client2.Player.Name + " is now the party leader!", Text.BrightGreen);
-                        }
+                int slot = party.GetMemberSlot(client.Player.CharID);
+
+                party.Remove(client);
+                client.Player.PartyID = null;
+                client.Player.RemoveExpKitModule(Enums.ExpKitModules.Party);
+                Messenger.PlayerMsg(client, "You have been removed from your party!", Text.Black);
+                Messenger.SendLeftParty(party, slot);
+                Messenger.PartyMsg(party, client.Player.Name + " has been removed from the party!", Text.BrightGreen);
+                if (slot == 0 && party.IsLeaderInParty())
+                {
+                    Client client2 = party.GetLeader();
+                    if (client2 != null)
+                    {
+                        Messenger.PartyMsg(party, client2.Player.Name + " is now the party leader!", Text.BrightGreen);
                     }
-                    PerformPartyChecks(party);
+                }
+                PerformPartyChecks(party);
                 //} else {
                 //    Messenger.PlayerMsg(client, "You can't be removed from your party here!", Text.Black);
                 //}
-            } else {
+            }
+            else
+            {
                 Messenger.PlayerMsg(client, "You are not in a party!", Text.Black);
             }
         }
 
         //public static bool CanBeRemovedFromParty(Party party, Client client) {
-        
+
         //    if (client.Player.Map.Moral == Enums.MapMoral.None) return false;
 
         //    return true;
         //}
 
-        private static void PerformPartyChecks(Party party) {
+        private static void PerformPartyChecks(Party party)
+        {
             //bool shouldDisband = false;
-            if (party.MemberCount == 0) {
+            if (party.MemberCount == 0)
+            {
                 //shouldDisband = true;
                 rwLock.EnterWriteLock();
-                try {
+                try
+                {
                     int partyIndex = parties.IndexOfValue(party);
-                    if (partyIndex > -1) {
+                    if (partyIndex > -1)
+                    {
                         parties.RemoveAt(partyIndex);
                     }
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitWriteLock();
                 }
             }
@@ -254,41 +313,46 @@ namespace Server.Players.Parties
             HandleMemberLogout(party.PartyID, null);
         }
 
-        public static void LoadCharacterParty(Client client) {
-            
+        public static void LoadCharacterParty(Client client)
+        {
             Party partyData = null;
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 partyData = LoadCharacterParty(dbConnection.Database, client.Player.CharID);
             }
 
-            if (partyData != null) {
-                if (!parties.ContainsKey(partyData.PartyID)) {
+            if (partyData != null)
+            {
+                if (!parties.ContainsKey(partyData.PartyID))
+                {
                     parties.Add(partyData.PartyID, partyData);
                 }
                 client.Player.PartyID = partyData.PartyID;
                 //party.SwitchOutExtraMembers();
             }
-
-            
-            
         }
 
-        public static void HandleMemberLogout(string partyID, string leavingChar) {
+        public static void HandleMemberLogout(string partyID, string leavingChar)
+        {
             Party party = FindParty(partyID);
             int onlineClients = 0;
-            if (party != null) {
-                foreach (Client client in party.GetOnlineMemberClients()) {
-                    if (client.Player.CharID != leavingChar) {
+            if (party != null)
+            {
+                foreach (Client client in party.GetOnlineMemberClients())
+                {
+                    if (client.Player.CharID != leavingChar)
+                    {
                         onlineClients++;
                     }
                 }
-                if (onlineClients <= 0) {
+                if (onlineClients <= 0)
+                {
                     parties.RemoveAtKey(partyID);
                 }
             }
         }
 
-        public static List<string> LoadPartyIDList(MySql database)
+        public static List<string> LoadPartyIDList(PMDCP.DatabaseConnector.MySql.MySql database)
         {
             List<string> idList = new List<string>();
 
@@ -309,7 +373,7 @@ namespace Server.Players.Parties
             return idList;
         }
 
-        public static Party LoadParty(MySql database, string partyID)
+        public static Party LoadParty(PMDCP.DatabaseConnector.MySql.MySql database, string partyID)
         {
             Party partyData = new Party(partyID);
 
@@ -327,7 +391,7 @@ namespace Server.Players.Parties
             return partyData;
         }
 
-        public static Party LoadCharacterParty(MySql database, string charID)
+        public static Party LoadCharacterParty(PMDCP.DatabaseConnector.MySql.MySql database, string charID)
         {
             string partyID = "";
 
@@ -363,7 +427,7 @@ namespace Server.Players.Parties
             return partyData;
         }
 
-        public static void LoadParty(MySql database, Party partyData)
+        public static void LoadParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             string query = "SELECT parties.CharID " +
                 "FROM parties " +
@@ -376,10 +440,9 @@ namespace Server.Players.Parties
                     partyData.Members.Add(rows[i]["CharID"].ValueString);
                 }
             }
-
         }
 
-        public static void SaveParty(MySql database, Party partyData)
+        public static void SaveParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             database.ExecuteNonQuery("DELETE FROM parties WHERE PartyID = \'" + partyData.PartyID + "\'");
             //database.DeleteRow("friends", "CharID = \'" + playerData.CharID + "\'");
@@ -392,10 +455,9 @@ namespace Server.Players.Parties
                     database.CreateColumn(false, "CharID", partyData.Members[i])
                 });
             }
-
         }
 
-        public static void DeleteParty(MySql database, Party partyData)
+        public static void DeleteParty(PMDCP.DatabaseConnector.MySql.MySql database, Party partyData)
         {
             database.ExecuteNonQuery("DELETE FROM parties WHERE PartyID = \'" + partyData.PartyID + "\'");
         }

@@ -33,7 +33,7 @@ namespace Server.DataConverter.RDungeons.V1
         public int MaxFloors { get; set; }
         public bool Recruitment { get; set; }
         public bool Exp { get; set; }
-        public GeneratorOptions Options { get {return options;} }
+        public GeneratorOptions Options { get { return options; } }
 
         public List<RDungeonFloor> Floors { get; set; }
 
@@ -143,7 +143,8 @@ namespace Server.DataConverter.RDungeons.V1
 
         public int DungeonIndex;
 
-        public RDungeon(int dungeonIndex) {
+        public RDungeon(int dungeonIndex)
+        {
             DungeonIndex = dungeonIndex;
             DungeonName = "";
             Floors = new List<RDungeonFloor>();

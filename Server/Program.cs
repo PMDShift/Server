@@ -27,26 +27,33 @@ namespace Server
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main() {
-            try {
+        static void Main()
+        {
+            try
+            {
                 AppDomain.CurrentDomain.FirstChanceException += new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException);
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
                 ServerLoader.LoadServer();
 
-                while (true) {
+                while (true)
+                {
                     Console.ReadLine();
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 ServerConsole.WriteLine(ex.ToString());
             }
         }
 
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
             ServerConsole.WriteLine("First Chance Exception: " + ((Exception)e.ExceptionObject).ToString());
         }
 
-        static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e) {
+        static void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
             //MessageBox.Show("First Chance Exception: " + e.Exception.ToString());
         }
     }

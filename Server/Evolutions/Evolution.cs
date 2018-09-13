@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,20 +21,14 @@
 
 namespace Server.Evolutions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class Evolution
     {
-        
-
         #region Properties
 
-        
-        public string Name {get; set;}
-        public int Species {get; set; }
-        
+
+        public string Name { get; set; }
+        public int Species { get; set; }
+
         public List<EvolutionBranch> Branches { get; set; }
 
         public bool IsSandboxed { get; set; }
@@ -50,7 +47,8 @@ namespace Server.Evolutions
 
         //#endregion Methods
 
-        public Evolution() {
+        public Evolution()
+        {
             //if (!splitEvo) {
             //    splitEvos = new Evolution[1];
             //    splitEvos[0] = new Evolution(true);

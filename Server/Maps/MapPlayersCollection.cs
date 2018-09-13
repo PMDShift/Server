@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using Server.Network;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +24,6 @@
 
 namespace Server.Maps
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
-    using Server.Network;
-
     public class MapPlayersCollection
     {
         #region Fields
@@ -36,7 +35,8 @@ namespace Server.Maps
 
         #region Constructors
 
-        public MapPlayersCollection() {
+        public MapPlayersCollection()
+        {
             playersOnMap = new List<MapPlayer>();
         }
 
@@ -44,12 +44,17 @@ namespace Server.Maps
 
         #region Properties
 
-        public int Count {
-            get {
+        public int Count
+        {
+            get
+            {
                 rwLock.EnterReadLock();
-                try {
+                try
+                {
                     return playersOnMap.Count;
-                } finally {
+                }
+                finally
+                {
                     rwLock.ExitReadLock();
                 }
             }
@@ -59,92 +64,124 @@ namespace Server.Maps
 
         #region Methods
 
-        public void Add(string playerID) {
+        public void Add(string playerID)
+        {
             rwLock.EnterUpgradeableReadLock();
-            try {
-                if (UnsafeIndexOf(playerID) == -1) {
-
+            try
+            {
+                if (UnsafeIndexOf(playerID) == -1)
+                {
                     rwLock.EnterWriteLock();
-                    try {
+                    try
+                    {
                         playersOnMap.Add(new MapPlayer(playerID, ClientManager.FindClientFromCharID(playerID)));
-                    } finally {
+                    }
+                    finally
+                    {
                         rwLock.ExitWriteLock();
                     }
-
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitUpgradeableReadLock();
             }
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             rwLock.EnterWriteLock();
-            try {
+            try
+            {
                 playersOnMap.Clear();
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitWriteLock();
             }
         }
 
-        public MapPlayer GetItemByIndex(int index) {
+        public MapPlayer GetItemByIndex(int index)
+        {
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 return playersOnMap[index];
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
         }
 
-        public IEnumerable<MapPlayer> GetPlayers() {
+        public IEnumerable<MapPlayer> GetPlayers()
+        {
             MapPlayer[] playersOnMapCopy;
 
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 playersOnMapCopy = playersOnMap.ToArray();
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
 
-            for (int i = 0; i < playersOnMapCopy.Length; i++) {
+            for (int i = 0; i < playersOnMapCopy.Length; i++)
+            {
                 yield return playersOnMapCopy[i];
             }
         }
 
-        public MapPlayer[] ToArray() {
+        public MapPlayer[] ToArray()
+        {
             MapPlayer[] playersOnMapCopy;
 
             rwLock.EnterReadLock();
-            try {
+            try
+            {
                 playersOnMapCopy = playersOnMap.ToArray();
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitReadLock();
             }
 
             return playersOnMapCopy;
         }
 
-        public void Remove(string playerID) {
+        public void Remove(string playerID)
+        {
             rwLock.EnterUpgradeableReadLock();
-            try {
+            try
+            {
                 int index = UnsafeIndexOf(playerID);
-                if (index > -1) {
-
+                if (index > -1)
+                {
                     rwLock.EnterWriteLock();
-                    try {
+                    try
+                    {
                         playersOnMap.RemoveAt(index);
-                    } finally {
+                    }
+                    finally
+                    {
                         rwLock.ExitWriteLock();
                     }
-
                 }
-            } finally {
+            }
+            finally
+            {
                 rwLock.ExitUpgradeableReadLock();
             }
         }
 
-        private int UnsafeIndexOf(string playerID) {
-            for (int i = 0; i < playersOnMap.Count; i++) {
-                if (playersOnMap[i].PlayerID == playerID) {
+        private int UnsafeIndexOf(string playerID)
+        {
+            for (int i = 0; i < playersOnMap.Count; i++)
+            {
+                if (playersOnMap[i].PlayerID == playerID)
+                {
                     return i;
                 }
             }

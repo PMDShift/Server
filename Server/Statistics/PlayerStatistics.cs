@@ -32,15 +32,18 @@ namespace Server.Statistics
     {
         Player owner;
 
-        public TimeSpan TotalPlayTime {
+        public TimeSpan TotalPlayTime
+        {
             get { return owner.PlayerData.TotalPlayTime; }
         }
 
-        public DateTime LoginTime {
+        public DateTime LoginTime
+        {
             get { return owner.PlayerData.LastLogin; }
         }
 
-        public PlayerStatistics(Player owner) {
+        public PlayerStatistics(Player owner)
+        {
             this.owner = owner;
         }
 
@@ -54,25 +57,31 @@ namespace Server.Statistics
             owner.PlayerData.LastIPAddressUsed = ipAddress.ToString();
         }
 
-        public void HandleLogout() {
+        public void HandleLogout()
+        {
             owner.PlayerData.LastLogout = DateTime.UtcNow;
         }
 
-        public void Save() {
-            if (owner.PlayerData.TotalPlayTime == null) {
+        public void Save()
+        {
+            if (owner.PlayerData.TotalPlayTime == null)
+            {
                 owner.PlayerData.TotalPlayTime = new TimeSpan();
             }
 
             owner.PlayerData.TotalPlayTime += DetermineLastPlayTime();
         }
 
-        public TimeSpan DetermineLastPlayTime() {
-            if (owner.PlayerData.LastLogin != DateTime.MinValue && owner.PlayerData.LastLogout != DateTime.MinValue) {
+        public TimeSpan DetermineLastPlayTime()
+        {
+            if (owner.PlayerData.LastLogin != DateTime.MinValue && owner.PlayerData.LastLogout != DateTime.MinValue)
+            {
                 return owner.PlayerData.LastLogout - owner.PlayerData.LastLogin;
-            } else {
+            }
+            else
+            {
                 return TimeSpan.Zero;
             }
         }
-
     }
 }

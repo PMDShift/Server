@@ -33,17 +33,23 @@ namespace Server.Combat
         public ICharacter Attacker { get; set; }
         public ICharacter Defender { get; set; }
 
-        public IMap AttackerMap {
-            get {
-                if (attackerMap == null) {
+        public IMap AttackerMap
+        {
+            get
+            {
+                if (attackerMap == null)
+                {
                     attackerMap = MapManager.RetrieveActiveMap(Attacker.MapID);
                 }
                 return attackerMap;
             }
         }
-        public IMap DefenderMap {
-            get {
-                if (defenderMap == null) {
+        public IMap DefenderMap
+        {
+            get
+            {
+                if (defenderMap == null)
+                {
                     defenderMap = MapManager.RetrieveActiveMap(Defender.MapID);
                 }
                 return defenderMap;
@@ -67,13 +73,15 @@ namespace Server.Combat
         public bool KnockedOut { get; set; }
         public ulong ExpGained { get; set; }
         internal Network.PacketHitList packetStack;
-        public Network.PacketHitList PacketStack {
+        public Network.PacketHitList PacketStack
+        {
             get { return packetStack; }
         }
         public List<String> BattleTags { get; set; }
 
 
-        public BattleSetup() {
+        public BattleSetup()
+        {
             AttackerMultiplier = 1000;
             Multiplier = 1000;
             Move = new Move();
@@ -81,8 +89,8 @@ namespace Server.Combat
             BattleTags = new List<string>();
         }
 
-        public void SetupMove(Move move) {
-
+        public void SetupMove(Move move)
+        {
             Move = new Move();
             Move.Name = move.Name;
             Move.MaxPP = move.MaxPP;
@@ -115,10 +123,10 @@ namespace Server.Combat
             Move.DefenderAnim.AnimationIndex = move.DefenderAnim.AnimationIndex;
             Move.DefenderAnim.FrameSpeed = move.DefenderAnim.FrameSpeed;
             Move.DefenderAnim.Repetitions = move.DefenderAnim.Repetitions;
-
         }
 
-        public Move SetdownMove() {
+        public Move SetdownMove()
+        {
             Move newMove = new Move();
 
             newMove.Name = Move.Name;

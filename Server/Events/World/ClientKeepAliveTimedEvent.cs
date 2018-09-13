@@ -25,47 +25,59 @@ namespace Server.Events.World
 {
     class ClientKeepAliveTimedEvent : ITimedEvent
     {
-         int interval;
+        int interval;
         TickCount storedTime;
         string id;
 
-        public ClientKeepAliveTimedEvent(string id) {
+        public ClientKeepAliveTimedEvent(string id)
+        {
             this.id = id;
         }
 
-        public bool TimeElapsed(TickCount currentTick) {
-            if (currentTick.Elapsed(storedTime, this.interval)) {
+        public bool TimeElapsed(TickCount currentTick)
+        {
+            if (currentTick.Elapsed(storedTime, interval))
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public string ID {
-            get {
+        public string ID
+        {
+            get
+            {
                 return id;
             }
         }
 
-        public TickCount StoredTime {
+        public TickCount StoredTime
+        {
             get { return storedTime; }
         }
 
-        public int Interval {
+        public int Interval
+        {
             get { return interval; }
         }
 
-        public void OnTimeElapsed(TickCount currentTick) {
+        public void OnTimeElapsed(TickCount currentTick)
+        {
             storedTime = currentTick;
             return;
             PMDCP.Sockets.IPacket packet = PMDCP.Sockets.TcpPacket.CreatePacket("keepalive");
-            foreach (Network.Client client in Network.ClientManager.GetAllClients()) {
+            foreach (Network.Client client in Network.ClientManager.GetAllClients())
+            {
                 Network.Messenger.SendDataTo(client, packet);
             }
         }
 
-        public void SetInterval(TickCount currentTick, int interval) {
-            this.storedTime = currentTick;
+        public void SetInterval(TickCount currentTick, int interval)
+        {
+            storedTime = currentTick;
             this.interval = interval;
         }
     }

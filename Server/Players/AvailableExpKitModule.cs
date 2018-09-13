@@ -28,16 +28,19 @@ namespace Server.Players
         Enums.ExpKitModules type;
         bool temporary;
 
-        public Enums.ExpKitModules Type {
+        public Enums.ExpKitModules Type
+        {
             get { return type; }
         }
 
-        public bool Temporary {
+        public bool Temporary
+        {
             get { return temporary; }
             set { temporary = value; }
         }
 
-        public AvailableExpKitModule(Enums.ExpKitModules type, bool temporary) {
+        public AvailableExpKitModule(Enums.ExpKitModules type, bool temporary)
+        {
             this.type = type;
             this.temporary = temporary;
         }

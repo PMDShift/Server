@@ -79,9 +79,6 @@ namespace Server.DataConverter.Moves.V3
 
         public int SpellDone { get; set; }
 
-        
-
-
         #endregion Properties
     }
 }

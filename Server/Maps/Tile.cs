@@ -27,7 +27,8 @@ namespace Server.Maps
     {
         Data.Tile tile;
 
-        public Data.Tile RawTile {
+        public Data.Tile RawTile
+        {
             get { return tile; }
         }
 
@@ -103,7 +104,8 @@ namespace Server.Maps
         public int FAnimSet
         {
             get { return tile.FAnimSet; }
-            set {
+            set
+            {
                 tile.FAnimSet = value;
             }
         }

@@ -25,7 +25,8 @@ namespace Server.DataConverter
 {
     public class NpcConverter
     {
-        public static void ConvertV3ToV4(int num) {
+        public static void ConvertV3ToV4(int num)
+        {
             DataConverter.Npcs.V4.Npc npcV4 = new Server.DataConverter.Npcs.V4.Npc();
 
             DataConverter.Npcs.V3.Npc npcV3 = Server.DataConverter.Npcs.V3.NpcManager.LoadNpc(num);
@@ -37,15 +38,19 @@ namespace Server.DataConverter
             npcV4.Behavior = npcV3.Behavior;
             npcV4.Range = npcV3.Range;
             Server.Pokedex.Pokemon pokemon = Server.Pokedex.Pokedex.FindBySprite(npcV3.Sprite);
-            if (pokemon != null) {
+            if (pokemon != null)
+            {
                 npcV4.Species = pokemon.ID;
-            } else {
+            }
+            else
+            {
                 npcV4.Species = 0;
             }
             npcV4.Big = npcV3.Big;
             npcV4.SpawnTime = npcV3.SpawnTime;
 
-            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++) {
+            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++)
+            {
                 npcV4.Drops[z].ItemNum = npcV3.Drops[z].ItemNum;
                 npcV4.Drops[z].ItemValue = npcV3.Drops[z].ItemValue;
                 npcV4.Drops[z].Chance = npcV3.Drops[z].Chance;
@@ -62,7 +67,8 @@ namespace Server.DataConverter
             Npcs.V4.NpcManager.SaveNpc(npcV4, num);
         }
 
-        public static void ConvertV4ToV5(int num) {
+        public static void ConvertV4ToV5(int num)
+        {
             DataConverter.Npcs.V5.Npc npcV5 = new Server.DataConverter.Npcs.V5.Npc();
 
             DataConverter.Npcs.V4.Npc npcV4 = Server.DataConverter.Npcs.V4.NpcManager.LoadNpc(num);
@@ -77,7 +83,8 @@ namespace Server.DataConverter
             npcV5.BigSprite = npcV4.Big;
             npcV5.SpawnTime = npcV4.SpawnTime;
 
-            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++) {
+            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++)
+            {
                 npcV5.Drops[z].ItemNum = npcV4.Drops[z].ItemNum;
                 npcV5.Drops[z].ItemValue = npcV4.Drops[z].ItemValue;
                 npcV5.Drops[z].Chance = npcV4.Drops[z].Chance;
@@ -134,7 +141,8 @@ namespace Server.DataConverter
             Npcs.V6.NpcManager.SaveNpc(npcV6, num);
         }
 
-        public static void ConvertV6ToV7(int num) {
+        public static void ConvertV6ToV7(int num)
+        {
             DataConverter.Npcs.V7.Npc npcV7 = new Server.DataConverter.Npcs.V7.Npc();
 
             DataConverter.Npcs.V6.Npc npcV6 = Server.DataConverter.Npcs.V6.NpcManager.LoadNpc(num);
@@ -146,7 +154,8 @@ namespace Server.DataConverter
             npcV7.ShinyChance = 0;
             npcV7.Species = npcV6.Species;
 
-            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++) {
+            for (int z = 0; z < Constants.MAX_NPC_DROPS; z++)
+            {
                 npcV7.Drops[z].ItemNum = npcV6.Drops[z].ItemNum;
                 npcV7.Drops[z].ItemValue = npcV6.Drops[z].ItemValue;
                 npcV7.Drops[z].Chance = npcV6.Drops[z].Chance;

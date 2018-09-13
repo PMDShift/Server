@@ -23,20 +23,20 @@ using System.Text;
 
 namespace Server.Combat
 {
-	/// <summary>
-	/// Description of BattleMessage.
-	/// </summary>
-	public class BattleMessage
-	{
-		public string Message { get; set;}
-		public Color Color { get; set; }
-		
-		
-		
-		public BattleMessage(string msg, Color color)
-		{
-			Message = msg;
-			Color = color;
-		}
-	}
+    /// <summary>
+    /// Description of BattleMessage.
+    /// </summary>
+    public class BattleMessage
+    {
+        public string Message { get; set; }
+        public Color Color { get; set; }
+
+
+
+        public BattleMessage(string msg, Color color)
+        {
+            Message = msg;
+            Color = color;
+        }
+    }
 }

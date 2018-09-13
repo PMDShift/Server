@@ -57,29 +57,36 @@ namespace Server.Network
     {
         #region Method
 
-        public static void AdminMsg(string Msg, Color Color) {
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Monitor)) {
+        public static void AdminMsg(string Msg, Color Color)
+        {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying() && Ranks.IsAllowed(i, Enums.Rank.Monitor))
+                {
                     SendDataTo(i, TcpPacket.CreatePacket("msg", Msg, Color.ToArgb().ToString()));
                 }
             }
         }
 
-        public static void AlertMsg(Client client, string msg) {
+        public static void AlertMsg(Client client, string msg)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("alertmsg", msg));
             client.CloseConnection();
         }
 
-        public static void AskQuestion(Client client, string questionID, string text, int storySprite) {
+        public static void AskQuestion(Client client, string questionID, string text, int storySprite)
+        {
             AskQuestion(client, questionID, text, storySprite, new string[] { "Yes", "No" });
         }
 
-        public static void AskQuestion(Client client, string questionID, string text, int storySprite, string[] choices) {
+        public static void AskQuestion(Client client, string questionID, string text, int storySprite, string[] choices)
+        {
             client.Player.QuestionID = questionID;
             TcpPacket packet = new TcpPacket("askquestion");
             packet.AppendParameters(text, storySprite.ToString(), questionID);
             packet.AppendParameter(choices.Length);
-            foreach (string i in choices) {
+            foreach (string i in choices)
+            {
                 packet.AppendParameter(i);
             }
             packet.FinalizePacket();
@@ -87,7 +94,8 @@ namespace Server.Network
             SendHunted(client);
         }
 
-        public static void BattleMsg(Client client, string msg, Color color) {
+        public static void BattleMsg(Client client, string msg, Color color)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("battlemsg", msg, color.ToArgb().ToString()));
         }
 
@@ -103,31 +111,39 @@ namespace Server.Network
 
 
 
-        public static void GlobalMsg(string msg, Color color) {
+        public static void GlobalMsg(string msg, Color color)
+        {
             SendDataToAll(TcpPacket.CreatePacket("msg", msg, color.ToArgb().ToString()));
         }
 
-        public static void HackingAttempt(Client client, string reason) {
+        public static void HackingAttempt(Client client, string reason)
+        {
             AdminMsg("[Hacking Attempt] Name: " + client.Player.AccountName + "/" + client.Player.Name + " Reason: " + reason, Text.Cyan);
         }
 
-        public static void MapMsg(string mapID, string Msg, Color Color) {
+        public static void MapMsg(string mapID, string Msg, Color Color)
+        {
             SendDataToMap(mapID, TcpPacket.CreatePacket("msg", Msg, Color.ToArgb().ToString()));
         }
 
-        public static void DisplaySpeechBubble(string mapID, string Msg, Client client) {
+        public static void DisplaySpeechBubble(string mapID, string Msg, Client client)
+        {
             SendDataToMap(mapID, TcpPacket.CreatePacket("speechbubble", Msg, client.ConnectionID.ToString()));
         }
 
-        public static void PartyMsg(Party party, string msg, Color color) {
-            foreach (Client i in party.GetOnlineMemberClients()) {
-                if (i.IsPlaying()) {
+        public static void PartyMsg(Party party, string msg, Color color)
+        {
+            foreach (Client i in party.GetOnlineMemberClients())
+            {
+                if (i.IsPlaying())
+                {
                     Messenger.PlayerMsg(i, msg, color);
                 }
             }
         }
 
-        public static void RefreshMap(Client client) {
+        public static void RefreshMap(Client client)
+        {
             PacketHitList hitlist = null;
             PacketHitList.MethodStart(ref hitlist);
             PacketBuilder.AppendMapData(client, hitlist, client.Player.Map, Enums.MapID.TempActive);
@@ -142,7 +158,8 @@ namespace Server.Network
             PacketHitList.MethodEnded(ref hitlist);
         }
 
-        public static void NeedMapCheck(Client client, bool val) {
+        public static void NeedMapCheck(Client client, bool val)
+        {
             Player player = client.Player;
             player.MovementLocked = true;
 
@@ -151,7 +168,8 @@ namespace Server.Network
             PacketHitList packetList = null;
             PacketHitList.MethodStart(ref packetList);
             // Get yes/no value
-            if (val == true) {
+            if (val == true)
+            {
                 PacketBuilder.AppendMapData(client, packetList, map, Enums.MapID.TempActive);
             }
             PacketBuilder.AppendMapItems(client, packetList, map, true);
@@ -164,8 +182,10 @@ namespace Server.Network
             Scripting.ScriptManager.InvokeSub("OnMapLoaded", client, map, packetList);
 
             // Send map npc HP, confusion, status ailment, volatile status
-            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-                if (map.ActiveNpc[i].Num > 0) {
+            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++)
+            {
+                if (map.ActiveNpc[i].Num > 0)
+                {
                     PacketBuilder.AppendNpcHP(map, packetList, i);
 
                     //PacketBuilder.AppendNpcConfusion(map, packetList, i);
@@ -179,10 +199,10 @@ namespace Server.Network
 
             //SendWornEquipmentFromMap(client);
             player.MovementLocked = false;
-
         }
 
-        public static void NeedMapCheck(Client client, bool[] results) {
+        public static void NeedMapCheck(Client client, bool[] results)
+        {
             Player player = client.Player;
             //player.MovementLocked = true;
 
@@ -193,46 +213,66 @@ namespace Server.Network
 
             int[] mapIDs = new int[8] { map.Up, map.Down, map.Left, map.Right, 0, 0, 0, 0 };
 
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Up)) {
-                if (MapManager.IsBorderingMapLoaded(map, Enums.MapID.Up)) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Up))
+            {
+                if (MapManager.IsBorderingMapLoaded(map, Enums.MapID.Up))
+                {
                     IMap mapData = MapManager.RetrieveBorderingMap(map, Enums.MapID.Up, true);
-                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left)) {
+                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left))
+                    {
                         mapIDs[4] = mapData.Left;
                     }
-                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right)) {
+                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right))
+                    {
                         mapIDs[6] = mapData.Right;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 mapIDs[0] = 0;
             }
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Down)) {
-                if (MapManager.IsBorderingMapLoaded(map, Enums.MapID.Down)) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Down))
+            {
+                if (MapManager.IsBorderingMapLoaded(map, Enums.MapID.Down))
+                {
                     IMap mapData = MapManager.RetrieveBorderingMap(map, Enums.MapID.Down, true);
-                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left)) {
+                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left))
+                    {
                         mapIDs[5] = mapData.Left;
                     }
-                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right)) {
+                    if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right))
+                    {
                         mapIDs[7] = mapData.Right;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 mapIDs[1] = 0;
             }
 
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Left) == false) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Left) == false)
+            {
                 mapIDs[2] = 0;
             }
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Right) == false) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Right) == false)
+            {
                 mapIDs[3] = 0;
             }
 
-            for (int i = 0; i < results.Length; i++) {
-                if (results[i] == false) {
-                    if (i == 0) {
+            for (int i = 0; i < results.Length; i++)
+            {
+                if (results[i] == false)
+                {
+                    if (i == 0)
+                    {
                         PacketBuilder.AppendMapData(client, packetList, map, (Enums.MapID)(i + 9));
-                    } else {
-                        if (mapIDs[i - 1] > 0) {
+                    }
+                    else
+                    {
+                        if (mapIDs[i - 1] > 0)
+                        {
                             IMap mapData = MapManager.RetrieveMap(mapIDs[i - 1]);
                             PacketBuilder.AppendMapData(client, packetList, mapData, (Enums.MapID)(i + 9));
                         }
@@ -241,8 +281,10 @@ namespace Server.Network
             }
 
             bool isSeamless = false;
-            for (int i = 0; i < mapIDs.Length; i++) {
-                if (mapIDs[i] > 0) {
+            for (int i = 0; i < mapIDs.Length; i++)
+            {
+                if (mapIDs[i] > 0)
+                {
                     isSeamless = true;
                     break;
                 }
@@ -251,10 +293,13 @@ namespace Server.Network
             PacketBuilder.AppendMapItems(client, packetList, map, true);
             PacketBuilder.AppendMapNpcs(client, packetList, map, true);
 
-            if (isSeamless) {
+            if (isSeamless)
+            {
                 // Append bordering map npcs/items
-                for (int i = 0; i < mapIDs.Length; i++) {
-                    if (mapIDs[i] > 0) {
+                for (int i = 0; i < mapIDs.Length; i++)
+                {
+                    if (mapIDs[i] > 0)
+                    {
                         IMap borderingMap = MapManager.RetrieveMap(mapIDs[i]);
                         // Append items and npcs
                         PacketBuilder.AppendMapItems(client, packetList, borderingMap, true);
@@ -263,9 +308,12 @@ namespace Server.Network
                 }
             }
 
-            if (!isSeamless) {
+            if (!isSeamless)
+            {
                 PacketBuilder.AppendPlayerData(client, packetList);
-            } else {
+            }
+            else
+            {
                 PacketBuilder.AppendPlayerData(client, false, packetList);
             }
             PacketBuilder.AppendMapDone(client, packetList);
@@ -275,8 +323,10 @@ namespace Server.Network
             Scripting.ScriptManager.InvokeSub("OnMapLoaded", client, map, packetList);
 
             // Send map npc HP, confusion, status ailment, volatile status
-            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-                if (map.ActiveNpc[i].Num > 0) {
+            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++)
+            {
+                if (map.ActiveNpc[i].Num > 0)
+                {
                     PacketBuilder.AppendNpcHP(map, packetList, i);
 
                     //PacketBuilder.AppendNpcConfusion(map, packetList, i);
@@ -292,11 +342,13 @@ namespace Server.Network
             //player.MovementLocked = false;
         }
 
-        public static void OpenAssembly(Client client) {
+        public static void OpenAssembly(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("openassembly"));
         }
 
-        public static void OpenBank(Client client) {
+        public static void OpenBank(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("openbank"));
         }
 
@@ -334,14 +386,19 @@ namespace Server.Network
         //    }
         //}
 
-        public static void OpenMissionBoard(Client client) {
-            if (client.Player.MissionBoard.BoardMissions.Count == 0) {
+        public static void OpenMissionBoard(Client client)
+        {
+            if (client.Player.MissionBoard.BoardMissions.Count == 0)
+            {
                 PlayerMsg(client, "There are no missions available right now.  Come back later and check again.", Text.Grey);
-            } else {
+            }
+            else
+            {
                 TcpPacket packet = new TcpPacket("missionboard");
                 MissionBoard board = client.Player.MissionBoard;
                 packet.AppendParameter(client.Player.MissionBoard.BoardMissions.Count);
-                for (int i = 0; i < client.Player.MissionBoard.BoardMissions.Count; i++) {
+                for (int i = 0; i < client.Player.MissionBoard.BoardMissions.Count; i++)
+                {
                     WonderMail mission = client.Player.MissionBoard.BoardMissions[i];
                     packet.AppendParameters(mission.Title, mission.Summary, mission.GoalName);
                     packet.AppendParameters(WonderMailManager.Missions.MissionPools[(int)mission.Difficulty - 1].MissionClients[mission.MissionClientIndex].Species,
@@ -355,10 +412,11 @@ namespace Server.Network
             }
         }
 
-        public static void SendAddedMission(Client client) {
+        public static void SendAddedMission(Client client)
+        {
             TcpPacket packet = new TcpPacket("missionadded");
             MissionBoard board = client.Player.MissionBoard;
-            
+
             WonderMail mission = client.Player.MissionBoard.BoardMissions[0];
             packet.AppendParameters(mission.Title, mission.Summary, mission.GoalName);
             packet.AppendParameters(WonderMailManager.Missions.MissionPools[(int)mission.Difficulty - 1].MissionClients[mission.MissionClientIndex].Species,
@@ -370,16 +428,19 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendRemovedMission(Client client, int slot) {
+        public static void SendRemovedMission(Client client, int slot)
+        {
             TcpPacket packet = new TcpPacket("missionremoved");
             packet.AppendParameter(slot);
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void OpenTradeMenu(Client client) {
+        public static void OpenTradeMenu(Client client)
+        {
             Client tradePartner = ClientManager.FindClientFromCharID(client.Player.TradePartner);
-            if (tradePartner != null) {
+            if (tradePartner != null)
+            {
                 TcpPacket packet = new TcpPacket("opentrademenu");
                 packet.AppendParameter(tradePartner.Player.Name);
                 packet.FinalizePacket();
@@ -391,19 +452,23 @@ namespace Server.Network
             }
         }
 
-        public static void SendTradeSetItemUpdate(Client client, int itemNum, int amount, bool thisSide) {
+        public static void SendTradeSetItemUpdate(Client client, int itemNum, int amount, bool thisSide)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("tradesetitemupdate", itemNum.ToString(), amount.ToString(), thisSide.ToIntString()));
         }
 
-        public static void SendTradeComplete(Client client) {
+        public static void SendTradeComplete(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("tradecomplete"));
         }
 
-        public static void SendTradeUnconfirm(Client client) {
+        public static void SendTradeUnconfirm(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("unconfirmtrade"));
         }
 
-        public static void SendEndTrade(Client client) {
+        public static void SendEndTrade(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("endtrade"));
         }
 
@@ -411,59 +476,73 @@ namespace Server.Network
         //    SendDataToMap(mapID, TcpPacket.CreatePacket("npcattack", mapSlot));
         //}
 
-        public static void PlainMsg(Client client, string msg, Enums.PlainMsgType num) {
+        public static void PlainMsg(Client client, string msg, Enums.PlainMsgType num)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("plainmsg", msg, ((int)num).ToString()));
         }
 
-        public static void PlayerMsg(Client client, string msg, Color color) {
+        public static void PlayerMsg(Client client, string msg, Color color)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("msg", msg, color.ToArgb().ToString()));
         }
 
-        public static void OpenVisitHouseMenu(Client client) {
+        public static void OpenVisitHouseMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("visithouse"));
         }
 
-        public static void OpenAddShopMenu(Client client) {
+        public static void OpenAddShopMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("addhouseshop", House.SHOP_PRICE));
         }
 
-        public static void OpenAddNoticeMenu(Client client) {
+        public static void OpenAddNoticeMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("addhousenotice", House.NOTICE_PRICE, House.WORD_PRICE));
         }
-        public static void OpenAddSoundMenu(Client client) {
+        public static void OpenAddSoundMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("addhousesound", House.SOUND_PRICE));
         }
 
-        public static void OpenAddSignMenu(Client client) {
+        public static void OpenAddSignMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("addhousesign", House.WORD_PRICE));
         }
 
-        public static void OpenChangeWeatherMenu(Client client) {
+        public static void OpenChangeWeatherMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("changehouseweather", House.WEATHER_PRICE));
         }
 
-        public static void OpenChangeDarknessMenu(Client client) {
+        public static void OpenChangeDarknessMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("changehousedarkness", House.LIGHT_PRICE));
         }
 
-        public static void OpenChangeBoundsMenu(Client client) {
+        public static void OpenChangeBoundsMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("changehousebounds", House.TILE_PRICE));
         }
 
-        public static void PlayerWarpToVoid(Client client) {
+        public static void PlayerWarpToVoid(Client client)
+        {
             IMap map = MapManager.RetrieveMap("void-" + client.Player.CharID);
             PlayerWarp(client, map, 10, 7);
         }
 
-        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room) {
+        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room)
+        {
             PlayerWarpToHouse(client, houseOwnerID, room, true);
         }
 
-        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room, bool tileCheck) {
+        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room, bool tileCheck)
+        {
             string houseID = MapManager.GenerateHouseID(houseOwnerID, room);
             IMap map = MapManager.RetrieveMap(houseID, true);
             bool mapModified = false;
-            if (map == null) {
+            if (map == null)
+            {
                 // Make an empty house
                 DataManager.Maps.HouseMap rawHouse = new DataManager.Maps.HouseMap(houseID);
                 rawHouse.Owner = houseOwnerID;
@@ -472,34 +551,43 @@ namespace Server.Network
                 map.Moral = Enums.MapMoral.House;
                 mapModified = true;
             }
-            if (string.IsNullOrEmpty(map.Name)) {
-                using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            if (string.IsNullOrEmpty(map.Name))
+            {
+                using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+                {
                     map.Name = Players.PlayerManager.RetrieveCharacterName(dbConnection, houseOwnerID) + "'s House";
                     mapModified = true;
                 }
             }
-            if (mapModified) {
+            if (mapModified)
+            {
                 map.Save();
             }
             PlayerWarp(client, map, ((House)map).StartX, ((House)map).StartY, tileCheck);
         }
 
-        public static void PlayerXYWarp(Client client, int x, int y) {
+        public static void PlayerXYWarp(Client client, int x, int y)
+        {
             PlayerWarp(client, client.Player.Map, x, y);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y) {
+        public static void PlayerWarp(Client client, string mapID, int x, int y)
+        {
             PlayerWarp(client, mapID, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck) {
+        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck)
+        {
             PlayerWarp(client, mapID, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck, bool playSound) {
-            if (mapID.StartsWith("void")) {
+        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck, bool playSound)
+        {
+            if (mapID.StartsWith("void"))
+            {
                 string charID = mapID.Replace("void-", "");
-                if (charID != client.Player.CharID) {
+                if (charID != client.Player.CharID)
+                {
                     // You can't go to someone elses void
                     return;
                 }
@@ -508,41 +596,52 @@ namespace Server.Network
             PlayerWarp(client, MapManager.RetrieveMap(mapID, true), x, y, tileCheck, playSound);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y) {
+        public static void PlayerWarp(Client client, int mapNum, int x, int y)
+        {
             PlayerWarp(client, mapNum, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck) {
+        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck)
+        {
             PlayerWarp(client, mapNum, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck, bool playSound) {
+        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck, bool playSound)
+        {
             PlayerWarp(client, MapManager.RetrieveMap(mapNum, true), x, y, tileCheck, playSound);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y) {
+        public static void PlayerWarp(Client client, IMap map, int x, int y)
+        {
             PlayerWarp(client, map, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck) {
+        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck)
+        {
             PlayerWarp(client, map, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound) {
-            if (map.IsSandboxed) {
-                if (!client.Player.IsAssignedToZone(map.ZoneID)) {
+        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound)
+        {
+            if (map.IsSandboxed)
+            {
+                if (!client.Player.CanViewZone(map.ZoneID) && client.Player.LoggedIn)
+                {
                     Messenger.PlayerMsg(client, "Unable to warp to a sandboxed map that you are not assigned to.", Text.BrightRed);
                     return;
                 }
 
-                if (!client.Player.PlayerData.IsSandboxed) {
+                if (!client.Player.PlayerData.IsSandboxed)
+                {
                     client.Player.EnterSandbox();
                 }
             }
 
-            if (client.Player.LoggedIn && map.MapType == Enums.MapType.Void) {
+            if (client.Player.LoggedIn && map.MapType == Enums.MapType.Void)
+            {
                 Maps.Void @void = map as Maps.Void;
-                if (@void.PlayerOwner.CharID != client.Player.CharID) {
+                if (@void.PlayerOwner.CharID != client.Player.CharID)
+                {
                     return;
                 }
             }
@@ -558,7 +657,8 @@ namespace Server.Network
             // Save old map to send erase player data to
             IMap oldMap = client.Player.Map;
 
-            if (oldMap != null && oldMap.MapID == map.MapID && client.Player.LoggedIn == true) {
+            if (oldMap != null && oldMap.MapID == map.MapID && client.Player.LoggedIn == true)
+            {
                 PacketHitList hitlist = null;
                 PacketHitList.MethodStart(ref hitlist);
 
@@ -569,33 +669,43 @@ namespace Server.Network
 
                 PacketHitList.MethodEnded(ref hitlist);
 
-                if (tileCheck) {
-                    if (map.Tile[x, y].Type == Enums.TileType.Story) {
+                if (tileCheck)
+                {
+                    if (map.Tile[x, y].Type == Enums.TileType.Story)
+                    {
                         StoryManager.PlayStory(client, map.Tile[x, y].Data1);
                     }
                 }
                 return;
             }
 
-            if (oldMap != null && oldMap.MapType == Enums.MapType.Void) {
+            if (oldMap != null && oldMap.MapType == Enums.MapType.Void)
+            {
                 Maps.Void @void = oldMap as Maps.Void;
-                if (@void.SafeExit == false) {
+                if (@void.SafeExit == false)
+                {
                     return;
                 }
             }
 
-            if (map.MapType == Enums.MapType.Standard) {
+            if (map.MapType == Enums.MapType.Standard)
+            {
                 Map sMap = map as Map;
-                if (sMap.Instanced && client.Player.InUninstancedWarp == false) {
+                if (sMap.Instanced && client.Player.InUninstancedWarp == false)
+                {
                     InstancedMap iMap = null;
-                    
+
                     //party check
-                    if (client.Player.IsInParty()) {
+                    if (client.Player.IsInParty())
+                    {
                         Party playerParty = PartyManager.FindParty(client.Player.PartyID);
-                        foreach (Client i in playerParty.GetOnlineMemberClients()) {
+                        foreach (Client i in playerParty.GetOnlineMemberClients())
+                        {
                             IMap partyPlayerMap = i.Player.Map;
-                            if (i != client && partyPlayerMap.MapType == Enums.MapType.Instanced) {
-                                if (((InstancedMap)partyPlayerMap).MapBase == sMap.MapNum) {
+                            if (i != client && partyPlayerMap.MapType == Enums.MapType.Instanced)
+                            {
+                                if (((InstancedMap)partyPlayerMap).MapBase == sMap.MapNum)
+                                {
                                     iMap = (InstancedMap)partyPlayerMap;
                                     break;
                                 }
@@ -605,7 +715,8 @@ namespace Server.Network
 
 
 
-                    if (iMap == null) {
+                    if (iMap == null)
+                    {
                         iMap = MapCloner.CreateInstancedMap(sMap);
                         //MapManager.RemoveActiveMap(sMap.MapID);
                         MapManager.AddActiveMap(iMap);
@@ -620,18 +731,21 @@ namespace Server.Network
 
             ScriptManager.InvokeSub("OnMapLoad", client, client.Player.Map, map, client.Player.LoggedIn);
 
-            if (map.MapType == Enums.MapType.Void) {
+            if (map.MapType == Enums.MapType.Void)
+            {
                 Scripting.ScriptManager.InvokeSub("OnPlayerVoidLoad", client, map as Server.Maps.Void);
             }
 
-            if (oldMap == null || oldMap.MapID != map.MapID || client.Player.LoggedIn == false) {
+            if (oldMap == null || oldMap.MapID != map.MapID || client.Player.LoggedIn == false)
+            {
                 // Sets it so we know to process npcs on the map
                 map.PlayersOnMap.Add(client.Player.CharID);
-                MapManager.AddActiveMap(map); 
- 
+                MapManager.AddActiveMap(map);
+
                 client.Player.MapID = map.MapID;
 
-                if (client.Player.LoggedIn) {
+                if (client.Player.LoggedIn)
+                {
                     SendLeaveMap(client, oldMap, true, false);
                 }
 
@@ -643,7 +757,8 @@ namespace Server.Network
                 //ReDim Program.ClassMan.mMaps[mapNum].Tile(0 To Program.ClassMan.mMaps[mapNum].MapX, 0 To Program.ClassMan.mMaps[mapNum].MapY) As TileRec
 
                 client.Player.GettingMap = true;
-                if (playSound) {
+                if (playSound)
+                {
                     PlaySoundToMap(map.MapID, "warp.wav");
                 }
                 Messenger.SendPlayerData(client);
@@ -652,8 +767,10 @@ namespace Server.Network
                 //SendInventory(client);// removed
                 //SendWornEquipment(client);
 
-                if (tileCheck) {
-                    if (map.Tile[x, y].Type == Enums.TileType.Story) {
+                if (tileCheck)
+                {
+                    if (map.Tile[x, y].Type == Enums.TileType.Story)
+                    {
                         StoryManager.PlayStory(client, map.Tile[x, y].Data1);
                     }
                 }
@@ -663,32 +780,42 @@ namespace Server.Network
             client.Player.ActiveGoalPoints.Clear();
             bool destinationReached = false;
             int targetsMissed = 0;
-            for (int i = 0; i < client.Player.JobList.JobList.Count; i++) {
-                if (client.Player.JobList.JobList[i].Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(client.Player.JobList.JobList[i].Mission, map)) {
+            for (int i = 0; i < client.Player.JobList.JobList.Count; i++)
+            {
+                if (client.Player.JobList.JobList[i].Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(client.Player.JobList.JobList[i].Mission, map))
+                {
                     destinationReached = true;
                     GoalPoint goalPoint = new GoalPoint();
                     goalPoint.DetermineGoalPoint(map);
                     goalPoint.JobListIndex = i;
-                    if (goalPoint.GoalX == -1 || goalPoint.GoalY == -1) {
+                    if (goalPoint.GoalX == -1 || goalPoint.GoalY == -1)
+                    {
                         targetsMissed++;
-                    } else {
+                    }
+                    else
+                    {
                         client.Player.ActiveGoalPoints.Add(goalPoint);
                     }
                 }
             }
-            if (destinationReached) {
+            if (destinationReached)
+            {
                 PlayerMsg(client, "You have reached a destination floor!", Text.BrightBlue);
-                if (targetsMissed > 0) {
+                if (targetsMissed > 0)
+                {
                     PlayerMsg(client, "...But the target seems to be missing...", Text.Blue);
                 }
             }
             SendActiveMissionGoalPoints(client);
-            
+
 
             // Trigger event checking
-            for (int i = 0; i < client.Player.TriggerEvents.Count; i++) {
-                if (client.Player.TriggerEvents[i].Trigger == Events.Player.TriggerEvents.TriggerEventTrigger.MapLoad) {
-                    if (client.Player.TriggerEvents[i].CanInvokeTrigger()) {
+            for (int i = 0; i < client.Player.TriggerEvents.Count; i++)
+            {
+                if (client.Player.TriggerEvents[i].Trigger == Events.Player.TriggerEvents.TriggerEventTrigger.MapLoad)
+                {
+                    if (client.Player.TriggerEvents[i].CanInvokeTrigger())
+                    {
                         client.Player.TriggerEvents[i].InvokeTrigger();
                     }
                 }
@@ -709,10 +836,12 @@ namespace Server.Network
         //    SendDataTo(client, TcpPacket.CreatePacket("openjoblist"));
         //}
 
-        public static void SendActiveMissionGoalPoints(Client client) {
+        public static void SendActiveMissionGoalPoints(Client client)
+        {
             TcpPacket packet = new TcpPacket("missiongoal");
             packet.AppendParameter(client.Player.ActiveGoalPoints.Count);
-            foreach (GoalPoint point in client.Player.ActiveGoalPoints) {
+            foreach (GoalPoint point in client.Player.ActiveGoalPoints)
+            {
                 packet.AppendParameters(point.JobListIndex, point.GoalX, point.GoalY);
             }
             SendDataTo(client, packet);
@@ -783,7 +912,8 @@ namespace Server.Network
         //    SendDataTo(client, packet);
         //}
 
-        public static void SendCancelJob(Client client) {
+        public static void SendCancelJob(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("canceljob"));
         }
 
@@ -793,26 +923,33 @@ namespace Server.Network
         //    SendDataTo(client, packet);
         //}
 
-        public static void SendPlayerMissionExp(Client client) {
+        public static void SendPlayerMissionExp(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("missionexp", client.Player.MissionExp.ToString(), ((int)client.Player.ExplorerRank).ToString()));
         }
 
-        public static void SendHunted(Client client) {
+        public static void SendHunted(Client client)
+        {
             PacketHitList hitlist = new PacketHitList();
             PacketBuilder.AppendHunted(client, hitlist);
             SendData(hitlist);
         }
 
-        public static void SendActiveTeam(Client client) {
+        public static void SendActiveTeam(Client client)
+        {
             TcpPacket packet = new TcpPacket("activeteam");
             Player player = client.Player;
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (client.Player.Team[i].Loaded == true) {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (client.Player.Team[i].Loaded == true)
+                {
                     packet.AppendParameters(player.Team[i].Name, player.Team[i].Species.ToString(), player.Team[i].Form.ToString(), ((int)player.Team[i].Shiny).ToString(), ((int)player.Team[i].Sex).ToString(),
                                             player.Team[i].HP.ToString(), player.Team[i].MaxHP.ToString(),
                                             Server.Math.CalculatePercent(player.Team[i].Exp, Exp.ExpManager.Exp[player.Team[i].Level - 1]).ToString(),
                                             player.Team[i].Level.ToString(), ((int)player.Team[i].StatusAilment).ToString(), player.Team[i].HeldItemSlot.ToString());
-                } else {
+                }
+                else
+                {
                     packet.AppendParameter("notloaded");
                 }
             }
@@ -820,13 +957,18 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendActivePets(Client client) {
+        public static void SendActivePets(Client client)
+        {
             TcpPacket packet = new TcpPacket("activepets");
             packet.AppendParameter(client.ConnectionID);
-            for (int i = 1; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (client.Player.Team[i].Loaded) {
+            for (int i = 1; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (client.Player.Team[i].Loaded)
+                {
                     packet.AppendParameters(client.Player.Team[i].Sprite.ToString());
-                } else {
+                }
+                else
+                {
                     packet.AppendParameters("-1");
                 }
             }
@@ -834,12 +976,17 @@ namespace Server.Network
             SendDataToMap(client.Player.MapID, packet);
         }
 
-        public static void SendWornEquipment(Client client) {
+        public static void SendWornEquipment(Client client)
+        {
             TcpPacket packet = new TcpPacket("playerhelditem");
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (client.Player.Team[i].Loaded == true) {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (client.Player.Team[i].Loaded == true)
+                {
                     packet.AppendParameter(client.Player.Team[i].HeldItemSlot);
-                } else {
+                }
+                else
+                {
                     packet.AppendParameter("0");
                 }
             }
@@ -860,12 +1007,14 @@ namespace Server.Network
             SendDataTo(client, packet);
         }*/
 
-        public static void SendJobList(Client client) {
+        public static void SendJobList(Client client)
+        {
             // 
             TcpPacket packet = new TcpPacket("joblist");
             Player player = client.Player;
             packet.AppendParameter(player.JobList.JobList.Count.ToString());
-            for (int i = 0; i < player.JobList.JobList.Count; i++) {
+            for (int i = 0; i < player.JobList.JobList.Count; i++)
+            {
                 WonderMailJob job = player.JobList.JobList[i];
                 packet.AppendParameters(job.Mission.Title, job.Mission.Summary, job.Mission.GoalName);
                 packet.AppendParameters(WonderMailManager.Missions.MissionPools[(int)job.Mission.Difficulty - 1].MissionClients[job.Mission.MissionClientIndex].Species,
@@ -875,9 +1024,12 @@ namespace Server.Network
                     WonderMailManager.Missions.MissionPools[(int)job.Mission.Difficulty - 1].Rewards[job.Mission.RewardIndex].Amount, job.Mission.Mugshot);
                 //MapGeneralInfo mapInfo = MapManager.RetrieveMapGeneralInfo(player.JobList.JobList[i].Mission.Goal);
                 packet.AppendParameters((int)player.JobList.JobList[i].Accepted);
-                if (player.JobList.JobList[i].SendsRemaining > 0) {
+                if (player.JobList.JobList[i].SendsRemaining > 0)
+                {
                     packet.AppendParameters(1);
-                } else {
+                }
+                else
+                {
                     packet.AppendParameters(0);
                 }
             }
@@ -885,7 +1037,8 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendNewJob(Client client) {
+        public static void SendNewJob(Client client)
+        {
             TcpPacket packet = new TcpPacket("newjob");
             Player player = client.Player;
 
@@ -898,9 +1051,12 @@ namespace Server.Network
                 WonderMailManager.Missions.MissionPools[(int)job.Mission.Difficulty - 1].Rewards[job.Mission.RewardIndex].Amount, job.Mission.Mugshot);
             //MapGeneralInfo mapInfo = MapManager.RetrieveMapGeneralInfo(player.JobList.JobList[i].Mission.Goal);
             packet.AppendParameters((int)player.JobList.JobList[player.JobList.JobList.Count - 1].Accepted);
-            if (player.JobList.JobList[player.JobList.JobList.Count - 1].SendsRemaining > 0) {
+            if (player.JobList.JobList[player.JobList.JobList.Count - 1].SendsRemaining > 0)
+            {
                 packet.AppendParameters(1);
-            } else {
+            }
+            else
+            {
                 packet.AppendParameters(0);
             }
 
@@ -908,16 +1064,18 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendDeleteJob(Client client, int slot) {
+        public static void SendDeleteJob(Client client, int slot)
+        {
             TcpPacket packet = new TcpPacket("deletejob");
-            
+
             packet.AppendParameter(slot);
 
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void SendJobAccept(Client client, int slot) {
+        public static void SendJobAccept(Client client, int slot)
+        {
             TcpPacket packet = new TcpPacket("acceptjob");
             Player player = client.Player;
 
@@ -927,14 +1085,18 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendRemainingJobSends(Client client, int slot) {
+        public static void SendRemainingJobSends(Client client, int slot)
+        {
             TcpPacket packet = new TcpPacket("jobsends");
             Player player = client.Player;
 
             packet.AppendParameter(slot);
-            if (player.JobList.JobList[slot].SendsRemaining > 0) {
+            if (player.JobList.JobList[slot].SendsRemaining > 0)
+            {
                 packet.AppendParameter(1);
-            } else {
+            }
+            else
+            {
                 packet.AppendParameter(0);
             }
 
@@ -947,44 +1109,55 @@ namespace Server.Network
             SendDataTo(client, TcpPacket.CreatePacket("activeteamnum", client.Player.ActiveSlot.ToString()));
         }
         */
-        public static void SendAllRecruits(Client client) {
+        public static void SendAllRecruits(Client client)
+        {
             SendDataTo(client, PacketBuilder.CreatePlayerAllRecruitsPacket(client), true, false);
         }
 
-        public static void SendBank(Client client) {
+        public static void SendBank(Client client)
+        {
             TcpPacket packet = new TcpPacket("playerbank");
-            for (int i = 1; i <= client.Player.MaxBank; i++) {
-                if (client.Player.Bank.ContainsKey(i)) {
+            for (int i = 1; i <= client.Player.MaxBank; i++)
+            {
+                if (client.Player.Bank.ContainsKey(i))
+                {
                     packet.AppendParameters(client.Player.Bank[i].Num,
                                             client.Player.Bank[i].Amount);
-                } else {
+                }
+                else
+                {
                     packet.AppendParameters(0, 0);
                 }
             }
             SendDataTo(client, packet);
         }
 
-        public static void SendBankUpdate(Client client, int bankSlot) {
+        public static void SendBankUpdate(Client client, int bankSlot)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("playerbankupdate", bankSlot.ToString(), client.Player.Bank[bankSlot].Num.ToString(),
                                                       client.Player.Bank[bankSlot].Amount.ToString(),
                 /* client.Player.mBank[bankSlot].Dur.ToString() */ "0"));
         }
 
-        public static void SendBattleDivider(Client client) {
+        public static void SendBattleDivider(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("battledivider"));
         }
 
-        public static void SendChars(DatabaseConnection dbConnection, Client client) {
+        public static void SendChars(DatabaseConnection dbConnection, Client client)
+        {
             TcpPacket packet = new TcpPacket("allchars");
             string[] characterNames = PlayerDataManager.RetrieveAccountCharacters(dbConnection.Database, client.Player.AccountName);
-            for (int i = 0; i < characterNames.Length; i++) {
+            for (int i = 0; i < characterNames.Length; i++)
+            {
                 packet.AppendParameters(characterNames[i]);
             }
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void SendCheckForMap(Client client) {
+        public static void SendCheckForMap(Client client)
+        {
             IMap map = client.Player.GetCurrentMap();
 
             string emptyMapString = "nm-1";
@@ -994,45 +1167,64 @@ namespace Server.Network
 
             int[] borderMaps = new int[8] { map.Up, map.Down, map.Left, map.Right, 0, 0, 0, 0 };
 
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Up)) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Up))
+            {
                 IMap mapData = MapManager.RetrieveMap(map.Up);
-                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left)) {
+                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left))
+                {
                     borderMaps[4] = mapData.Left;
                 }
-                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right)) {
+                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right))
+                {
                     borderMaps[6] = mapData.Right;
                 }
-            } else {
+            }
+            else
+            {
                 borderMaps[0] = 0;
             }
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Down)) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Down))
+            {
                 IMap mapData = MapManager.RetrieveMap(map.Down);
-                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left)) {
+                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Left))
+                {
                     borderMaps[5] = mapData.Left;
                 }
-                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right)) {
+                if (SeamlessWorldHelper.IsMapSeamless(mapData, Enums.MapID.Right))
+                {
                     borderMaps[7] = mapData.Right;
                 }
-            } else {
+            }
+            else
+            {
                 borderMaps[1] = 0;
             }
 
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Left) == false) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Left) == false)
+            {
                 borderMaps[2] = 0;
             }
-            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Right) == false) {
+            if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Right) == false)
+            {
                 borderMaps[3] = 0;
             }
 
-            for (int i = 0; i < borderMaps.Length; i++) {
-                if (borderMaps[i] > 0) {
+            for (int i = 0; i < borderMaps.Length; i++)
+            {
+                if (borderMaps[i] > 0)
+                {
                     IMap borderMap = MapManager.RetrieveMap(borderMaps[i]);
-                    if (borderMap != null) {
+                    if (borderMap != null)
+                    {
                         packet.AppendParameters(borderMap.MapID, borderMap.Revision.ToString(), borderMap.TempChange.ToIntString());
-                    } else {
+                    }
+                    else
+                    {
                         packet.AppendParameter(emptyMapString);
                     }
-                } else {
+                }
+                else
+                {
                     packet.AppendParameter(emptyMapString);
                 }
             }
@@ -1041,86 +1233,113 @@ namespace Server.Network
             //SendDataTo(client, TcpPacket.CreatePacket("checkformap", map.MapID, map.Revision.ToString(), map.TempChange.ToIntString()));
         }
 
-        public static void SendMapNameUpdate(Client client, int mapNum, string mapName) {
+        public static void SendMapNameUpdate(Client client, int mapNum, string mapName)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mapnameupdated", mapNum.ToString(), mapName));
         }
 
-        public static void SendDataTo(Client client, IPacket packet) {
+        public static void SendDataTo(Client client, IPacket packet)
+        {
             SendDataTo(client, packet, false, false);
         }
 
-        public static void SendDataTo(Client client, IPacket packet, bool compress, bool encrypt) {
+        public static void SendDataTo(Client client, IPacket packet, bool compress, bool encrypt)
+        {
             SendDataTo(client, ByteEncoder.StringToByteArray(packet.PacketString), compress, encrypt, false);
         }
 
-        public static void SendDataTo(Client client, byte[] packet, bool compress, bool encrypt, bool isPacketList) {
-            if (client.TcpClient.Socket.Connected) {
+        public static void SendDataTo(Client client, byte[] packet, bool compress, bool encrypt, bool isPacketList)
+        {
+            if (client.TcpClient.Socket.Connected)
+            {
                 byte[] customHeader = new byte[client.TcpClient.CustomHeaderSize];
-                if (encrypt) {
+                if (encrypt)
+                {
                     packet = client.PacketSecurity.EncryptPacket(packet);
                     customHeader[1] = 1;
                 }
 
-                if (packet.Length > 2000) {
-                    if (compress == false) {
+                if (packet.Length > 2000)
+                {
+                    if (compress == false)
+                    {
                         compress = true;
                     }
                 }
 
-                if (compress) {
+                if (compress)
+                {
                     packet = client.PacketSecurity.CompressPacket(packet);
                     customHeader[0] = 1;
                 }
 
-                if (isPacketList) {
+                if (isPacketList)
+                {
                     customHeader[2] = 1;
-                } else {
+                }
+                else
+                {
                     customHeader[2] = 0;
                 }
                 client.TcpClient.Send(packet, customHeader);
             }
         }
 
-        public static void SendDataTo(string playerID, IPacket packet) {
+        public static void SendDataTo(string playerID, IPacket packet)
+        {
             Client client = ClientManager.FindClientFromCharID(playerID);
-            if (client != null) {
+            if (client != null)
+            {
                 SendDataTo(client, packet);
             }
         }
 
-        public static void SendDataTo(Client client, PacketList packetList) {
+        public static void SendDataTo(Client client, PacketList packetList)
+        {
             SendDataTo(client, packetList.CombinePackets(), false, false, true);
         }
 
-        public static void SendData(PacketHitList packetHitList) {
-            for (int i = 0; i < packetHitList.HitList.Count; i++) {
+        public static void SendData(PacketHitList packetHitList)
+        {
+            for (int i = 0; i < packetHitList.HitList.Count; i++)
+            {
                 SendDataTo(packetHitList.HitList.Keys[i], packetHitList.HitList.Values[i]);
             }
         }
 
-        public static void SendDataToAll(IPacket packet) {
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying()) {
+        public static void SendDataToAll(IPacket packet)
+        {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying())
+                {
                     SendDataTo(i, packet);
                 }
             }
         }
 
-        public static void SendDataToAllBut(Client client, IPacket packet) {
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying() && i != client) {
+        public static void SendDataToAllBut(Client client, IPacket packet)
+        {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying() && i != client)
+                {
                     SendDataTo(i, packet);
                 }
             }
         }
 
-        public static void SendDataToParty(string partyID, IPacket packet) {
+        public static void SendDataToParty(string partyID, IPacket packet)
+        {
             SendDataToParty(PartyManager.FindParty(partyID), packet);
         }
 
-        public static void SendDataToParty(Players.Parties.Party party, IPacket packet) {
-            foreach (Client i in party.GetOnlineMemberClients()) {
-                if (i.IsPlaying()) {
+        public static void SendDataToParty(Players.Parties.Party party, IPacket packet)
+        {
+            foreach (Client i in party.GetOnlineMemberClients())
+            {
+                if (i.IsPlaying())
+                {
                     SendDataTo(i, packet);
                 }
             }
@@ -1136,10 +1355,13 @@ namespace Server.Network
         //    }
         //}
 
-        public static void SendDataToMap(string mapID, IPacket packet) {
+        public static void SendDataToMap(string mapID, IPacket packet)
+        {
             IMap map = MapManager.RetrieveActiveMap(mapID);
-            if (map != null) {
-                foreach (Client i in map.GetClients()) {
+            if (map != null)
+            {
+                foreach (Client i in map.GetClients())
+                {
                     SendDataTo(i, packet);
                 }
             }
@@ -1162,12 +1384,16 @@ namespace Server.Network
         //    }
         //}
 
-        public static void SendDataToMapBut(Client client, string mapID, IPacket packet) {
+        public static void SendDataToMapBut(Client client, string mapID, IPacket packet)
+        {
             // 
             IMap map = MapManager.RetrieveActiveMap(mapID);
-            if (map != null) {
-                foreach (Client mapClient in map.GetClients()) {
-                    if (mapClient != client) {
+            if (map != null)
+            {
+                foreach (Client mapClient in map.GetClients())
+                {
+                    if (mapClient != client)
+                    {
                         SendDataTo(mapClient, packet);
                     }
                 }
@@ -1231,26 +1457,32 @@ namespace Server.Network
         */
 
 
-        public static void SendPartyMemberData(Party party, Client member, int slot) {
+        public static void SendPartyMemberData(Party party, Client member, int slot)
+        {
             SendDataToParty(party, PacketBuilder.CreatePartyMemberDataPacket(party, member, slot));
         }
 
-        public static void SendLeftParty(Party party, int slot) {
+        public static void SendLeftParty(Party party, int slot)
+        {
             SendDataToParty(party, TcpPacket.CreatePacket("clearpartyslot", slot.ToString()));
         }
 
-        public static void SendDisbandPartyTo(Client client) {
+        public static void SendDisbandPartyTo(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("disbandparty"));
         }
 
-        public static void SendHP(Client client) {
+        public static void SendHP(Client client)
+        {
             SendHP(client, client.Player.ActiveSlot);
         }
 
-        public static void SendHP(Client client, int recruitIndex) {
+        public static void SendHP(Client client, int recruitIndex)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("playerhp", recruitIndex.ToString(), client.Player.Team[recruitIndex].MaxHP.ToString(),
                                                       client.Player.Team[recruitIndex].HP.ToString()));
-            if (!string.IsNullOrEmpty(client.Player.PartyID)) {
+            if (!string.IsNullOrEmpty(client.Player.PartyID))
+            {
                 Party playerParty = PartyManager.FindPlayerParty(client);
                 SendPartyMemberData(playerParty, client, playerParty.GetMemberSlot(client.Player.CharID));
             }
@@ -1267,14 +1499,17 @@ namespace Server.Network
         }
 
         */
-        public static void SendBelly(Client client) {
+        public static void SendBelly(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("recruitbelly", client.Player.GetActiveRecruit().Belly.ToString(),
                 client.Player.GetActiveRecruit().MaxBelly.ToString()));
         }
-        public static void SendInventory(Client client) {
+        public static void SendInventory(Client client)
+        {
             TcpPacket packet = new TcpPacket("playerinv");
             packet.AppendParameter(client.Player.MaxInv);
-            for (int i = 1; i <= client.Player.MaxInv; i++) {
+            for (int i = 1; i <= client.Player.MaxInv; i++)
+            {
                 packet.AppendParameters(client.Player.Inventory[i].Num.ToString(),
                     client.Player.Inventory[i].Amount.ToString(),
                     client.Player.Inventory[i].Sticky.ToIntString());
@@ -1284,14 +1519,16 @@ namespace Server.Network
         }
 
 
-        public static void SendInventoryUpdate(Client client, int invSlot) {
+        public static void SendInventoryUpdate(Client client, int invSlot)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("playerinvupdate", invSlot.ToString(),
                 client.Player.Inventory[invSlot].Num.ToString(),
                 client.Player.Inventory[invSlot].Amount.ToString(),
                 client.Player.Inventory[invSlot].Sticky.ToIntString()));
         }
 
-        public static void SendInventoryUpdate(Client client, int invSlot, PacketHitList hitList) {
+        public static void SendInventoryUpdate(Client client, int invSlot, PacketHitList hitList)
+        {
             PacketHitList.MethodStart(ref hitList);
 
             hitList.AddPacket(client, TcpPacket.CreatePacket("playerinvupdate", invSlot.ToString(),
@@ -1302,8 +1539,10 @@ namespace Server.Network
             PacketHitList.MethodEnded(ref hitList);
         }
 
-        public static void SendJoinGame(Client client) {
-            try {
+        public static void SendJoinGame(Client client)
+        {
+            try
+            {
                 PacketHitList packetList = null;
                 PacketHitList.MethodStart(ref packetList);
 
@@ -1332,31 +1571,42 @@ namespace Server.Network
 
                 Scripting.ScriptManager.InvokeSub("JoinGame", client);
 
-                if (client.Player.CurrentSegment != -1 && client.Player.CurrentChapter != null) {
-                    if (Stories.StoryManager.Stories[client.Player.CurrentChapter.ID.ToInt()].ExitAndContinue.Count > 0) {
+                if (client.Player.CurrentSegment != -1 && client.Player.CurrentChapter != null)
+                {
+                    if (Stories.StoryManager.Stories[client.Player.CurrentChapter.ID.ToInt()].ExitAndContinue.Count > 0)
+                    {
                         int goodSegment = -1;
                         Story story = Stories.StoryManager.Stories[client.Player.CurrentChapter.ID.ToInt()];
-                        for (int i = client.Player.CurrentSegment; i >= 0; i--) {
-                            if (story.ExitAndContinue.Contains(i)) {
+                        for (int i = client.Player.CurrentSegment; i >= 0; i--)
+                        {
+                            if (story.ExitAndContinue.Contains(i))
+                            {
                                 goodSegment = i;
                                 break;
                             }
                         }
-                        if (goodSegment > -1) {
+                        if (goodSegment > -1)
+                        {
                             client.Player.SegmentToStart = goodSegment;
                             PlayerWarp(client, client.Player.MapID, client.Player.X, client.Player.Y, false);
                             Stories.StoryManager.ResumeStory(client, client.Player.CurrentChapter.ID.ToInt());
-                        } else {
+                        }
+                        else
+                        {
                             client.Player.CurrentChapter = null;
                             client.Player.CurrentSegment = -1;
                             PlayerWarp(client, client.Player.MapID, client.Player.X, client.Player.Y);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         client.Player.CurrentChapter = null;
                         client.Player.CurrentSegment = -1;
                         PlayerWarp(client, client.Player.MapID, client.Player.X, client.Player.Y);
                     }
-                } else {
+                }
+                else
+                {
                     client.Player.CurrentChapter = null;
                     client.Player.CurrentSegment = -1;
                     PlayerWarp(client, client.Player.MapID, client.Player.X, client.Player.Y);
@@ -1378,7 +1628,8 @@ namespace Server.Network
                 hitlist.AddPacket(client, TcpPacket.CreatePacket("ingame"));
 
 #if DEBUG
-                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
+                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                {
                     hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("The server is currently in debug mode!", Text.BrightRed));
                 }
 #endif
@@ -1399,7 +1650,8 @@ namespace Server.Network
 
                 client.Player.RefreshSeenCharacters(hitlist);
 
-                if (!string.IsNullOrEmpty(Globals.ServerStatus)) {
+                if (!string.IsNullOrEmpty(Globals.ServerStatus))
+                {
                     hitlist.AddPacket(client, PacketBuilder.CreateServerStatus());
                 }
 
@@ -1413,10 +1665,9 @@ namespace Server.Network
                 //}
 
                 client.Player.LoggedIn = true;
-
-
-            
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Exceptions.ErrorLogger.WriteToErrorLog(ex, "Login, sending join game info");
             }
         }
@@ -1454,23 +1705,31 @@ namespace Server.Network
         }
         */
 
-        public static void SendLeaveMap(Client client, IMap map, bool shouldUnsee, bool logout) {
-            if (map != null) {
+        public static void SendLeaveMap(Client client, IMap map, bool shouldUnsee, bool logout)
+        {
+            if (map != null)
+            {
                 // Remove the player ID from the maps player list
                 map.PlayersOnMap.Remove(client.Player.CharID);
                 //if ((map.MapType == Enums.MapType.RDungeonMap || map.MapType == Enums.MapType.Instanced) && map.PlayersOnMap.Count > 0) {
                 //    map.Save();
                 //}
-                if (logout) {
+                if (logout)
+                {
                     shouldUnsee = true;
-                } else {
-                    if (map.MapType == Enums.MapType.Instanced || map.MapType == Enums.MapType.RDungeonMap) {
+                }
+                else
+                {
+                    if (map.MapType == Enums.MapType.Instanced || map.MapType == Enums.MapType.RDungeonMap)
+                    {
                         client.Player.AddMapToDelete(map.MapID);
                     }
                 }
                 //remove from everyone's seencharacter list
-                if (shouldUnsee) {
-                    foreach (Client i in map.GetSurroundingClients(map)) {
+                if (shouldUnsee)
+                {
+                    foreach (Client i in map.GetSurroundingClients(map))
+                    {
                         i.Player.UnseeLeftPlayer(client.Player);
                     }
                     PacketHitList hitlist = null;
@@ -1482,15 +1741,16 @@ namespace Server.Network
                     PacketHitList.MethodEnded(ref hitlist);
                     //SendDataToMapBut(client, map.MapID, TcpPacket.CreatePacket("leftmap", client.ConnectionID.ToString()));
                 }
-
             }
         }
 
-        public static void SendLeftGame(Client client) {
+        public static void SendLeftGame(Client client)
+        {
             SendDataToAllBut(client, TcpPacket.CreatePacket("leftmap", client.ConnectionID.ToString()));
         }
 
-        public static void SendTemporaryTileTo(PacketHitList hitlist, Client client, int x, int y, Tile tile) {
+        public static void SendTemporaryTileTo(PacketHitList hitlist, Client client, int x, int y, Tile tile)
+        {
             PacketHitList.MethodStart(ref hitlist);
 
             TcpPacket packet = new TcpPacket("tiledata");
@@ -1532,7 +1792,8 @@ namespace Server.Network
             PacketHitList.MethodEnded(ref hitlist);
         }
 
-        public static void SendTile(int x, int y, IMap map) {
+        public static void SendTile(int x, int y, IMap map)
+        {
             TcpPacket packet = new TcpPacket("tiledata");
 
             packet.AppendParameters(
@@ -1631,26 +1892,31 @@ namespace Server.Network
         }
         */
 
-        public static void SendScriptedTileInfoTo(Client client, string data) {
+        public static void SendScriptedTileInfoTo(Client client, string data)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("scriptedattributename", data));
         }
 
-        public static void SendScriptedSignInfoTo(Client client, string data) {
+        public static void SendScriptedSignInfoTo(Client client, string data)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("scriptedsignattributename", data));
         }
 
-        public static void SendMobilityInfoTo(Client client, string data) {
+        public static void SendMobilityInfoTo(Client client, string data)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mobilityname", data));
         }
 
 
-        public static void SendNewCharClasses(Client client) {
+        public static void SendNewCharClasses(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("newcharclasses", Settings.NewCharForm.ToString()));
         }
 
-        public static void SendNews(Client client) {
+        public static void SendNews(Client client)
+        {
             string newsString = "";
-            for (int i = Server.Settings.News.Count-1; i >= 0; i--)
+            for (int i = Server.Settings.News.Count - 1; i >= 0; i--)
             {
                 newsString += Server.Settings.News[i];
                 newsString += '\n';
@@ -1658,26 +1924,37 @@ namespace Server.Network
             SendDataTo(client, TcpPacket.CreatePacket("news", newsString));
         }
 
-        public static void SendAdventureLog(Client client) {
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+        public static void SendAdventureLog(Client client)
+        {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 TcpPacket packet = TcpPacket.CreatePacket("adventurelog", (int)client.Player.Statistics.TotalPlayTime.TotalMinutes,
                     client.Player.GetTotalDungeonCompletionCount(), client.Player.MissionCompletions, 0, client.Player.DungeonCompletionCounts.Count);
-                for (int i = 0; i < client.Player.DungeonCompletionCounts.Count; i++) {
-                    if (DungeonManager.Dungeons.Count > client.Player.DungeonCompletionCounts.KeyByIndex(i)) {
+                for (int i = 0; i < client.Player.DungeonCompletionCounts.Count; i++)
+                {
+                    if (DungeonManager.Dungeons.Count > client.Player.DungeonCompletionCounts.KeyByIndex(i))
+                    {
                         packet.AppendParameters(DungeonManager.Dungeons[client.Player.DungeonCompletionCounts.KeyByIndex(i)].Name, client.Player.DungeonCompletionCounts.ValueByIndex(i).ToString());
-                    } else {
+                    }
+                    else
+                    {
                         packet.AppendParameters("Unknown Dungeon", client.Player.DungeonCompletionCounts.ValueByIndex(i).ToString());
                     }
                 }
 
-                if (client.Player.PlayerData.RecruitListLoaded == false) {
+                if (client.Player.PlayerData.RecruitListLoaded == false)
+                {
                     PlayerDataManager.LoadPlayerRecruitList(dbConnection.Database, client.Player.PlayerData);
                 }
 
-                for (int i = 1; i <= Constants.TOTAL_POKEMON; i++) {
-                    if (!client.Player.RecruitList.ContainsKey(i)) {
+                for (int i = 1; i <= Constants.TOTAL_POKEMON; i++)
+                {
+                    if (!client.Player.RecruitList.ContainsKey(i))
+                    {
                         packet.AppendParameter((int)Enums.PokedexStat.Unknown);
-                    } else {
+                    }
+                    else
+                    {
                         packet.AppendParameter(client.Player.RecruitList[i]);
                     }
                 }
@@ -1685,11 +1962,14 @@ namespace Server.Network
             }
         }
 
-        public static void SendOnlineList(Client client) {
+        public static void SendOnlineList(Client client)
+        {
             TcpPacket packet = new TcpPacket();
             int n = 0;
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying()) {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying())
+                {
                     packet.AppendParameter(i.Player.Name);
                     n++;
                 }
@@ -1699,8 +1979,8 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendPlayerData(Client client) {
-
+        public static void SendPlayerData(Client client)
+        {
             TcpPacket packet = TcpPacket.CreatePacket("playerdata",
                                                                   client.ConnectionID.ToString(), client.Player.Name, client.Player.GetActiveRecruit().Sprite.ToString(),
                                                                   client.Player.GetActiveRecruit().Form.ToString(), ((int)client.Player.GetActiveRecruit().Shiny).ToString(), ((int)client.Player.GetActiveRecruit().Sex).ToString(),
@@ -1710,7 +1990,8 @@ namespace Server.Network
                                                                   client.Player.Status, client.Player.GetActiveRecruit().Visible.ToIntString());
 
             packet.AppendParameters(0, (int)client.Player.GetActiveRecruit().StatusAilment, client.Player.GetActiveRecruit().VolatileStatus.Count);
-            for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++) {
+            for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++)
+            {
                 packet.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus[j].Emoticon);
             }
             PacketHitList hitlist = null;
@@ -1720,37 +2001,38 @@ namespace Server.Network
 
             PacketHitList.MethodEnded(ref hitlist);
             //SendDataToMapBut(client, client.Player.MapID, packet);
-                        Recruit recruit = client.Player.GetActiveRecruit();
+            Recruit recruit = client.Player.GetActiveRecruit();
             int mobility = 0;
-            for (int i = 15; i >= 0; i--) {
-                if (recruit.Mobility[i]) {
+            for (int i = 15; i >= 0; i--)
+            {
+                if (recruit.Mobility[i])
+                {
                     mobility += (int)System.Math.Pow(2, i);
                 }
             }
-            
-                TcpPacket myPacket = TcpPacket.CreatePacket("myplayerdata", client.Player.ActiveSlot.ToString(),
-                                                      client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
-                                                      client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
-                                                      ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
-                                                      client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),
-                                                      client.Player.Solid.ToIntString(), client.Player.Status, client.Player.GetActiveRecruit().Confused.ToIntString(),
-                                                      ((int)client.Player.GetActiveRecruit().StatusAilment).ToString(), ((int)client.Player.SpeedLimit).ToString(),
-                                                      mobility.ToString(), client.Player.GetActiveRecruit().TimeMultiplier.ToString(),
-                                                      recruit.Darkness.ToString());
+
+            TcpPacket myPacket = TcpPacket.CreatePacket("myplayerdata", client.Player.ActiveSlot.ToString(),
+                                                  client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
+                                                  client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
+                                                  ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
+                                                  client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),
+                                                  client.Player.Solid.ToIntString(), client.Player.Status, client.Player.GetActiveRecruit().Confused.ToIntString(),
+                                                  ((int)client.Player.GetActiveRecruit().StatusAilment).ToString(), ((int)client.Player.SpeedLimit).ToString(),
+                                                  mobility.ToString(), client.Player.GetActiveRecruit().TimeMultiplier.ToString(),
+                                                  recruit.Darkness.ToString());
 
             myPacket.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus.Count);
-            for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++) {
+            for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++)
+            {
                 myPacket.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus[j].Emoticon);
             }
             SendDataTo(client, myPacket);
-
-
         }
 
 
 
-        public static void SendPlayerGuild(Client client) {
-
+        public static void SendPlayerGuild(Client client)
+        {
             TcpPacket packet = TcpPacket.CreatePacket("playerguild", client.ConnectionID.ToString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString());
 
             PacketHitList hitlist = null;
@@ -1765,22 +2047,27 @@ namespace Server.Network
             SendDataTo(client, myPacket);
         }
 
-        public static void SendGuildMenu(Client client) {
+        public static void SendGuildMenu(Client client)
+        {
             TcpPacket packet = TcpPacket.CreatePacket("guildmenu");
 
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 List<GuildMemberData> members = DataManager.Players.PlayerDataManager.LoadGuildInfo(dbConnection.Database, client.Player.GuildName);
 
                 packet.AppendParameter(members.Count);
-                foreach (GuildMemberData member in members) {
-                    if (!String.IsNullOrEmpty(member.LastLogin)) {
+                foreach (GuildMemberData member in members)
+                {
+                    if (!String.IsNullOrEmpty(member.LastLogin))
+                    {
                         string[] loginDate = member.LastLogin.Split(' ')[0].Split(':');
                         string login = loginDate[2] + "/" + loginDate[1] + "/" + loginDate[0];
                         packet.AppendParameters(member.Name, member.GuildAccess.ToString(), login);
-                    } else {
+                    }
+                    else
+                    {
                         packet.AppendParameters(member.Name, member.GuildAccess.ToString(), "---");
                     }
-                    
                 }
             }
 
@@ -1788,76 +2075,100 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendGuildCreation(Client client) {
+        public static void SendGuildCreation(Client client)
+        {
             TcpPacket packet = new TcpPacket("createguild");
             Party party = PartyManager.FindPlayerParty(client);
 
-            if (party != null) {
+            if (party != null)
+            {
                 packet.AppendParameter(party.MemberCount);
-                foreach (Client member in party.GetOnlineMemberClients()) {
+                foreach (Client member in party.GetOnlineMemberClients())
+                {
                     packet.AppendParameter(member.Player.Name);
                 }
-            } else {
+            }
+            else
+            {
                 packet.AppendParameters("1", client.Player.Name);
             }
             SendDataTo(client, packet);
         }
 
-        public static void SendFullGuildUpdate(string guildName) {
+        public static void SendFullGuildUpdate(string guildName)
+        {
             TcpPacket packet = TcpPacket.CreatePacket("fullguildupdate");
-            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
                 List<GuildMemberData> members = DataManager.Players.PlayerDataManager.LoadGuildInfo(dbConnection.Database, guildName);
 
                 packet.AppendParameter(members.Count);
-                foreach (GuildMemberData member in members) {
-                    if (!String.IsNullOrEmpty(member.LastLogin)) {
+                foreach (GuildMemberData member in members)
+                {
+                    if (!String.IsNullOrEmpty(member.LastLogin))
+                    {
                         string[] loginDate = member.LastLogin.Split(' ')[0].Split(':');
                         string login = loginDate[2] + "/" + loginDate[1] + "/" + loginDate[0];
                         packet.AppendParameters(member.Name, member.GuildAccess.ToString(), login);
-                    } else {
+                    }
+                    else
+                    {
                         packet.AppendParameters(member.Name, member.GuildAccess.ToString(), "---");
                     }
-
                 }
             }
-            
-            foreach (Client target in ClientManager.GetClients()) {
-                if (target.Player.GuildName == guildName) {
-                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild) {
 
+            foreach (Client target in ClientManager.GetClients())
+            {
+                if (target.Player.GuildName == guildName)
+                {
+                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild)
+                    {
                         SendDataTo(target, packet);
                     }
                 }
             }
         }
 
-        public static void SendGuildUpdate(string guildName, int index, Enums.GuildRank newAccess) {
+        public static void SendGuildUpdate(string guildName, int index, Enums.GuildRank newAccess)
+        {
             //send update to all potential guild members with the menu open
-            foreach (Client target in ClientManager.GetClients()) {
-                if (target.Player.GuildName == guildName) {
-                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild) {
+            foreach (Client target in ClientManager.GetClients())
+            {
+                if (target.Player.GuildName == guildName)
+                {
+                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild)
+                    {
                         SendDataTo(target, TcpPacket.CreatePacket("guildupdate", index, (int)newAccess));
                     }
                 }
             }
         }
 
-        public static void SendGuildAdd(string guildName, string name) {
+        public static void SendGuildAdd(string guildName, string name)
+        {
             //send update to all potential guild members with the menu open
-            foreach (Client target in ClientManager.GetClients()) {
-                if (target.Player.GuildName == guildName) {
-                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild) {
+            foreach (Client target in ClientManager.GetClients())
+            {
+                if (target.Player.GuildName == guildName)
+                {
+                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild)
+                    {
                         SendDataTo(target, TcpPacket.CreatePacket("guildadd", name));
                     }
                 }
             }
         }
 
-        public static void SendGuildRemove(string guildName, int index) {
+        public static void SendGuildRemove(string guildName, int index)
+        {
             //send update to all potential guild members with the menu open
-            foreach (Client target in ClientManager.GetClients()) {
-                if (target.Player.GuildName == guildName) {
-                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild) {
+            foreach (Client target in ClientManager.GetClients())
+            {
+                if (target.Player.GuildName == guildName)
+                {
+                    if (target.Player.Map.Tile[target.Player.X, target.Player.Y].Type == Enums.TileType.Guild)
+                    {
                         SendDataTo(target, TcpPacket.CreatePacket("guildremove", index));
                     }
                 }
@@ -1902,9 +2213,11 @@ namespace Server.Network
         }
         */
 
-        public static void SendPlayerMoves(Client client) {
+        public static void SendPlayerMoves(Client client)
+        {
             TcpPacket packet = new TcpPacket("moves");
-            for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++) {
+            for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++)
+            {
                 RecruitMove move = client.Player.GetActiveRecruit().Moves[i];
                 packet.AppendParameters(move.MoveNum.ToString(), move.CurrentPP.ToString(), move.MaxPP.ToString(), move.Sealed.ToIntString());
             }
@@ -1930,21 +2243,24 @@ namespace Server.Network
         }
         */
 
-        public static void SendStartStoryTo(Client client, int storyNum, int segment) {
+        public static void SendStartStoryTo(Client client, int storyNum, int segment)
+        {
             client.Player.CurrentChapter = StoryManager.Stories[storyNum];
             client.Player.CurrentSegment = segment;
             SendDataTo(client, TcpPacket.CreatePacket("startstory", storyNum.ToString(), segment.ToString()));
             client.Player.SegmentToStart = -1;
         }
 
-        public static void SendStartStoryTo(Client client, int storyNum) {
+        public static void SendStartStoryTo(Client client, int storyNum)
+        {
             client.Player.CurrentChapter = StoryManager.Stories[storyNum];
             client.Player.CurrentSegment = 0;
             SendDataTo(client, TcpPacket.CreatePacket("startstory", storyNum.ToString(), "0"));
             client.Player.SegmentToStart = -1;
         }
 
-        public static void ForceEndStoryTo(Client client) {
+        public static void ForceEndStoryTo(Client client)
+        {
             client.Player.CurrentChapter = null;
             client.Player.CurrentSegment = -1;
             client.Player.QuestionID = "";
@@ -1952,7 +2268,8 @@ namespace Server.Network
             client.Player.SegmentToStart = -1;
         }
 
-        public static void SendStats(Client client) {
+        public static void SendStats(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("playerstatspacket", client.Player.GetActiveRecruit().Atk.ToString(),
                                                       client.Player.GetActiveRecruit().Def.ToString(), client.Player.GetActiveRecruit().Spd.ToString(),
                                                       client.Player.GetActiveRecruit().SpclAtk.ToString(), client.Player.GetActiveRecruit().SpclDef.ToString(), client.Player.GetActiveRecruit().GetNextLevel().ToString(),
@@ -1960,34 +2277,43 @@ namespace Server.Network
         }
 
 
-        public static void SendShopMenu(Client client, int shopNum) {
-            if (Shops.ShopManager.Shops[shopNum].JoinSay.Trim() != "") {
+        public static void SendShopMenu(Client client, int shopNum)
+        {
+            if (Shops.ShopManager.Shops[shopNum].JoinSay.Trim() != "")
+            {
                 PlayerMsg(client, Shops.ShopManager.Shops[shopNum].JoinSay.Trim(), Color.Yellow);
             }
             SendDataTo(client, TcpPacket.CreatePacket("openshop"));
-
         }
 
-        public static void SendRecallMenu(Client client, bool earlierEvo) {
+        public static void SendRecallMenu(Client client, bool earlierEvo)
+        {
             List<int> validLevelUpMoves = new List<int>();
             List<int> currentMoves = new List<int>();
-            for (int i = 0; i < 4; i++) {
-                if (client.Player.GetActiveRecruit().Moves[i].MoveNum > 0) {
+            for (int i = 0; i < 4; i++)
+            {
+                if (client.Player.GetActiveRecruit().Moves[i].MoveNum > 0)
+                {
                     currentMoves.Add(client.Player.GetActiveRecruit().Moves[i].MoveNum);
                 }
             }
 
-            if (earlierEvo) {
+            if (earlierEvo)
+            {
                 int species = EvolutionManager.FindPreEvolution(client.Player.GetActiveRecruit().Species);
 
-                while (species > -1) {
-
+                while (species > -1)
+                {
                     Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(species, client.Player.GetActiveRecruit().Form);
-                    if (pokemon != null) {
-                        for (int n = 0; n < pokemon.LevelUpMoves.Count; n++) {
-                            if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level) {
+                    if (pokemon != null)
+                    {
+                        for (int n = 0; n < pokemon.LevelUpMoves.Count; n++)
+                        {
+                            if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level)
+                            {
                                 int moveNum = pokemon.LevelUpMoves[n].Move;
-                                if (!currentMoves.Contains(moveNum) && !validLevelUpMoves.Contains(moveNum)) {
+                                if (!currentMoves.Contains(moveNum) && !validLevelUpMoves.Contains(moveNum))
+                                {
                                     validLevelUpMoves.Add(moveNum);
                                 }
                             }
@@ -1996,13 +2322,19 @@ namespace Server.Network
 
                     species = EvolutionManager.FindPreEvolution(species);
                 }
-            } else {
+            }
+            else
+            {
                 Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(client.Player.GetActiveRecruit().Species, client.Player.GetActiveRecruit().Form);
-                if (pokemon != null) {
-                    for (int n = 0; n < pokemon.LevelUpMoves.Count; n++) {
-                        if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level) {
+                if (pokemon != null)
+                {
+                    for (int n = 0; n < pokemon.LevelUpMoves.Count; n++)
+                    {
+                        if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level)
+                        {
                             int moveNum = pokemon.LevelUpMoves[n].Move;
-                            if (!currentMoves.Contains(moveNum) && !validLevelUpMoves.Contains(moveNum)) {
+                            if (!currentMoves.Contains(moveNum) && !validLevelUpMoves.Contains(moveNum))
+                            {
                                 validLevelUpMoves.Add(moveNum);
                             }
                         }
@@ -2012,18 +2344,19 @@ namespace Server.Network
 
             TcpPacket packet = new TcpPacket("moverecallmenu");
 
-            foreach (int move in validLevelUpMoves) {
+            foreach (int move in validLevelUpMoves)
+            {
                 packet.AppendParameter(move);
             }
 
             packet.FinalizePacket();
 
             SendDataTo(client, packet);
-
         }
 
 
-        public static void SendTrade(Client client, int ShopNum) {
+        public static void SendTrade(Client client, int ShopNum)
+        {
             TcpPacket packet = new TcpPacket();
 
             //int X = 0;
@@ -2033,8 +2366,10 @@ namespace Server.Network
 
             //packet.AppendParameters(ShopNum.ToString(), ShopManager.Shops[ShopNum].LeaveSay);
 
-            for (int i = 0; i < Constants.MAX_TRADES; i++) {
-                if (ShopManager.Shops[ShopNum].Items[i].GetItem > 0) {
+            for (int i = 0; i < Constants.MAX_TRADES; i++)
+            {
+                if (ShopManager.Shops[ShopNum].Items[i].GetItem > 0)
+                {
                     XX++;
 
                     packet.AppendParameters(
@@ -2063,24 +2398,31 @@ namespace Server.Network
                 XX.ToString());
 
             packet.FinalizePacket();
-            if (ShopManager.Shops[ShopNum].JoinSay != "") {
+            if (ShopManager.Shops[ShopNum].JoinSay != "")
+            {
                 PlayerMsg(client, ShopManager.Shops[ShopNum].JoinSay, Text.Yellow);
             }
-            if (XX == 0) {
+            if (XX == 0)
+            {
                 SendDataTo(client, packet);
                 PlayerMsg(client, "This shop has nothing to sell!", Text.BrightRed);
-            } else {
+            }
+            else
+            {
                 SendDataTo(client, packet);
             }
         }
 
-        public static void SendUpdateStoryTo(Client client, int StoryNum) {
+        public static void SendUpdateStoryTo(Client client, int StoryNum)
+        {
             TcpPacket packet = new TcpPacket("updatestory");
             Story story = StoryManager.Stories[StoryNum];
             packet.AppendParameters(StoryNum.ToString(), StoryManager.Stories[StoryNum].Name.Trim(), StoryManager.Stories[StoryNum].Revision.ToString(), StoryManager.Stories[StoryNum].StoryStart.ToString(), StoryManager.Stories[StoryNum].Segments.Count.ToString());
-            for (int i = 0; i < StoryManager.Stories[StoryNum].Segments.Count; i++) {
+            for (int i = 0; i < StoryManager.Stories[StoryNum].Segments.Count; i++)
+            {
                 packet.AppendParameters(StoryManager.Stories[StoryNum].Segments[i].Parameters.Count.ToString(), ((int)StoryManager.Stories[StoryNum].Segments[i].Action).ToString());
-                for (int z = 0; z < StoryManager.Stories[StoryNum].Segments[i].Parameters.Count; z++) {
+                for (int z = 0; z < StoryManager.Stories[StoryNum].Segments[i].Parameters.Count; z++)
+                {
                     packet.AppendParameters(StoryManager.Stories[StoryNum].Segments[i].Parameters.KeyByIndex(z), StoryManager.Stories[StoryNum].Segments[i].Parameters.ValueByIndex(z));
                 }
             }
@@ -2088,12 +2430,15 @@ namespace Server.Network
             SendDataTo(client, packet, true, false);
         }
 
-        public static void SendRunStoryTo(Client client, Story story) {
+        public static void SendRunStoryTo(Client client, Story story)
+        {
             TcpPacket packet = new TcpPacket("runstory");
             packet.AppendParameters("-2", story.Name == null ? "" : story.Name, story.Revision.ToString(), story.StoryStart.ToString(), story.Segments.Count.ToString());
-            for (int i = 0; i < story.Segments.Count; i++) {
+            for (int i = 0; i < story.Segments.Count; i++)
+            {
                 packet.AppendParameters(story.Segments[i].Parameters.Count.ToString(), ((int)story.Segments[i].Action).ToString());
-                for (int z = 0; z < story.Segments[i].Parameters.Count; z++) {
+                for (int z = 0; z < story.Segments[i].Parameters.Count; z++)
+                {
                     packet.AppendParameters(story.Segments[i].Parameters.KeyByIndex(z), story.Segments[i].Parameters.ValueByIndex(z));
                 }
             }
@@ -2101,11 +2446,13 @@ namespace Server.Network
             SendDataTo(client, packet, true, false);
         }
 
-        public static void SendLoadingStoryTo(Client client) {
+        public static void SendLoadingStoryTo(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("loadingstory"));
         }
 
-        public static void SendUpdateStoryNameToAll(int storyNum) {
+        public static void SendUpdateStoryNameToAll(int storyNum)
+        {
             SendDataToAll(TcpPacket.CreatePacket("updatestoryname", storyNum.ToString(), StoryManager.Stories[storyNum].Name ?? ""));
         }
 
@@ -2120,15 +2467,15 @@ namespace Server.Network
         }
         */
 
-        public static void SendWeatherToAll() {
+        public static void SendWeatherToAll()
+        {
             //if (Globals.WeatherIntensity <= 0) Globals.WeatherIntensity = 1;
             //if (Globals.ServerWeather == Enums.Weather.None) {
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.IsPlaying()) {
-
-
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.IsPlaying())
+                {
                     SendDataTo(i, TcpPacket.CreatePacket("weather", ((int)i.Player.Map.Weather).ToString()));
-
                 }
             }
             //} else {
@@ -2137,43 +2484,55 @@ namespace Server.Network
 
         }
 
-        public static void SendGameTimeToAll() {
+        public static void SendGameTimeToAll()
+        {
             SendDataToAll(TcpPacket.CreatePacket("gametime", ((int)Globals.ServerTime).ToString()));
         }
 
-        public static void SendGameTimeTo(Client client) {
+        public static void SendGameTimeTo(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("gametime", ((int)Globals.ServerTime).ToString()));
         }
 
-        public static void SendAvailableExpKitModules(Client client) {
+        public static void SendAvailableExpKitModules(Client client)
+        {
             TcpPacket packet = new TcpPacket("kitmodules");
             packet.AppendParameter(client.Player.AvailableExpKitModules.Count);
-            for (int i = 0; i < client.Player.AvailableExpKitModules.Count; i++) {
+            for (int i = 0; i < client.Player.AvailableExpKitModules.Count; i++)
+            {
                 packet.AppendParameter((int)client.Player.AvailableExpKitModules[i].Type);
             }
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void SendWhosOnline(Client client) {
+        public static void SendWhosOnline(Client client)
+        {
             string s = "";
             int n = 0;
-            foreach (Client i in ClientManager.GetClients()) {
-                if (i.Player != null) {
-                    if (i.IsPlaying() && i != client) {
+            foreach (Client i in ClientManager.GetClients())
+            {
+                if (i.Player != null)
+                {
+                    if (i.IsPlaying() && i != client)
+                    {
                         n++;
                     }
                 }
             }
-            if (n == 0) {
+            if (n == 0)
+            {
                 s = "There are no other players online.";
-            } else {
+            }
+            else
+            {
                 s = "There are " + n.ToString() + " other players online.";
             }
             PlayerMsg(client, s, Text.Grey);
         }
 
-        public static void SpellAnim(int SpellNum, string mapID, int X, int Y) {
+        public static void SpellAnim(int SpellNum, string mapID, int X, int Y)
+        {
             SendDataToMap(mapID, PacketBuilder.CreateSpellAnim(SpellNum, X, Y));
         }
 
@@ -2182,7 +2541,8 @@ namespace Server.Network
         //    SendDataToMap(client.Player.MapID, TcpPacket.CreatePacket("scriptspellanim", SpellNum.ToString(), MoveManager.Moves[SpellNum].SpellAnim.ToString(), MoveManager.Moves[SpellNum].SpellTime.ToString(), MoveManager.Moves[SpellNum].SpellDone.ToString(), X.ToString(), Y.ToString(), MoveManager.Moves[SpellNum].Big.ToIntString()));
         //}
 
-        public static void StorageMessage(Client client, string msg) {
+        public static void StorageMessage(Client client, string msg)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("msg", msg));
         }
 
@@ -2228,7 +2588,8 @@ namespace Server.Network
         //    packet.FinalizePacket();
         //   SendDataTo(client, packet);
         //}
-        public static void SendEditEmotionTo(Client client, int EmoNum) {
+        public static void SendEditEmotionTo(Client client, int EmoNum)
+        {
             TcpPacket packet = new TcpPacket("editemoticon");
             packet.AppendParameter(EmoNum);
             packet.AppendClass(EmoticonManagerBase.Emoticons[EmoNum]);
@@ -2239,10 +2600,12 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditEvoTo(Client client, int EvoNum) {
+        public static void SendEditEvoTo(Client client, int EvoNum)
+        {
             TcpPacket packet = new TcpPacket("editevo");
             packet.AppendParameters(Evolutions.EvolutionManager.Evolutions[EvoNum].Name, Evolutions.EvolutionManager.Evolutions[EvoNum].Species.ToString(), Evolutions.EvolutionManager.Evolutions[EvoNum].Branches.Count.ToString());
-            foreach (Evolutions.EvolutionBranch i in Evolutions.EvolutionManager.Evolutions[EvoNum].Branches) {
+            foreach (Evolutions.EvolutionBranch i in Evolutions.EvolutionManager.Evolutions[EvoNum].Branches)
+            {
                 packet.AppendParameters(i.Name, i.NewSpecies.ToString(), i.ReqScript.ToString(), i.Data1.ToString(), i.Data2.ToString(), i.Data3.ToString());
             }
             //for (int i = 0; i <= EvolutionManager.Evolutions[EvoNum].SplitEvosNum; i++) {
@@ -2252,38 +2615,46 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditItemTo(Client client, int itemnum) {
+        public static void SendEditItemTo(Client client, int itemnum)
+        {
             TcpPacket packet = TcpPacket.CreatePacket("edititem", itemnum);
             SendDataTo(client, packet);
         }
 
-        public static void SendItemEditor(Client client) {
+        public static void SendItemEditor(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("itemeditor"));
         }
 
-        public static void SendArrowEditor(Client client) {
+        public static void SendArrowEditor(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("arroweditor"));
         }
 
-        public static void OpenMoveForgetMenu(Client client) {
+        public static void OpenMoveForgetMenu(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("openmoveforgetmenu"));
         }
 
-        public static void SendNpcAiTypes(Client client) {
+        public static void SendNpcAiTypes(Client client)
+        {
             TcpPacket packet = new TcpPacket("npcaitypes");
             packet.AppendParameter(Scripting.ScriptManager.NPCAIType.Count);
-            for (int i = 0; i < Scripting.ScriptManager.NPCAIType.Count; i++) {
+            for (int i = 0; i < Scripting.ScriptManager.NPCAIType.Count; i++)
+            {
                 packet.AppendParameters(Scripting.ScriptManager.NPCAIType.KeyByIndex(i));
             }
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void SendNpcEmotion(Client client, int npcSlot, Enums.Emotion emotion) {
+        public static void SendNpcEmotion(Client client, int npcSlot, Enums.Emotion emotion)
+        {
             SendDataToMap(client.Player.MapID, TcpPacket.CreatePacket("npcemotion", npcSlot.ToString(), ((int)emotion).ToString()));
         }
 
-        public static void SendRDungeonEditor(Client client) {
+        public static void SendRDungeonEditor(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("rdungeoneditor"));
         }
 
@@ -2293,7 +2664,8 @@ namespace Server.Network
         //   packet.FinalizePacket();
         //   SendDataToAll(packet);
         //}
-        public static void SendUpdateEmoticonToAll(int EmoteNum) {
+        public static void SendUpdateEmoticonToAll(int EmoteNum)
+        {
             TcpPacket packet = new TcpPacket("updateemoticon");
             packet.AppendParameter(EmoteNum);
             packet.AppendClass(EmoticonManagerBase.Emoticons[EmoteNum]);
@@ -2301,14 +2673,16 @@ namespace Server.Network
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateEvoToAll(int EvoNum) {
+        public static void SendUpdateEvoToAll(int EvoNum)
+        {
             TcpPacket packet = new TcpPacket("updateevo");
             packet.AppendParameters(EvoNum.ToString(), EvolutionManager.Evolutions[EvoNum].Name);
             packet.FinalizePacket();
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateItemToAll(int itemnum) {
+        public static void SendUpdateItemToAll(int itemnum)
+        {
             TcpPacket packet = new TcpPacket("updateitem");
             packet.AppendParameters(
                 itemnum.ToString(),
@@ -2371,7 +2745,8 @@ namespace Server.Network
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateMissionToAll(int MissionIndex) {
+        public static void SendUpdateMissionToAll(int MissionIndex)
+        {
             //string TcpPacket = "UPDATEMISSION" + TcpManager.SEP_CHAR + MissionIndex.ToString() + TcpManager.SEP_CHAR;
             //if (Program.ClassMan.mMissions.mMissions.ContainsKey(MissionIndex)) {
             //    TcpPacket = TcpPacket + Program.ClassMan.mMissions[MissionIndex].Name + TcpManager.SEP_CHAR;
@@ -2382,7 +2757,8 @@ namespace Server.Network
             //SendDataToAll(TcpPacket);
         }
 
-        public static void SendUpdateMoveToAll(int SpellNum) {
+        public static void SendUpdateMoveToAll(int SpellNum)
+        {
             TcpPacket packet = new TcpPacket("updatespell");
             packet.AppendParameters(SpellNum.ToString(),
                     MoveManager.Moves[SpellNum].Name,
@@ -2395,7 +2771,8 @@ namespace Server.Network
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateNpcToAll(int NPCNum) {
+        public static void SendUpdateNpcToAll(int NPCNum)
+        {
             TcpPacket packet = new TcpPacket("updatenpc");
             packet.AppendParameters(NPCNum.ToString(), NpcManager.Npcs[NPCNum].Name);
             SendDataToAll(packet);
@@ -2433,64 +2810,81 @@ namespace Server.Network
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateRDungeonToAll(int dungeonIndex) {
+        public static void SendUpdateRDungeonToAll(int dungeonIndex)
+        {
             TcpPacket packet = new TcpPacket("rdungeonupdate");
             packet.AppendParameter(dungeonIndex);
-            if (RDungeonManager.RDungeons.RDungeons.ContainsKey(dungeonIndex)) {
+            if (RDungeonManager.RDungeons.RDungeons.ContainsKey(dungeonIndex))
+            {
                 packet.AppendParameters(RDungeonManager.RDungeons[dungeonIndex].DungeonName);
-            } else {
+            }
+            else
+            {
                 packet.AppendParameters("");
             }
             packet.FinalizePacket();
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateShopToAll(int ShopNum) {
+        public static void SendUpdateShopToAll(int ShopNum)
+        {
             TcpPacket packet = new TcpPacket("updateshop");
             packet.AppendParameters(ShopNum.ToString(), ShopManager.Shops[ShopNum].Name);
             packet.FinalizePacket();
             SendDataToAll(packet);
         }
 
-        public static void SendUpdateDungeonToAll(int DungeonIndex) {
+        public static void SendUpdateDungeonToAll(int DungeonIndex)
+        {
             TcpPacket packet = new TcpPacket("updatedungeon");
             packet.AppendParameter(DungeonIndex);
-            if (DungeonManager.Dungeons.Dungeons.ContainsKey(DungeonIndex)) {
+            if (DungeonManager.Dungeons.Dungeons.ContainsKey(DungeonIndex))
+            {
                 packet.AppendParameters(DungeonManager.Dungeons[DungeonIndex].Name);
-            } else {
+            }
+            else
+            {
                 packet.AppendParameters("");
             }
             packet.FinalizePacket();
             SendDataToAll(packet);
         }
 
-        public static void SendAddDungeonToAll(int dungeonIndex) {
+        public static void SendAddDungeonToAll(int dungeonIndex)
+        {
             TcpPacket packet = new TcpPacket("dungeonadded");
             packet.AppendParameter(dungeonIndex);
-            if (DungeonManager.Dungeons.Dungeons.ContainsKey(dungeonIndex)) {
+            if (DungeonManager.Dungeons.Dungeons.ContainsKey(dungeonIndex))
+            {
                 packet.AppendParameters(DungeonManager.Dungeons[dungeonIndex].Name);
-            } else {
+            }
+            else
+            {
                 packet.AppendParameters("");
             }
             packet.FinalizePacket();
             SendDataToAll(packet);
         }
 
-        
-        public static void SendEditMissionTo(Client client, int DifficultyNum) {
+
+        public static void SendEditMissionTo(Client client, int DifficultyNum)
+        {
             TcpPacket packet = new TcpPacket("editmission");
             packet.AppendParameter(DifficultyNum);
             packet.AppendParameter(WonderMailManager.Missions.MissionPools[DifficultyNum].MissionClients.Count);
-            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].MissionClients.Count; i++) {
+            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].MissionClients.Count; i++)
+            {
                 packet.AppendParameters(WonderMailManager.Missions.MissionPools[DifficultyNum].MissionClients[i].Species,
                     WonderMailManager.Missions.MissionPools[DifficultyNum].MissionClients[i].Form);
             }
             packet.AppendParameter(WonderMailManager.Missions.MissionPools[DifficultyNum].Enemies.Count);
-            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].Enemies.Count; i++) {
+            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].Enemies.Count; i++)
+            {
                 packet.AppendParameter(WonderMailManager.Missions.MissionPools[DifficultyNum].Enemies[i].NpcNum);
             }
             packet.AppendParameter(WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards.Count);
-            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards.Count; i++) {
+            for (int i = 0; i < WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards.Count; i++)
+            {
                 packet.AppendParameters(WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards[i].ItemNum,
                     WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards[i].Amount);
                 packet.AppendParameter(WonderMailManager.Missions.MissionPools[DifficultyNum].Rewards[i].Tag);
@@ -2499,11 +2893,12 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditMoveTo(Client client, int MoveNum) {
+        public static void SendEditMoveTo(Client client, int MoveNum)
+        {
             TcpPacket packet = new TcpPacket("editmove");
             packet.AppendParameters(MoveNum.ToString(),
                                     MoveManager.Moves[MoveNum].Name,
-                //MoveManager.Moves[MoveNum].LevelReq.ToString(),
+                                    //MoveManager.Moves[MoveNum].LevelReq.ToString(),
                                     MoveManager.Moves[MoveNum].MaxPP.ToString(),
                                     ((int)MoveManager.Moves[MoveNum].EffectType).ToString(),
                                     ((int)MoveManager.Moves[MoveNum].Element).ToString(),
@@ -2539,7 +2934,8 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditNpcTo(Client client, int NPCNum) {
+        public static void SendEditNpcTo(Client client, int NPCNum)
+        {
             TcpPacket packet = new TcpPacket("editnpc");
             packet.AppendParameters(
                  NpcManager.Npcs[NPCNum].Name,
@@ -2556,10 +2952,12 @@ namespace Server.Network
                  NpcManager.Npcs[NPCNum].SpawnsAtNight.ToIntString()
              );
 
-            for (int i = 0; i < NpcManager.Npcs[NPCNum].Moves.Length; i++) {
+            for (int i = 0; i < NpcManager.Npcs[NPCNum].Moves.Length; i++)
+            {
                 packet.AppendParameter(NpcManager.Npcs[NPCNum].Moves[i]);
             }
-            for (int i = 0; i < NpcManager.Npcs[NPCNum].Drops.Length; i++) {
+            for (int i = 0; i < NpcManager.Npcs[NPCNum].Drops.Length; i++)
+            {
                 packet.AppendParameters(
                     NpcManager.Npcs[NPCNum].Drops[i].ItemNum.ToString(),
                     NpcManager.Npcs[NPCNum].Drops[i].ItemValue.ToString(),
@@ -2571,14 +2969,16 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditRDungeonTo(Client client, int dungeonIndex) {
+        public static void SendEditRDungeonTo(Client client, int dungeonIndex)
+        {
             RDungeons.RDungeon dungeon = RDungeons.RDungeonManager.RDungeons[dungeonIndex];
             TcpPacket packet = new TcpPacket("editrdungeon");
             packet.AppendParameter(dungeonIndex.ToString());
             if (dungeon == null)
                 dungeon = new RDungeon(dungeonIndex);
             packet.AppendParameters(dungeon.DungeonName, ((int)dungeon.Direction).ToString(), dungeon.Floors.Count.ToString(), dungeon.Recruitment.ToIntString(), dungeon.Exp.ToIntString(), dungeon.WindTimer.ToString(), dungeon.DungeonIndex.ToString());
-            for (int i = 0; i < dungeon.Floors.Count; i++) {
+            for (int i = 0; i < dungeon.Floors.Count; i++)
+            {
                 //Generator Options
                 packet.AppendParameters(dungeon.Floors[i].Options.TrapMin.ToString(), dungeon.Floors[i].Options.TrapMax.ToString(),
                                         dungeon.Floors[i].Options.ItemMin.ToString(), dungeon.Floors[i].Options.ItemMax.ToString(),
@@ -2748,7 +3148,8 @@ namespace Server.Network
                                 dungeon.Floors[i].NpcMax.ToString());
 
                 packet.AppendParameter(dungeon.Floors[i].Items.Count);
-                for (int item = 0; item < dungeon.Floors[i].Items.Count; item++) {
+                for (int item = 0; item < dungeon.Floors[i].Items.Count; item++)
+                {
                     packet.AppendParameters(dungeon.Floors[i].Items[item].ItemNum.ToString(),
                                             dungeon.Floors[i].Items[item].MinAmount.ToString(),
                                             dungeon.Floors[i].Items[item].MaxAmount.ToString(),
@@ -2762,7 +3163,8 @@ namespace Server.Network
                 }
 
                 packet.AppendParameter(dungeon.Floors[i].Npcs.Count);
-                for (int npc = 0; npc < dungeon.Floors[i].Npcs.Count; npc++) {
+                for (int npc = 0; npc < dungeon.Floors[i].Npcs.Count; npc++)
+                {
                     packet.AppendParameters(dungeon.Floors[i].Npcs[npc].NpcNum.ToString(),
                                             dungeon.Floors[i].Npcs[npc].MinLevel.ToString(),
                                             dungeon.Floors[i].Npcs[npc].MaxLevel.ToString(),
@@ -2773,7 +3175,8 @@ namespace Server.Network
                 }
 
                 packet.AppendParameter(dungeon.Floors[i].SpecialTiles.Count);
-                for (int trap = 0; trap < dungeon.Floors[i].SpecialTiles.Count; trap++) {
+                for (int trap = 0; trap < dungeon.Floors[i].SpecialTiles.Count; trap++)
+                {
                     packet.AppendParameters(((int)dungeon.Floors[i].SpecialTiles[trap].Type).ToString(),
                                             dungeon.Floors[i].SpecialTiles[trap].Data1.ToString(),
                                             dungeon.Floors[i].SpecialTiles[trap].Data2.ToString(),
@@ -2806,12 +3209,14 @@ namespace Server.Network
                 }
 
                 packet.AppendParameter(dungeon.Floors[i].Weather.Count);
-                for (int weather = 0; weather < dungeon.Floors[i].Weather.Count; weather++) {
+                for (int weather = 0; weather < dungeon.Floors[i].Weather.Count; weather++)
+                {
                     packet.AppendParameters(((int)dungeon.Floors[i].Weather[weather]).ToString());
                 }
 
                 packet.AppendParameter(dungeon.Floors[i].Options.Chambers.Count);
-                for (int chamber = 0; chamber < dungeon.Floors[i].Options.Chambers.Count; chamber++) {
+                for (int chamber = 0; chamber < dungeon.Floors[i].Options.Chambers.Count; chamber++)
+                {
                     packet.AppendParameters(dungeon.Floors[i].Options.Chambers[chamber].ChamberNum.ToString(),
                                             dungeon.Floors[i].Options.Chambers[chamber].String1,
                                             dungeon.Floors[i].Options.Chambers[chamber].String2,
@@ -2823,22 +3228,27 @@ namespace Server.Network
             SendDataTo(client, packet, true, false);
         }
 
-        public static void SendEditDungeonTo(Client client, int DungeonIndex) {
-            if (DungeonManager.Dungeons.Dungeons.ContainsKey(DungeonIndex)) {
+        public static void SendEditDungeonTo(Client client, int DungeonIndex)
+        {
+            if (DungeonManager.Dungeons.Dungeons.ContainsKey(DungeonIndex))
+            {
                 Dungeons.Dungeon dungeon = DungeonManager.Dungeons[DungeonIndex];
                 TcpPacket packet = new TcpPacket("editdungeon");
                 packet.AppendParameters(DungeonIndex.ToString(), dungeon.Name, dungeon.AllowsRescue.ToIntString(), dungeon.ScriptList.Count.ToString());
-                for (int i = 0; i < dungeon.ScriptList.Count; i++) {
+                for (int i = 0; i < dungeon.ScriptList.Count; i++)
+                {
                     packet.AppendParameters(dungeon.ScriptList.KeyByIndex(i).ToString(), dungeon.ScriptList.ValueByIndex(i));
                 }
                 packet.AppendParameter(dungeon.StandardMaps.Count);
-                for (int i = 0; i < dungeon.StandardMaps.Count; i++) {
+                for (int i = 0; i < dungeon.StandardMaps.Count; i++)
+                {
                     StandardDungeonMap map = dungeon.StandardMaps[i];
                     //MapGeneralInfo mapGeneralInfo = MapManager.RetrieveMapGeneralInfo(System.Math.Max(1, map.MapNum));
                     packet.AppendParameters(((int)map.Difficulty).ToString(), map.IsBadGoalMap.ToIntString(), map.MapNum.ToString());//, mapGeneralInfo.Name);
                 }
                 packet.AppendParameter(dungeon.RandomMaps.Count);
-                for (int i = 0; i < dungeon.RandomMaps.Count; i++) {
+                for (int i = 0; i < dungeon.RandomMaps.Count; i++)
+                {
                     RandomDungeonMap map = dungeon.RandomMaps[i];
                     packet.AppendParameters(((int)map.Difficulty).ToString(), map.IsBadGoalMap.ToIntString(), map.RDungeonIndex.ToString(), map.RDungeonFloor.ToString());
                 }
@@ -2847,15 +3257,16 @@ namespace Server.Network
             }
         }
 
-        public static void SendEditShopTo(Client client, int ShopNum) {
+        public static void SendEditShopTo(Client client, int ShopNum)
+        {
             TcpPacket packet = new TcpPacket("editshop");
             packet.AppendParameters(ShopNum.ToString(),
                                     ShopManager.Shops[ShopNum].Name.Trim(),
                                     ShopManager.Shops[ShopNum].JoinSay.Trim(),
                                     ShopManager.Shops[ShopNum].LeaveSay.Trim());
 
-            for (int z = 0; z < Constants.MAX_TRADES; z++) {
-
+            for (int z = 0; z < Constants.MAX_TRADES; z++)
+            {
                 packet.AppendParameters(ShopManager.Shops[ShopNum].Items[z].GiveItem.ToString(),
                                         ShopManager.Shops[ShopNum].Items[z].GiveValue.ToString(),
                                         ShopManager.Shops[ShopNum].Items[z].GetItem.ToString());
@@ -2865,82 +3276,99 @@ namespace Server.Network
             SendDataTo(client, packet);
         }
 
-        public static void SendEditStoryTo(Client client, int StoryNum) {
+        public static void SendEditStoryTo(Client client, int StoryNum)
+        {
             TcpPacket packet = new TcpPacket("editstory");
             packet.AppendParameters(StoryNum.ToString(),
                                     StoryManager.Stories[StoryNum].Name.Trim(),
                                     StoryManager.Stories[StoryNum].Revision.ToString(),
                                     StoryManager.Stories[StoryNum].StoryStart.ToString(),
                                     StoryManager.Stories[StoryNum].Segments.Count.ToString());
-            for (int i = 0; i < StoryManager.Stories[StoryNum].Segments.Count; i++) {
+            for (int i = 0; i < StoryManager.Stories[StoryNum].Segments.Count; i++)
+            {
                 if (StoryManager.Stories[StoryNum].Segments[i] == null)
                     StoryManager.Stories[StoryNum].Segments[i] = new StorySegment();
                 packet.AppendParameters(StoryManager.Stories[StoryNum].Segments[i].Parameters.Count.ToString(),
                                         ((int)StoryManager.Stories[StoryNum].Segments[i].Action).ToString());
-                for (int z = 0; z < StoryManager.Stories[StoryNum].Segments[i].Parameters.Count; z++) {
+                for (int z = 0; z < StoryManager.Stories[StoryNum].Segments[i].Parameters.Count; z++)
+                {
                     packet.AppendParameters(StoryManager.Stories[StoryNum].Segments[i].Parameters.KeyByIndex(z),
                                             StoryManager.Stories[StoryNum].Segments[i].Parameters.ValueByIndex(z));
                 }
             }
             packet.AppendParameter(StoryManager.Stories[StoryNum].ExitAndContinue.Count.ToString());
-            for (int i = 0; i < StoryManager.Stories[StoryNum].ExitAndContinue.Count; i++) {
+            for (int i = 0; i < StoryManager.Stories[StoryNum].ExitAndContinue.Count; i++)
+            {
                 packet.AppendParameters(StoryManager.Stories[StoryNum].ExitAndContinue[i].ToString());
             }
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
 
-        public static void SendLiveMapEditorTilePlacedData(Client client, int x, int y, int layer, int layerSet, int layerTile) {
+        public static void SendLiveMapEditorTilePlacedData(Client client, int x, int y, int layer, int layerSet, int layerTile)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mapeditortileplaced", x.ToString(), y.ToString(),
                 layer.ToString(), layerSet.ToString(), layerTile.ToString()));
         }
 
         public static void SendLiveMapEditorAttributePlacedData(Client client, int x, int y, int type, int data1, int data2, int data3,
-            string string1, string string2, string string3, int dungeonValue) {
+            string string1, string string2, string string3, int dungeonValue)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mapeditorattribplaced", x.ToString(), y.ToString(),
                 type.ToString(), data1.ToString(), data2.ToString(), data3.ToString(),
                 string1, string2, string3, dungeonValue.ToString()));
         }
 
-        public static void SendLiveMapEditorFillLayerData(Client client, int layer, int layerSet, int layerTile) {
+        public static void SendLiveMapEditorFillLayerData(Client client, int layer, int layerSet, int layerTile)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mapeditorlayerfill",
                 layer.ToString(), layerSet.ToString(), layerTile.ToString()));
         }
 
         public static void SendLiveMapEditorFillAttributeData(Client client, int type, int data1, int data2, int data3,
-            string string1, string string2, string string3, int dungeonValue) {
+            string string1, string string2, string string3, int dungeonValue)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("mapeditorattribfill",
                 type.ToString(), data1.ToString(), data2.ToString(), data3.ToString(),
                 string1, string2, string3, dungeonValue.ToString()));
         }
 
-        public static void PlaySound(Client client, string sound) {
-            if (string.IsNullOrEmpty(sound)) {
+        public static void PlaySound(Client client, string sound)
+        {
+            if (string.IsNullOrEmpty(sound))
+            {
                 Messenger.SendDataTo(client, TcpPacket.CreatePacket("sound", sound));
             }
         }
 
-        public static void PlaySoundToMap(string mapID, string sound) {
-            if (!string.IsNullOrEmpty(sound)) {
+        public static void PlaySoundToMap(string mapID, string sound)
+        {
+            if (!string.IsNullOrEmpty(sound))
+            {
                 Messenger.SendDataToMap(mapID, TcpPacket.CreatePacket("sound", sound));
             }
         }
 
-        public static void PlayMusic(Client client, string song) {
+        public static void PlayMusic(Client client, string song)
+        {
             Messenger.SendDataTo(client, TcpPacket.CreatePacket("music", song));
         }
 
-        public static void FadeOutMusic(Client client, int milliseconds) {
+        public static void FadeOutMusic(Client client, int milliseconds)
+        {
             Messenger.SendDataTo(client, TcpPacket.CreatePacket("fademusic", milliseconds.ToString()));
         }
 
-        public static void SendMapLatestPropertiesTo(Client client) {
+        public static void SendMapLatestPropertiesTo(Client client)
+        {
             TcpPacket packet = new TcpPacket("maplatestproperties");
             IMap map = client.Player.Map;
-            if (map.MapType == Enums.MapType.Standard) {
+            if (map.MapType == Enums.MapType.Standard)
+            {
                 packet.AppendParameter(((Map)map).Instanced.ToIntString());
                 packet.AppendParameter(map.Npc.Count);
-                for (int i = 0; i < map.Npc.Count; i++) {
+                for (int i = 0; i < map.Npc.Count; i++)
+                {
                     packet.AppendParameters(map.Npc[i].NpcNum.ToString(),
                         map.Npc[i].SpawnX.ToString(), map.Npc[i].SpawnY.ToString(),
                         map.Npc[i].MinLevel.ToString(), map.Npc[i].MaxLevel.ToString(),
@@ -2954,11 +3382,13 @@ namespace Server.Network
             }
         }
 
-        public static void SendHeartBeat(Client client) {
+        public static void SendHeartBeat(Client client)
+        {
             SendDataTo(client, TcpPacket.CreatePacket("hb"));
         }
 
-        public static void SendTournamentListingTo(Client client, PacketHitList hitList) {
+        public static void SendTournamentListingTo(Client client, PacketHitList hitList)
+        {
             PacketHitList.MethodStart(ref hitList);
 
             hitList.AddPacket(client, PacketBuilder.CreateTournamentListingPacket());
@@ -2966,7 +3396,8 @@ namespace Server.Network
             PacketHitList.MethodEnded(ref hitList);
         }
 
-        public static void SendTournamentSpectateListingTo(Client client, PacketHitList hitList) {
+        public static void SendTournamentSpectateListingTo(Client client, PacketHitList hitList)
+        {
             PacketHitList.MethodStart(ref hitList);
 
             hitList.AddPacket(client, PacketBuilder.CreateTournamentSpectateListingPacket());
@@ -2974,21 +3405,25 @@ namespace Server.Network
             PacketHitList.MethodEnded(ref hitList);
         }
 
-        public static void SendTournamentRulesEditorTo(Client client, PacketHitList hitList) {
+        public static void SendTournamentRulesEditorTo(Client client, PacketHitList hitList)
+        {
             PacketHitList.MethodStart(ref hitList);
 
             Tournaments.Tournament tourny = client.Player.Tournament;
-            if (tourny != null) {
+            if (tourny != null)
+            {
                 hitList.AddPacket(client, PacketBuilder.CreateTournamentRulesEditorPacket(tourny.Rules));
             }
 
             PacketHitList.MethodEnded(ref hitList);
         }
 
-        public static void SendTournamentRulesTo(Client client, PacketHitList hitList, Tournaments.Tournament tournament) {
+        public static void SendTournamentRulesTo(Client client, PacketHitList hitList, Tournaments.Tournament tournament)
+        {
             PacketHitList.MethodStart(ref hitList);
 
-            if (tournament != null) {
+            if (tournament != null)
+            {
                 hitList.AddPacket(client, PacketBuilder.CreateTournamentRulesPacket(tournament));
             }
 

@@ -33,7 +33,8 @@ namespace Server.RDungeons
 
         #region Constructors
 
-        public RDungeonCollection() {
+        public RDungeonCollection()
+        {
             rdungeons = new ListPair<int, RDungeon>();
         }
 
@@ -41,11 +42,13 @@ namespace Server.RDungeons
 
         #region Properties
 
-        public ListPair<int, RDungeon> RDungeons {
+        public ListPair<int, RDungeon> RDungeons
+        {
             get { return rdungeons; }
         }
 
-        public int Count {
+        public int Count
+        {
             get { return rdungeons.Count; }
         }
 
@@ -53,7 +56,8 @@ namespace Server.RDungeons
 
         #region Indexers
 
-        public RDungeon this[int index] {
+        public RDungeon this[int index]
+        {
             get { return rdungeons[index]; }
             set { rdungeons[index] = value; }
         }

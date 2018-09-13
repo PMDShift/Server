@@ -22,6 +22,7 @@ using System.Text;
 using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
+using Server.Zones;
 
 namespace Server.Dungeons
 {
@@ -37,15 +38,18 @@ namespace Server.Dungeons
 
         #endregion Events
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             dungeons = new DungeonCollection();
         }
 
-        public static DungeonCollection Dungeons {
+        public static DungeonCollection Dungeons
+        {
             get { return dungeons; }
         }
 
-        public static void LoadDungeons(object object1) {
+        public static void LoadDungeons(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 string query = "SELECT COUNT(num) FROM dungeon";
@@ -141,7 +145,8 @@ namespace Server.Dungeons
             dungeons.Dungeons.Add(dungeonNum, dungeon);
         }
 
-        public static void AddDungeon() {
+        public static void AddDungeon()
+        {
             SaveDungeon(dungeons.Count);
         }
 
@@ -198,6 +203,25 @@ namespace Server.Dungeons
                 }
                 database.EndTransaction();
             }
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM dungeon WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.Dungeons
+                });
+            }
+
+            return results;
         }
     }
 }

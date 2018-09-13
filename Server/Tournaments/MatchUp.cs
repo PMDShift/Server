@@ -35,70 +35,92 @@ namespace Server.Tournaments
 
         MatchUpRules rules;
 
-        public TournamentMember PlayerOne {
+        public TournamentMember PlayerOne
+        {
             get { return playerOne; }
         }
 
-        public TournamentMember PlayerTwo {
+        public TournamentMember PlayerTwo
+        {
             get { return playerTwo; }
         }
 
-        public MatchUpRules Rules {
+        public MatchUpRules Rules
+        {
             get { return rules; }
-            internal set {
-                this.rules = value;
+            internal set
+            {
+                rules = value;
             }
         }
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 
         IMap combatMap;
 
-        public MatchUp(string id, Tournament tournament, TournamentMember playerOne, TournamentMember playerTwo) {
+        public MatchUp(string id, Tournament tournament, TournamentMember playerOne, TournamentMember playerTwo)
+        {
             this.id = id;
             this.tournament = tournament;
             this.playerOne = playerOne;
             this.playerTwo = playerTwo;
         }
 
-        public void StartMatchUp(IMap combatMap) {
+        public void StartMatchUp(IMap combatMap)
+        {
             playerOne.Client.Player.TournamentMatchUp = this;
             playerTwo.Client.Player.TournamentMatchUp = this;
 
             this.combatMap = combatMap;
         }
 
-        public void WarpToCombatMap(Client client) {
-            if (client.Player.CharID == playerOne.Client.Player.CharID) {
+        public void WarpToCombatMap(Client client)
+        {
+            if (client.Player.CharID == playerOne.Client.Player.CharID)
+            {
                 Messenger.PlayerWarp(client, combatMap, 10, 10);
-            } else if (client.Player.CharID == playerTwo.Client.Player.CharID) {
+            }
+            else if (client.Player.CharID == playerTwo.Client.Player.CharID)
+            {
                 Messenger.PlayerWarp(client, combatMap, 11, 10);
             }
         }
 
-        public TournamentMember SelectOtherMember(Client client) {
-            if (client.Player.CharID == playerOne.Client.Player.CharID) {
+        public TournamentMember SelectOtherMember(Client client)
+        {
+            if (client.Player.CharID == playerOne.Client.Player.CharID)
+            {
                 return playerTwo;
-            } else if (client.Player.CharID == playerTwo.Client.Player.CharID) {
+            }
+            else if (client.Player.CharID == playerTwo.Client.Player.CharID)
+            {
                 return playerOne;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
 
-        public void EndMatchUp(string winnerPlayerID) {
+        public void EndMatchUp(string winnerPlayerID)
+        {
             TournamentMember winner = null;
             TournamentMember loser = null;
-            if (winnerPlayerID == playerOne.Client.Player.CharID) {
+            if (winnerPlayerID == playerOne.Client.Player.CharID)
+            {
                 winner = playerOne;
                 loser = playerTwo;
-            } else if (winnerPlayerID == playerTwo.Client.Player.CharID) {
+            }
+            else if (winnerPlayerID == playerTwo.Client.Player.CharID)
+            {
                 winner = playerTwo;
                 loser = playerOne;
             }
-            if (winner != null && loser != null) {
+            if (winner != null && loser != null)
+            {
                 // Warp both players to the hub
                 tournament.WarpToHub(playerOne.Client);
                 tournament.WarpToHub(playerTwo.Client);

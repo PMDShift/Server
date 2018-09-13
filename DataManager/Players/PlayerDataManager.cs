@@ -733,6 +733,32 @@ namespace DataManager.Players
             }
         }
 
+        public static string FindLinkedDiscordCharacter(MySql database, ulong discordID)
+        {
+            var query = "SELECT CharID FROM characteristics WHERE LinkedDiscordId = " + discordID;
+
+            var row = database.RetrieveRow(query);
+            if (row != null)
+            {
+                return row["CharID"].ValueString;
+            }
+
+            return null;
+        }
+
+        public static string GetCharacterName(MySql database, string charID)
+        {
+            var query = "SELECT Name FROM characteristics WHERE CharID = \'" + charID + "\'";
+
+            var row = database.RetrieveRow(query);
+            if (row != null)
+            {
+                return row["Name"].ValueString;
+            }
+
+            return null;
+        }
+
         public static bool IsRecruitSlotEmpty(PMDCP.DatabaseConnector.MySql.MySql database, string charID, int recruitIndex) {
             string query = "SELECT recruit_data.CharID " +
                 "FROM recruit_data " +

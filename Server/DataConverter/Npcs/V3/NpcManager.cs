@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,31 +21,33 @@
 
 namespace Server.DataConverter.Npcs.V3
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class NpcManager
     {
         #region Methods
 
-        public static Npc LoadNpc(int npcNum) {
+        public static Npc LoadNpc(int npcNum)
+        {
             Npc npc = new Npc();
             string FileName = IO.Paths.NpcsFolder + "npc" + npcNum + ".dat";
             string s;
             string[] parse;
-            using (System.IO.StreamReader read = new System.IO.StreamReader(FileName)) {
-                while (!(read.EndOfStream)) {
+            using (System.IO.StreamReader read = new System.IO.StreamReader(FileName))
+            {
+                while (!(read.EndOfStream))
+                {
                     s = read.ReadLine();
                     parse = s.Split('|');
-                    switch (parse[0].ToLower()) {
+                    switch (parse[0].ToLower())
+                    {
                         case "npcdata":
-                            if (parse[1].ToLower() != "v1" && parse[1].ToLower() != "v2" && parse[1].ToLower() != "v3") {
+                            if (parse[1].ToLower() != "v1" && parse[1].ToLower() != "v2" && parse[1].ToLower() != "v3")
+                            {
                                 read.Close();
                                 return null;
                             }
                             break;
-                        case "data": {
+                        case "data":
+                            {
                                 npc.Name = parse[1];
                                 npc.AttackSay = parse[2];
                                 npc.Sprite = parse[3].ToInt();
@@ -58,13 +63,16 @@ namespace Server.DataConverter.Npcs.V3
                                 npc.Exp = parse[13].ToUlng();
                                 npc.SpawnTime = parse[14].ToInt();
                                 npc.Element = parse[15].ToInt();
-                                if (parse.Length > 17) {
+                                if (parse.Length > 17)
+                                {
                                     npc.Spell = parse[16].ToInt();
                                 }
-                                if (parse.Length > 18) {
+                                if (parse.Length > 18)
+                                {
                                     npc.Frequency = parse[17].ToInt();
                                 }
-                                if (parse.Length > 19) {
+                                if (parse.Length > 19)
+                                {
                                     npc.AIScript = parse[18];
                                 }
                             }
@@ -73,19 +81,27 @@ namespace Server.DataConverter.Npcs.V3
                             npc.RecruitRate = parse[1].ToInt();
                             npc.RecruitLevel = parse[2].ToInt();
                             //Check if size is in the NPC file... if not add it...
-                            if (parse.Length > 4) {
+                            if (parse.Length > 4)
+                            {
                                 npc.Size = parse[3].ToInt();
-                            } else {
+                            }
+                            else
+                            {
                                 npc.Size = 1;
                             }
-                            if (parse.Length > 5) {
+                            if (parse.Length > 5)
+                            {
                                 npc.RecruitClass = parse[4].ToInt();
-                            } else {
+                            }
+                            else
+                            {
                                 npc.RecruitClass = 0;
                             }
                             break;
-                        case "items": {
-                                if (parse[1].ToInt() < npc.Drops.Length) {
+                        case "items":
+                            {
+                                if (parse[1].ToInt() < npc.Drops.Length)
+                                {
                                     npc.Drops[parse[1].ToInt()].ItemNum = parse[2].ToInt();
                                     npc.Drops[parse[1].ToInt()].ItemValue = parse[3].ToInt();
                                     npc.Drops[parse[1].ToInt()].Chance = parse[4].ToInt();
@@ -98,13 +114,16 @@ namespace Server.DataConverter.Npcs.V3
             return npc;
         }
 
-        public static void SaveNpc(Npc npc, int npcNum) {
+        public static void SaveNpc(Npc npc, int npcNum)
+        {
             string FileName = IO.Paths.NpcsFolder + "npc" + npcNum.ToString() + ".dat";
-            using (System.IO.StreamWriter Write = new System.IO.StreamWriter(FileName)) {
+            using (System.IO.StreamWriter Write = new System.IO.StreamWriter(FileName))
+            {
                 Write.WriteLine("NpcData|V3");
                 Write.WriteLine("Data" + "|" + npc.Name + "|" + npc.AttackSay + "|" + npc.Sprite + "|" + npc.SpawnSecs + "|" + (int)npc.Behavior + "|" + npc.Range + "|" + npc.Str + "|" + npc.Def + "|" + npc.Speed + "|" + npc.Magi + "|" + npc.Big + "|" + npc.MaxHp + "|" + npc.Exp + "|" + npc.SpawnTime + "|" + npc.Element + "|" + npc.Spell + "|" + npc.Frequency + "|" + npc.AIScript + "|");
                 Write.WriteLine("recruit" + "|" + npc.RecruitRate + "|" + npc.RecruitLevel + "|" + npc.Size + "|" + npc.RecruitClass + "|");
-                for (int z = 0; z < Constants.MAX_NPC_DROPS; z++) {
+                for (int z = 0; z < Constants.MAX_NPC_DROPS; z++)
+                {
                     Write.WriteLine("items" + "|" + z + "|" + npc.Drops[z].ItemNum + "|" + npc.Drops[z].ItemValue + "|" + npc.Drops[z].Chance + "|");
                 }
             }

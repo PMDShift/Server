@@ -26,30 +26,39 @@ namespace Server.Events.World
     {
         List<ITimedEvent> timedEvents;
 
-        public int Count {
+        public int Count
+        {
             get { return timedEvents.Count; }
         }
 
-        public TimedEventCollection() {
+        public TimedEventCollection()
+        {
             timedEvents = new List<ITimedEvent>();
         }
 
-        public void Add(ITimedEvent timedEvent) {
-            this.timedEvents.Add(timedEvent);
+        public void Add(ITimedEvent timedEvent)
+        {
+            timedEvents.Add(timedEvent);
         }
 
-        public void Remove(ITimedEvent timedEvent) {
-            this.timedEvents.Remove(timedEvent);
+        public void Remove(ITimedEvent timedEvent)
+        {
+            timedEvents.Remove(timedEvent);
         }
 
-        public ITimedEvent this[int index] {
+        public ITimedEvent this[int index]
+        {
             get { return timedEvents[index]; }
         }
 
-        public ITimedEvent this[string id] {
-            get {
-                for (int i = 0; i < timedEvents.Count; i++) {
-                    if (timedEvents[i].ID == id) {
+        public ITimedEvent this[string id]
+        {
+            get
+            {
+                for (int i = 0; i < timedEvents.Count; i++)
+                {
+                    if (timedEvents[i].ID == id)
+                    {
                         return timedEvents[i];
                     }
                 }

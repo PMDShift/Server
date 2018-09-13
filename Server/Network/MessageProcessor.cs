@@ -150,7 +150,6 @@ namespace Server.Network
                                     string password = Security.Hash.GenerateMD5Hash(parse[2]).Trim();
                                     if (PlayerManager.IsPasswordCorrect(dbConnection, parse[1], password))
                                     {
-
                                         client.SetMacAddress(parse[11]);
                                         client.SetBiosIdentification(parse[12]);
                                         // Check if they aren't banned
@@ -176,7 +175,7 @@ namespace Server.Network
                             }
                             else
                             {
-                                Messenger.PlainMsg(client, "You are already in the Pokémon world!", Enums.PlainMsgType.MainMenu);
+                                Messenger.PlainMsg(client, "You are already in the Pok\u00E9mon world!", Enums.PlainMsgType.MainMenu);
                             }
                         }
                         break;
@@ -218,7 +217,7 @@ namespace Server.Network
 
                                     if (Bans.IsCharacterBanned(dbConnection, client.Player.CharID) == Enums.BanType.Ban)
                                     {
-                                        Messenger.PlainMsg(client, "This character can't enter the Pokémon world!", Enums.PlainMsgType.MainMenu);
+                                        Messenger.PlainMsg(client, "This character can't enter the Pok\u00E9mon world!", Enums.PlainMsgType.MainMenu);
                                         client.Player = new Player(client);
                                         client.CloseConnection();
                                         return;
@@ -232,7 +231,7 @@ namespace Server.Network
                                 }
                                 else
                                 {
-                                    Messenger.PlainMsg(client, "This character hasn't been sent to the Pokémon world yet!", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "This character hasn't been sent to the Pok\u00E9mon world yet!", Enums.PlainMsgType.Chars);
                                     return;
                                 }
                             }
@@ -361,7 +360,7 @@ namespace Server.Network
                             {
                                 if (client.Player.CharacterExists(dbConnection, charNum))
                                 {
-                                    Messenger.PlainMsg(client, "That character is already in the Pokémon world!", Enums.PlainMsgType.NewChar);
+                                    Messenger.PlainMsg(client, "That character is already in the Pok\u00E9mon world!", Enums.PlainMsgType.NewChar);
                                     return;
                                 }
 
@@ -391,7 +390,7 @@ namespace Server.Network
                                 {
                                     PlayerManager.DeleteCharacter(dbConnection, client.Player.AccountName, charNum);
                                     Messenger.SendChars(dbConnection, client);
-                                    Messenger.PlainMsg(client, "The character has been sent back from the Pokémon world, never to return.", Enums.PlainMsgType.Chars);
+                                    Messenger.PlainMsg(client, "The character has been sent back from the Pok\u00E9mon world, never to return.", Enums.PlainMsgType.Chars);
                                 }
                                 else
                                 {
@@ -445,7 +444,7 @@ namespace Server.Network
                             }
                         }
                         break;
-                    #endregion
+                        #endregion
                 }
                 #endregion
             }
@@ -573,7 +572,6 @@ namespace Server.Network
                         {
                             if (client.Player.GettingMap) return;
                             client.Player.GetActiveRecruit().UseMove(-1);
-
                         }
                         break;
                     #endregion
@@ -601,7 +599,6 @@ namespace Server.Network
                                 client.Player.GetActiveRecruit().Moves[n].MaxPP = -1;
                                 Messenger.SendPlayerMoves(client);
                             }
-
                         }
                         break;
                     case "swapmoves":
@@ -758,7 +755,6 @@ namespace Server.Network
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
                             {
-
                                 var updatedMessage = (string)Scripting.ScriptManager.InvokeFunction("OnChatMessageRecieved", client, parse[1], Enums.ChatMessageType.Staff);
 
                                 Logging.ChatLogger.AppendToChatLog("Staff", client.Player.Name + ": " + parse[1]);
@@ -843,7 +839,6 @@ namespace Server.Network
                                     Messenger.PlayerMsg(client, "You tell " + playerToName + ", '" + updatedMessage + "'", Text.Pink);
                                     Messenger.PlayerMsg(msgto, playerName + " tells you, '" + updatedMessage + "'", Text.Pink);
                                 }
-
                             }
                         }
                         break;
@@ -1007,7 +1002,6 @@ namespace Server.Network
                                             {
                                                 if (Combat.MoveProcessor.IsInAreaRange(1, client.Player.X, client.Player.Y, target.Player.X, target.Player.Y))
                                                 {
-
                                                     if (slot > -1 && slot < client.Player.JobList.JobList.Count)
                                                     {
                                                         client.Player.JobList.JobList[slot].SendsRemaining--;
@@ -1021,7 +1015,6 @@ namespace Server.Network
                                                         Messenger.PlayerMsg(target, client.Player.Name + " has sent you a Wonder Mail!", Text.BrightGreen);
                                                         Messenger.SendNewJob(target);
                                                     }
-
                                                 }
                                                 else
                                                 {
@@ -1124,30 +1117,30 @@ namespace Server.Network
                                                 Messenger.PlayerMsg(client, "You see " + i.Player.Name + ".", Text.Yellow);
                                                 if (i.Player.GetActiveRecruit().Level >= client.Player.GetActiveRecruit().Level + 5)
                                                 {
-                                                    Messenger.PlayerMsg(client, "This Pokémon appears to be much more experienced than you.", Text.BrightRed);
+                                                    Messenger.PlayerMsg(client, "This Pok\u00E9mon appears to be much more experienced than you.", Text.BrightRed);
                                                 }
                                                 else if (i.Player.GetActiveRecruit().Level > client.Player.GetActiveRecruit().Level)
                                                 {
-                                                    Messenger.PlayerMsg(client, "This Pokémon appears to be slightly more experienced than you.", Text.Yellow);
+                                                    Messenger.PlayerMsg(client, "This Pok\u00E9mon appears to be slightly more experienced than you.", Text.Yellow);
                                                 }
                                                 else if (i.Player.GetActiveRecruit().Level == client.Player.GetActiveRecruit().Level)
                                                 {
-                                                    Messenger.PlayerMsg(client, "This Pokémon seems to be about as experienced as you.", Text.White);
+                                                    Messenger.PlayerMsg(client, "This Pok\u00E9mon seems to be about as experienced as you.", Text.White);
                                                 }
                                                 else if (client.Player.GetActiveRecruit().Level >= i.Player.GetActiveRecruit().Level + 5)
                                                 {
-                                                    Messenger.PlayerMsg(client, "This Pokémon appears much less experienced than you.", Text.BrightBlue);
+                                                    Messenger.PlayerMsg(client, "This Pok\u00E9mon appears much less experienced than you.", Text.BrightBlue);
                                                 }
                                                 else if (client.Player.GetActiveRecruit().Level > i.Player.GetActiveRecruit().Level)
                                                 {
-                                                    Messenger.PlayerMsg(client, "This Pokémon appears slightly less experienced than you.", Text.Yellow);
+                                                    Messenger.PlayerMsg(client, "This Pok\u00E9mon appears slightly less experienced than you.", Text.Yellow);
                                                 }
                                             }
                                             return;
                                         }
                                         else
                                         {
-                                            Messenger.PlayerMsg(client, "You see a Pokémon.", Text.Yellow);
+                                            Messenger.PlayerMsg(client, "You see a Pok\u00E9mon.", Text.Yellow);
                                             return;
                                         }
                                     }
@@ -1170,12 +1163,10 @@ namespace Server.Network
                                                 if (!map.RecruitEnabled)
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited in this area.", Text.Yellow);
-
                                                 }
                                                 else if (map.ActiveNpc[i].Level >= client.Player.GetActiveRecruit().Level)
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "'s level is too high for you to recruit it.", Text.Yellow);
-
                                                 }
                                                 else if (NpcManager.Npcs[map.ActiveNpc[i].Num].RecruitRate != 0)
                                                 {
@@ -1191,7 +1182,7 @@ namespace Server.Network
                                             }
                                             else
                                             {
-                                                Messenger.PlayerMsg(client, "You see a Pokémon.", Text.Yellow);
+                                                Messenger.PlayerMsg(client, "You see a Pok\u00E9mon.", Text.Yellow);
                                                 return;
                                             }
                                         }
@@ -1526,12 +1517,10 @@ namespace Server.Network
                                         #region ReleasePokemon Result
                                         if (parse[1] == "Yes")
                                         {
-
                                             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
                                             {
                                                 client.Player.ReleaseRecruit(dbConnection, client.Player.RequestedRecruit.RecruitIndex);
                                             }
-
                                         }
                                         client.Player.RequestedRecruit = null;
                                         #endregion
@@ -1618,7 +1607,6 @@ namespace Server.Network
                                                 hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have evolved into " + Pokedex.Pokedex.GetPokemon(client.Player.GetActiveRecruit().Species).Name + "! Congratulations!", Text.Yellow));
                                                 Scripting.ScriptManager.InvokeFunction("OnEvoDone", client, evo.ReqScript, evo.Data1, evo.Data2, evo.Data3);
                                             }
-
                                         }
 
                                         PacketHitList.MethodEnded(ref hitlist);
@@ -1711,7 +1699,6 @@ namespace Server.Network
                                         }
                                         else if (parse[1] == "No")
                                         {
-
                                         }
                                         #endregion
                                     }
@@ -1765,9 +1752,11 @@ namespace Server.Network
                                         #endregion
                                     }
                                     break;
-                                case "LinkDiscord": {
+                                case "LinkDiscord":
+                                    {
                                         #region Link Discord
-                                        if (parse[1] == "Yes") {
+                                        if (parse[1] == "Yes")
+                                        {
                                             client.Player.PlayerData.LinkedDiscordId = client.Player.PendingDiscordId;
                                             Messenger.PlayerMsg(client, "Discord account connected!", Text.BrightGreen);
                                         }
@@ -2103,11 +2092,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!RDungeonManager.RDungeons[n].IsSandboxed) {
+                            if (!RDungeonManager.RDungeons[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[n].ZoneID)) {
+                            if (!client.Player.CanViewZone(RDungeonManager.RDungeons[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -2125,11 +2116,13 @@ namespace Server.Network
 
                             int z = parse[1].ToInt();
 
-                            if (!RDungeonManager.RDungeons[z].IsSandboxed) {
+                            if (!RDungeonManager.RDungeons[z].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[z].ZoneID)) {
+                            if (!client.Player.CanEditZone(RDungeonManager.RDungeons[z].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -2486,7 +2479,6 @@ namespace Server.Network
                                     newTile.AppearanceRate = parse[n + traps * 29 + 29].ToInt();
 
                                     RDungeonManager.RDungeons[z].Floors[i].SpecialTiles.Add(newTile);
-
                                 }
                                 n += RDungeonManager.RDungeons[z].Floors[i].SpecialTiles.Count * 29 + 1;
 
@@ -2494,7 +2486,6 @@ namespace Server.Network
                                 for (int weather = 0; weather < parse[n].ToInt(); weather++)
                                 {
                                     RDungeonManager.RDungeons[z].Floors[i].Weather.Add((Enums.Weather)parse[n + 1 + weather].ToInt());
-
                                 }
                                 n += RDungeonManager.RDungeons[z].Floors[i].Weather.Count + 1;
 
@@ -2510,11 +2501,9 @@ namespace Server.Network
                                     RDungeonManager.RDungeons[z].Floors[i].Options.Chambers.Add(newChamber);
                                 }
                                 n += RDungeonManager.RDungeons[z].Floors[i].Options.Chambers.Count * 4 + 1;
-
                             }
                             Messenger.SendUpdateRDungeonToAll(z);
                             RDungeonManager.SaveRDungeon(z);
-
                         }
                         break;
                     #endregion
@@ -2565,13 +2554,15 @@ namespace Server.Network
                             return;
                         }
 
-                        if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House) {
+                        if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                        {
                             Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                             return;
                         }
-                        if (!client.Player.IsAssignedToZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House) {
+                        if (!client.Player.CanViewZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                        {
                             Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
-                            return; 
+                            return;
                         }
 
                         client.Player.InMapEditor = true;
@@ -2619,8 +2610,14 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House) {
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                                 return;
                             }
 
@@ -2651,7 +2648,6 @@ namespace Server.Network
                                 newHouseMap.StartX = ((House)client.Player.Map).StartX;
                                 newHouseMap.StartY = ((House)client.Player.Map).StartY;
                                 map = new House(newHouseMap);
-
                             }
                             map.IsSaving = true;
 
@@ -3070,11 +3066,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Items.ItemManager.Items[n].IsSandboxed) {
+                            if (!Items.ItemManager.Items[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this item (item not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Items.ItemManager.Items[n].ZoneID)) {
+                            if (!client.Player.CanEditZone(Items.ItemManager.Items[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this item (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3140,11 +3138,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Stories.StoryManager.Stories[n].IsSandboxed) {
+                            if (!Stories.StoryManager.Stories[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID)) {
+                            if (!client.Player.CanEditZone(Stories.StoryManager.Stories[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3196,11 +3196,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Stories.StoryManager.Stories[n].IsSandboxed) {
+                            if (!Stories.StoryManager.Stories[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID)) {
+                            if (!client.Player.CanViewZone(Stories.StoryManager.Stories[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3225,7 +3227,6 @@ namespace Server.Network
                         break;
                     case "editevo":
                         {
-
                             // Prevent hacking
                             if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
@@ -3304,7 +3305,6 @@ namespace Server.Network
                     // :::::::::::::::::::::
                     case "editnpc":
                         {
-
                             // Prevent hacking
                             if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
@@ -3322,11 +3322,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed) {
+                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID)) {
+                            if (!client.Player.CanViewZone(Npcs.NpcManager.Npcs[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3366,11 +3368,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed) {
+                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID)) {
+                            if (!client.Player.CanEditZone(Npcs.NpcManager.Npcs[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3452,11 +3456,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Shops.ShopManager.Shops[n].IsSandboxed) {
+                            if (!Shops.ShopManager.Shops[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[n].ZoneID)) {
+                            if (!client.Player.CanViewZone(Shops.ShopManager.Shops[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3484,11 +3490,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Shops.ShopManager.Shops[ShopNum].IsSandboxed) {
+                            if (!Shops.ShopManager.Shops[ShopNum].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[ShopNum].ZoneID)) {
+                            if (!client.Player.CanEditZone(Shops.ShopManager.Shops[ShopNum].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -3555,7 +3563,8 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Moves.MoveManager.Moves[n].IsSandboxed) {
+                            if (!Moves.MoveManager.Moves[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this move (move not sandboxed).", Text.BrightRed);
                                 return;
                             }
@@ -3585,11 +3594,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Moves.MoveManager.Moves[n].IsSandboxed) {
+                            if (!Moves.MoveManager.Moves[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this move (move not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (Moves.MoveManager.Moves[n].IsBeingReviewed) {
+                            if (Moves.MoveManager.Moves[n].IsBeingReviewed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't make edits to this move, it is currently under review.", Text.BrightRed);
                                 return;
                             }
@@ -3926,11 +3937,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!DungeonManager.Dungeons[n].IsSandboxed) {
+                            if (!DungeonManager.Dungeons[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID)) {
+                            if (!client.Player.CanEditZone(DungeonManager.Dungeons[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -4000,11 +4013,13 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!DungeonManager.Dungeons[n].IsSandboxed) {
+                            if (!DungeonManager.Dungeons[n].IsSandboxed)
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID)) {
+                            if (!client.Player.CanViewZone(DungeonManager.Dungeons[n].ZoneID))
+                            {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
                                 return;
                             }
@@ -4041,7 +4056,6 @@ namespace Server.Network
                                 missionPool.MissionClients.Add(missionClient);
 
                                 n += 2;
-
                             }
 
                             int enemyCount = parse[n].ToInt();
@@ -4061,7 +4075,6 @@ namespace Server.Network
 
                             for (int i = 0; i < rewardCount; i++)
                             {
-
                                 WonderMails.MissionRewardData missionReward = new WonderMails.MissionRewardData(); ;
                                 missionReward.ItemNum = parse[n].ToInt();
                                 missionReward.Amount = parse[n + 1].ToInt();
@@ -4069,7 +4082,6 @@ namespace Server.Network
                                 missionPool.Rewards.Add(missionReward);
 
                                 n += 3;
-
                             }
 
                             WonderMails.WonderMailManager.Missions[difficulty] = missionPool;
@@ -4204,7 +4216,6 @@ namespace Server.Network
                             {
                                 Messenger.PlayerMsg(client, "Invalid access level.", Text.Red);
                             }
-
                         }
                         break;
                     case "setmotd":
@@ -4405,7 +4416,6 @@ namespace Server.Network
                     // TODO: Unban all players/unban single player [MEDIUM]
                     case "banlistdestroy":
                         {
-
                         }
                         break;
                     case "warpto":
@@ -4529,7 +4539,6 @@ namespace Server.Network
                     #region Guild
                     case "guildpromote":
                         {
-
                             if (client.Player.GuildAccess < Enums.GuildRank.Founder)
                             {
                                 Messenger.PlayerMsg(client, "You are not the owner of this guild!", Text.BrightRed);
@@ -4567,8 +4576,6 @@ namespace Server.Network
                                 client.Player.TakeItem(1, Guilds.GuildManager.PROMOTE_PRICE * adminCount, true);
                                 DataManager.Players.PlayerDataManager.SetGuildAccess(dbConnection.Database, members.KeyByIndex(parse[1].ToInt()), (int)Enums.GuildRank.Admin);
                                 Messenger.PlayerMsg(client, "The player has been promoted.", Text.Blue);
-
-
                             }
 
                             Client target = ClientManager.FindClientFromCharID(members.KeyByIndex(parse[1].ToInt()));
@@ -4586,7 +4593,6 @@ namespace Server.Network
                         break;
                     case "guilddemote":
                         {
-
                             if (client.Player.GuildAccess < Enums.GuildRank.Founder)
                             {
                                 Messenger.PlayerMsg(client, "You are not the owner of this guild!", Text.BrightRed);
@@ -4623,7 +4629,6 @@ namespace Server.Network
                     // Disown
                     case "guilddisown":
                         {
-
                             if (client.Player.GuildAccess < Enums.GuildRank.Admin)
                             {
                                 Messenger.PlayerMsg(client, "Your guild rank isn't high enough to disown players!", Text.BrightRed);
@@ -4706,12 +4711,10 @@ namespace Server.Network
                             string name = parse[1].Trim();
 
                             Guilds.GuildManager.RegisterGuild(client, name);
-
                         }
                         break;
                     case "guildmember":
                         {
-
                             if (client.Player.GuildAccess < Enums.GuildRank.Admin)
                             {
                                 Messenger.PlayerMsg(client, "Your guild rank isn't high enough to add players!", Text.BrightRed);
@@ -4938,7 +4941,6 @@ namespace Server.Network
                                 {
                                     n = 1;
                                 }
-
                             }
 
                             if (ItemManager.Items[ShopManager.Shops[i].Items[z].GetItem].Rarity > (int)client.Player.ExplorerRank + 1)
@@ -5048,7 +5050,6 @@ namespace Server.Network
 
                                 while (species > -1)
                                 {
-
                                     Pokedex.PokemonForm pokemon = Pokedex.Pokedex.GetPokemonForm(species, client.Player.GetActiveRecruit().Form);
                                     if (pokemon != null)
                                     {
@@ -5086,7 +5087,6 @@ namespace Server.Network
                                     {
                                         if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level && pokemon.LevelUpMoves[n].Move == recallMove)
                                         {
-
                                             if (client.Player.HasItem(priceItem) >= priceAmount)
                                             {
                                                 client.Player.TakeItem(priceItem, priceAmount);
@@ -5098,13 +5098,10 @@ namespace Server.Network
                                                 Messenger.PlayerMsg(client, "You do not have enough to recall a move!", Text.BrightRed);
                                             }
                                             return;
-
                                         }
                                     }
-
                                 }
                             }
-
                         }
                         break;
                     #endregion
@@ -5317,7 +5314,6 @@ namespace Server.Network
                         break;
                     case "addsignrequest":
                         {
-
                             IMap map = client.Player.Map;
                             if (map.MapType != Server.Enums.MapType.House || ((House)map).OwnerID != client.Player.CharID)
                             {
@@ -5349,7 +5345,6 @@ namespace Server.Network
                         break;
                     case "weatherrequest":
                         {
-
                             IMap map = client.Player.Map;
                             if (map.MapType != Server.Enums.MapType.House || ((House)map).OwnerID != client.Player.CharID)
                             {
@@ -5636,7 +5631,6 @@ namespace Server.Network
 
                                     if (myItem > -1 && partnersItem > -1)
                                     {
-
                                         client.Player.ReadyToTrade = true;
                                     }
                                     //TODO: Allow Empty Trading
@@ -5679,7 +5673,6 @@ namespace Server.Network
                                         Messenger.SendTradeComplete(client);
                                         Messenger.SendTradeComplete(tradePartner);
                                     }
-
                                 }
                             }
                         }
@@ -5737,12 +5730,11 @@ namespace Server.Network
                             tourny.RegisterSpectator(client);
                         }
                         break;
-                    #endregion
+                        #endregion
                 }
                 #endregion
 
             }
-
         }
     }
 }

@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,14 +25,6 @@
 
 namespace Server.Exp
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Xml;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class ExpManager
     {
         #region Fields
@@ -44,7 +43,8 @@ namespace Server.Exp
 
         #region Properties
 
-        public static ExpCollection Exp {
+        public static ExpCollection Exp
+        {
             get { return exp; }
         }
 
@@ -53,7 +53,8 @@ namespace Server.Exp
         #region Methods
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -65,12 +66,13 @@ namespace Server.Exp
             }
         }
 
-        public static void LoadExps(object object1) {
+        public static void LoadExps(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 try
                 {
-                    MySql database = dbConnection.Database;
+                    var database = dbConnection.Database;
 
                     string query = "SELECT * " +
                         "FROM experience";

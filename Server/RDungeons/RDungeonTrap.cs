@@ -30,7 +30,8 @@ namespace Server.RDungeons
         public int AppearanceRate { get; set; }
 
         public RDungeonTrap()
-            : base(new DataManager.Maps.Tile()) {
+            : base(new DataManager.Maps.Tile())
+        {
         }
     }
 }

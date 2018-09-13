@@ -10,11 +10,13 @@ namespace Server.Discord.Commands
     public class ContentModule : ModuleBase<SocketCommandContext>
     {
         [Group("details")]
-        public class DetailsModule :ModuleBase<SocketCommandContext>
+        public class DetailsModule : ModuleBase<SocketCommandContext>
         {
             [Command("move")]
-            public async Task MoveAsync(int id) {
-                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves) {
+            public async Task MoveAsync(int id)
+            {
+                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves)
+                {
                     await Context.Channel.SendMessageAsync("Invalid move number.");
                     return;
                 }
@@ -44,8 +46,10 @@ namespace Server.Discord.Commands
         {
             [RequireOwner]
             [Command("move")]
-            public async Task MoveAsync(int id) {
-                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves) {
+            public async Task MoveAsync(int id)
+            {
+                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves)
+                {
                     await Context.Channel.SendMessageAsync("Invalid move number.");
                     return;
                 }
@@ -62,13 +66,16 @@ namespace Server.Discord.Commands
         {
             [RequireOwner]
             [Command("move")]
-            public async Task MoveAsync(int id) {
-                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves) {
+            public async Task MoveAsync(int id)
+            {
+                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves)
+                {
                     await Context.Channel.SendMessageAsync("Invalid move number.");
                     return;
                 }
 
-                if (!Moves.MoveManager.Moves[id].IsSandboxed) {
+                if (!Moves.MoveManager.Moves[id].IsSandboxed)
+                {
                     await Context.Channel.SendMessageAsync("This move is not currently being edited.");
                     return;
                 }
@@ -84,13 +91,16 @@ namespace Server.Discord.Commands
         {
             [RequireOwner]
             [Command("move")]
-            public async Task MoveAsync(int id) {
-                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves) {
+            public async Task MoveAsync(int id)
+            {
+                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves)
+                {
                     await Context.Channel.SendMessageAsync("Invalid move number.");
                     return;
                 }
 
-                if (!Moves.MoveManager.Moves[id].IsSandboxed) {
+                if (!Moves.MoveManager.Moves[id].IsSandboxed)
+                {
                     await Context.Channel.SendMessageAsync("This move is not currently being edited.");
                     return;
                 }
@@ -108,13 +118,16 @@ namespace Server.Discord.Commands
         {
             [RequireOwner]
             [Command("move")]
-            public async Task MoveAsync(int id) {
-                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves) {
+            public async Task MoveAsync(int id)
+            {
+                if (id < 1 || id > Moves.MoveManager.Moves.MaxMoves)
+                {
                     await Context.Channel.SendMessageAsync("Invalid move number.");
                     return;
                 }
 
-                if (!Moves.MoveManager.Moves[id].IsSandboxed) {
+                if (!Moves.MoveManager.Moves[id].IsSandboxed)
+                {
                     await Context.Channel.SendMessageAsync("This move is not currently being edited.");
                     return;
                 }

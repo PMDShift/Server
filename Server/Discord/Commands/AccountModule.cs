@@ -13,20 +13,24 @@ namespace Server.Discord.Commands
         [Command("connect")]
         [Summary("Connect your Discord account to your ingame account.")]
         [RequireContext(ContextType.DM)]
-        public async Task ConnectAsync([Remainder] string characterName) {
+        public async Task ConnectAsync([Remainder] string characterName)
+        {
             var client = ClientManager.FindClient(characterName);
 
-            if (client == null) {
+            if (client == null)
+            {
                 await Context.Channel.SendMessageAsync("That player is not online.");
                 return;
             }
 
-            if (!client.Player.PlayerData.CanLinkDiscord) {
+            if (!client.Player.PlayerData.CanLinkDiscord)
+            {
                 await Context.Channel.SendMessageAsync("Unable to connect to ingame account.");
                 return;
             }
 
-            if (client.Player.PendingDiscordId > 0) {
+            if (client.Player.PendingDiscordId > 0)
+            {
                 await Context.Channel.SendMessageAsync("An active connect is pending. Try again later, or reset with \"/resetdiscord\" ingame.");
                 return;
             }

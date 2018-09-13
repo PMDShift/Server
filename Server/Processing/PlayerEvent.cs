@@ -29,20 +29,24 @@ namespace Server.Processing
         string data;
         string[] parameters;
 
-        public string Data {
+        public string Data
+        {
             get { return data; }
         }
 
-        public string[] Parameters {
+        public string[] Parameters
+        {
             get { return parameters; }
         }
 
-        public PlayerEvent(string data) {
+        public PlayerEvent(string data)
+        {
             this.data = data;
-            this.parameters = data.Split(TcpPacket.SEP_CHAR);
+            parameters = data.Split(TcpPacket.SEP_CHAR);
         }
 
-        public string this[int index] {
+        public string this[int index]
+        {
             get { return parameters[index]; }
         }
     }

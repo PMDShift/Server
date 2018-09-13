@@ -30,46 +30,58 @@ namespace Server.Maps
         public const string ID_PREFIX = "rd";
 
         public RDungeonMap(DataManager.Maps.RDungeonMap baseMap)
-            : base(baseMap) {
+            : base(baseMap)
+        {
             this.baseMap = baseMap;
         }
 
-        public Enums.MapType MapType {
+        public Enums.MapType MapType
+        {
             get { return Enums.MapType.RDungeonMap; }
         }
 
-        public string IDPrefix {
+        public string IDPrefix
+        {
             get { return ID_PREFIX; }
         }
 
-        public bool Cacheable {
+        public bool Cacheable
+        {
             get { return false; }
         }
 
-        public int RDungeonIndex {
+        public int RDungeonIndex
+        {
             get { return baseMap.RDungeonIndex; }
         }
 
-        public int RDungeonFloor {
+        public int RDungeonFloor
+        {
             get { return baseMap.RDungeonFloor; }
         }
 
-        public int StartX {
+        public int StartX
+        {
             get { return baseMap.StartX; }
             set { baseMap.StartX = value; }
         }
-        public int StartY {
+        public int StartY
+        {
             get { return baseMap.StartY; }
             set { baseMap.StartY = value; }
         }
 
-        public bool IsProcessingComplete() {
+        public bool IsProcessingComplete()
+        {
             return true;
         }
 
-        public void Save() {
-            lock (lockObject) {
-                using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data)) {
+        public void Save()
+        {
+            lock (lockObject)
+            {
+                using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data))
+                {
                     MapManager.SaveRDungeonMap(dbConnection, MapID, this);
                 }
             }

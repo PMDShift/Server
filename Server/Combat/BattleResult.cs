@@ -28,16 +28,19 @@ namespace Server.Combat
         ICharacter attacker;
         ICharacter victim;
 
-        public BattleResult(ICharacter attacker, ICharacter victim) {
+        public BattleResult(ICharacter attacker, ICharacter victim)
+        {
             this.attacker = attacker;
             this.victim = victim;
         }
 
-        internal void SetVictimFainted(bool victimFainted) {
+        internal void SetVictimFainted(bool victimFainted)
+        {
             this.victimFainted = victimFainted;
         }
 
-        public bool VictimFainted {
+        public bool VictimFainted
+        {
             get { return victimFainted; }
         }
     }

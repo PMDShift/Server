@@ -1,4 +1,8 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,11 +22,6 @@
 
 namespace Server.Events.World
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     public class TimedEventManager
     {
         #region Fields
@@ -33,7 +32,8 @@ namespace Server.Events.World
 
         #region Properties
 
-        public static TimedEventCollection TimedEvents {
+        public static TimedEventCollection TimedEvents
+        {
             get { return timedEvents; }
         }
 
@@ -41,34 +41,43 @@ namespace Server.Events.World
 
         #region Methods
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             timedEvents = new TimedEventCollection();
         }
 
-        public static void LoadBasicEvents(TickCount currentTick) {
+        public static void LoadBasicEvents(TickCount currentTick)
+        {
             TimeSpan time = new TimeSpan(0, 0, 0, 0, Core.GetTickCount().Tick);
             int hour = (int)time.TotalHours % 12;
-            
+
             DayCycleTimedEvent dayCycleEvent = new DayCycleTimedEvent("DayCycle");
-            
-            if (hour < 4) {
+
+            if (hour < 4)
+            {
                 Server.Globals.ServerTime = Enums.Time.Day;
                 int tickDiff = (int)(time.TotalMilliseconds - new TimeSpan((int)time.TotalHours - hour, 0, 0).TotalMilliseconds);
                 dayCycleEvent.SetInterval(currentTick, (int)new TimeSpan(4, 0, 0).TotalMilliseconds - tickDiff);
-            } else if (hour < 6) {
+            }
+            else if (hour < 6)
+            {
                 Server.Globals.ServerTime = Enums.Time.Dusk;
                 int tickDiff = (int)(time.TotalMilliseconds - new TimeSpan((int)time.TotalHours - hour + 4, 0, 0).TotalMilliseconds);
                 dayCycleEvent.SetInterval(currentTick, (int)new TimeSpan(2, 0, 0).TotalMilliseconds - tickDiff);
-            } else if (hour < 10) {
+            }
+            else if (hour < 10)
+            {
                 Server.Globals.ServerTime = Enums.Time.Night;
                 int tickDiff = (int)(time.TotalMilliseconds - new TimeSpan((int)time.TotalHours - hour + 6, 0, 0).TotalMilliseconds);
                 dayCycleEvent.SetInterval(currentTick, (int)new TimeSpan(4, 0, 0).TotalMilliseconds - tickDiff);
-            } else {
+            }
+            else
+            {
                 Server.Globals.ServerTime = Enums.Time.Dawn;
                 int tickDiff = (int)(time.TotalMilliseconds - new TimeSpan((int)time.TotalHours - hour + 10, 0, 0).TotalMilliseconds);
                 dayCycleEvent.SetInterval(currentTick, (int)new TimeSpan(2, 0, 0).TotalMilliseconds - tickDiff);
             }
-            
+
             timedEvents.Add(dayCycleEvent);
 
             StatisticSaverTimedEvent statisticSaverEvent = new StatisticSaverTimedEvent("StatisticSaver");
@@ -91,19 +100,23 @@ namespace Server.Events.World
         //    timedEvents.Add(mapEvent);
         //}
 
-        public static void Process(TickCount currentTick) {
+        public static void Process(TickCount currentTick)
+        {
             //lock (timedEvents) {
-                for (int i = 0; i < timedEvents.Count; i++) {
-                    if (timedEvents[i].TimeElapsed(currentTick)) {
-                        timedEvents[i].OnTimeElapsed(currentTick);
-                    }
+            for (int i = 0; i < timedEvents.Count; i++)
+            {
+                if (timedEvents[i].TimeElapsed(currentTick))
+                {
+                    timedEvents[i].OnTimeElapsed(currentTick);
                 }
+            }
             //}
         }
 
-        public static void RemoveEvent(ITimedEvent timedEvent) {
+        public static void RemoveEvent(ITimedEvent timedEvent)
+        {
             //lock (timedEvents) {
-                timedEvents.Remove(timedEvent);
+            timedEvents.Remove(timedEvent);
             //}
         }
 

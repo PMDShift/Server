@@ -27,22 +27,26 @@ namespace Server.DataConverter.Stories.V3
     {
         ListPair<string, string> parameters;
 
-        public StorySegment() {
+        public StorySegment()
+        {
             parameters = new ListPair<string, string>();
         }
 
         #region Properties
 
-        public StoryAction Action {
+        public StoryAction Action
+        {
             get;
             set;
         }
 
-        public ListPair<string, string> Parameters {
+        public ListPair<string, string> Parameters
+        {
             get { return parameters; }
         }
 
-        public void AddParameter(string paramID, string value) {
+        public void AddParameter(string paramID, string value)
+        {
             parameters.Add(paramID, value);
         }
 

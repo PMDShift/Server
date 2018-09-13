@@ -29,20 +29,24 @@ namespace Server.Maps
 
         Object lockObject = new object();
 
-        public int Room {
+        public int Room
+        {
             get { return baseMap.Room; }
             set { baseMap.Room = value; }
         }
-        public int StartX {
+        public int StartX
+        {
             get { return baseMap.StartX; }
             set { baseMap.StartX = value; }
         }
-        public int StartY {
+        public int StartY
+        {
             get { return baseMap.StartY; }
             set { baseMap.StartY = value; }
         }
 
-        public string OwnerID {
+        public string OwnerID
+        {
             get { return baseMap.Owner; }
         }
 
@@ -55,16 +59,19 @@ namespace Server.Maps
         public const int LIGHT_PRICE = 400;
         public const int TILE_PRICE = 500;
 
-        public Enums.MapType MapType {
+        public Enums.MapType MapType
+        {
             get { return Enums.MapType.House; }
         }
 
-        public bool Cacheable {
+        public bool Cacheable
+        {
             get { return true; }
         }
 
         public House(DataManager.Maps.HouseMap baseMap)
-            : base(baseMap) {
+            : base(baseMap)
+        {
             this.baseMap = baseMap;
         }
 
@@ -85,17 +92,22 @@ namespace Server.Maps
         //    }
         //}
 
-        public string IDPrefix {
+        public string IDPrefix
+        {
             get { return ID_PREFIX; }
         }
 
-        public bool IsProcessingComplete() {
+        public bool IsProcessingComplete()
+        {
             return true;
         }
 
-        public void Save() {
-            lock (lockObject) {
-                using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data)) {
+        public void Save()
+        {
+            lock (lockObject)
+            {
+                using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data))
+                {
                     MapManager.SaveHouseMap(dbConnection, MapID, this);
                 }
             }

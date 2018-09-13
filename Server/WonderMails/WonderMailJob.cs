@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using DataManager.Players;
+
+using Server.Players;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,14 +25,6 @@
 
 namespace Server.WonderMails
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-    using DataManager.Players;
-
-    using Server.Players;
-
     public class WonderMailJob
     {
         #region Fields
@@ -36,16 +35,18 @@ namespace Server.WonderMails
 
         #region Constructors
 
-        public WonderMailJob(PlayerDataJobListItem baseJobItem) {
-            
+        public WonderMailJob(PlayerDataJobListItem baseJobItem)
+        {
             mission = new WonderMail(baseJobItem);
         }
 
-        public WonderMailJob(WonderMail mail) {
+        public WonderMailJob(WonderMail mail)
+        {
             mission = mail;
         }
 
-        public WonderMailJob(WonderMailJob mail) {
+        public WonderMailJob(WonderMailJob mail)
+        {
             mission = new WonderMail(new PlayerDataJobListItem());
             mission.Data1 = mail.Mission.Data1;
             mission.Data2 = mail.Mission.Data2;
@@ -72,21 +73,25 @@ namespace Server.WonderMails
 
         #region Properties
 
-        public Enums.JobStatus Accepted {
+        public Enums.JobStatus Accepted
+        {
             get { return (Enums.JobStatus)mission.RawMission.Accepted; }
             set { mission.RawMission.Accepted = (int)value; }
         }
 
-        public PlayerDataJobListItem RawJob {
+        public PlayerDataJobListItem RawJob
+        {
             get { return mission.RawMission; }
         }
 
-        public int SendsRemaining {
+        public int SendsRemaining
+        {
             get { return mission.RawMission.SendsRemaining; }
             set { mission.RawMission.SendsRemaining = value; }
         }
 
-        public WonderMail Mission {
+        public WonderMail Mission
+        {
             get { return mission; }
         }
 

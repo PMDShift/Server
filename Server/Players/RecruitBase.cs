@@ -21,8 +21,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace Server.Players {
-    public class RecruitBase {
+namespace Server.Players
+{
+    public class RecruitBase
+    {
         #region Fields
 
         int mBaseMaxHP;
@@ -83,7 +85,8 @@ namespace Server.Players {
         public int Belly { get; set; }
         public int MaxBelly { get; set; }
 
-        public bool InTempMode {
+        public bool InTempMode
+        {
             get;
             set;
         }
@@ -93,108 +96,133 @@ namespace Server.Players {
 
         // Final Stats
         int maxHP;
-        public int MaxHP {
-            get {
-
+        public int MaxHP
+        {
+            get
+            {
                 return maxHP;
             }
         }
 
         int atk;
-        public int Atk {
-            get {
-                    return atk;
-                
+        public int Atk
+        {
+            get
+            {
+                return atk;
             }
         }
 
         int def;
-        public int Def {
-            get {
-                    return def;
-                
+        public int Def
+        {
+            get
+            {
+                return def;
             }
         }
 
         int spd;
-        public int Spd {
-            get {
-                    return spd;
-                
+        public int Spd
+        {
+            get
+            {
+                return spd;
             }
         }
 
         int spclAtk;
-        public int SpclAtk {
-            get {
-                    return spclAtk;
-                
+        public int SpclAtk
+        {
+            get
+            {
+                return spclAtk;
             }
         }
 
         int spclDef;
-        public int SpclDef {
-            get {
-                    return spclDef;
-                
+        public int SpclDef
+        {
+            get
+            {
+                return spclDef;
             }
         }
 
         #region Base Stats
 
-        public int BaseMaxHP {
-            get {
+        public int BaseMaxHP
+        {
+            get
+            {
                 return mBaseMaxHP;
             }
-            set {
+            set
+            {
                 mBaseMaxHP = value;
                 maxHP = mBaseMaxHP + mMaxHPBonus + mMaxHPBoost;
-                if (HP > maxHP) {
+                if (HP > maxHP)
+                {
                     HP = maxHP;
                 }
             }
         }
-        public int BaseAtk {
-            get {
+        public int BaseAtk
+        {
+            get
+            {
                 return mBaseAtk;
             }
-            set {
+            set
+            {
                 mBaseAtk = value;
                 atk = BaseAtk + mAtkBonus + mAtkBoost;
             }
         }
-        public int BaseDef {
-            get {
+        public int BaseDef
+        {
+            get
+            {
                 return mBaseDef;
             }
-            set {
+            set
+            {
                 mBaseDef = value;
                 def = mBaseDef + mDefBonus + mDefBoost;
             }
         }
-        public int BaseSpd {
-            get {
+        public int BaseSpd
+        {
+            get
+            {
                 return mBaseSpd;
             }
-            set {
+            set
+            {
                 mBaseSpd = value;
                 spd = mBaseSpd + mSpdBonus + mSpdBoost;
             }
         }
-        public int BaseSpclAtk {
-            get {
+        public int BaseSpclAtk
+        {
+            get
+            {
                 return mBaseSpclAtk;
             }
-            set {
+            set
+            {
                 mBaseSpclAtk = value;
                 spclAtk = mBaseSpclAtk + mSpclAtkBonus + mSpclAtkBoost;
             }
         }
-        public int BaseSpclDef {
-            get {
+        public int BaseSpclDef
+        {
+            get
+            {
                 return mBaseSpclDef;
             }
-            set {
+            set
+            {
                 mBaseSpclDef = value;
                 spclDef = mBaseSpclDef + mSpclDefBonus + mSpclDefBoost;
             }
@@ -205,26 +233,33 @@ namespace Server.Players {
         #endregion Base Stats
 
         #region From Vitamins
-        public int MaxHPBonus {
-            get {
+        public int MaxHPBonus
+        {
+            get
+            {
                 return mMaxHPBonus;
             }
-            set {
+            set
+            {
                 mMaxHPBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetMaxHPLimit();
                 if (mBaseMaxHP + mMaxHPBonus > baseStat) mMaxHPBonus = baseStat - mBaseMaxHP;
                 if (mBaseMaxHP + mMaxHPBonus < 1) mMaxHPBonus = 1 - mBaseMaxHP;
                 maxHP = mBaseMaxHP + mMaxHPBonus + mMaxHPBoost;
-                if (HP > maxHP) {
+                if (HP > maxHP)
+                {
                     HP = maxHP;
                 }
             }
         }
-        public int AtkBonus {
-            get {
+        public int AtkBonus
+        {
+            get
+            {
                 return mAtkBonus;
             }
-            set {
+            set
+            {
                 mAtkBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetAttLimit();
                 if (mBaseAtk + mAtkBonus > baseStat) mAtkBonus = baseStat - mBaseAtk;
@@ -232,11 +267,14 @@ namespace Server.Players {
                 atk = BaseAtk + mAtkBonus + mAtkBoost;
             }
         }
-        public int DefBonus {
-            get {
+        public int DefBonus
+        {
+            get
+            {
                 return mDefBonus;
             }
-            set {
+            set
+            {
                 mDefBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetDefLimit();
                 if (mBaseDef + mDefBonus > baseStat) mDefBonus = baseStat - mBaseDef;
@@ -244,11 +282,14 @@ namespace Server.Players {
                 def = mBaseDef + mDefBonus + mDefBoost;
             }
         }
-        public int SpdBonus {
-            get {
+        public int SpdBonus
+        {
+            get
+            {
                 return mSpdBonus;
             }
-            set {
+            set
+            {
                 mSpdBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetSpdLimit();
                 if (mBaseSpd + mSpdBonus > baseStat) mSpdBonus = baseStat - mBaseSpd;
@@ -256,11 +297,14 @@ namespace Server.Players {
                 spd = mBaseSpd + mSpdBonus + mSpdBoost;
             }
         }
-        public int SpclAtkBonus {
-            get {
+        public int SpclAtkBonus
+        {
+            get
+            {
                 return mSpclAtkBonus;
             }
-            set {
+            set
+            {
                 mSpclAtkBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetSpAttLimit();
                 if (mBaseSpclAtk + mSpclAtkBonus > baseStat) mSpclAtkBonus = baseStat - mBaseSpclAtk;
@@ -268,11 +312,14 @@ namespace Server.Players {
                 spclAtk = mBaseSpclAtk + mSpclAtkBonus + mSpclAtkBoost;
             }
         }
-        public int SpclDefBonus {
-            get {
+        public int SpclDefBonus
+        {
+            get
+            {
                 return mSpclDefBonus;
             }
-            set {
+            set
+            {
                 mSpclDefBonus = value;
                 int baseStat = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetSpDefLimit();
                 if (mBaseSpclDef + mSpclDefBonus > baseStat) mSpclDefBonus = baseStat - mBaseSpclDef;
@@ -285,59 +332,78 @@ namespace Server.Players {
 
         #region From Items
 
-        public int MaxHPBoost {
-            get {
+        public int MaxHPBoost
+        {
+            get
+            {
                 return mMaxHPBoost;
             }
-            set {
+            set
+            {
                 mMaxHPBoost = value;
                 maxHP = mBaseMaxHP + mMaxHPBonus + mMaxHPBoost;
-                if (HP > maxHP) {
+                if (HP > maxHP)
+                {
                     HP = maxHP;
                 }
             }
         }
-        public int AtkBoost {
-            get {
+        public int AtkBoost
+        {
+            get
+            {
                 return mAtkBoost;
             }
-            set {
+            set
+            {
                 mAtkBoost = value;
                 atk = BaseAtk + mAtkBonus + mAtkBoost;
             }
         }
-        public int DefBoost {
-            get {
+        public int DefBoost
+        {
+            get
+            {
                 return mDefBoost;
             }
-            set {
+            set
+            {
                 mDefBoost = value;
                 def = mBaseDef + mDefBonus + mDefBoost;
             }
         }
-        public int SpdBoost {
-            get {
+        public int SpdBoost
+        {
+            get
+            {
                 return mSpdBoost;
             }
-            set {
+            set
+            {
                 mSpdBoost = value;
                 spd = mBaseSpd + mSpdBonus + mSpdBoost;
             }
         }
-        public int SpclAtkBoost {
-            get {
+        public int SpclAtkBoost
+        {
+            get
+            {
                 return mSpclAtkBoost;
             }
-            set {
+            set
+            {
                 mSpclAtkBoost = value;
                 spclAtk = mBaseSpclAtk + mSpclAtkBonus + mSpclAtkBoost;
             }
         }
-        public int SpclDefBoost {
-            get {
+        public int SpclDefBoost
+        {
+            get
+            {
                 return mSpclDefBoost;
             }
-            set {
+            set
+            {
                 mSpclDefBoost = value;
                 spclDef = mBaseSpclDef + mSpclDefBonus + mSpclDefBoost;
             }
@@ -377,11 +443,13 @@ namespace Server.Players {
 
         public string FileVersion { get; set; }
 
-        public RecruitBase() {
+        public RecruitBase()
+        {
             Moves = new RecruitMove[Constants.MAX_PLAYER_MOVES];
             RecruitIndex = -1;
             MoveItem = -1;
-            for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++) {
+            for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++)
+            {
                 Moves[i] = new RecruitMove();
             }
         }
@@ -676,16 +744,18 @@ namespace Server.Players {
             Form = PermanentForm;
         }
 
-        public void CalculateOriginalSpecies() {
-
+        public void CalculateOriginalSpecies()
+        {
         }
 
-        public void CalculateOriginalSprite() {
+        public void CalculateOriginalSprite()
+        {
             //Sprite = Pokedex.Pokedex.GetPokemonForm(Species, Form).Sprite[(int)Shiny, (int)Sex];
             Sprite = Species;
         }
 
-        public void CalculateOriginalStats() {
+        public void CalculateOriginalStats()
+        {
             BaseMaxHP = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetMaxHP(Level);
             BaseAtk = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetAtt(Level);
             BaseDef = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetDef(Level);
@@ -694,10 +764,10 @@ namespace Server.Players {
             BaseSpd = Pokedex.Pokedex.GetPokemonForm(Species, Form).GetSpd(Level);
         }
 
-        public void CalculateOriginalType() {
+        public void CalculateOriginalType()
+        {
             Type1 = Pokedex.Pokedex.GetPokemonForm(Species, Form).Type1;
             Type2 = Pokedex.Pokedex.GetPokemonForm(Species, Form).Type2;
-
         }
 
         //public void CalculateOriginalMobility() {
@@ -725,30 +795,34 @@ namespace Server.Players {
         //    }
         //}
 
-        public void CalculateOriginalAbility() {
+        public void CalculateOriginalAbility()
+        {
             Ability1 = Pokedex.Pokedex.GetPokemonForm(Species, Form).Ability1;
             Ability2 = Pokedex.Pokedex.GetPokemonForm(Species, Form).Ability2;
             Ability3 = Pokedex.Pokedex.GetPokemonForm(Species, Form).Ability3;
-
         }
 
-        public static int DetermineSpecies(int sprite) {
+        public static int DetermineSpecies(int sprite)
+        {
             int species;
             //if (speciesOverride > 0 && speciesOverride <= Constants.TOTAL_POKEMON) {
             //    species = speciesOverride;
             //} else {
             Pokedex.Pokemon pokemon = Pokedex.Pokedex.FindBySprite(sprite);
-            if (pokemon != null) {
+            if (pokemon != null)
+            {
                 species = pokemon.ID;
-            } else { // MissingNo.
+            }
+            else
+            { // MissingNo.
                 species = 0;
             }
             //}
-            if (species < 0 || species > Constants.TOTAL_POKEMON) {
+            if (species < 0 || species > Constants.TOTAL_POKEMON)
+            {
                 species = 0;
             }
             return species;
         }
-
     }
 }

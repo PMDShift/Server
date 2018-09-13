@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -17,23 +20,24 @@
 
 namespace Server.DataConverter.Moves.V1
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class MoveManager
     {
         #region Methods
 
-        public static Move LoadMove(int moveNum) {
+        public static Move LoadMove(int moveNum)
+        {
             Move move = new Move();
             string[] parse = null;
-            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat")) {
-                while (!(read.EndOfStream)) {
+            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat"))
+            {
+                while (!(read.EndOfStream))
+                {
                     parse = read.ReadLine().Split('|');
-                    switch (parse[0].ToLower()) {
+                    switch (parse[0].ToLower())
+                    {
                         case "spelldata":
-                            if (parse[1].ToLower() != "v1") {
+                            if (parse[1].ToLower() != "v1")
+                            {
                                 read.Close();
                                 return null;
                             }
@@ -57,7 +61,8 @@ namespace Server.DataConverter.Moves.V1
                             move.SpellDone = parse[16].ToInt();
                             move.SpellTime = parse[17].ToInt();
                             move.Type = (Enums.MoveType)parse[18].ToInt();
-                            if (parse.Length > 20) {
+                            if (parse.Length > 20)
+                            {
                                 move.IsKey = parse[19].ToBool();
                                 move.KeyItem = parse[20].ToInt();
                             }
@@ -68,9 +73,11 @@ namespace Server.DataConverter.Moves.V1
             return move;
         }
 
-        public static void SaveMove(Move move, int moveNum) {
+        public static void SaveMove(Move move, int moveNum)
+        {
             string FileName = IO.Paths.MovesFolder + "move" + moveNum + ".dat";
-            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName)) {
+            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName))
+            {
                 write.WriteLine("SpellData|V1");
                 write.WriteLine("Data|" + move.Name + "|" + move.LevelReq + "|" + move.AE + "|" + move.Big + "|" + move.ClassReq + "|" + move.ClassReq2 + "|" + move.ClassReq3 + "|" + move.Data1 + "|" + move.Data2 + "|" + move.Data3 + "|" + move.Element + "|" + move.MPCost + "|" + move.Range + "|" + move.Sound + "|" + move.SpellAnim + "|" + move.SpellDone + "|" + move.SpellTime + "|" + (int)move.Type + "|" + move.IsKey.ToIntString() + "|" + move.KeyItem.ToString() + "|");
             }

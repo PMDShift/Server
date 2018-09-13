@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -17,23 +20,24 @@
 
 namespace Server.DataConverter.Moves.V2
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class MoveManager
     {
         #region Methods
 
-        public static Move LoadMove(int moveNum) {
+        public static Move LoadMove(int moveNum)
+        {
             Move move = new Move();
             string[] parse = null;
-            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat")) {
-                while (!(read.EndOfStream)) {
+            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat"))
+            {
+                while (!(read.EndOfStream))
+                {
                     parse = read.ReadLine().Split('|');
-                    switch (parse[0].ToLower()) {
+                    switch (parse[0].ToLower())
+                    {
                         case "movedata":
-                            if (parse[1].ToLower() != "v2") {
+                            if (parse[1].ToLower() != "v2")
+                            {
                                 read.Close();
                                 return null;
                             }
@@ -63,9 +67,11 @@ namespace Server.DataConverter.Moves.V2
             return move;
         }
 
-        public static void SaveMove(Move move, int moveNum) {
+        public static void SaveMove(Move move, int moveNum)
+        {
             string FileName = IO.Paths.MovesFolder + "move" + moveNum + ".dat";
-            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName)) {
+            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName))
+            {
                 write.WriteLine("MoveData|V2");
                 write.WriteLine("Data|" + move.Name + "|" + move.LevelReq + "|" + ((int)move.Range).ToString() + "|" + ((int)move.TargetType).ToString() + "|" + ((int)move.MoveType).ToString() + "|" + ((int)move.EffectType).ToString() + "|" + move.MaxPP + "|" + move.Data1 + "|" + move.Data2 + "|" + move.Data3 + "|" + move.Big.ToIntString() + "|" + move.Sound + "|" + move.SpellAnim + "|" + move.SpellDone + "|" + move.SpellTime + "|" + move.IsKey.ToIntString() + "|" + move.KeyItem + "|");
             }

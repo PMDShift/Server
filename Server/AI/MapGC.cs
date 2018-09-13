@@ -29,42 +29,50 @@ namespace Server.AI
         internal System.Collections.Concurrent.ConcurrentQueue<string> cleanupQueue;
         ManualResetEvent resetEvent;
 
-        public void SetWaitEvent() {
+        public void SetWaitEvent()
+        {
             resetEvent.Set();
         }
 
-        public MapGC() {
+        public MapGC()
+        {
             cleanupQueue = new System.Collections.Concurrent.ConcurrentQueue<string>();
             resetEvent = new ManualResetEvent(false);
         }
 
-        public void AddMaps(List<string> mapList) {
-            foreach (string map in mapList) {
+        public void AddMaps(List<string> mapList)
+        {
+            foreach (string map in mapList)
+            {
                 cleanupQueue.Enqueue(map);
             }
         }
 
-        public void Cleanup() {
-            while (true) { // Keep this thread alive!
-
+        public void Cleanup()
+        {
+            while (true)
+            { // Keep this thread alive!
                 resetEvent.WaitOne(); // Wait until we should do another GC
                 resetEvent.Reset();
 
                 // Go through all queued items
-                while (true) {
+                while (true)
+                {
                     string mapID = null;
                     bool hasItem = cleanupQueue.TryDequeue(out mapID);
-                    if (!hasItem) {
+                    if (!hasItem)
+                    {
                         break; // Break out of the loop
                     }
 
-                    using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data)) {
-                        if (MapManager.GetTotalPlayersOnMap(dbConnection, mapID) == 0) {
+                    using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data))
+                    {
+                        if (MapManager.GetTotalPlayersOnMap(dbConnection, mapID) == 0)
+                        {
                             DataManager.Maps.MapDataManager.DeleteMap(dbConnection.Database, mapID);
                         }
                     }
                 }
-                
             }
             /*
              * old code for reference:

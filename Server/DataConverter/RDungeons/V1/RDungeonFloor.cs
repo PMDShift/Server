@@ -23,7 +23,7 @@ using Server.RDungeons;
 
 namespace Server.DataConverter.RDungeons.V1
 {
-	public class RDungeonFloor
+    public class RDungeonFloor
     {
         public Enums.Weather Weather { get; set; }
         public int WeatherIntensity { get; set; }
@@ -42,7 +42,8 @@ namespace Server.DataConverter.RDungeons.V1
 
         public string Music { get; set; }
 
-        public RDungeonFloor() {
+        public RDungeonFloor()
+        {
             Traps = new List<int>();
             Npc = new int[15];
             Items = new int[8];

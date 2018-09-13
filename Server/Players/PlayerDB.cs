@@ -1,4 +1,23 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using DataManager.Players;
+using Server.Maps;
+using Server.Network;
+using Server.Scripting;
+using PMDCP.Sockets;
+using Server.Players.Parties;
+using Server.Npcs;
+using Server.Items;
+using Server.WonderMails;
+using Server.Stories;
+using Server.Missions;
+using Server.RDungeons;
+using PMDCP.Core;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,26 +37,6 @@
 
 namespace Server.Players
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using DataManager.Players;
-    using Server.Maps;
-    using Server.Network;
-    using Server.Scripting;
-    using PMDCP.Sockets;
-    using Server.Players.Parties;
-    using Server.Npcs;
-    using Server.Items;
-    using Server.WonderMails;
-    using Server.Stories;
-    using Server.Missions;
-    using Server.RDungeons;
-    using PMDCP.Core;
-    using Server.Database;
-
     public partial class Player
     {
         #region Methods
@@ -185,7 +184,6 @@ namespace Server.Players
                     PacketHitList.MethodEnded(ref hitList);
                     ScriptManager.InvokeSub("RecruitActiveCharSwap", client, oldSlot, teamSlot);
                     PauseTimer = new Server.TickCount(Core.GetTickCount().Tick + 1000);
-
                 }
             }
             else if (!Core.GetTickCount().Elapsed(PauseTimer, 0))
@@ -232,7 +230,7 @@ namespace Server.Players
             }
             else
             {
-                Messenger.PlayerMsg(client, "Error: Pokémon not loaded.", Text.BrightRed);
+                Messenger.PlayerMsg(client, "Error: Pok\u00E9mon not loaded.", Text.BrightRed);
             }
         }
 
@@ -490,7 +488,6 @@ namespace Server.Players
             int index = FindOpenRecruitmentSlot(dbConnection);
             if (index > -1 && index <= Constants.MAX_RECRUITMENTS)
             {
-
                 PokemonCaught(requestedRecruit.Species);
 
                 Recruit recruit = new Recruit(client);
@@ -536,11 +533,11 @@ namespace Server.Players
                 {
                     if (IsInTeam(recruitIndex))
                     {
-                        Messenger.PlayerMsg(client, "This Pokémon is in your team! You can't release it!", Text.BrightRed);
+                        Messenger.PlayerMsg(client, "This Pok\u00E9mon is in your team! You can't release it!", Text.BrightRed);
                         return;
                     }
                     DeleteFromRecruitmentBank(dbConnection, recruitIndex, true);
-                    Messenger.PlayerMsg(client, "Pokémon released!", Text.BrightRed);
+                    Messenger.PlayerMsg(client, "Pok\u00E9mon released!", Text.BrightRed);
                     ScriptManager.InvokeSub("RecruitReleased", client, recruitIndex);
                     Messenger.SendAllRecruits(client);
                     //Messenger.OpenAssembly(client);
@@ -568,17 +565,16 @@ namespace Server.Players
             }
             else if (recruitIndex == 0)
             {
-                Messenger.PlayerMsg(client, "You can't release your starter Pokémon!", Text.BrightRed);
+                Messenger.PlayerMsg(client, "You can't release your starter Pok\u00E9mon!", Text.BrightRed);
             }
             else
             {
-                Messenger.PlayerMsg(client, "Error: Unable to release selected Pokémon", Text.BrightRed);
+                Messenger.PlayerMsg(client, "Error: Unable to release selected Pok\u00E9mon", Text.BrightRed);
             }
         }
 
         public void ChangeRecruitName(int teamSlot, string newName)
         {
-
             if (teamSlot > -1 && teamSlot < 4)
             {
                 if (newName != "")
@@ -659,7 +655,6 @@ namespace Server.Players
 
         public void AddToTeamTemp(int teamSlot, int species, int form, int level, int missionIndex)
         {
-
             Team[teamSlot].RecruitIndex = -2 - missionIndex;
             Team[teamSlot].Loaded = true;
             Team[teamSlot].Species = species;
@@ -679,7 +674,6 @@ namespace Server.Players
             client.Player.Team[teamSlot].MaxBelly = 100;
             client.Player.Team[teamSlot].Belly = client.Player.Team[teamSlot].MaxBelly;
             client.Player.Team[teamSlot].GenerateMoveset();
-
         }
 
         #region Stats
@@ -714,7 +708,6 @@ namespace Server.Players
                         hitlist.AddPacket(client, PacketBuilder.CreateSoundPacket("magic129.wav"));
                     }
                     PacketBuilder.AppendBelly(client, hitlist);
-
                 }
                 else if (GetActiveRecruit().Belly > 10)
                 {
@@ -725,7 +718,6 @@ namespace Server.Players
                         hitlist.AddPacket(client, PacketBuilder.CreateSoundPacket("magic129.wav"));
                     }
                     PacketBuilder.AppendBelly(client, hitlist);
-
                 }
                 else if (GetActiveRecruit().Belly > 0)
                 {
@@ -935,7 +927,6 @@ namespace Server.Players
 
                 if (i != -1)
                 {
-
                     // Check to see if its any sort of ArmorSlot/WeaponSlot
                     //if (GetItemSlotHolder(InvNum) > -1)
                     //{
@@ -1020,7 +1011,6 @@ namespace Server.Players
 
                         if (TakeItem == true)
                         {
-
                             // Check to see if its held by anyone
                             if (GetItemSlotHolder(invSlot) > -1)
                             { //remove from all equippers
@@ -1045,7 +1035,6 @@ namespace Server.Players
                                         //the function auto-checks if it's in the activeItemlist to begin with
                                         Team[j].RemoveFromActiveItemList(itemNum);
                                     }
-
                                 }
                             }
                         }
@@ -1063,7 +1052,6 @@ namespace Server.Players
                 {
                     Messenger.PlayerMsg(client, "Too many items already on the ground.", Text.BrightRed);
                 }
-
             }
         }
 
@@ -1161,7 +1149,6 @@ namespace Server.Players
                                                     //the function auto-checks if it's in the activeItemlist to begin with
                                                     Team[j].AddToActiveItemList(Inventory[n].Num);
                                                 }
-
                                             }
                                         }
 
@@ -1263,7 +1250,7 @@ namespace Server.Players
         internal void SetSystemInfo(string osVersion, string dotNetVersion, string clientEdition)
         {
             this.osVersion = osVersion;
-            this.platformVersion = dotNetVersion;
+            platformVersion = dotNetVersion;
             this.clientEdition = clientEdition;
         }
 
@@ -1444,7 +1431,6 @@ namespace Server.Players
                         {
                             if (((RDungeonMap)i.Player.Map).RDungeonIndex == dungeonNum && ((RDungeonMap)i.Player.Map).RDungeonFloor == floor)
                             {
-
                                 map = (RDungeonMap)i.Player.Map;
 
                                 break;
@@ -1531,7 +1517,6 @@ namespace Server.Players
             MissionCompletions++;
             Messenger.SendJobAccept(client, missionIndex);
             Scripting.ScriptManager.InvokeSub("OnMissionComplete", client, missionIndex);
-
         }
 
         public bool HandleMissionRewardDump()
@@ -2013,8 +1998,6 @@ namespace Server.Players
                     }
                 }
             }
-
-
         }
 
         public void ProcessCharacterVisibilities(PacketHitList hitlist)
@@ -2249,7 +2232,6 @@ namespace Server.Players
             {
                 lock (seenPlayers)
                 {
-
                     SeenCharacter seenCharacter;
                     if (seenPlayers.TryGetValue(((Recruit)target).Owner.Player.CharID, out seenCharacter))
                     {
@@ -2346,16 +2328,44 @@ namespace Server.Players
         }
         //when outdating something, be sure it exists
 
-        public void EnterSandbox() {
+        public void EnterSandbox()
+        {
             PlayerData.IsSandboxed = true;
         }
 
-        public void LeaveSandbox() {
+        public void LeaveSandbox()
+        {
             PlayerData.IsSandboxed = false;
         }
 
-        public bool IsAssignedToZone(int zoneID) {
-            return true;
+        public bool CanViewZone(int zoneID)
+        {
+            if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
+            {
+                return false;
+            }
+
+            var zone = Zones.ZoneManager.Zones[zoneID];
+
+            return zone.Members.Any(x => x.CharacterID == CharID);
+        }
+
+        public bool CanEditZone(int zoneID)
+        {
+            if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
+            {
+                return false;
+            }
+
+            var zone = Zones.ZoneManager.Zones[zoneID];
+
+            var member = zone.Members.Where(x => x.CharacterID == CharID).FirstOrDefault();
+            if (member == null)
+            {
+                return false;
+            }
+
+            return (member.Access == Enums.ZoneAccess.Member || member.Access == Enums.ZoneAccess.Leader);
         }
 
         #endregion Methods

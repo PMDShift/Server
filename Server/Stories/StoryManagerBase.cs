@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+using Server.Zones;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +25,6 @@
 
 namespace Server.Stories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class StoryManagerBase
     {
         #region Fields
@@ -43,7 +43,8 @@ namespace Server.Stories
 
         #region Properties
 
-        public static StoryCollection Stories {
+        public static StoryCollection Stories
+        {
             get { return stories; }
         }
 
@@ -52,7 +53,8 @@ namespace Server.Stories
         #region Methods
 
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -69,7 +71,6 @@ namespace Server.Stories
         {
             try
             {
-
                 using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
                 {
                     for (int i = 0; i <= stories.MaxStories; i++)
@@ -80,14 +81,15 @@ namespace Server.Stories
                     }
                     if (LoadComplete != null)
                         LoadComplete(null, null);
-
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Exceptions.ErrorLogger.WriteToErrorLog(ex);
             }
         }
 
-        public static void LoadStory(int storyNum, MySql database)
+        public static void LoadStory(int storyNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (stories.Stories.ContainsKey(storyNum) == false)
                 stories.Stories.Add(storyNum, new Story(storyNum.ToString()));
@@ -119,7 +121,6 @@ namespace Server.Stories
             if (columnCollections == null) columnCollections = new List<DataColumnCollection>();
             foreach (DataColumnCollection columnCollection in columnCollections)
             {
-
                 StorySegment segment = new StorySegment();
 
                 int segmentNum = columnCollection["segment"].ValueString.ToInt();
@@ -155,7 +156,7 @@ namespace Server.Stories
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
 
                 database.BeginTransaction();
 
@@ -202,6 +203,25 @@ namespace Server.Stories
                 }
                 database.EndTransaction();
             }
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM story WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.Stories
+                });
+            }
+
+            return results;
         }
 
         #endregion Methods

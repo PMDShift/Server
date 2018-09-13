@@ -22,20 +22,25 @@ using Server.RDungeons;
 
 namespace Server.DataConverter.RDungeons.V1
 {
-	/// <summary>
-	/// Description of RDungeonManager.
-	/// </summary>
-	public class RDungeonManager
-	{
-		public static RDungeon LoadRDungeon(int dungeonNum) {
+    /// <summary>
+    /// Description of RDungeonManager.
+    /// </summary>
+    public class RDungeonManager
+    {
+        public static RDungeon LoadRDungeon(int dungeonNum)
+        {
             RDungeon dungeon = new RDungeon(dungeonNum);
             string FilePath = IO.Paths.RDungeonsFolder + "rdungeon" + dungeonNum.ToString() + ".dat";
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(FilePath)) {
-                while (!(reader.EndOfStream)) {
+            using (System.IO.StreamReader reader = new System.IO.StreamReader(FilePath))
+            {
+                while (!(reader.EndOfStream))
+                {
                     string[] parse = reader.ReadLine().Split('|');
-                    switch (parse[0].ToLower()) {
+                    switch (parse[0].ToLower())
+                    {
                         case "rdungeondata":
-                            if (parse[1].ToLower() != "v1") {
+                            if (parse[1].ToLower() != "v1")
+                            {
                                 reader.Close();
                                 reader.Dispose();
                                 return null;
@@ -48,7 +53,8 @@ namespace Server.DataConverter.RDungeons.V1
                             dungeon.Recruitment = parse[4].ToBool();
                             dungeon.Exp = parse[5].ToBool();
                             break;
-                        case "terrain": {
+                        case "terrain":
+                            {
                                 #region Terrain
                                 dungeon.StairsX = parse[1].ToInt();
                                 dungeon.StairsSheet = parse[2].ToInt();
@@ -87,7 +93,8 @@ namespace Server.DataConverter.RDungeons.V1
                                 dungeon.mInnerBottomRightX = parse[29].ToInt();
                                 dungeon.mInnerBottomRightSheet = parse[30].ToInt();
 
-                                if (parse.Length > 32) {
+                                if (parse.Length > 32)
+                                {
                                     dungeon.mWaterX = parse[31].ToInt();
                                     dungeon.mWaterSheet = parse[32].ToInt();
                                     dungeon.mWaterAnimX = parse[33].ToInt();
@@ -106,10 +113,12 @@ namespace Server.DataConverter.RDungeons.V1
                                     dungeon.mRowLeftSheet = parse[44].ToInt();
                                     dungeon.mRowCenterX = parse[45].ToInt();
                                     dungeon.mRowCenterSheet = parse[46].ToInt();
-                                    if (parse.Length > 48) {
+                                    if (parse.Length > 48)
+                                    {
                                         dungeon.mRowRightX = parse[47].ToInt();
                                         dungeon.mRowRightSheet = parse[48].ToInt();
-                                        if (parse.Length > 50) {
+                                        if (parse.Length > 50)
+                                        {
                                             dungeon.mShoreTopLeftX = parse[49].ToInt();
                                             dungeon.mShoreTopLeftSheet = parse[50].ToInt();
                                             dungeon.mShoreTopRightX = parse[51].ToInt();
@@ -162,7 +171,8 @@ namespace Server.DataConverter.RDungeons.V1
                                 #endregion
                             }
                             break;
-                        case "floor": {
+                        case "floor":
+                            {
                                 RDungeonFloor floor = new RDungeonFloor();
                                 floor.WeatherIntensity = parse[1].ToInt();
                                 floor.Weather = (Enums.Weather)parse[2].ToInt();
@@ -175,22 +185,26 @@ namespace Server.DataConverter.RDungeons.V1
                                 int maxTraps = parse[9].ToInt();
 
                                 int n = 10;
-                                for (int i = 0; i < 15; i++) {
+                                for (int i = 0; i < 15; i++)
+                                {
                                     floor.Npc[i] = parse[n].ToInt();
                                     n++;
                                 }
-                                for (int i = 0; i < 8; i++) {
+                                for (int i = 0; i < 8; i++)
+                                {
                                     floor.Items[i] = parse[n].ToInt();
                                     n++;
                                 }
-                                for (int i = 0; i < maxTraps; i++) {
+                                for (int i = 0; i < maxTraps; i++)
+                                {
                                     floor.Traps.Add(parse[n].ToInt());
                                     n++;
                                 }
                                 dungeon.Floors.Add(floor);
                             }
                             break;
-                        case "cratersettings": {
+                        case "cratersettings":
+                            {
                                 dungeon.Options.Craters = parse[1].ToInt();
                                 dungeon.Options.CraterMinLength = parse[2].ToInt();
                                 dungeon.Options.CraterMaxLength = parse[3].ToInt();
@@ -201,12 +215,13 @@ namespace Server.DataConverter.RDungeons.V1
                 }
             }
             return dungeon;
-	}
-	
-	public static void SaveRDungeon(RDungeon rdungeon, int dungeonNum) {
-            
+        }
+
+        public static void SaveRDungeon(RDungeon rdungeon, int dungeonNum)
+        {
             string Filepath = IO.Paths.RDungeonsFolder + "rdungeon" + dungeonNum.ToString() + ".dat";
-            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(Filepath)) {
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(Filepath))
+            {
                 writer.WriteLine("RDungeonData|V1");
                 writer.WriteLine("Data|" + rdungeon.DungeonName + "|" + ((int)rdungeon.Direction).ToString() + "|" + rdungeon.MaxFloors.ToString() + "|" + rdungeon.Recruitment.ToString() + "|" + rdungeon.Exp.ToString() + "|");
                 writer.WriteLine("Terrain|" + rdungeon.StairsX.ToString() + "|" + rdungeon.StairsSheet.ToString() + "|" +
@@ -239,25 +254,28 @@ namespace Server.DataConverter.RDungeons.V1
                                  rdungeon.mRowLeftX.ToString() + "|" + rdungeon.mRowLeftSheet.ToString() + "|" +
                                  rdungeon.mRowCenterX.ToString() + "|" + rdungeon.mRowCenterSheet.ToString() + "|" +
                                  rdungeon.mRowRightX.ToString() + "|" + rdungeon.mRowRightSheet.ToString() + "|");
-                for (int i = 0; i < rdungeon.Floors.Count; i++) {
+                for (int i = 0; i < rdungeon.Floors.Count; i++)
+                {
                     string data = "Floor|" + rdungeon.Floors[i].WeatherIntensity.ToString() + "|" + ((int)rdungeon.Floors[i].Weather).ToString() + "|" + rdungeon.Floors[i].Music + "|" +
                         ((int)rdungeon.Floors[i].GoalType).ToString() + "|" + rdungeon.Floors[i].GoalMap.ToString() + "|" + rdungeon.Floors[i].GoalX.ToString() + "|" + rdungeon.Floors[i].GoalY.ToString() + "|" +
                         rdungeon.Floors[i].ItemSpawnRate.ToString() + "|" + rdungeon.Floors[i].Traps.Count.ToString() + "|";
 
-                    for (int npc = 0; npc < 15; npc++) {
+                    for (int npc = 0; npc < 15; npc++)
+                    {
                         data += rdungeon.Floors[i].Npc[npc].ToString() + "|";
                     }
-                    for (int item = 0; item < 8; item++) {
+                    for (int item = 0; item < 8; item++)
+                    {
                         data += rdungeon.Floors[i].Items[item].ToString() + "|";
                     }
-                    for (int trap = 0; trap < rdungeon.Floors[i].Traps.Count; trap++) {
+                    for (int trap = 0; trap < rdungeon.Floors[i].Traps.Count; trap++)
+                    {
                         data += rdungeon.Floors[i].Traps[trap].ToString() + "|";
                     }
                     writer.WriteLine(data);
-
                 }
                 writer.WriteLine("CraterSettings|" + rdungeon.Options.Craters + "|" + rdungeon.Options.CraterMinLength + "|" + rdungeon.Options.CraterMaxLength + "|" + rdungeon.Options.CraterFuzzy.ToIntString() + "|");
             }
         }
-}
+    }
 }

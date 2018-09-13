@@ -21,19 +21,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Server.DataConverter.Moves.V4 {
-    public class MoveManager {
-
-        public static Move LoadMove(int moveNum) {
-
+namespace Server.DataConverter.Moves.V4
+{
+    public class MoveManager
+    {
+        public static Move LoadMove(int moveNum)
+        {
             Move move = new Move();
             string[] parse = null;
-            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat")) {
-                while (!(read.EndOfStream)) {
+            using (System.IO.StreamReader read = new System.IO.StreamReader(IO.Paths.MovesFolder + "move" + moveNum + ".dat"))
+            {
+                while (!(read.EndOfStream))
+                {
                     parse = read.ReadLine().Split('|');
-                    switch (parse[0].ToLower()) {
+                    switch (parse[0].ToLower())
+                    {
                         case "movedata":
-                            if (parse[1].ToLower() != "v4") {
+                            if (parse[1].ToLower() != "v4")
+                            {
                                 read.Close();
                                 return null;
                             }
@@ -86,10 +91,11 @@ namespace Server.DataConverter.Moves.V4 {
         }
 
 
-        public static void SaveMove(Move move, int moveNum) {
-            
+        public static void SaveMove(Move move, int moveNum)
+        {
             string FileName = IO.Paths.MovesFolder + "move" + moveNum + ".dat";
-            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName)) {
+            using (System.IO.StreamWriter write = new System.IO.StreamWriter(FileName))
+            {
                 write.WriteLine("MoveData|V4");
                 write.WriteLine("Data|" + move.Name + "|" + move.MaxPP + "|" + ((int)move.EffectType).ToString() + "|" + ((int)move.Element).ToString() + "|" + ((int)move.MoveCategory).ToString() + "|"
                     + ((int)move.RangeType).ToString() + "|" + move.Range + "|" + ((int)move.TargetType).ToString()
@@ -101,6 +107,5 @@ namespace Server.DataConverter.Moves.V4 {
                     + ((int)move.DefenderAnim.AnimationType).ToString() + "|" + move.DefenderAnim.AnimationIndex.ToString() + "|" + move.DefenderAnim.FrameSpeed.ToString() + "|" + move.DefenderAnim.Repetitions.ToString() + "|");
             }
         }
-
     }
 }

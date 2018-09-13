@@ -28,14 +28,16 @@ namespace Server.Shops
         public string JoinSay { get; set; }
         public string LeaveSay { get; set; }
         //public bool FixesItems { get; set; }
-        public ShopItem[] Items{get;set;}
+        public ShopItem[] Items { get; set; }
 
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
-        public Shop() {
+        public Shop()
+        {
             Items = new ShopItem[Constants.MAX_TRADES];
-            for (int i = 0; i < Constants.MAX_TRADES; i++) {
+            for (int i = 0; i < Constants.MAX_TRADES; i++)
+            {
                 Items[i] = new ShopItem();
             }
         }

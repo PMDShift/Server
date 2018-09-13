@@ -31,41 +31,52 @@ namespace Server.Events.World
         string id;
         MapGC mapGC;
 
-        public MapGCTimedEvent(string id, MapGC mapGC) {
+        public MapGCTimedEvent(string id, MapGC mapGC)
+        {
             this.id = id;
             this.mapGC = mapGC;
         }
 
-        public bool TimeElapsed(TickCount currentTick) {
-            if (currentTick.Elapsed(storedTime, this.interval)) {
+        public bool TimeElapsed(TickCount currentTick)
+        {
+            if (currentTick.Elapsed(storedTime, interval))
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public string ID {
-            get {
+        public string ID
+        {
+            get
+            {
                 return id;
             }
         }
 
-        public TickCount StoredTime {
+        public TickCount StoredTime
+        {
             get { return storedTime; }
         }
 
-        public int Interval {
+        public int Interval
+        {
             get { return interval; }
         }
 
-        public void OnTimeElapsed(TickCount currentTick) {
+        public void OnTimeElapsed(TickCount currentTick)
+        {
             storedTime = currentTick;
 
             mapGC.SetWaitEvent();
         }
 
-        public void SetInterval(TickCount currentTick, int interval) {
-            this.storedTime = currentTick;
+        public void SetInterval(TickCount currentTick, int interval)
+        {
+            storedTime = currentTick;
             this.interval = interval;
         }
     }

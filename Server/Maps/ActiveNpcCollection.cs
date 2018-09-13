@@ -28,29 +28,36 @@ namespace Server.Maps
         DataManager.Maps.MapDump rawMap;
         MapNpc[] mapNpcs;
 
-        public ActiveNpcCollection(DataManager.Maps.MapDump rawMap) {
+        public ActiveNpcCollection(DataManager.Maps.MapDump rawMap)
+        {
             this.rawMap = rawMap;
             mapNpcs = new MapNpc[rawMap.ActiveNpc.Length];
-            for (int i = 0; i < mapNpcs.Length; i++) {
+            for (int i = 0; i < mapNpcs.Length; i++)
+            {
                 mapNpcs[i] = new MapNpc(rawMap.MapID, rawMap.ActiveNpc[i]);
             }
         }
 
-        public int Length {
+        public int Length
+        {
             get { return mapNpcs.Length; }
         }
 
-        public MapNpc this[int index] {
-            get {
+        public MapNpc this[int index]
+        {
+            get
+            {
                 return mapNpcs[index];
             }
-            set {
+            set
+            {
                 mapNpcs[index] = value;
                 rawMap.ActiveNpc[index] = value.RawNpc;
             }
         }
 
-        public System.Collections.IEnumerator GetEnumerator() {
+        public System.Collections.IEnumerator GetEnumerator()
+        {
             return mapNpcs.GetEnumerator();
         }
     }

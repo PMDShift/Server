@@ -23,27 +23,27 @@ using Server.Maps;
 
 namespace Server.DataConverter.RDungeons.V2
 {
-	public class RDungeonFloor
+    public class RDungeonFloor
     {
         GeneratorOptions options;
-			
-        public GeneratorOptions Options { get {return options;} }
-			
-        
+
+        public GeneratorOptions Options { get { return options; } }
+
+
         public int Darkness { get; set; }
 
-        
+
 
         public Enums.RFloorGoalType GoalType { get; set; }
 
         public int GoalMap { get; set; }
         public int GoalX { get; set; }
         public int GoalY { get; set; }
-        
+
         public string Music { get; set; }
-        
-        
-        
+
+
+
         #region Terrain Variables
 
         public int StairsX { get; set; }
@@ -97,7 +97,7 @@ namespace Server.DataConverter.RDungeons.V2
         public int mRowCenterSheet { get; set; }
         public int mRowRightX { get; set; }
         public int mRowRightSheet { get; set; }
-        
+
         public int mWaterX { get; set; }
         public int mWaterSheet { get; set; }
         public int mWaterAnimX { get; set; }
@@ -150,16 +150,18 @@ namespace Server.DataConverter.RDungeons.V2
 
         public int ItemSpawnRate { get; set; }
         public int[] Items { get; set; }
-        
+
         public MapNpcPreset[] Npc { get; set; }
         public List<int> Traps { get; set; }
-        public List <Enums.Weather> Weather { get; set; }
+        public List<Enums.Weather> Weather { get; set; }
 
-        public RDungeonFloor() {
+        public RDungeonFloor()
+        {
             Traps = new List<int>();
             Weather = new List<Enums.Weather>();
             Npc = new MapNpcPreset[Constants.MAX_MAP_NPCS];
-            for (int i = 0; i < Npc.Length; i++) {
+            for (int i = 0; i < Npc.Length; i++)
+            {
                 Npc[i] = new MapNpcPreset();
             }
             Items = new int[16];

@@ -1,4 +1,10 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using PMDCP.DatabaseConnector.MySql;
+using Server.Database;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,16 +24,8 @@
 
 namespace Server.Pokedex
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Xml;
-    using PMDCP.DatabaseConnector.MySql;
-    using Server.Database;
-    
     public class Pokemon
     {
-
         public int ID { get; set; }
 
         public string Name { get; set; }
@@ -42,7 +40,8 @@ namespace Server.Pokedex
 
         public List<PokemonForm> Forms { get; set; }
 
-        public Pokemon() {
+        public Pokemon()
+        {
             Forms = new List<PokemonForm>();
         }
 
@@ -66,8 +65,9 @@ namespace Server.Pokedex
         }
         */
 
-        public void Load(DatabaseConnection dbConnection) {
-            MySql database = dbConnection.Database;
+        public void Load(DatabaseConnection dbConnection)
+        {
+            var database = dbConnection.Database;
 
             string query = "SELECT pokedex_pokemon.PokemonName, pokedex_pokemon.SpeciesName, " +
                 "pokedex_pokemon.GrowthGroup, pokedex_pokemon.EggGroup1, pokedex_pokemon.EggGroup2 " +
@@ -139,6 +139,5 @@ namespace Server.Pokedex
                 row = database.RetrieveRow(query);
             }
         }
-
     }
 }

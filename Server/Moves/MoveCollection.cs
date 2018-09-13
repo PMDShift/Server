@@ -25,7 +25,7 @@ namespace Server.Moves
 {
     public class MoveCollection
     {
-         #region Fields
+        #region Fields
 
         ListPair<int, Move> moves;
         int maxMoves;

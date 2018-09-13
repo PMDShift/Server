@@ -22,6 +22,7 @@ using System.Text;
 using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
+using Server.Zones;
 
 namespace Server.Shops
 {
@@ -37,11 +38,13 @@ namespace Server.Shops
 
         #endregion Events
 
-        public static ShopCollection Shops {
+        public static ShopCollection Shops
+        {
             get { return shops; }
         }
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 //method for getting count
@@ -55,7 +58,8 @@ namespace Server.Shops
 
         #region Loading
 
-        public static void LoadShops(object object1) {
+        public static void LoadShops(object object1)
+        {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 try
@@ -112,10 +116,9 @@ namespace Server.Shops
                 shops[shopNum].Items[tradeNum].GiveItem = columnCollection["cost_num"].ValueString.ToInt();
                 shops[shopNum].Items[tradeNum].GiveValue = columnCollection["cost_val"].ValueString.ToInt();
             }
-
         }
-        
-        
+
+
         #endregion
 
         #region Saving
@@ -154,8 +157,25 @@ namespace Server.Shops
             }
         }
 
-        
-
         #endregion
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM shop WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.Shops
+                });
+            }
+
+            return results;
+        }
     }
 }

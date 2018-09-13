@@ -72,16 +72,17 @@ namespace Server.Combat
                                                      {3,3,3,2,3,3,3,4,3,3,2,4,3,3,3,3,4,3,2}};
 
         //static int[] AttackBuffLevels = new int[21] { 128, 133, 138, 143, 148, 153, 161, 171, 179, 204, 256, 307, 332, 358, 384, 409, 422, 435, 448, 460, 473 };
-        static int[] AttackBuffLevels = new int[21] {128,133,138,143,148,153,161,171,179,204,256,307,358,409,460,512,563,614,665,716,768};
+        static int[] AttackBuffLevels = new int[21] { 128, 133, 138, 143, 148, 153, 161, 171, 179, 204, 256, 307, 358, 409, 460, 512, 563, 614, 665, 716, 768 };
         //static int[] DefenseBuffLevels = new int[21] {7,12,25,38,51,64,76,102,128,179,256,332,409,486,537,588,640,691,742,793,844};
         static int[] DefenseBuffLevels = new int[21] { 7, 12, 25, 38, 51, 64, 76, 102, 128, 179, 256, 307, 358, 409, 460, 512, 563, 614, 665, 716, 768 };
         static int[] SpeedBuffLevels = new int[21] { 7, 12, 25, 38, 51, 64, 76, 102, 128, 179, 256, 332, 409, 486, 537, 588, 640, 691, 742, 793, 844 };
-        static int[] AccuracyBuffLevels = new int[21] {84,89,94,102,110,115,140,153,179,204,256,320,384,409,422,435,448,460,473,486,512};
-        static int[] EvasionBuffLevels = new int[21] {512,486,473,460,448,435,422,409,384,345,263,204,179,153,128,102,89,76,64,51,38};
-        public static int[] Effectiveness = new int[9] {2, 8, 16, 64, 96, 160, 256, 416, 640};
+        static int[] AccuracyBuffLevels = new int[21] { 84, 89, 94, 102, 110, 115, 140, 153, 179, 204, 256, 320, 384, 409, 422, 435, 448, 460, 473, 486, 512 };
+        static int[] EvasionBuffLevels = new int[21] { 512, 486, 473, 460, 448, 435, 422, 409, 384, 345, 263, 204, 179, 153, 128, 102, 89, 76, 64, 51, 38 };
+        public static int[] Effectiveness = new int[9] { 2, 8, 16, 64, 96, 160, 256, 416, 640 };
 
 
-        public static int CalculateDamage(int moveBasePower, int attackerStr, int attackerLevel, int victimDef) {
+        public static int CalculateDamage(int moveBasePower, int attackerStr, int attackerLevel, int victimDef)
+        {
             //int A = attackerStr + (moveBasePower) / 5;
             //int B = attackerLevel;
             //int C = victimDef;
@@ -91,7 +92,6 @@ namespace Server.Combat
 
 
             return ((((((attackerLevel * 2 / 3) + 2) * (25 + moveBasePower / 2) * attackerStr / 50) / victimDef) + 2) * Math.Rand(90, 101) / 100);
-
         }
 
         //public static int CalculateDamageCritical(int moveBasePower, int attackerStr, int attackerLevel, int victimDef) {
@@ -106,7 +106,6 @@ namespace Server.Combat
         public static int CalculateTypeMatchup(Enums.PokemonType attackerType, Enums.PokemonType targetType)
         {
             return TypeMatchup[(int)attackerType, (int)targetType];
-
         }
 
         public static int ApplyAttackBuff(int baseStat, int buffLevel)
@@ -122,7 +121,7 @@ namespace Server.Combat
             if (buffLevel > 20) buffLevel = 20;
             return baseStat * DefenseBuffLevels[buffLevel + 10];
         }
-        
+
         public static int ApplySpeedBuff(int baseStat, int buffLevel)
         {
             if (buffLevel < 0) buffLevel = 0;

@@ -1,4 +1,11 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using PMDCP.DatabaseConnector.MySql;
+using PMDCP.DatabaseConnector;
+using Server.Database;
+using Server.Zones;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,13 +25,6 @@
 
 namespace Server.Items
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using PMDCP.DatabaseConnector.MySql;
-    using PMDCP.DatabaseConnector;
-    using Server.Database;
-
     public class ItemManager
     {
         #region Fields
@@ -66,7 +66,7 @@ namespace Server.Items
             }
         }
 
-        public static void LoadItem(int itemNum, MySql database)
+        public static void LoadItem(int itemNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
             if (items.Items.ContainsKey(itemNum) == false)
                 items.Items.Add(itemNum, new Item());
@@ -164,7 +164,7 @@ namespace Server.Items
         {
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
-                MySql database = dbConnection.Database;
+                var database = dbConnection.Database;
                 database.BeginTransaction();
                 database.ExecuteNonQuery("DELETE FROM item WHERE num = \'" + itemNum + "\'");
 
@@ -204,6 +204,25 @@ namespace Server.Items
 
                 database.EndTransaction();
             }
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM item WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.Items
+                });
+            }
+
+            return results;
         }
 
         #endregion Methods

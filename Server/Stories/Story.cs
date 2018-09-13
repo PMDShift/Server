@@ -1,4 +1,7 @@
-﻿// This file is part of Mystery Dungeon eXtended.
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -18,10 +21,6 @@
 
 namespace Server.Stories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class Story
     {
         #region Fields
@@ -34,16 +33,18 @@ namespace Server.Stories
 
         #region Constructors
 
-        public Story(string id) {
+        public Story(string id)
+        {
             ExitAndContinue = new List<int>();
             segments = new List<StorySegment>();
             this.id = id;
         }
 
-        public Story() {
+        public Story()
+        {
             ExitAndContinue = new List<int>();
             segments = new List<StorySegment>();
-            this.id = null;
+            id = null;
         }
 
         #endregion Constructors
@@ -53,26 +54,31 @@ namespace Server.Stories
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
-        public string Name {
+        public string Name
+        {
             get;
             set;
         }
 
-        public int Revision {
+        public int Revision
+        {
             get;
             set;
         }
 
-        public List<StorySegment> Segments {
+        public List<StorySegment> Segments
+        {
             get { return segments; }
         }
 
-        public int StoryStart {
+        public int StoryStart
+        {
             get;
             set;
         }
 
-        public string ID {
+        public string ID
+        {
             get { return id; }
         }
 

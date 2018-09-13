@@ -32,7 +32,8 @@ namespace Server.DataConverter.Stories.V3
 
         #region Constructors
 
-        public Story() {
+        public Story()
+        {
             ExitAndContinue = new List<int>();
             segments = new List<StorySegment>();
         }
@@ -41,21 +42,25 @@ namespace Server.DataConverter.Stories.V3
 
         #region Properties
 
-        public string Name {
+        public string Name
+        {
             get;
             set;
         }
 
-        public int Revision {
+        public int Revision
+        {
             get;
             set;
         }
 
-        public List<StorySegment> Segments {
+        public List<StorySegment> Segments
+        {
             get { return segments; }
         }
 
-        public int StoryStart {
+        public int StoryStart
+        {
             get;
             set;
         }

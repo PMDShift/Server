@@ -28,34 +28,44 @@ namespace Server
 {
     class CommandHandler
     {
-        public CommandHandler() {
+        public CommandHandler()
+        {
         }
 
-        public void ProcessCommand(int activeLine, string command) {
+        public void ProcessCommand(int activeLine, string command)
+        {
             ThreadManager.StartOnThreadParams(new System.Threading.WaitCallback(ProcessCommandCallback), new ParamObject(activeLine, command));
         }
 
-        public void ProcessCommandCallback(object obj) {
+        public void ProcessCommandCallback(object obj)
+        {
             int activeLine = (int)((ParamObject)obj).Param[0];
             string command = (string)((ParamObject)obj).Param[1];
             Command fullCommand = Server.CommandProcessor.ParseCommand(command);
             string fullArgs = CommandProcessor.JoinArgs(fullCommand.CommandArgs.ToArray());
-            switch (fullCommand.CommandArgs[0].ToLower()) {
-                case "/help": {
+            switch (fullCommand.CommandArgs[0].ToLower())
+            {
+                case "/help":
+                    {
                         DisplayHelp();
                     }
                     break;
-                case "/clear": {
+                case "/clear":
+                    {
                     }
                     break;
-                case "/global": {
+                case "/global":
+                    {
                         Messenger.GlobalMsg(fullArgs, Text.White);
                         ServerConsole.WriteLine("Global: " + fullArgs);
                     }
                     break;
-                case "/masskick": {
-                        foreach (Client i in ClientManager.GetClients()) {
-                            if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor)) {
+                case "/masskick":
+                    {
+                        foreach (Client i in ClientManager.GetClients())
+                        {
+                            if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor))
+                            {
                                 Messenger.GlobalMsg(i.Player.Name + " has been kicked by the server!", Text.White);
                                 Messenger.AlertMsg(i, "You have been kicked by the server!");
                             }
@@ -63,28 +73,37 @@ namespace Server
                         ServerConsole.WriteLine("Everyone has been kicked.");
                     }
                     break;
-                case "/dumpstats": {
+                case "/dumpstats":
+                    {
                         Statistics.PacketStatistics.DumpStatistics();
                         ServerConsole.WriteLine("Packet statistics dumped to database.");
                     }
                     break;
-                case "/clearstats": {
+                case "/clearstats":
+                    {
                         Statistics.PacketStatistics.ClearStatistics();
-                        ServerConsole.WriteLine("Packet statistics cleared."); 
+                        ServerConsole.WriteLine("Packet statistics cleared.");
                     }
                     break;
-                case "/masswarp": {
-                        if (fullCommand.CommandArgs.Count == 4) {
+                case "/masswarp":
+                    {
+                        if (fullCommand.CommandArgs.Count == 4)
+                        {
                             int map = fullCommand.CommandArgs[1].ToInt(-1);
                             int x = fullCommand.CommandArgs[2].ToInt(-1);
                             int y = fullCommand.CommandArgs[3].ToInt(-1);
-                            if (map <= 0) {
+                            if (map <= 0)
+                            {
                                 ServerConsole.WriteLine("Invalid Map.");
                                 break;
-                            } else if (x == -1) {
+                            }
+                            else if (x == -1)
+                            {
                                 ServerConsole.WriteLine("Invalid X coordinate.");
                                 break;
-                            } else if (y == -1) {
+                            }
+                            else if (y == -1)
+                            {
                                 ServerConsole.WriteLine("Invalid Y coordinate.");
                                 break;
                             }
@@ -97,65 +116,92 @@ namespace Server
                             //    ServerConsole.WriteLine("Invalid Y coordinate.");
                             //    break;
                             //}
-                            foreach (Client i in ClientManager.GetClients()) {
-                                if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor)) {
+                            foreach (Client i in ClientManager.GetClients())
+                            {
+                                if (i.IsPlaying() && Ranks.IsDisallowed(i, Enums.Rank.Monitor))
+                                {
                                     Messenger.GlobalMsg("The server has warped everyone!", Text.White);
                                     Messenger.PlayerWarp(i, map, x, y);
                                 }
                             }
                             ServerConsole.WriteLine("Everyone has been warped.");
-                        } else {
+                        }
+                        else
+                        {
                             ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
-                case "/kick": {
-                        if (fullCommand.CommandArgs.Count == 2) {
+                case "/kick":
+                    {
+                        if (fullCommand.CommandArgs.Count == 2)
+                        {
                             Client client = ClientManager.FindClient(fullCommand.CommandArgs[1]);
-                            if (client == null) {
+                            if (client == null)
+                            {
                                 ServerConsole.WriteLine("Player is offline.");
-                            } else {
+                            }
+                            else
+                            {
                                 Messenger.GlobalMsg(client.Player.Name + " has been kicked by the server!", Text.White);
                                 Messenger.AlertMsg(client, "You have been kicked by the server!");
                                 ServerConsole.WriteLine(client.Player.Name + " has been kicked!");
                             }
-                        } else {
+                        }
+                        else
+                        {
                             ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
-                case "/warp": {
-                        if (fullCommand.CommandArgs.Count == 5) {
+                case "/warp":
+                    {
+                        if (fullCommand.CommandArgs.Count == 5)
+                        {
                             Client client = ClientManager.FindClient(fullCommand.CommandArgs[1]);
-                            if (client == null) {
+                            if (client == null)
+                            {
                                 ServerConsole.WriteLine("Player is offline.");
-                            } else {
+                            }
+                            else
+                            {
                                 int mapNum = fullCommand.CommandArgs[2].ToInt(-1);
                                 int x = fullCommand.CommandArgs[3].ToInt(-1);
                                 int y = fullCommand.CommandArgs[4].ToInt(-1);
-                                if (mapNum <= 0) {
+                                if (mapNum <= 0)
+                                {
                                     ServerConsole.WriteLine("Invalid Map.");
                                     break;
-                                } else if (x == -1) {
+                                }
+                                else if (x == -1)
+                                {
                                     ServerConsole.WriteLine("Invalid X coordinate.");
                                     break;
-                                } else if (y == -1) {
+                                }
+                                else if (y == -1)
+                                {
                                     ServerConsole.WriteLine("Invalid Y coordinate.");
                                     break;
                                 }
                                 IMap map;
-                                if (MapManager.IsMapActive(MapManager.GenerateMapID(mapNum))) {
+                                if (MapManager.IsMapActive(MapManager.GenerateMapID(mapNum)))
+                                {
                                     map = MapManager.RetrieveActiveMap(MapManager.GenerateMapID(mapNum));
-                                } else {
-                                    using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data)) {
+                                }
+                                else
+                                {
+                                    using (Database.DatabaseConnection dbConnection = new Database.DatabaseConnection(Database.DatabaseID.Data))
+                                    {
                                         map = MapManager.LoadStandardMap(dbConnection, MapManager.GenerateMapID(mapNum));
                                     }
                                 }
-                                if (x > map.MaxX) {
+                                if (x > map.MaxX)
+                                {
                                     ServerConsole.WriteLine("Invalid X coordinate.");
                                     break;
                                 }
-                                if (y > map.MaxY) {
+                                if (y > map.MaxY)
+                                {
                                     ServerConsole.WriteLine("Invalid Y coordinate.");
                                     break;
                                 }
@@ -163,36 +209,47 @@ namespace Server
                                 Messenger.PlayerWarp(client, mapNum, x, y);
                                 ServerConsole.WriteLine(client.Player.Name + " has been warped.");
                             }
-                        } else {
+                        }
+                        else
+                        {
                             ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
-                case "/mapmsg": {
-                        if (fullCommand.CommandArgs.Count == 3) {
+                case "/mapmsg":
+                    {
+                        if (fullCommand.CommandArgs.Count == 3)
+                        {
                             string map = fullCommand.CommandArgs[1];
                             // Check if the map is active
-                            if (!MapManager.IsMapActive(map)) {
+                            if (!MapManager.IsMapActive(map))
+                            {
                                 ServerConsole.WriteLine("Invalid Map.");
                                 break;
                             }
                             Messenger.MapMsg(map, fullCommand.CommandArgs[2], Text.DarkGrey);
                             ServerConsole.WriteLine("Map Msg (Map " + map.ToString() + "): " + fullCommand.CommandArgs[2]);
-                        } else {
+                        }
+                        else
+                        {
                             ServerConsole.WriteLine("Invalid arguments.");
                         }
                     }
                     break;
-                case "/reloadscripts": {
+                case "/reloadscripts":
+                    {
                         Scripting.ScriptManager.Reload();
                         ServerConsole.WriteLine("Scripts reloaded.");
                     }
                     break;
-                case "/players": {
+                case "/players":
+                    {
                         string players = "";
                         int count = 0;
-                        foreach (Client i in ClientManager.GetClients()) {
-                            if (i.IsPlaying()) {
+                        foreach (Client i in ClientManager.GetClients())
+                        {
+                            if (i.IsPlaying())
+                            {
                                 count++;
                                 players += i.Player.Name + "\r\n";
                             }
@@ -201,7 +258,8 @@ namespace Server
                         ServerConsole.WriteLine("There are " + count.ToString() + " players online");
                     }
                     break;
-                case "/test": {
+                case "/test":
+                    {
                         //Email.Email.SendEmail("test");
                         //ServerConsole.WriteLine("Mail sent!");
                         //ServerConsole.WriteLine("There are currently no benchmarking tests");
@@ -218,53 +276,66 @@ namespace Server
                         //ServerConsole.WriteLine("Name: " + genInfo.Name);
                     }
                     break;
-                case "/finditem": {
+                case "/finditem":
+                    {
                         int itemsFound = 0;
-                        for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++) {
-                            if (ItemManager.Items[i].Name.ToLower().StartsWith(fullCommand.CommandArgs[1].ToLower())) {
+                        for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++)
+                        {
+                            if (ItemManager.Items[i].Name.ToLower().StartsWith(fullCommand.CommandArgs[1].ToLower()))
+                            {
                                 ServerConsole.WriteLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
                                 itemsFound++;
                                 //return;
                             }
                         }
-                        if (itemsFound == 0) {
+                        if (itemsFound == 0)
+                        {
                             ServerConsole.WriteLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
                         }
                     }
                     break;
-                case "/finditemc": {
+                case "/finditemc":
+                    {
                         int itemsFound = 0;
-                        for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++) {
-                            if (ItemManager.Items[i].Name.ToLower().Contains(fullCommand.CommandArgs[1].ToLower())) {
+                        for (int i = 0; i < Server.Items.ItemManager.Items.MaxItems; i++)
+                        {
+                            if (ItemManager.Items[i].Name.ToLower().Contains(fullCommand.CommandArgs[1].ToLower()))
+                            {
                                 ServerConsole.WriteLine(ItemManager.Items[i].Name + "'s number is " + i.ToString());
                                 itemsFound++;
                                 //return;
                             }
                         }
-                        if (itemsFound == 0) {
+                        if (itemsFound == 0)
+                        {
                             ServerConsole.WriteLine("Unable to find an item that starts with '" + fullCommand.CommandArgs[1] + "'");
                         }
                     }
                     break;
-                case "/calcwm": {
+                case "/calcwm":
+                    {
                         ServerConsole.WriteLine("Factorial: " + Server.Math.CalculateFactorial(fullCommand.CommandArgs[1].ToInt()).ToString("R"));
                     }
                     break;
-                case "/gmmode": {
+                case "/gmmode":
+                    {
                         Globals.GMOnly = !Globals.GMOnly;
                         ServerConsole.WriteLine("GM Only Mode Active: " + Globals.GMOnly);
                     }
                     break;
-                default: {
-                    Scripting.ScriptManager.InvokeSub("ProcessServerCommand", fullCommand, fullArgs);
+                default:
+                    {
+                        Scripting.ScriptManager.InvokeSub("ProcessServerCommand", fullCommand, fullArgs);
                     }
                     break;
             }
         }
 
-        internal bool IsValidCommand(string command) {
+        internal bool IsValidCommand(string command)
+        {
             string[] args = CommandProcessor.SplitCommand(command);
-            switch (args[0].ToLower()) {
+            switch (args[0].ToLower())
+            {
                 case "/help":
                 case "/clear":
                 case "/global":
@@ -290,7 +361,8 @@ namespace Server
             }
         }
 
-        private void DisplayHelp() {
+        private void DisplayHelp()
+        {
             ServerConsole.WriteLine("-=- Server Command Help -=-");
             ServerConsole.WriteLine("Available Commands:");
             ServerConsole.WriteLine("/help - Shows help");
@@ -306,7 +378,5 @@ namespace Server
             ServerConsole.WriteLine("/players - Gets a list of all online players");
             Scripting.ScriptManager.InvokeSub("DisplayServerCommandHelp");
         }
-
-
     }
 }

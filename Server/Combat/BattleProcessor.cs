@@ -34,7 +34,6 @@ namespace Server.Combat
 {
     public class BattleProcessor
     {
-
         #region Obsolete
 
         #region old player-npc methods
@@ -1750,19 +1749,23 @@ namespace Server.Combat
 
         #region New Area
 
-        public static void HandleItemUse(InventoryItem item, int invNum, BattleSetup setup) {
-
+        public static void HandleItemUse(InventoryItem item, int invNum, BattleSetup setup)
+        {
             // Prevent hacking
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                if (invNum != -1 && (invNum < 1 || invNum > ((Recruit)setup.Attacker).Owner.Player.MaxInv)) {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {
+                if (invNum != -1 && (invNum < 1 || invNum > ((Recruit)setup.Attacker).Owner.Player.MaxInv))
+                {
                     Messenger.HackingAttempt(((Recruit)setup.Attacker).Owner, "Invalid InvNum");
                     return;
                 }
             }
 
 
-            if (item.Num < 0 || item.Num >= Items.ItemManager.Items.MaxItems) {
-                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+            if (item.Num < 0 || item.Num >= Items.ItemManager.Items.MaxItems)
+            {
+                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                {
                     Messenger.HackingAttempt(((Recruit)setup.Attacker).Owner, "Invalid ItemNum");
                 }
                 return;
@@ -1772,135 +1775,191 @@ namespace Server.Combat
             setup.AttackerMap.ProcessingPaused = false;
 
 
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.ProtectionOff) {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {
+                if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.ProtectionOff)
+                {
                     ((Recruit)setup.Attacker).Owner.Player.Hunted = true;
                     PacketBuilder.AppendHunted(((Recruit)setup.Attacker).Owner, setup.PacketStack);
                 }
             }
 
-            if (!(bool)Scripting.ScriptManager.InvokeFunction("CanUseItem", setup, item)) {
+            if (!(bool)Scripting.ScriptManager.InvokeFunction("CanUseItem", setup, item))
+            {
                 return;
             }
 
 
             // Find out what kind of item it is
-            switch (ItemManager.Items[item.Num].Type) {
-                case Enums.ItemType.PotionAddHP: {
+            switch (ItemManager.Items[item.Num].Type)
+            {
+                case Enums.ItemType.PotionAddHP:
+                    {
                         setup.Attacker.HP += ItemManager.Items[item.Num].Data1;
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                        {
                             ((Recruit)setup.Attacker).Belly += ItemManager.Items[item.Num].Data2;
-                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly) {
+                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly)
+                            {
                                 ((Recruit)setup.Attacker).Belly = ((Recruit)setup.Attacker).MaxBelly;
                             }
                             PacketBuilder.AppendBelly(((Recruit)setup.Attacker).Owner, setup.PacketStack);
-                            if (ItemManager.Items[item.Num].StackCap > 0) {
+                            if (ItemManager.Items[item.Num].StackCap > 0)
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 1, true);
-                            } else {
+                            }
+                            else
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 0, true);
                             }
-                        } else {
-                            if (invNum != -1) {
+                        }
+                        else
+                        {
+                            if (invNum != -1)
+                            {
                                 setup.Attacker.TakeHeldItem(1);
                             }
                         }
                     }
                     break;
-                case Enums.ItemType.PotionAddMP: {
-                        for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++) {
-                            if (setup.Attacker.Moves[i] != null) {
+                case Enums.ItemType.PotionAddMP:
+                    {
+                        for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++)
+                        {
+                            if (setup.Attacker.Moves[i] != null)
+                            {
                                 setup.Attacker.Moves[i].CurrentPP += ItemManager.Items[item.Num].Data1;
-                                if (setup.Attacker.Moves[i].CurrentPP > setup.Attacker.Moves[i].MaxPP) {
+                                if (setup.Attacker.Moves[i].CurrentPP > setup.Attacker.Moves[i].MaxPP)
+                                {
                                     setup.Attacker.Moves[i].CurrentPP = setup.Attacker.Moves[i].MaxPP;
                                 }
-
                             }
                         }
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                        {
                             PacketBuilder.AppendPlayerMoves(((Recruit)setup.Attacker).Owner, setup.PacketStack);
                             ((Recruit)setup.Attacker).Belly += ItemManager.Items[item.Num].Data2;
-                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly) {
+                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly)
+                            {
                                 ((Recruit)setup.Attacker).Belly = ((Recruit)setup.Attacker).MaxBelly;
                             }
                             PacketBuilder.AppendBelly(((Recruit)setup.Attacker).Owner, setup.PacketStack);
-                            if (ItemManager.Items[item.Num].StackCap > 0) {
+                            if (ItemManager.Items[item.Num].StackCap > 0)
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 1, true);
-                            } else {
+                            }
+                            else
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 0, true);
                             }
-                        } else {
-                            if (invNum != -1) {
+                        }
+                        else
+                        {
+                            if (invNum != -1)
+                            {
                                 setup.Attacker.TakeHeldItem(1);
                             }
                         }
                     }
                     break;
-                case Enums.ItemType.PotionAddBelly: {
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                            if (((Recruit)setup.Attacker).Belly < ((Recruit)setup.Attacker).MaxBelly) {
+                case Enums.ItemType.PotionAddBelly:
+                    {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                        {
+                            if (((Recruit)setup.Attacker).Belly < ((Recruit)setup.Attacker).MaxBelly)
+                            {
                                 ((Recruit)setup.Attacker).MaxBelly += ItemManager.Items[item.Num].Data2;
                                 ((Recruit)setup.Attacker).Belly += ItemManager.Items[item.Num].Data1;
-                            } else {
+                            }
+                            else
+                            {
                                 ((Recruit)setup.Attacker).MaxBelly += ItemManager.Items[item.Num].Data3;
                                 ((Recruit)setup.Attacker).Belly += ItemManager.Items[item.Num].Data1;
                             }
-                            if (((Recruit)setup.Attacker).MaxBelly > 200) {
+                            if (((Recruit)setup.Attacker).MaxBelly > 200)
+                            {
                                 ((Recruit)setup.Attacker).MaxBelly = 200;
                             }
-                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly) {
+                            if (((Recruit)setup.Attacker).Belly > ((Recruit)setup.Attacker).MaxBelly)
+                            {
                                 ((Recruit)setup.Attacker).Belly = ((Recruit)setup.Attacker).MaxBelly;
                             }
                             PacketBuilder.AppendBelly(((Recruit)setup.Attacker).Owner, setup.PacketStack);
-                            if (ItemManager.Items[item.Num].StackCap > 0) {
+                            if (ItemManager.Items[item.Num].StackCap > 0)
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 1, true);
-                            } else {
+                            }
+                            else
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 0, true);
                             }
-                        } else {
-                            if (invNum != -1) {
+                        }
+                        else
+                        {
+                            if (invNum != -1)
+                            {
                                 setup.Attacker.TakeHeldItem(1);
                             }
                         }
                     }
                     break;
-                case Enums.ItemType.Key: {
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+                case Enums.ItemType.Key:
+                    {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                        {
                             int x = 0;
                             int y = 0;
                             IMap map = ((Recruit)setup.Attacker).Owner.Player.GetCurrentMap();
-                            switch (((Recruit)setup.Attacker).Direction) {
-                                case Enums.Direction.Up: {
-                                        if (((Recruit)setup.Attacker).Y > 0) {
+                            switch (((Recruit)setup.Attacker).Direction)
+                            {
+                                case Enums.Direction.Up:
+                                    {
+                                        if (((Recruit)setup.Attacker).Y > 0)
+                                        {
                                             x = ((Recruit)setup.Attacker).X;
                                             y = ((Recruit)setup.Attacker).Y - 1;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             return;
                                         }
                                     }
                                     break;
-                                case Enums.Direction.Down: {
-                                        if (((Recruit)setup.Attacker).Y < map.MaxY) {
+                                case Enums.Direction.Down:
+                                    {
+                                        if (((Recruit)setup.Attacker).Y < map.MaxY)
+                                        {
                                             x = ((Recruit)setup.Attacker).X;
                                             y = ((Recruit)setup.Attacker).Y + 1;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             return;
                                         }
                                     }
                                     break;
-                                case Enums.Direction.Left: {
-                                        if (((Recruit)setup.Attacker).X > 0) {
+                                case Enums.Direction.Left:
+                                    {
+                                        if (((Recruit)setup.Attacker).X > 0)
+                                        {
                                             x = ((Recruit)setup.Attacker).X - 1;
                                             y = ((Recruit)setup.Attacker).Y;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             return;
                                         }
                                     }
                                     break;
-                                case Enums.Direction.Right: {
-                                        if (((Recruit)setup.Attacker).X < map.MaxX) {
+                                case Enums.Direction.Right:
+                                    {
+                                        if (((Recruit)setup.Attacker).X < map.MaxX)
+                                        {
                                             x = ((Recruit)setup.Attacker).X + 1;
                                             y = ((Recruit)setup.Attacker).Y;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             return;
                                         }
                                     }
@@ -1908,31 +1967,38 @@ namespace Server.Combat
                             }
 
                             // Check if a key exists
-                            if (map.Tile[x, y].Type == Enums.TileType.Key) {
+                            if (map.Tile[x, y].Type == Enums.TileType.Key)
+                            {
                                 // Check if the key they are using matches the map key
-                                if (item.Num == map.Tile[x, y].Data1) {
+                                if (item.Num == map.Tile[x, y].Data1)
+                                {
                                     map.Tile[x, y].DoorOpen = true;
                                     map.Tile[x, y].DoorTimer = Core.GetTickCount();
 
                                     Messenger.SendDataToMap(((Recruit)setup.Attacker).MapID, TcpPacket.CreatePacket("mapkey", x.ToString(), y.ToString(), "1"));
 
-                                    if (map.Tile[x, y].String1.Trim() != "") {
+                                    if (map.Tile[x, y].String1.Trim() != "")
+                                    {
                                         Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "A door has been unlocked!", Text.White);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, map.Tile[x, y].String1.Trim(), Text.White);
                                     }
 
                                     Messenger.PlaySoundToMap(((Recruit)setup.Attacker).MapID, "key.wav");
 
                                     // Check if we are supposed to take the item away
-                                    if (map.Tile[x, y].Data2 == 1) {
+                                    if (map.Tile[x, y].Data2 == 1)
+                                    {
                                         ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 0, true);
                                         Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "The key dissolves.", Text.Yellow);
                                     }
                                 }
                             }
 
-                            if (map.Tile[x, y].Type == Enums.TileType.Door) {
+                            if (map.Tile[x, y].Type == Enums.TileType.Door)
+                            {
                                 map.Tile[x, y].DoorOpen = true;
                                 map.Tile[x, y].DoorTimer = Core.GetTickCount();
 
@@ -1942,71 +2008,93 @@ namespace Server.Combat
                         }
                     }
                     break;
-                case Enums.ItemType.TM: {
+                case Enums.ItemType.TM:
+                    {
                         // Get the spell num
 
-                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+                        if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                        {
                             int n = ItemManager.Items[item.Num].Data1;
 
-                            if (n > 0) {
+                            if (n > 0)
+                            {
                                 // Make sure they are the right class
-                                if (((Recruit)setup.Attacker).CanLearnTMMove(n)) {
-
-
-
-                                    if (((Recruit)setup.Attacker).CanLearnNewMove()) {
-                                        if (((Recruit)setup.Attacker).HasMove(n) == false) {
+                                if (((Recruit)setup.Attacker).CanLearnTMMove(n))
+                                {
+                                    if (((Recruit)setup.Attacker).CanLearnNewMove())
+                                    {
+                                        if (((Recruit)setup.Attacker).HasMove(n) == false)
+                                        {
                                             ((Recruit)setup.Attacker).LearnNewMove(n);
                                             ((Recruit)setup.Attacker).Owner.Player.TakeItemSlot(invNum, 0, true);
                                             Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "You have learned a new move!", Text.White);
                                             Messenger.SendPlayerMoves(((Recruit)setup.Attacker).Owner);
-                                        } else {
-                                            Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "You already know this move!", Text.BrightRed);
                                         }
-                                    } else {
-                                        if (((Recruit)setup.Attacker).HasMove(n) == false) {
-                                            int itemNum = item.Num;
-                                            ((Recruit)setup.Attacker).MoveItem = itemNum;
-                                            ((Recruit)setup.Attacker).LearnNewMove(n);
-                                        } else {
+                                        else
+                                        {
                                             Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "You already know this move!", Text.BrightRed);
                                         }
                                     }
-                                } else {
+                                    else
+                                    {
+                                        if (((Recruit)setup.Attacker).HasMove(n) == false)
+                                        {
+                                            int itemNum = item.Num;
+                                            ((Recruit)setup.Attacker).MoveItem = itemNum;
+                                            ((Recruit)setup.Attacker).LearnNewMove(n);
+                                        }
+                                        else
+                                        {
+                                            Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "You already know this move!", Text.BrightRed);
+                                        }
+                                    }
+                                }
+                                else
+                                {
                                     Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "You cannot learn this move!", Text.White);
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 Messenger.PlayerMsg(((Recruit)setup.Attacker).Owner, "There is no move that can be learned. Please inform an admin.", Text.BrightRed);
                             }
                         }
                     }
                     break;
-                case Enums.ItemType.Scripted: {
+                case Enums.ItemType.Scripted:
+                    {
                         Scripting.ScriptManager.InvokeSub("ScriptedItem", setup, item, invNum);
                     }
                     break;
             }
-
         }
 
-        public static void FinalizeAction(BattleSetup setup, PacketHitList parent) {
+        public static void FinalizeAction(BattleSetup setup, PacketHitList parent)
+        {
             Scripting.ScriptManager.InvokeSub("AfterActionTaken", setup);
 
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                if (setup.AttackerMap.MapType == Enums.MapType.Standard) {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {
+                if (setup.AttackerMap.MapType == Enums.MapType.Standard)
+                {
                     setup.ExpGained /= 2;
                 }
-                if (setup.ExpGained > 0) {
-
-                    if (((Recruit)setup.Attacker).Owner.Player.PartyID == null) {
-                        if (!(setup.Attacker.Level == Exp.ExpManager.Exp.MaxLevels)) {
+                if (setup.ExpGained > 0)
+                {
+                    if (((Recruit)setup.Attacker).Owner.Player.PartyID == null)
+                    {
+                        if (!(setup.Attacker.Level == Exp.ExpManager.Exp.MaxLevels))
+                        {
                             Scripting.ScriptManager.InvokeSub("PlayerEXP", setup.packetStack, ((Recruit)setup.Attacker).Owner, setup.ExpGained);
 
                             CheckPlayerLevelUp(setup.PacketStack, ((Recruit)setup.Attacker).Owner);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         Party party = PartyManager.FindPlayerParty(((Recruit)setup.Attacker).Owner);
-                        if (party != null) {
+                        if (party != null)
+                        {
                             party.HandoutExp(((Recruit)setup.Attacker).Owner, setup.ExpGained, setup.PacketStack);
                         }
                     }
@@ -2017,46 +2105,54 @@ namespace Server.Combat
             // Disable caching and build the hitlist to allow for post-processing
             setup.PacketStack.CachingEnabled = false;
 
-            for (int i = 0; i < setup.PacketStack.HitList.Count; i++) {
-                if (setup.PacketStack.HitList.ValueByIndex(i).ContainsPacket("battlemsg") && parent == null) {
+            for (int i = 0; i < setup.PacketStack.HitList.Count; i++)
+            {
+                if (setup.PacketStack.HitList.ValueByIndex(i).ContainsPacket("battlemsg") && parent == null)
+                {
                     setup.PacketStack.AddPacket(setup.PacketStack.HitList.KeyByIndex(i), PacketBuilder.CreateBattleDivider());
                 }
-
             }
 
-            if (parent != null) {
+            if (parent != null)
+            {
                 parent.AddHitList(setup.PacketStack);
-            } else {
+            }
+            else
+            {
                 PacketHitList.MethodEnded(ref setup.packetStack);
             }
-
         }
 
-        public static void FinalizeAction(BattleSetup setup) {
+        public static void FinalizeAction(BattleSetup setup)
+        {
             FinalizeAction(setup, null);
-            
-
         }
 
-        public static void HandleAttack(BattleSetup setup) {
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {//if player, check if he's playing
+        public static void HandleAttack(BattleSetup setup)
+        {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {//if player, check if he's playing
                 var attacker = ((Recruit)setup.Attacker).Owner;
-                if (NetworkManager.IsPlaying(attacker) == false) {
+                if (NetworkManager.IsPlaying(attacker) == false)
+                {
                     return;
-
                 }
 
-                if (setup.Move.IsSandboxed) {
-                    if (!attacker.Player.PlayerData.IsSandboxed) {
+                if (setup.Move.IsSandboxed)
+                {
+                    if (!attacker.Player.PlayerData.IsSandboxed)
+                    {
                         // Disable this attack if the move is sandboxed and the player is not
                         return;
                     }
                 }
-            } else {//if NPC, check if it exists
-                if (((MapNpc)setup.Attacker).Num <= 0) {
+            }
+            else
+            {//if NPC, check if it exists
+                if (((MapNpc)setup.Attacker).Num <= 0)
+                {
                     return;
                 }
-
             }
 
             //BattleSetup setup = new BattleSetup();
@@ -2066,37 +2162,39 @@ namespace Server.Combat
 
             Scripting.ScriptManager.InvokeSub("BeforeMoveUsed", setup);
 
-            if (!setup.Cancel) {
+            if (!setup.Cancel)
+            {
                 ExecuteAttack(setup);
             }
 
 
 
 
-            if (!setup.Cancel) {
+            if (!setup.Cancel)
+            {
                 Scripting.ScriptManager.InvokeSub("AfterMoveUsed", setup);
             }
-
-
         }
 
-        public static void ExecuteAttack(BattleSetup setup) {
-
-
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-
+        public static void ExecuteAttack(BattleSetup setup)
+        {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {
                 PacketBuilder.AppendAttackPacket(((Recruit)setup.Attacker).Owner, setup.PacketStack);
-
-            } else {
+            }
+            else
+            {
                 PacketBuilder.AppendNpcAttack(setup.AttackerMap, setup.PacketStack, ((MapNpc)setup.Attacker).MapSlot);
             }
 
-            if (!string.IsNullOrEmpty(setup.Move.Name)) {
+            if (!string.IsNullOrEmpty(setup.Move.Name))
+            {
                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Move.Name, Text.WhiteSmoke), setup.Attacker.X, setup.Attacker.Y, 16);
                 //setup.PacketStack.AddPacket(PacketBuilder.CreateBattleMsg(((Recruit)setup.Attacker).Owner.Player.Name + setup.Move.Name, Text.WhiteSmoke));
             }
 
-            if (setup.Move.Sound > 0) {
+            if (setup.Move.Sound > 0)
+            {
                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSoundPacket("magic" + setup.Move.Sound + ".wav"), setup.Attacker.X, setup.Attacker.Y, 10);
                 //Messenger.PlaySoundToMap(setup.Attacker.MapID, "magic" + setup.Move.Sound + ".wav");
             }
@@ -2110,89 +2208,109 @@ namespace Server.Combat
 
             TargetCollection targets = MoveProcessor.GetTargetsInRange(setup.Move.RangeType, setup.Move.Range, setup.AttackerMap, setup.Attacker, setup.Attacker.X, setup.Attacker.Y, setup.Attacker.Direction, hitsFoes, hitsAllies, false);
 
-            if (hitsFoes) {
+            if (hitsFoes)
+            {
                 setup.Attacker.UseMoveOnFoes(setup, targets);
             }
 
-            if (hitsAllies) {
+            if (hitsAllies)
+            {
                 setup.Attacker.UseMoveOnAllies(setup, targets);
             }
 
-            if (HitsSelf(setup.Move.TargetType)) {
+            if (HitsSelf(setup.Move.TargetType))
+            {
                 setup.Defender = setup.Attacker;
                 MoveHitCharacter(setup);
-                if (setup.Cancel) {
+                if (setup.Cancel)
+                {
                     return;
                 }
-
             }
 
-            if (setup.Move.TargetType == Enums.MoveTarget.NoOne) {
+            if (setup.Move.TargetType == Enums.MoveTarget.NoOne)
+            {
                 setup.Defender = null;
                 MoveHitCharacter(setup);
-                if (setup.Cancel) {
+                if (setup.Cancel)
+                {
                     return;
                 }
             }
 
-            switch (setup.Move.TravelingAnim.AnimationType) {
-                case Enums.MoveAnimationType.Normal: {
+            switch (setup.Move.TravelingAnim.AnimationType)
+            {
+                case Enums.MoveAnimationType.Normal:
+                    {
                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, setup.Attacker.X, setup.Attacker.Y, 0));
                     }
                     break;
-                case Enums.MoveAnimationType.Overlay: {
+                case Enums.MoveAnimationType.Overlay:
+                    {
                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, setup.Attacker.X, setup.Attacker.Y, 0));
                     }
                     break;
                 case Enums.MoveAnimationType.Arrow:
-                case Enums.MoveAnimationType.ItemArrow: {
+                case Enums.MoveAnimationType.ItemArrow:
+                    {
                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, (int)setup.Attacker.Direction, setup.Move.Range, 0));
                     }
                     break;
                 case Enums.MoveAnimationType.Throw:
-                case Enums.MoveAnimationType.ItemThrow: {
-                        if (setup.Defender == null) {
-                            switch (setup.Attacker.Direction) {
-                                case Enums.Direction.Up: {
+                case Enums.MoveAnimationType.ItemThrow:
+                    {
+                        if (setup.Defender == null)
+                        {
+                            switch (setup.Attacker.Direction)
+                            {
+                                case Enums.Direction.Up:
+                                    {
                                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, 0, -2, 0));
                                     }
                                     break;
-                                case Enums.Direction.Down: {
+                                case Enums.Direction.Down:
+                                    {
                                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, 0, 2, 0));
                                     }
                                     break;
-                                case Enums.Direction.Left: {
+                                case Enums.Direction.Left:
+                                    {
                                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, -2, 0, 0));
                                     }
                                     break;
-                                case Enums.Direction.Right: {
+                                case Enums.Direction.Right:
+                                    {
                                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, 2, 0, 0));
                                     }
                                     break;
                             }
-                        } else {
+                        }
+                        else
+                        {
                             setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, setup.Defender.X - setup.Attacker.X, setup.Defender.Y - setup.Attacker.Y, 0));
                         }
                     }
                     break;
-                case Enums.MoveAnimationType.Beam: {
+                case Enums.MoveAnimationType.Beam:
+                    {
                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, (int)setup.Attacker.Direction, setup.Move.Range, 0));
                     }
                     break;
-                case Enums.MoveAnimationType.Tile: {
+                case Enums.MoveAnimationType.Tile:
+                    {
                         setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(setup.Move.TravelingAnim, setup.Attacker.X, setup.Attacker.Y, (int)setup.Move.RangeType, (int)setup.Attacker.Direction, setup.Move.Range));
                     }
                     break;
             }
 
-            if (!setup.Move.PerPlayer && !setup.Cancel) {
+            if (!setup.Move.PerPlayer && !setup.Cancel)
+            {
                 Scripting.ScriptManager.InvokeSub("MoveAdditionalEffect", setup);
             }
-
-
         }
 
-        public static void MoveHitCharacter(BattleSetup setup) {
+        public static void MoveHitCharacter(BattleSetup setup)
+        {
             setup.Multiplier = setup.AttackerMultiplier;
             setup.KnockedOut = true;
             //setup.Critical = false;
@@ -2213,7 +2331,8 @@ namespace Server.Combat
             //BattleProcessor.NpcAttackPlayer(((MapNpc)setup.Attacker).MapSlot, recruit.Owner, damage);
             //    }
             //}
-            if (setup.Defender != null) {
+            if (setup.Defender != null)
+            {
                 setup.PacketStack.AddPacketToMap(setup.DefenderMap, PacketBuilder.CreateSpellAnim(setup.Move.DefenderAnim, setup.Defender.X, setup.Defender.Y, setup.Defender.X, setup.Defender.Y, 0));
                 //Messenger.SpellAnim(setup.Move, setup.Defender.MapID, setup.Defender.X, setup.Defender.Y);
             }
@@ -2221,23 +2340,30 @@ namespace Server.Combat
 
             Scripting.ScriptManager.InvokeSub("BeforeMoveHits", setup);
 
-            if (setup.Cancel) {
+            if (setup.Cancel)
+            {
                 return;
             }
 
             Move move = setup.Move;
 
-            if (setup.Hit == true) {
-                switch (move.EffectType) {
-                    case Enums.MoveType.SubHP: {
+            if (setup.Hit == true)
+            {
+                switch (move.EffectType)
+                {
+                    case Enums.MoveType.SubHP:
+                        {
                             int damage = DamageCalculator.CalculateDamage(move.Data1, setup.AttackStat, setup.Attacker.Level, setup.DefenseStat) * setup.Multiplier / 1000;
                             if (damage < 0) damage = 0;
                             setup.Defender.HP -= damage;
 
-                            if (damage <= 0 && setup.Multiplier > -1) {
+                            if (damage <= 0 && setup.Multiplier > -1)
+                            {
                                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Defender.Name + " took no damage!", Text.BrightRed), setup.Defender.X, setup.Defender.Y, 10);
                                 //BothWaysBattleMsg(setup, setup.Defender.Name + " took no damage!", Text.BrightRed);
-                            } else if (damage > 0) {
+                            }
+                            else if (damage > 0)
+                            {
                                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg(setup.Defender.Name + " took " + damage + " damage!", Text.BrightRed), setup.Defender.X, setup.Defender.Y, 10);
                                 //BothWaysBattleMsg(setup, setup.Defender.Name + " took " + damage + " damage!", Text.BrightRed);
                             }
@@ -2245,30 +2371,31 @@ namespace Server.Combat
                             setup.Damage = damage;
                         }
                         break;
-                    case Enums.MoveType.AddHP: {
+                    case Enums.MoveType.AddHP:
+                        {
                             //Todo?: messages for the other movetypes
 
 
 
 
-                            if (setup.Defender.HP + move.Data1 > setup.Defender.MaxHP) {
+                            if (setup.Defender.HP + move.Data1 > setup.Defender.MaxHP)
+                            {
                                 setup.Defender.HP = setup.Defender.MaxHP;
-                            } else {
+                            }
+                            else
+                            {
                                 setup.Defender.HP += move.Data1;
                             }
-
-
                         }
                         break;
-                    case Enums.MoveType.SubMP: {
-
-
-
-
+                    case Enums.MoveType.SubMP:
+                        {
                             int randomSlot = Server.Math.Rand(0, 4);
-                            if (setup.Defender.Moves[randomSlot].MoveNum > 0 && setup.Defender.Moves[randomSlot].CurrentPP > 0) {
+                            if (setup.Defender.Moves[randomSlot].MoveNum > 0 && setup.Defender.Moves[randomSlot].CurrentPP > 0)
+                            {
                                 setup.Defender.Moves[randomSlot].CurrentPP--;
-                                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
+                                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit)
+                                {
                                     Recruit recruit = setup.Defender as Recruit;
                                     PacketBuilder.AppendMovePPUpdate(recruit.Owner, setup.PacketStack, randomSlot);
                                 }
@@ -2288,14 +2415,14 @@ namespace Server.Combat
 
                         }
                         break;
-                    case Enums.MoveType.AddMP: {
-
-
-
+                    case Enums.MoveType.AddMP:
+                        {
                             int randomSlot = Server.Math.Rand(0, 4);
-                            if (setup.Defender.Moves[randomSlot].MoveNum > 0 && setup.Defender.Moves[randomSlot].CurrentPP < setup.Defender.Moves[randomSlot].MaxPP) {
+                            if (setup.Defender.Moves[randomSlot].MoveNum > 0 && setup.Defender.Moves[randomSlot].CurrentPP < setup.Defender.Moves[randomSlot].MaxPP)
+                            {
                                 setup.Defender.Moves[randomSlot].CurrentPP++;
-                                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
+                                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit)
+                                {
                                     Recruit recruit = setup.Defender as Recruit;
                                     PacketBuilder.AppendMovePPUpdate(recruit.Owner, setup.PacketStack, randomSlot);
                                 }
@@ -2315,63 +2442,69 @@ namespace Server.Combat
 
                         }
                         break;
-                    case Enums.MoveType.Scripted: {
-
-
-                        Scripting.ScriptManager.InvokeSub("ScriptedMoveHitCharacter", setup);
+                    case Enums.MoveType.Scripted:
+                        {
+                            Scripting.ScriptManager.InvokeSub("ScriptedMoveHitCharacter", setup);
                         }
                         break;
                 }
-
-
-
-
-
-            } else {
-
-                if (setup.Defender != null) {
+            }
+            else
+            {
+                if (setup.Defender != null)
+                {
                     setup.PacketStack.AddPacketToMap(setup.DefenderMap, PacketBuilder.CreateBattleMsg("The move missed " + setup.Defender.Name + "!", Text.BrightRed), setup.Defender.X, setup.Defender.Y, 10);
                     //BothWaysBattleMsg(setup, "The move missed " + setup.Defender.Name + "!", Text.BrightRed);
                 }
-
             }
 
 
 
-            if (setup.Defender != null && setup.Defender.CharacterType == Enums.CharacterType.MapNpc) {
-                if (setup.moveIndex > 0) {
+            if (setup.Defender != null && setup.Defender.CharacterType == Enums.CharacterType.MapNpc)
+            {
+                if (setup.moveIndex > 0)
+                {
                     ((MapNpc)setup.Defender).HitByMove = true;
                 }
-                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                    if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.Hunted) {
+                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                {
+                    if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.Hunted)
+                    {
                         ((MapNpc)setup.Defender).Target = ((Recruit)setup.Attacker).Owner;
-                        if (NpcManager.Npcs[((MapNpc)setup.Defender).Num].Behavior == Enums.NpcBehavior.Guard) {
-                            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-                                if (setup.DefenderMap.ActiveNpc[i].Num == ((MapNpc)setup.Defender).Num) {
+                        if (NpcManager.Npcs[((MapNpc)setup.Defender).Num].Behavior == Enums.NpcBehavior.Guard)
+                        {
+                            for (int i = 0; i < Constants.MAX_MAP_NPCS; i++)
+                            {
+                                if (setup.DefenderMap.ActiveNpc[i].Num == ((MapNpc)setup.Defender).Num)
+                                {
                                     setup.DefenderMap.ActiveNpc[i].Target = ((Recruit)setup.Attacker).Owner;
                                 }
                             }
-
                         }
                     }
                 }
             }
 
-            if (!setup.Cancel) {
-                if (setup.Move.PerPlayer) {
+            if (!setup.Cancel)
+            {
+                if (setup.Move.PerPlayer)
+                {
                     Scripting.ScriptManager.InvokeSub("MoveAdditionalEffect", setup);
                 }
                 Scripting.ScriptManager.InvokeSub("AfterMoveHits", setup);
             }
 
-            if (setup.Defender != null && setup.Defender.HP <= 0 && setup.KnockedOut == false) {
+            if (setup.Defender != null && setup.Defender.HP <= 0 && setup.KnockedOut == false)
+            {
                 setup.Defender.HP = 1;
-                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
+                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit)
+                {
                     PacketBuilder.AppendHP(((Recruit)setup.Defender).Owner, setup.PacketStack);
                 }
             }
 
-            if (setup.Defender == null || setup.Defender.HP > 0) {
+            if (setup.Defender == null || setup.Defender.HP > 0)
+            {
                 setup.KnockedOut = false;
             }
 
@@ -2381,7 +2514,6 @@ namespace Server.Combat
             //}
 
             if (setup.KnockedOut) HandleDeath(setup);//""uncancellable
-
         }
 
         //no longer needed?
@@ -2405,78 +2537,109 @@ namespace Server.Combat
 
 
 
-        public static bool ShouldUseMove(IMap map, MapNpc attacker, int moveSlot) {
+        public static bool ShouldUseMove(IMap map, MapNpc attacker, int moveSlot)
+        {
             Move move = null;
-            if (moveSlot > -1 && moveSlot < 4 && attacker.Moves[moveSlot].MoveNum > 0) {
+            if (moveSlot > -1 && moveSlot < 4 && attacker.Moves[moveSlot].MoveNum > 0)
+            {
                 move = MoveManager.Moves[attacker.Moves[moveSlot].MoveNum];
-            } else {
+            }
+            else
+            {
                 move = MoveManager.StandardAttack;
             }
 
             //Confusion check
-            if (moveSlot == -1 || attacker.Moves[moveSlot].CurrentPP > 0) {
+            if (moveSlot == -1 || attacker.Moves[moveSlot].CurrentPP > 0)
+            {
                 // Attack any players that are in range
-                switch (move.TargetType) {
-                    case Enums.MoveTarget.Foes: {
-                            if (attacker.IsInRangeOfFoes(map, move, moveSlot)) {
+                switch (move.TargetType)
+                {
+                    case Enums.MoveTarget.Foes:
+                        {
+                            if (attacker.IsInRangeOfFoes(map, move, moveSlot))
+                            {
                                 return true;
-                            } else {
+                            }
+                            else
+                            {
                                 return false;
                             }
                         }
-                    case Enums.MoveTarget.User: {
+                    case Enums.MoveTarget.User:
+                        {
                             return true;
                         }
-                    case Enums.MoveTarget.UserAndAllies: {
+                    case Enums.MoveTarget.UserAndAllies:
+                        {
                             return true;
                         }
-                    case Enums.MoveTarget.UserAndFoe: {
+                    case Enums.MoveTarget.UserAndFoe:
+                        {
                             return true;
                         }
-                    case Enums.MoveTarget.All: {
+                    case Enums.MoveTarget.All:
+                        {
                             return true;
                         }
-                    case Enums.MoveTarget.AllAlliesButUser: {
-                            if (attacker.IsInRangeOfAllies(map, move, moveSlot)) {
+                    case Enums.MoveTarget.AllAlliesButUser:
+                        {
+                            if (attacker.IsInRangeOfAllies(map, move, moveSlot))
+                            {
                                 return true;
-                            } else {
+                            }
+                            else
+                            {
                                 return false;
                             }
                         }
-                    case Enums.MoveTarget.AllButUser: {
+                    case Enums.MoveTarget.AllButUser:
+                        {
                             if (attacker.IsInRangeOfAllies(map, move, moveSlot) ||
-                                attacker.IsInRangeOfFoes(map, move, moveSlot)) {
+                                attacker.IsInRangeOfFoes(map, move, moveSlot))
+                            {
                                 return true;
-                            } else {
+                            }
+                            else
+                            {
                                 return false;
                             }
                         }
-                    default: {
+                    default:
+                        {
                             return false;
                         }
                 }
-            } else {
+            }
+            else
+            {
                 return false;
             }
-
         }
 
 
 
-        public static void HandleDeath(BattleSetup setup) {
+        public static void HandleDeath(BattleSetup setup)
+        {
             IMap map = setup.DefenderMap;
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+            {
+                if (setup.Defender.CharacterType == Enums.CharacterType.Recruit)
+                {
                     Recruit defender = (Recruit)setup.Defender;
-                    if (((Recruit)setup.Attacker).Owner.Player.Map.Tile[setup.Attacker.X, setup.Attacker.Y].Type == Enums.TileType.Arena/* || defender.Owner.Player.PK == true*/) {
+                    if (((Recruit)setup.Attacker).Owner.Player.Map.Tile[setup.Attacker.X, setup.Attacker.Y].Type == Enums.TileType.Arena/* || defender.Owner.Player.PK == true*/)
+                    {
                         ((Recruit)setup.Attacker).Owner.Player.PokemonSeen(setup.Defender.Species);
                     }
-                } else if (setup.Defender.CharacterType == Enums.CharacterType.MapNpc) {
+                }
+                else if (setup.Defender.CharacterType == Enums.CharacterType.MapNpc)
+                {
                     ((Recruit)setup.Attacker).Owner.Player.PokemonSeen(setup.Defender.Species);
                 }
             }
 
-            if (setup.Defender.CharacterType == Enums.CharacterType.Recruit) {
+            if (setup.Defender.CharacterType == Enums.CharacterType.Recruit)
+            {
                 Recruit defender = (Recruit)setup.Defender;
                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg("Oh, no!  " + defender.Name + " fainted!", Text.BrightRed));
                 //Messenger.MapMsg(defender.MapID, "Oh, no!  " + defender.Name + " fainted!", Text.BrightRed);
@@ -2485,43 +2648,51 @@ namespace Server.Combat
                 //    if (((Recruit)setup.Defender).Owner.Player.Map.Tile[setup.Defender.X, setup.Defender.Y].Type != Enums.TileType.Arena && ((Recruit)setup.Attacker).Owner.Player.PK == false && defender.Owner.Player.PK == false) {
                 //        ((Recruit)setup.Attacker).Owner.Player.PK = true;
                 //        setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateChatMsg(setup.Attacker.Name + " has been deemed an Outlaw!", Text.BrightRed));
-                        //Messenger.GlobalMsg(setup.Attacker.Name + " has been deemed an Outlaw!", Text.BrightRed);  
+                //Messenger.GlobalMsg(setup.Attacker.Name + " has been deemed an Outlaw!", Text.BrightRed);  
                 //    }
                 //}
 
                 //if (defender.Owner.Player.PK == true) {
                 //    defender.Owner.Player.PK = false;
                 //    setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateChatMsg(defender.Name + " has paid the price for being an Outlaw!", Text.BrightRed));
-                    //Messenger.GlobalMsg(defender.Name + " has paid the price for being an Outlaw!", Text.BrightRed);
+                //Messenger.GlobalMsg(defender.Name + " has paid the price for being an Outlaw!", Text.BrightRed);
                 //}
 
-                
 
-                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
+
+                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                {
                     Scripting.ScriptManager.InvokeSub("OnDeath", setup.PacketStack, defender.Owner, Enums.KillType.Player);
-                } else {
+                }
+                else
+                {
                     Scripting.ScriptManager.InvokeSub("OnDeath", setup.PacketStack, defender.Owner, Enums.KillType.Npc);
                 }
 
                 if (setup.Attacker == setup.Defender) setup.Cancel = true;
 
                 bool allOut = true;
-                foreach (Client client in map.GetClients()) {
-                    if (client.Player.Hunted) {
+                foreach (Client client in map.GetClients())
+                {
+                    if (client.Player.Hunted)
+                    {
                         allOut = false;
                     }
                 }
-                if (allOut) {
+                if (allOut)
+                {
                     map.ProcessingPaused = true;
                 }
-
-            } else if (setup.Defender.CharacterType == Enums.CharacterType.MapNpc) {
+            }
+            else if (setup.Defender.CharacterType == Enums.CharacterType.MapNpc)
+            {
                 MapNpc defender = (MapNpc)setup.Defender;
 
 
-                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
-
-                    if (defender.HeldItem != null) {
+                if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
+                {
+                    if (defender.HeldItem != null)
+                    {
                         defender.MapDropItem(defender.HeldItem.Amount, ((Recruit)setup.Attacker).Owner);
                     }
 
@@ -2529,9 +2700,10 @@ namespace Server.Combat
 
                     bool skipRecruit = false;
 
-                    try {
-
-                        if (!((Recruit)setup.Attacker).Owner.Player.Map.RecruitEnabled) {
+                    try
+                    {
+                        if (!((Recruit)setup.Attacker).Owner.Player.Map.RecruitEnabled)
+                        {
                             skipRecruit = true;
                         }
                         if (NpcManager.Npcs[defender.Num].RecruitRate == 0) skipRecruit = true;
@@ -2544,58 +2716,65 @@ namespace Server.Combat
 
                         //if (((Recruit)setup.Attacker).Owner.Player.Team[0] != setup.Attacker) skipRecruit = true;
                         if (setup.Attacker.Level <= defender.Level) skipRecruit = true;
-                    } catch { }
+                    }
+                    catch { }
 
-                    if (skipRecruit == false) {
-
+                    if (skipRecruit == false)
+                    {
                         int openSlot = ((Recruit)setup.Attacker).Owner.Player.FindOpenTeamSlot();
-                        if (openSlot != -1) {
-
+                        if (openSlot != -1)
+                        {
                             int bonus = ((Recruit)setup.Attacker).Owner.Player.GetRecruitBonus(defender);
 
                             int recruitRate = NpcManager.Npcs[defender.Num].RecruitRate;
 
-                            if (Math.Rand(1, 1001) < (recruitRate + bonus)) {
-
+                            if (Math.Rand(1, 1001) < (recruitRate + bonus))
+                            {
                                 ((Recruit)setup.Attacker).Owner.Player.AddToRequested((MapNpc)defender);
-
                             }
                         }
                     }
 
                     bool skipExp = false;
-                    try {
-                        if (!((Recruit)setup.Attacker).Owner.Player.Map.ExpEnabled) {
+                    try
+                    {
+                        if (!((Recruit)setup.Attacker).Owner.Player.Map.ExpEnabled)
+                        {
                             skipExp = true;
                         }
 
-                        if (((Recruit)setup.Attacker).Owner.Player.GetActiveRecruit().Level == Exp.ExpManager.Exp.MaxLevels) {
+                        if (((Recruit)setup.Attacker).Owner.Player.GetActiveRecruit().Level == Exp.ExpManager.Exp.MaxLevels)
+                        {
                             skipExp = true;
                         }
-                    } catch { }
+                    }
+                    catch { }
 
-                    if (!skipExp) {
+                    if (!skipExp)
+                    {
                         ulong Exp = (ulong)Pokedex.Pokedex.GetPokemonForm(NpcManager.Npcs[defender.Num].Species, defender.Form).GetRewardExp(defender.Level);
-                        if (!defender.HitByMove) {
+                        if (!defender.HitByMove)
+                        {
                             Exp /= 2;
                         }
                         // Make sure we dont get less then 0
-                        if (Exp < 0) {
+                        if (Exp < 0)
+                        {
                             Exp = 1;
                         }
 
                         Exp = (ulong)(Exp);
 
                         setup.ExpGained += Exp;
-
                     }
-
-                } else {//attacker is null, or another npc
-                    if (defender.HeldItem != null) {
+                }
+                else
+                {//attacker is null, or another npc
+                    if (defender.HeldItem != null)
+                    {
                         defender.MapDropItem(defender.HeldItem.Amount, null);
                     }
                     Scripting.ScriptManager.InvokeSub("OnNpcDeath", setup.PacketStack, setup.Attacker, defender);
-
                 }
 
                 //reset NPC slot
@@ -2609,90 +2788,114 @@ namespace Server.Combat
 
 
 
-        public static string EffectivenessToPhrase(int effectiveness) {
-            if (effectiveness < 4) {
+        public static string EffectivenessToPhrase(int effectiveness)
+        {
+            if (effectiveness < 4)
+            {
                 return "It has little effect...";
-            } else if (effectiveness < 6) {
+            }
+            else if (effectiveness < 6)
+            {
                 return "It's not very effective...";
-            } else if (effectiveness == 7) {
+            }
+            else if (effectiveness == 7)
+            {
                 return "It's super-effective!";
-
-            } else if (effectiveness > 7) {
+            }
+            else if (effectiveness > 7)
+            {
                 return "It's super-effective!!!";
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
 
-        public static bool HitsFoes(Enums.MoveTarget moveTargetType) {
-            switch (moveTargetType) {
+        public static bool HitsFoes(Enums.MoveTarget moveTargetType)
+        {
+            switch (moveTargetType)
+            {
                 case Enums.MoveTarget.Foes:
                 case Enums.MoveTarget.All:
                 case Enums.MoveTarget.UserAndFoe:
-                case Enums.MoveTarget.AllButUser: {
+                case Enums.MoveTarget.AllButUser:
+                    {
                         return true;
                     }
                     break;
-                default: {
+                default:
+                    {
                         return false;
                     }
                     break;
             }
-
         }
 
-        public static bool HitsAllies(Enums.MoveTarget moveTargetType) {
-            switch (moveTargetType) {
+        public static bool HitsAllies(Enums.MoveTarget moveTargetType)
+        {
+            switch (moveTargetType)
+            {
                 case Enums.MoveTarget.UserAndAllies:
                 case Enums.MoveTarget.All:
                 case Enums.MoveTarget.AllButUser:
-                case Enums.MoveTarget.AllAlliesButUser: {
+                case Enums.MoveTarget.AllAlliesButUser:
+                    {
                         return true;
                     }
                     break;
-                default: {
+                default:
+                    {
                         return false;
                     }
                     break;
             }
-
         }
 
-        public static bool HitsSelf(Enums.MoveTarget moveTargetType) {
-            switch (moveTargetType) {
+        public static bool HitsSelf(Enums.MoveTarget moveTargetType)
+        {
+            switch (moveTargetType)
+            {
                 case Enums.MoveTarget.UserAndAllies:
                 case Enums.MoveTarget.All:
                 case Enums.MoveTarget.User:
-                case Enums.MoveTarget.UserAndFoe: {
+                case Enums.MoveTarget.UserAndFoe:
+                    {
                         return true;
                     }
                     break;
-                default: {
+                default:
+                    {
                         return false;
                     }
                     break;
             }
-
         }
 
 
 
 
-        public static void CheckPlayerLevelUp(PacketHitList hitList, Client client) {
+        public static void CheckPlayerLevelUp(PacketHitList hitList, Client client)
+        {
             PacketHitList.MethodStart(ref hitList);
-            if (client.Player.GetActiveRecruit().Exp > client.Player.GetActiveRecruit().GetNextLevel()) {
-                if (client.Player.GetActiveRecruit().Level < Exp.ExpManager.Exp.MaxLevels) {
+            if (client.Player.GetActiveRecruit().Exp > client.Player.GetActiveRecruit().GetNextLevel())
+            {
+                if (client.Player.GetActiveRecruit().Level < Exp.ExpManager.Exp.MaxLevels)
+                {
                     Scripting.ScriptManager.InvokeSub("PlayerLevelUp", hitList, client);
 
                     hitList.AddPacketToMap(client.Player.Map, TcpPacket.CreatePacket("levelup", client.ConnectionID.ToString()));
                     //Messenger.SendDataToMap(client.Player.MapID, TcpPacket.CreatePacket("levelup", client.ConnectionID.ToString()));
                 }
-                
-                if (client.Player.GetActiveRecruit().Level >= Exp.ExpManager.Exp.MaxLevels) {
+
+                if (client.Player.GetActiveRecruit().Level >= Exp.ExpManager.Exp.MaxLevels)
+                {
                     client.Player.GetActiveRecruit().Level = Exp.ExpManager.Exp.MaxLevels;
                     client.Player.GetActiveRecruit().Exp = ExpManager.Exp[Exp.ExpManager.Exp.MaxLevels - 1];
                 }
-            } else {
+            }
+            else
+            {
                 PacketBuilder.AppendEXP(client, hitList);
                 //Messenger.SendEXP(client);
             }
@@ -2707,12 +2910,5 @@ namespace Server.Combat
         }
 
         #endregion New Area
-
-
-
-
-
     }
-
-
 }

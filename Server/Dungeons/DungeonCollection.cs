@@ -33,7 +33,8 @@ namespace Server.Dungeons
 
         #region Constructors
 
-        public DungeonCollection() {
+        public DungeonCollection()
+        {
             dungeons = new ListPair<int, Dungeon>();
         }
 
@@ -41,11 +42,13 @@ namespace Server.Dungeons
 
         #region Properties
 
-        public ListPair<int, Dungeon> Dungeons {
+        public ListPair<int, Dungeon> Dungeons
+        {
             get { return dungeons; }
         }
 
-        public int Count {
+        public int Count
+        {
             get { return dungeons.Count; }
         }
 
@@ -53,7 +56,8 @@ namespace Server.Dungeons
 
         #region Indexers
 
-        public Dungeon this[int index] {
+        public Dungeon this[int index]
+        {
             get { return dungeons[index]; }
             set { dungeons[index] = value; }
         }

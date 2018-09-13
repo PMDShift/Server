@@ -28,11 +28,13 @@ namespace Server.Network
     {
         EndPoint endPoint;
 
-        public EndPoint EndPoint {
+        public EndPoint EndPoint
+        {
             get { return endPoint; }
         }
 
-        public TcpClientIdentifier(EndPoint endPoint) {
+        public TcpClientIdentifier(EndPoint endPoint)
+        {
             this.endPoint = endPoint;
         }
     }
