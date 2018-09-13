@@ -625,7 +625,7 @@ namespace Server.Network
         {
             if (map.IsSandboxed)
             {
-                if (!client.Player.IsAssignedToZone(map.ZoneID))
+                if (!client.Player.CanViewZone(map.ZoneID) && client.Player.LoggedIn)
                 {
                     Messenger.PlayerMsg(client, "Unable to warp to a sandboxed map that you are not assigned to.", Text.BrightRed);
                     return;

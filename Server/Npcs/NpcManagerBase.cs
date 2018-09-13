@@ -4,6 +4,7 @@ using System.Text;
 using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
+using Server.Zones;
 // This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
@@ -207,6 +208,25 @@ namespace Server.Npcs
             int index = npcs.MaxNpcs;
             SaveNpc(index);
             return index;
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM npc WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.NPCs
+                });
+            }
+
+            return results;
         }
 
         #endregion Methods

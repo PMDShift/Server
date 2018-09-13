@@ -2338,9 +2338,34 @@ namespace Server.Players
             PlayerData.IsSandboxed = false;
         }
 
-        public bool IsAssignedToZone(int zoneID)
+        public bool CanViewZone(int zoneID)
         {
-            return true;
+            if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
+            {
+                return false;
+            }
+
+            var zone = Zones.ZoneManager.Zones[zoneID];
+
+            return zone.Members.Any(x => x.CharacterID == CharID);
+        }
+
+        public bool CanEditZone(int zoneID)
+        {
+            if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
+            {
+                return false;
+            }
+
+            var zone = Zones.ZoneManager.Zones[zoneID];
+
+            var member = zone.Members.Where(x => x.CharacterID == CharID).FirstOrDefault();
+            if (member == null)
+            {
+                return false;
+            }
+
+            return (member.Access == Enums.ZoneAccess.Member || member.Access == Enums.ZoneAccess.Leader);
         }
 
         #endregion Methods

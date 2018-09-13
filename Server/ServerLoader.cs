@@ -115,6 +115,10 @@ namespace Server
             //Emoticons.EmoticonManagerBase.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { loading.UpdateStatus("Loading Emoticons... " + e.Percent.ToString() + "%"); };
             //Emoticons.EmoticonManagerBase.Initialize(Settings.MaxEmoticons);
             //Emoticons.EmoticonManagerBase.LoadEmotions(null);
+            // Load zones
+            ServerConsole.WriteLine("Loading Zones...");
+            Zones.ZoneManager.Initialize();
+            Zones.ZoneManager.LoadZones(null);
             // Load exp
             ServerConsole.WriteLine("Loading Exp...");
             //Exp.ExpManager.LoadUpdate += delegate(System.Object o, Server.LoadingUpdateEventArgs e) { ServerConsole.WriteLine("Loading Experience values... " + e.Percent.ToString() + "%"); };

@@ -10,6 +10,7 @@ using DataManager.Maps;
 using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
+using Server.Zones;
 // This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
@@ -1198,6 +1199,39 @@ namespace Server.Maps
                         return Enums.MapID.TempActive;
                     }
             }
+        }
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT MapID, Name FROM map_data WHERE ZoneID = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["MapID"].ValueString.Trim('s').ToInt(),
+                    Name = row["Name"].ValueString,
+                    Type = ZoneResourceType.Maps
+                });
+            }
+
+            return results;
+        }
+
+        public static List<string> LoadPendingZonedMaps(PMDCP.DatabaseConnector.MySql.MySql database, int quantity)
+        {
+            var results = new List<string>();
+
+            var query = "SELECT MapID FROM map_data WHERE ((ZoneID = 0 OR ZoneID IS NULL) AND MapID LIKE 's%') ORDER BY CONVERT(SUBSTRING(MapID, 2, CHARACTER_LENGTH(MapID)), SIGNED INTEGER) LIMIT " + quantity;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(row["MapID"].ValueString);
+            }
+
+            return results;
         }
 
         #endregion Methods

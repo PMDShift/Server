@@ -539,7 +539,13 @@ namespace Server {
             Paralyze,
             Poison,
             Sleep
+        }
 
+        public enum ZoneAccess
+        {
+            Viewer,
+            Member,
+            Leader
         }
     }
 }

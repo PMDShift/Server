@@ -2097,7 +2097,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[n].ZoneID))
+                            if (!client.Player.CanViewZone(RDungeonManager.RDungeons[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
                                 return;
@@ -2121,7 +2121,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(RDungeonManager.RDungeons[z].ZoneID))
+                            if (!client.Player.CanEditZone(RDungeonManager.RDungeons[z].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (not assigned).", Text.BrightRed);
                                 return;
@@ -2559,7 +2559,7 @@ namespace Server.Network
                             Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                             return;
                         }
-                        if (!client.Player.IsAssignedToZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                        if (!client.Player.CanViewZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
                         {
                             Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                             return;
@@ -2613,6 +2613,11 @@ namespace Server.Network
                             if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                                 return;
                             }
 
@@ -3066,7 +3071,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this item (item not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Items.ItemManager.Items[n].ZoneID))
+                            if (!client.Player.CanEditZone(Items.ItemManager.Items[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this item (not assigned).", Text.BrightRed);
                                 return;
@@ -3138,7 +3143,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID))
+                            if (!client.Player.CanEditZone(Stories.StoryManager.Stories[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
                                 return;
@@ -3196,7 +3201,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this story (story not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Stories.StoryManager.Stories[n].ZoneID))
+                            if (!client.Player.CanViewZone(Stories.StoryManager.Stories[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this story (not assigned).", Text.BrightRed);
                                 return;
@@ -3322,7 +3327,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID))
+                            if (!client.Player.CanViewZone(Npcs.NpcManager.Npcs[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
                                 return;
@@ -3368,7 +3373,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Npcs.NpcManager.Npcs[n].ZoneID))
+                            if (!client.Player.CanEditZone(Npcs.NpcManager.Npcs[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (not assigned).", Text.BrightRed);
                                 return;
@@ -3456,7 +3461,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[n].ZoneID))
+                            if (!client.Player.CanViewZone(Shops.ShopManager.Shops[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
                                 return;
@@ -3490,7 +3495,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(Shops.ShopManager.Shops[ShopNum].ZoneID))
+                            if (!client.Player.CanEditZone(Shops.ShopManager.Shops[ShopNum].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (not assigned).", Text.BrightRed);
                                 return;
@@ -3937,7 +3942,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID))
+                            if (!client.Player.CanEditZone(DungeonManager.Dungeons[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
                                 return;
@@ -4013,7 +4018,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (dungeon not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.IsAssignedToZone(DungeonManager.Dungeons[n].ZoneID))
+                            if (!client.Player.CanViewZone(DungeonManager.Dungeons[n].ZoneID))
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this dungeon (not assigned).", Text.BrightRed);
                                 return;

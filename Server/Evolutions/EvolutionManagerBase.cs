@@ -23,6 +23,7 @@ using System.Xml;
 using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
+using Server.Zones;
 
 namespace Server.Evolutions
 {
@@ -162,5 +163,24 @@ namespace Server.Evolutions
         }
 
         #endregion
+
+        public static List<ZoneResource> LoadZoneResources(PMDCP.DatabaseConnector.MySql.MySql database, int zoneID)
+        {
+            var results = new List<ZoneResource>();
+
+            var query = "SELECT num, name FROM item WHERE zone_id = " + zoneID;
+
+            foreach (var row in database.RetrieveRowsEnumerable(query))
+            {
+                results.Add(new ZoneResource()
+                {
+                    Num = row["num"].ValueString.ToInt(),
+                    Name = row["name"].ValueString,
+                    Type = ZoneResourceType.Items
+                });
+            }
+
+            return results;
+        }
     }
 }
