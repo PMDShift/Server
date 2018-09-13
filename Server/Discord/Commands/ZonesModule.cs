@@ -52,6 +52,65 @@ namespace Server.Discord.Commands
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
         }
 
+        [Command("list")]
+        [Summary("View a list of your assigned zones.")]
+        public async Task ListAsync()
+        {
+            string characterID;
+            using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                characterID = PlayerDataManager.FindLinkedDiscordCharacter(dbConnection.Database, Context.User.Id);
+            }
+
+            if (string.IsNullOrEmpty(characterID))
+            {
+                await Context.Channel.SendMessageAsync("You have not linked your Discord account with your in-game account yet. Unable to list zones.");
+                return;
+            }
+
+            var responseBuilder = new StringBuilder();
+            responseBuilder.AppendLine("**Your zones:**");
+
+            for (var i = 0; i < ZoneManager.Zones.Count; i++)
+            {
+                var zone = ZoneManager.Zones[i];
+
+                var zoneMember = zone.Members.Where(x => x.CharacterID == characterID).FirstOrDefault();
+                if (zoneMember != null)
+                {
+                    responseBuilder.AppendLine($"{i}. `{zone.Name}` - {zoneMember.Access}");
+                }
+            }
+
+            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
+        [Command("help")]
+        [Summary("View help information about zones.")]
+        public async Task HelpAsync()
+        {
+            var responseBuilder = new StringBuilder();
+            responseBuilder.AppendLine("**How to use zones:**");
+            responseBuilder.AppendLine("/zone list - View a list of your zones.");
+            responseBuilder.AppendLine("/zone [number] - View the details of the requested zone.");
+            responseBuilder.AppendLine("/zone members [number] - View the members of the requested zone.");
+
+            responseBuilder.AppendLine();
+
+            responseBuilder.AppendLine("**Zone leader commands:**");
+            responseBuilder.AppendLine("/zone members add [number] @name [Leader/Member/Viewer] - Add a user to your zone.");
+            responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
+
+            responseBuilder.AppendLine();
+
+            responseBuilder.AppendLine("**Types of zone members:**");
+            responseBuilder.AppendLine("Leader - Able to add and remove members from zones.");
+            responseBuilder.AppendLine("Member - Able to view and edit the resources in a zone.");
+            responseBuilder.AppendLine("Viewer - Able to view the resources in a zone.");
+
+            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
         [Command("create")]
         [Summary("Create a new zone.")]
         [RequireOwner]
