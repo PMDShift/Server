@@ -85,6 +85,32 @@ namespace Server.Discord.Commands
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
         }
 
+        [Command("help")]
+        [Summary("View help information about zones.")]
+        public async Task HelpAsync()
+        {
+            var responseBuilder = new StringBuilder();
+            responseBuilder.AppendLine("**How to use zones:**");
+            responseBuilder.AppendLine("/zone list - View a list of your zones.");
+            responseBuilder.AppendLine("/zone [number] - View the details of the requested zone.");
+            responseBuilder.AppendLine("/zone members [number] - View the members of the requested zone.");
+
+            responseBuilder.AppendLine();
+
+            responseBuilder.AppendLine("**Zone leader commands:**");
+            responseBuilder.AppendLine("/zone members add [number] @name [Leader/Member/Viewer] - Add a user to your zone.");
+            responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
+
+            responseBuilder.AppendLine();
+
+            responseBuilder.AppendLine("**Types of zone members:**");
+            responseBuilder.AppendLine("Leader - Able to add and remove members from zones.");
+            responseBuilder.AppendLine("Member - Able to view and edit the resources in a zone.");
+            responseBuilder.AppendLine("Viewer - Able to view the resources in a zone.");
+
+            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
         [Command("create")]
         [Summary("Create a new zone.")]
         [RequireOwner]
