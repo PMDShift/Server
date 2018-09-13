@@ -39,5 +39,23 @@ namespace Server.Discord.Commands
             await Context.Channel.SendMessageAsync("Please confirm ingame.");
             Messenger.AskQuestion(client, "LinkDiscord", $"Discord user \"{Context.User.Username}#{Context.User.Discriminator}\" would like to connect with your account. Allow?", -1);
         }
+
+        [Command("kickself")]
+        [Summary("Kick your account from the game.")]
+        public async Task KickSelfAsync()
+        {
+            var client = ClientManager.FindClient(Context.User.Id);
+
+            if (client == null)
+            {
+                await Context.Channel.SendMessageAsync("You are not online, or have not linked your Discord account.");
+                return; 
+            }
+
+            Messenger.PlainMsg(client, "You have been kicked from the server!", Enums.PlainMsgType.MainMenu);
+            client.CloseConnection();
+
+            await Context.Channel.SendMessageAsync("You have been kicked from the server!");
+        }
     }
 }
