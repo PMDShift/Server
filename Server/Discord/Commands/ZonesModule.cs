@@ -267,11 +267,11 @@ namespace Server.Discord.Commands
 
                 if (!foundMember)
                 {
-                    await Context.Channel.SendMessageAsync($"User added as a `{accessValue}`!");
+                    await Context.Channel.SendMessageAsync($"User added as a `{accessValue}` to `{zone.Name}`!");
                 }
                 else
                 {
-                    await Context.Channel.SendMessageAsync($"User updated to be a `{accessValue}`!");
+                    await Context.Channel.SendMessageAsync($"User updated to be a `{accessValue}` in `{zone.Name}`!");
                 }
             }
 
@@ -315,7 +315,7 @@ namespace Server.Discord.Commands
 
                 zone.Members.Remove(zoneMember);
                 ZoneManager.SaveZone(zoneID);
-                await Context.Channel.SendMessageAsync("User removed!");
+                await Context.Channel.SendMessageAsync($"User removed from `{zone.Name}`!");
             }
 
             private async Task<bool> IsUserLeader(int zoneID, SocketUser user)
