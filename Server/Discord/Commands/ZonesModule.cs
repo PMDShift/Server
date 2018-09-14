@@ -105,8 +105,8 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("**Zone leader commands:**");
             responseBuilder.AppendLine("/zone members add [number] @name [Leader/Member/Viewer] - Add a user to your zone.");
             responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
-            responseBuilder.AppendLine("/zone enable [option] - Enable a zone option (see available options below).");
-            responseBuilder.AppendLine("/zone disable [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone enable [number] [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone disable [number] [option] - Enable a zone option (see available options below).");
 
             responseBuilder.AppendLine();
 
