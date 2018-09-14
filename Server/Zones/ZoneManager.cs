@@ -51,7 +51,8 @@ namespace Server.Zones
 
             var query = "SELECT name, " +
                         "is_open, " +
-                        "discord_channel_id " +
+                        "discord_channel_id," +
+                        "allow_visitors " +
                         "FROM zone WHERE zone.num = \'" + zoneNum + "\'";
 
             var row = database.RetrieveRow(query);
@@ -60,6 +61,7 @@ namespace Server.Zones
                 zone.Name = row["name"].ValueString;
                 zone.IsOpen = row["is_open"].ValueString.ToBool();
                 zone.DiscordChannelID = row["discord_channel_id"].ValueString.ToUlng();
+                zone.AllowVisitors = row["allow_visitors"].ValueString.ToBool();
             }
 
             query = "SELECT " +
@@ -112,7 +114,8 @@ namespace Server.Zones
                     database.CreateColumn(false, "num", zoneNum.ToString()),
                     database.CreateColumn(false, "name", zone.Name),
                     database.CreateColumn(false, "is_open", zone.IsOpen.ToIntString()),
-                    database.CreateColumn(false, "discord_channel_id", zone.DiscordChannelID.ToString())
+                    database.CreateColumn(false, "discord_channel_id", zone.DiscordChannelID.ToString()),
+                    database.CreateColumn(false, "allow_visitors", zone.AllowVisitors.ToIntString())
                 });
 
                 for (var i = 0; i < zone.Members.Count; i++)

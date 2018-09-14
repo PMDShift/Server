@@ -2347,6 +2347,11 @@ namespace Server.Players
 
             var zone = Zones.ZoneManager.Zones[zoneID];
 
+            if (zone.AllowVisitors)
+            {
+                return true;
+            }
+
             return zone.Members.Any(x => x.CharacterID == CharID);
         }
 

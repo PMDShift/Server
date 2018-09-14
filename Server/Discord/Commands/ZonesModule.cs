@@ -33,6 +33,11 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine($"Name: `{zone.Name}`");
             responseBuilder.AppendLine();
 
+            responseBuilder.AppendLine("**Options:**");
+            responseBuilder.AppendLine($"Visitors: {zone.AllowVisitors}");
+
+            responseBuilder.AppendLine();
+
             using (var dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 var zoneResources = new List<ZoneResource>();
@@ -100,6 +105,13 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("**Zone leader commands:**");
             responseBuilder.AppendLine("/zone members add [number] @name [Leader/Member/Viewer] - Add a user to your zone.");
             responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
+            responseBuilder.AppendLine("/zone enable [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone disable [option] - Enable a zone option (see available options below).");
+
+            responseBuilder.AppendLine();
+
+            responseBuilder.AppendLine("**Zone options:**");
+            responseBuilder.AppendLine("Visitors - Allows any players to view all resources in the zone, regardless if they are on the zone team.");
 
             responseBuilder.AppendLine();
 
@@ -109,6 +121,70 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("Viewer - Able to view the resources in a zone.");
 
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
+        [Command("enable")]
+        [Summary("Enable a zone option.")]
+        public async Task EnableAsync(int zoneID, ZoneOption zoneOption)
+        {
+            if (!ZoneManager.Zones.Zones.ContainsKey(zoneID))
+            {
+                await Context.Channel.SendMessageAsync("Invalid zone id specified.");
+                return;
+            }
+
+            if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
+            {
+                await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
+                return;
+            }
+
+            var zone = ZoneManager.Zones[zoneID];
+
+            switch (zoneOption)
+            {
+                case ZoneOption.Visitors:
+                    {
+                        zone.AllowVisitors = true;  
+                    }
+                    break;
+            }
+
+            ZoneManager.SaveZone(zoneID);
+
+            await Context.Channel.SendMessageAsync($"The `{zoneOption}` option is now enabled on `{zone.Name}`!");
+        }
+
+        [Command("disable")]
+        [Summary("Disable a zone option.")]
+        public async Task DisableAsync(int zoneID, ZoneOption zoneOption)
+        {
+            if (!ZoneManager.Zones.Zones.ContainsKey(zoneID))
+            {
+                await Context.Channel.SendMessageAsync("Invalid zone id specified.");
+                return;
+            }
+
+            if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
+            {
+                await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
+                return;
+            }
+
+            var zone = ZoneManager.Zones[zoneID];
+
+            switch (zoneOption)
+            {
+                case ZoneOption.Visitors:
+                    {
+                        zone.AllowVisitors = false;
+                    }
+                    break;
+            }
+
+            ZoneManager.SaveZone(zoneID);
+
+            await Context.Channel.SendMessageAsync($"The `{zoneOption}` option is now disabled on `{zone.Name}`!");
         }
 
         [Command("create")]
@@ -257,7 +333,7 @@ namespace Server.Discord.Commands
                     return;
                 }
 
-                if (await IsUserLeader(zoneID, Context.User) == false)
+                if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
                 {
                     await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
                     return;
@@ -344,7 +420,7 @@ namespace Server.Discord.Commands
                     return;
                 }
 
-                if (await IsUserLeader(zoneID, Context.User) == false)
+                if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
                 {
                     await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
                     return;
@@ -375,38 +451,7 @@ namespace Server.Discord.Commands
                 zone.Members.Remove(zoneMember);
                 ZoneManager.SaveZone(zoneID);
                 await Context.Channel.SendMessageAsync($"User removed from `{zone.Name}`!");
-            }
-
-            private async Task<bool> IsUserLeader(int zoneID, SocketUser user)
-            {
-                // Allow application owner to always manage everything
-                var application = await Context.Client.GetApplicationInfoAsync();
-                if (application.Owner.Id == user.Id)
-                {
-                    return true;
-                }
-
-                string characterID;
-                using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
-                {
-                    characterID = PlayerDataManager.FindLinkedDiscordCharacter(dbConnection.Database, user.Id);
-                }
-
-                if (string.IsNullOrEmpty(characterID))
-                {
-                    return false;
-                }
-
-                var zone = ZoneManager.Zones[zoneID];
-
-                var member = zone.Members.Where(x => x.CharacterID == characterID).FirstOrDefault();
-                if (member == null)
-                {
-                    return false;
-                }
-
-                return (member.Access == Enums.ZoneAccess.Leader);
-            }
+            }          
         }
     }
 }
