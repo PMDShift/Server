@@ -43,5 +43,64 @@ namespace Server.Discord
 
             return (member.Access == Enums.ZoneAccess.Leader);
         }
+
+        public static async Task SyncUsersWithZoneRole(SocketCommandContext context, int zoneID, global::Discord.IRole role = null)
+        {
+            var roleName = $"zone-{zoneID}";
+
+            await context.Guild.DownloadUsersAsync();
+
+            if (role == null)
+            {
+                role = context.Guild.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+            }
+
+            if (role == null)
+            {
+                return;
+            }
+
+            var zone = ZoneManager.Zones[zoneID];
+
+            var validRoleUsers = new HashSet<ulong>();
+
+            using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                foreach (var member in zone.Members)
+                {
+                    var discordID = PlayerDataManager.FindLinkedCharacterDiscord(dbConnection.Database, member.CharacterID);
+
+                    if (discordID > 0)
+                    {
+                        var user = context.Guild.Users.Where(x => x.Id == discordID).FirstOrDefault();
+
+                        if (user != null)
+                        {
+                            var userRole = user.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+
+                            if (userRole == null)
+                            {
+                                await user.AddRoleAsync(role);
+                            }
+
+                            validRoleUsers.Add(discordID);
+                        }
+                    }
+                }
+            }
+                
+            foreach (var user in context.Guild.Users)
+            {
+                if (!validRoleUsers.Contains(user.Id))
+                {
+                    var userRole = user.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+
+                    if (userRole != null)
+                    {
+                        await userRole.DeleteAsync();
+                    }
+                }
+            }
+        }
     }
 }

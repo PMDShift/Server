@@ -746,6 +746,19 @@ namespace DataManager.Players
             return null;
         }
 
+        public static ulong FindLinkedCharacterDiscord(MySql database, string charID)
+        {
+            var query = "SELECT LinkedDiscordId FROM characteristics WHERE CharID = \'" + charID + "\'";
+
+            var row = database.RetrieveRow(query);
+            if (row != null)
+            {
+                return row["LinkedDiscordId"].ValueString.ToUlng();
+            }
+
+            return 0;
+        }
+
         public static string GetCharacterName(MySql database, string charID)
         {
             var query = "SELECT Name FROM characteristics WHERE CharID = \'" + charID + "\'";

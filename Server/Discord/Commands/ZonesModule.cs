@@ -146,17 +146,44 @@ namespace Server.Discord.Commands
 
             channelName = channelName.ToLower().Replace(' ', '-');
 
+            var roleName = $"zone-{zoneID}";
+
             switch (command.ToLower())
             {
                 case "open":
                     {
+                        var category = Context.Guild.CategoryChannels.Where(x => x.Name.ToLower() == "zones").FirstOrDefault();
+
+                        if (category == null)
+                        {
+                            await Context.Channel.SendMessageAsync("Category not found.");
+                            return;
+                        }
+
                         var channel = await Context.Guild.CreateTextChannelAsync(channelName);
 
                         await channel.ModifyAsync(o =>
                         {
-                            o.Topic = $"Discussion for zone {zoneID} - {zone.Name}.";
+                            o.CategoryId = category.Id;
+                            o.Topic = $"Discussion for Zone {zoneID} - {zone.Name}.";
                         });
 
+                        global::Discord.IRole role = Context.Guild.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+                        if (role == null)
+                        {
+                            role = await Context.Guild.CreateRoleAsync(roleName);
+                        }
+
+                        var botRole = Context.Guild.Roles.Where(x => x.Name == "Bot").FirstOrDefault();
+                        if (botRole != null)
+                        {
+                            await channel.AddPermissionOverwriteAsync(botRole, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Allow, sendMessages: global::Discord.PermValue.Allow));
+                        }
+
+                        await channel.AddPermissionOverwriteAsync(Context.Guild.EveryoneRole, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Deny, sendMessages: global::Discord.PermValue.Deny));
+                        await channel.AddPermissionOverwriteAsync(role, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Allow, sendMessages: global::Discord.PermValue.Allow));
+
+                        await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID, role);
                     }
                     break;
                 case "close":
@@ -168,9 +195,16 @@ namespace Server.Discord.Commands
                             await channel.DeleteAsync();
 
                             await Context.Channel.SendMessageAsync("Channel closed!");
-                        } else
+                        }
+                        else
                         {
                             await Context.Channel.SendMessageAsync("Channel not found.");
+                        }
+
+                        var role = Context.Guild.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+                        if (role != null)
+                        {
+                            await role.DeleteAsync();
                         }
                     }
                     break;
@@ -454,6 +488,8 @@ namespace Server.Discord.Commands
 
                 ZoneManager.SaveZone(zoneID);
 
+                await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID);
+
                 if (!foundMember)
                 {
                     await Context.Channel.SendMessageAsync($"User added as a `{accessValue}` to `{zone.Name}`!");
@@ -504,6 +540,9 @@ namespace Server.Discord.Commands
 
                 zone.Members.Remove(zoneMember);
                 ZoneManager.SaveZone(zoneID);
+
+                await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID);
+
                 await Context.Channel.SendMessageAsync($"User removed from `{zone.Name}`!");
             }
         }
