@@ -12,6 +12,8 @@ namespace Server.Zones
         public ulong DiscordChannelID { get; set; }
         public List<ZoneMember> Members { get; }
 
+        public bool AllowVisitors { get; set; }
+
         public Zone()
         {
             Members = new List<ZoneMember>();
