@@ -107,7 +107,7 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
             responseBuilder.AppendLine("/zone enable [number] [option] - Enable a zone option (see available options below).");
             responseBuilder.AppendLine("/zone disable [number] [option] - Enable a zone option (see available options below).");
-            responseBuilder.AppendLine("/zone channel [open/close] - Open/close a Discord channel for members of the zone.");
+            responseBuilder.AppendLine("/zone channel [number] [open/close] - Open/close a Discord channel for members of the zone.");
 
             responseBuilder.AppendLine();
 
