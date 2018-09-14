@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -6823,30 +6823,30 @@ namespace Script {
 
 		public static bool MaintenanceRestart = false;
         public static void OnMapLoad(Client client, IMap oldMap, IMap map, bool loggedIn) {
-        	// Maintenance mode (external program is scheduled to run at this time)
-        	TimeSpan start = new TimeSpan(5, 49, 0); //12:49 AM EST
-			TimeSpan end = new TimeSpan(5, 51, 0); //12:51 AM EST
-			TimeSpan now = DateTime.Now.TimeOfDay;
+   //     	// Maintenance mode (external program is scheduled to run at this time)
+   //     	TimeSpan start = new TimeSpan(5, 49, 0); //12:49 AM EST
+			//TimeSpan end = new TimeSpan(5, 51, 0); //12:51 AM EST
+			//TimeSpan now = DateTime.Now.TimeOfDay;
         	
-        	if ((now > start) && (now < end)) {
-        		if (MaintenanceRestart == false) {
-        			MaintenanceRestart = true;
-        			Messenger.AdminMsg("[Staff] Automated maintenance process starting...", Text.Red);
-        			RestartServer();
-        		}
-			}
+   //     	if ((now > start) && (now < end)) {
+   //     		if (MaintenanceRestart == false) {
+   //     			MaintenanceRestart = true;
+   //     			Messenger.AdminMsg("[Staff] Automated maintenance process starting...", Text.Red);
+   //     			RestartServer();
+   //     		}
+			//}
         	
-        	start = new TimeSpan(6, 0, 0); //6 AM
-			end = new TimeSpan(6, 10, 0); //6:10 AM (it takes about 10 minutes to run)
-			now = DateTime.Now.TimeOfDay;
+   //     	start = new TimeSpan(6, 0, 0); //6 AM
+			//end = new TimeSpan(6, 10, 0); //6:10 AM (it takes about 10 minutes to run)
+			//now = DateTime.Now.TimeOfDay;
 			
-			if ((now > start) && (now < end)) {
-			   Server.Globals.ServerStatus = "The server is currently in maintenance mode, which may result in slowdowns.";
-			} else {
-				if (Server.Globals.ServerStatus == "The server is currently in maintenance mode, which may result in slowdowns.") {
-					Server.Globals.ServerStatus = "";
-				}
-			}
+			//if ((now > start) && (now < end)) {
+			//   Server.Globals.ServerStatus = "The server is currently in maintenance mode, which may result in slowdowns.";
+			//} else {
+			//	if (Server.Globals.ServerStatus == "The server is currently in maintenance mode, which may result in slowdowns.") {
+			//		Server.Globals.ServerStatus = "";
+			//	}
+			//}
         
             //restore stats (temporary workaround)
             if (map.MapID == MapManager.GenerateMapID(Server.Settings.Crossroads)) {
