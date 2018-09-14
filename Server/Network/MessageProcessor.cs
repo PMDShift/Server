@@ -1767,6 +1767,11 @@ namespace Server.Network
                                         {
                                             client.Player.PlayerData.LinkedDiscordId = client.Player.PendingDiscordId;
                                             Messenger.PlayerMsg(client, "Discord account connected!", Text.BrightGreen);
+
+                                            using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+                                            {
+                                                client.Player.SaveCharacterData(dbConnection);
+                                            }
                                         }
 
                                         client.Player.PendingDiscordId = 0;
