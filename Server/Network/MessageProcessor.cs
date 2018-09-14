@@ -1775,6 +1775,7 @@ namespace Server.Network
                                         }
 
                                         client.Player.PendingDiscordId = 0;
+                                        client.Player.PlayerData.CanLinkDiscord = false;
                                         #endregion
                                     }
                                     break;
