@@ -105,8 +105,9 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("**Zone leader commands:**");
             responseBuilder.AppendLine("/zone members add [number] @name [Leader/Member/Viewer] - Add a user to your zone.");
             responseBuilder.AppendLine("/zone members remove [number] @name - Remove a user from your zone.");
-            responseBuilder.AppendLine("/zone enable [option] - Enable a zone option (see available options below).");
-            responseBuilder.AppendLine("/zone disable [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone enable [number] [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone disable [number] [option] - Enable a zone option (see available options below).");
+            responseBuilder.AppendLine("/zone channel [open/close] - Open/close a Discord channel for members of the zone.");
 
             responseBuilder.AppendLine();
 
@@ -121,6 +122,93 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("Viewer - Able to view the resources in a zone.");
 
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
+        [Command("channel")]
+        [Summary("Open/close a Discord channel for members of the zone.")]
+        public async Task ChannelAsync(int zoneID, string command)
+        {
+            if (!ZoneManager.Zones.Zones.ContainsKey(zoneID))
+            {
+                await Context.Channel.SendMessageAsync("Invalid zone id specified.");
+                return;
+            }
+
+            if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
+            {
+                await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
+                return;
+            }
+
+            var zone = ZoneManager.Zones[zoneID];
+
+            var channelName = $"{zoneID}-{zone.Name.Substring(0, System.Math.Min(zone.Name.Length, 17))}";
+
+            channelName = channelName.ToLower().Replace(' ', '-');
+
+            var roleName = $"zone-{zoneID}";
+
+            switch (command.ToLower())
+            {
+                case "open":
+                    {
+                        var category = Context.Guild.CategoryChannels.Where(x => x.Name.ToLower() == "zones").FirstOrDefault();
+
+                        if (category == null)
+                        {
+                            await Context.Channel.SendMessageAsync("Category not found.");
+                            return;
+                        }
+
+                        var channel = await Context.Guild.CreateTextChannelAsync(channelName);
+
+                        await channel.ModifyAsync(o =>
+                        {
+                            o.CategoryId = category.Id;
+                            o.Topic = $"Discussion for Zone {zoneID} - {zone.Name}.";
+                        });
+
+                        global::Discord.IRole role = Context.Guild.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+                        if (role == null)
+                        {
+                            role = await Context.Guild.CreateRoleAsync(roleName);
+                        }
+
+                        var botRole = Context.Guild.Roles.Where(x => x.Name == "Bot").FirstOrDefault();
+                        if (botRole != null)
+                        {
+                            await channel.AddPermissionOverwriteAsync(botRole, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Allow, sendMessages: global::Discord.PermValue.Allow));
+                        }
+
+                        await channel.AddPermissionOverwriteAsync(Context.Guild.EveryoneRole, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Deny, sendMessages: global::Discord.PermValue.Deny));
+                        await channel.AddPermissionOverwriteAsync(role, new global::Discord.OverwritePermissions(readMessages: global::Discord.PermValue.Allow, sendMessages: global::Discord.PermValue.Allow));
+
+                        await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID, role);
+                    }
+                    break;
+                case "close":
+                    {
+                        var channel = Context.Guild.Channels.Where(x => x.Name == channelName).FirstOrDefault();
+
+                        if (channel != null)
+                        {
+                            await channel.DeleteAsync();
+
+                            await Context.Channel.SendMessageAsync("Channel closed!");
+                        }
+                        else
+                        {
+                            await Context.Channel.SendMessageAsync("Channel not found.");
+                        }
+
+                        var role = Context.Guild.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+                        if (role != null)
+                        {
+                            await role.DeleteAsync();
+                        }
+                    }
+                    break;
+            }
         }
 
         [Command("enable")]
@@ -145,7 +233,7 @@ namespace Server.Discord.Commands
             {
                 case ZoneOption.Visitors:
                     {
-                        zone.AllowVisitors = true;  
+                        zone.AllowVisitors = true;
                     }
                     break;
             }
@@ -400,6 +488,8 @@ namespace Server.Discord.Commands
 
                 ZoneManager.SaveZone(zoneID);
 
+                await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID);
+
                 if (!foundMember)
                 {
                     await Context.Channel.SendMessageAsync($"User added as a `{accessValue}` to `{zone.Name}`!");
@@ -450,8 +540,11 @@ namespace Server.Discord.Commands
 
                 zone.Members.Remove(zoneMember);
                 ZoneManager.SaveZone(zoneID);
+
+                await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID);
+
                 await Context.Channel.SendMessageAsync($"User removed from `{zone.Name}`!");
-            }          
+            }
         }
     }
 }
