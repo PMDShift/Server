@@ -377,7 +377,7 @@ namespace Script
                         break;
                     case "/gmmode":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Server.Globals.GMOnly = !Server.Globals.GMOnly;
                                 Messenger.PlayerMsg(client, "GM Only Mode Active: " + Server.Globals.GMOnly, Text.Yellow);
