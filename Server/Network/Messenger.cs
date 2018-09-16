@@ -623,7 +623,7 @@ namespace Server.Network
 
         public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound)
         {
-            if (map.IsSandboxed)
+            if (map.IsSandboxed && map.MapType != Enums.MapType.House)
             {
                 if (!client.Player.CanViewZone(map.ZoneID) && client.Player.LoggedIn)
                 {
