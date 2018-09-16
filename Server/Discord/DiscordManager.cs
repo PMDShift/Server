@@ -51,9 +51,7 @@ namespace Server.Discord
             var context = new SocketCommandContext(client, message);
             // Execute the command. (result does not indicate a return value, 
             // rather an object stating if the command executed successfully)
-            var result = await commands.ExecuteAsync(context, argPos, services);
-            if (!result.IsSuccess)
-                await context.Channel.SendMessageAsync(result.ErrorReason);
+            await commands.ExecuteAsync(context, argPos, services);
         }
     }
 }
