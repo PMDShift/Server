@@ -426,6 +426,90 @@ namespace Server.Pokedex
             }
         }
 
+        public void SaveMoves(DatabaseConnection dbConnection, int ID, int formNum)
+        {
+            var database = dbConnection.Database;
+
+            for (var i = 0; i < LevelUpMoves.Count; i++)
+            {
+                var levelUpMove = LevelUpMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemonlevelmove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "LevelNum", levelUpMove.Level.ToString()),
+                    database.CreateColumn(false, "Move", levelUpMove.Move.ToString())
+                });
+            }
+
+            for (var i = 0; i < TMMoves.Count; i++)
+            {
+                var move = TMMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemontmmove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "Move", move.ToString())
+                });
+            }
+
+            for (var i = 0; i < EggMoves.Count; i++)
+            {
+                var move = EggMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemoneggmove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "Move", move.ToString())
+                });
+            }
+
+            for (var i = 0; i < TutorMoves.Count; i++)
+            {
+                var move = TutorMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemontutormove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "Move", move.ToString())
+                });
+            }
+
+            for (var i = 0; i < DWMoves.Count; i++)
+            {
+                var move = DWMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemondwmove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "Move", move.ToString())
+                });
+            }
+
+            for (var i = 0; i < EventMoves.Count; i++)
+            {
+                var move = EventMoves[i];
+
+                database.UpdateOrInsert("pokedex_pokemoneventmove", new PMDCP.DatabaseConnector.IDataColumn[]
+                {
+                    database.CreateColumn(false, "DexNum", ID.ToString()),
+                    database.CreateColumn(false, "FormNum", formNum.ToString()),
+                    database.CreateColumn(false, "MoveIndex", i.ToString()),
+                    database.CreateColumn(false, "Move", move.ToString())
+                });
+            }
+        }
+
         #endregion Methods
     }
 }

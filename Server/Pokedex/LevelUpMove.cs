@@ -27,9 +27,9 @@ namespace Server.Pokedex
         public int Level { get; set; }
         public int Move { get; set; }
 
-        public LevelUpMove(int name, int level)
+        public LevelUpMove(int move, int level)
         {
-            Move = name;
+            Move = move;
             Level = level;
         }
     }

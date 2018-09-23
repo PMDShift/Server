@@ -188,6 +188,9 @@ namespace Server
             // Initialize logs
             Logging.Logger.Initialize();
 
+            var pokedexSync = new Pokedex.PokedexSync();
+            pokedexSync.SyncPokedex(Constants.TOTAL_POKEMON_GEN6 + 1, Constants.TOTAL_POKEMON).GetAwaiter().GetResult();
+
             // Load scripts
             ServerConsole.WriteLine("Loading scripts... ");
             Scripting.ScriptManager.Initialize();

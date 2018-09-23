@@ -126,6 +126,11 @@ namespace Server.Pokedex
             //}
         }
 
+        public static void SavePokemon(DatabaseConnection dbConnection, int id)
+        {
+            pokemon[id].Save(dbConnection);
+        }
+
         /*
         public static void SavePokemon(int id) {
             pokemon[id].Save();
