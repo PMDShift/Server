@@ -38,7 +38,8 @@ namespace Server
         public const int MAX_MAP_NPCS = 20;
         public const int MAX_TRADES = 100;
 
-        public const int TOTAL_POKEMON = 718;
+        public const int TOTAL_POKEMON_GEN6 = 718;
+        public const int TOTAL_POKEMON = 802;
 
         public const string CLIENT_EDITION = "PMDSCore";
         public const int CLIENT_VERSION = 5;

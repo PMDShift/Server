@@ -65,6 +65,49 @@ namespace Server.Pokedex
         }
         */
 
+        public void Save(DatabaseConnection dbConnection)
+        {
+            var database = dbConnection.Database;
+
+            database.UpdateOrInsert("pokedex_pokemon", new PMDCP.DatabaseConnector.IDataColumn[] {
+                database.CreateColumn(true, "DexNum", ID.ToString()),
+                database.CreateColumn(false, "PokemonName", Name),
+                database.CreateColumn(false, "SpeciesName", SpeciesName),
+                database.CreateColumn(false, "GrowthGroup", ((int)GrowthGroup).ToString()),
+                database.CreateColumn(false, "EggGroup1", EggGroup1),
+                database.CreateColumn(false, "EggGroup2", EggGroup2)
+            });
+
+            for (var i = 0; i < Forms.Count; i++)
+            {
+                var form = Forms[i];
+
+                database.UpdateOrInsert("pokedex_pokemonform", new PMDCP.DatabaseConnector.IDataColumn[] {
+                    database.CreateColumn(true, "DexNum", ID.ToString()),
+                    database.CreateColumn(true, "FormNum", form.FormIndex.ToString()),
+                    database.CreateColumn(false, "FormName", form.FormName),
+                    database.CreateColumn(false, "HP", form.BaseHP.ToString()),
+                    database.CreateColumn(false, "Attack", form.BaseAtt.ToString()),
+                    database.CreateColumn(false, "Defense", form.BaseDef.ToString()),
+                    database.CreateColumn(false, "SpecialAttack", form.BaseSpAtt.ToString()),
+                    database.CreateColumn(false, "SpecialDefense", form.BaseSpDef.ToString()),
+                    database.CreateColumn(false, "Speed", form.BaseSpd.ToString()),
+                    database.CreateColumn(false, "Male", form.MaleRatio.ToString()),
+                    database.CreateColumn(false, "Female", form.FemaleRatio.ToString()),
+                    database.CreateColumn(false, "Height", form.Height.ToString()),
+                    database.CreateColumn(false, "Weight", form.Weight.ToString()),
+                    database.CreateColumn(false, "Type1", ((int)form.Type1).ToString()),
+                    database.CreateColumn(false, "Type2", ((int)form.Type2).ToString()),
+                    database.CreateColumn(false, "Ability1", form.Ability1),
+                    database.CreateColumn(false, "Ability2", form.Ability2),
+                    database.CreateColumn(false, "Ability3", form.Ability3),
+                    database.CreateColumn(false, "ExpYield", form.BaseRewardExp.ToString())
+                });
+
+                form.SaveMoves(dbConnection, ID, i);
+            }
+        }
+
         public void Load(DatabaseConnection dbConnection)
         {
             var database = dbConnection.Database;
@@ -102,6 +145,7 @@ namespace Server.Pokedex
             while (row != null)
             {
                 PokemonForm form = new PokemonForm();
+                form.FormIndex = formNum;
                 form.FormName = row["FormName"].ValueString;
                 form.BaseHP = row["HP"].ValueString.ToInt();
                 form.BaseAtt = row["Attack"].ValueString.ToInt();
