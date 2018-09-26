@@ -133,7 +133,7 @@ namespace Server.Network
                                         return;
                                     }
                                     // Verify that the client used is a valid one
-                                    if (parse[10] != Constants.CLIENT_EDITION)
+                                    if (parse[10] != Constants.CLIENT_EDITION && parse[10] != Constants.ALTERNATE_CLIENT_EDITION)
                                     {
                                         Messenger.PlainMsg(client, "Bad client edition! Did you edit the source code?", Enums.PlainMsgType.MainMenu);
                                         return;
