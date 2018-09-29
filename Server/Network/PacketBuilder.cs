@@ -889,6 +889,13 @@ namespace Server.Network
 
         */
 
+        public static void AppendMOTD(Client client, PacketHitList packetHitList)
+        {
+            var packet = TcpPacket.CreatePacket("motd", Settings.MOTD);
+
+            packetHitList.AddPacket(client, packet);
+        }
+
         public static void AppendServerStatus(Client client, PacketHitList packetList)
         {
             TcpPacket packet = CreateServerStatus();

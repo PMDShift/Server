@@ -1565,6 +1565,7 @@ namespace Server.Network
                 PacketBuilder.AppendActiveTeam(client, packetList);
                 PacketBuilder.AppendActiveTeamNum(client, packetList);
                 PacketBuilder.AppendPlayerData(client, packetList);
+                PacketBuilder.AppendMOTD(client, packetList);
                 PacketHitList.MethodEnded(ref packetList);
 
                 PartyManager.LoadCharacterParty(client);
