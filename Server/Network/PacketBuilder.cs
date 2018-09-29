@@ -1230,7 +1230,7 @@ namespace Server.Network
                                                                   player2.Dead.ToIntString(), player2.GuildName, ((int)player2.GuildAccess).ToString(),
                                                                   player2.Status, player2.GetActiveRecruit().Visible.ToIntString());
 
-                        packet.AppendParameters((int)player2.GetActiveRecruit().StatusAilment, player2.GetActiveRecruit().VolatileStatus.Count);
+                        packet.AppendParameters(0, (int)player2.GetActiveRecruit().StatusAilment, player2.GetActiveRecruit().VolatileStatus.Count);
                         for (int j = 0; j < player2.GetActiveRecruit().VolatileStatus.Count; j++)
                         {
                             packet.AppendParameter(player2.GetActiveRecruit().VolatileStatus[j].Emoticon);
