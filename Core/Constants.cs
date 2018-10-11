@@ -43,7 +43,7 @@ namespace Server
 
         public const string CLIENT_EDITION = "PMDSCore";
         public const string ALTERNATE_CLIENT_EDITION = "Shift-C";
-        public const int CLIENT_VERSION = 5;
+        public const int CLIENT_VERSION = 6;
 
         public const int STANDARDATTACKBASEPOWER = 0;
 
