@@ -1180,7 +1180,6 @@ namespace Script
                                             bannedClient.Player.AccountName + "/" + bannedClient.Player.Name, bannedClient.MacAddress, bannedClient.BiosId,
                                             client.Player.CharID, client.IP.ToString(), banTimeDays, Enums.BanType.Ban);
                                         Messenger.AdminMsg("[Staff] " + bannedClient.Player.Name + " has been banned by " + client.Player.Name + "!", Text.BrightBlue);
-                                        PlayerInfoReport(bannedClient);
                                         Messenger.PlainMsg(bannedClient, "You have been banned!", Enums.PlainMsgType.MainMenu);
                                         bannedClient.CloseConnection();
                                         Server.Logging.ChatLogger.AppendToChatLog("Staff", "[Ban] " + client.Player.Name + " banned " + playerName + ".");
@@ -3093,8 +3092,6 @@ namespace Script
                                 Messenger.AdminMsg("[Staff] " + client.Player.Name + " has muted " + n.Player.Name + ".", Text.BrightBlue);
                                 Server.Logging.ChatLogger.AppendToChatLog("Staff", "[Mute Issued] " + client.Player.Name + " muted " + n.Player.Name);
 
-                                PlayerInfoReport(n);
-
                                 Messenger.SendPlayerData(n);
                             }
                         }
@@ -3133,7 +3130,6 @@ namespace Script
                                         Messenger.PlayerMsg(bannedClient, "You have been permamuted.", Text.Green);
                                         Messenger.AdminMsg("[Staff] " + client.Player.Name + " has permamuted " + bannedClient.Player.Name + ".", Text.BrightBlue);
                                         Server.Logging.ChatLogger.AppendToChatLog("Staff", "[Permamute Issued] " + client.Player.Name + " muted " + bannedClient.Player.Name);
-                                        PlayerInfoReport(bannedClient);
                                         Messenger.SendPlayerData(bannedClient);
                                         using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
                                         {
@@ -3704,7 +3700,7 @@ namespace Script
                     case "/getip*":
                     case "/getip":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
 
                                 string playerName = command[1];
@@ -3742,7 +3738,7 @@ namespace Script
                         break;
                     case "/findip":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.PlayerMsg(client, "Searching for players with the IP: \"" + joinedArgs + "\"", Text.BrightBlue);
                                 foreach (Client n in ClientManager.GetClients())
