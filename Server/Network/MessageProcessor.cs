@@ -1269,15 +1269,15 @@ namespace Server.Network
 
                                     if (!string.IsNullOrEmpty(tile.String1))
                                     {
-                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String1, 0, 0, 0);
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String1, -1, 0, 0);
                                     }
                                     if (!string.IsNullOrEmpty(tile.String2))
                                     {
-                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String2, 0, 0, 0);
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String2, -1, 0, 0);
                                     }
                                     if (!string.IsNullOrEmpty(tile.String3))
                                     {
-                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String3, 0, 0, 0);
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String3, -1, 0, 0);
                                     }
 
                                     segment.AppendToStory(story);
