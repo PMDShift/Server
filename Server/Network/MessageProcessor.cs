@@ -1260,6 +1260,28 @@ namespace Server.Network
                                 if (map.Tile[newX, newY].Type == Enums.TileType.ScriptedSign)
                                 {
                                     Scripting.ScriptManager.InvokeSub("ScriptedSign", client, map.Tile[newX, newY].Data1, map.Tile[newX, newY].String1, map.Tile[newX, newY].String2, map.Tile[newX, newY].String3, dir);
+                                } 
+                                else if (map.Tile[newX, newY].Type == Enums.TileType.Sign) {
+                                    Stories.Story story = new Stories.Story();
+                                    Stories.StoryBuilderSegment segment = Stories.StoryBuilder.BuildStory();
+
+                                    var tile = map.Tile[newX, newY];
+
+                                    if (!string.IsNullOrEmpty(tile.String1))
+                                    {
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String1, 0, 0, 0);
+                                    }
+                                    if (!string.IsNullOrEmpty(tile.String2))
+                                    {
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String2, 0, 0, 0);
+                                    }
+                                    if (!string.IsNullOrEmpty(tile.String3))
+                                    {
+                                        Stories.StoryBuilder.AppendSaySegment(segment, tile.String3, 0, 0, 0);
+                                    }
+
+                                    segment.AppendToStory(story);
+                                    Stories.StoryManager.PlayStory(client, story);
                                 }
                                 else if (map.Tile[newX, newY].Type == Enums.TileType.Key)
                                 {

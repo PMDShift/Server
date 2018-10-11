@@ -8405,15 +8405,6 @@ namespace Script {
             }
         }
         
-        public static void PlayerInfoReport(Client client) {
-        	if ((!Ranks.IsAllowed(client, Enums.Rank.Monitor)) && client != null) {
-					Messenger.AdminMsg("\n" + "Player Information Report:" + "\n" + 
-					"Account/Character: " + client.Player.AccountName + "/" + client.Player.Name + "\n" + "IP: " 
-                    + client.IP.ToString() + "\n" + "MAC: " + client.MacAddress, Text.BrightBlue);
-           }
-        } 
-
-
         public static void EventCountdown() {
         
         	System.Threading.Thread eventCountdownThread = new System.Threading.Thread(delegate() {

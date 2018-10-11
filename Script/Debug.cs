@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -34,9 +34,6 @@ namespace Script {
 
     public class Debug {
         public static void RunTest(Client client) {
-        	Messenger.PlayerMsg(client, client.IP.ToString(), Text.BrightRed);
-  
-        	
         	return;
         	int playerCount = 0;
         	PacketHitList hitlist = null;
