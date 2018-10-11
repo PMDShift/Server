@@ -547,5 +547,11 @@ namespace Server {
             Member,
             Leader
         }
+        
+        public enum GameplayMode
+        {
+            RealTime,
+            TurnBased
+        }
     }
 }
