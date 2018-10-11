@@ -37,34 +37,7 @@ namespace Server.Maps
                     {
                         destinationMap.Tile[X, Y] = new Tile(new DataManager.Maps.Tile());
                     }
-                    destinationMap.Tile[X, Y].Ground = sourceMap.Tile[X, Y].Ground;
-                    destinationMap.Tile[X, Y].GroundAnim = sourceMap.Tile[X, Y].GroundAnim;
-                    destinationMap.Tile[X, Y].Mask = sourceMap.Tile[X, Y].Mask;
-                    destinationMap.Tile[X, Y].Anim = sourceMap.Tile[X, Y].Anim;
-                    destinationMap.Tile[X, Y].Mask2 = sourceMap.Tile[X, Y].Mask2;
-                    destinationMap.Tile[X, Y].M2Anim = sourceMap.Tile[X, Y].M2Anim;
-                    destinationMap.Tile[X, Y].Fringe = sourceMap.Tile[X, Y].Fringe;
-                    destinationMap.Tile[X, Y].FAnim = sourceMap.Tile[X, Y].FAnim;
-                    destinationMap.Tile[X, Y].Fringe2 = sourceMap.Tile[X, Y].Fringe2;
-                    destinationMap.Tile[X, Y].F2Anim = sourceMap.Tile[X, Y].F2Anim;
-                    destinationMap.Tile[X, Y].Type = sourceMap.Tile[X, Y].Type;
-                    destinationMap.Tile[X, Y].Data1 = sourceMap.Tile[X, Y].Data1;
-                    destinationMap.Tile[X, Y].Data2 = sourceMap.Tile[X, Y].Data2;
-                    destinationMap.Tile[X, Y].Data3 = sourceMap.Tile[X, Y].Data3;
-                    destinationMap.Tile[X, Y].String1 = sourceMap.Tile[X, Y].String1;
-                    destinationMap.Tile[X, Y].String2 = sourceMap.Tile[X, Y].String2;
-                    destinationMap.Tile[X, Y].String3 = sourceMap.Tile[X, Y].String3;
-                    destinationMap.Tile[X, Y].RDungeonMapValue = sourceMap.Tile[X, Y].RDungeonMapValue;
-                    destinationMap.Tile[X, Y].GroundSet = sourceMap.Tile[X, Y].GroundSet;
-                    destinationMap.Tile[X, Y].GroundAnimSet = sourceMap.Tile[X, Y].GroundAnimSet;
-                    destinationMap.Tile[X, Y].MaskSet = sourceMap.Tile[X, Y].MaskSet;
-                    destinationMap.Tile[X, Y].AnimSet = sourceMap.Tile[X, Y].AnimSet;
-                    destinationMap.Tile[X, Y].Mask2Set = sourceMap.Tile[X, Y].Mask2Set;
-                    destinationMap.Tile[X, Y].M2AnimSet = sourceMap.Tile[X, Y].M2AnimSet;
-                    destinationMap.Tile[X, Y].FringeSet = sourceMap.Tile[X, Y].FringeSet;
-                    destinationMap.Tile[X, Y].FAnimSet = sourceMap.Tile[X, Y].FAnimSet;
-                    destinationMap.Tile[X, Y].Fringe2Set = sourceMap.Tile[X, Y].Fringe2Set;
-                    destinationMap.Tile[X, Y].F2AnimSet = sourceMap.Tile[X, Y].F2AnimSet;
+                    CloneTile(sourceMap, X, Y, destinationMap.Tile[X, Y]);
                 }
             }
         }
@@ -77,10 +50,22 @@ namespace Server.Maps
             tile.Anim = map.Tile[x, y].Anim;
             tile.Mask2 = map.Tile[x, y].Mask2;
             tile.M2Anim = map.Tile[x, y].M2Anim;
+            tile.Mask3 = map.Tile[x, y].Mask3;
+            tile.M3Anim = map.Tile[x, y].M3Anim;
+            tile.Mask4 = map.Tile[x, y].Mask4;
+            tile.M4Anim = map.Tile[x, y].M4Anim;
+            tile.Mask5 = map.Tile[x, y].Mask5;
+            tile.M5Anim = map.Tile[x, y].M5Anim;
             tile.Fringe = map.Tile[x, y].Fringe;
             tile.FAnim = map.Tile[x, y].FAnim;
             tile.Fringe2 = map.Tile[x, y].Fringe2;
             tile.F2Anim = map.Tile[x, y].F2Anim;
+            tile.Fringe3 = map.Tile[x, y].Fringe3;
+            tile.F3Anim = map.Tile[x, y].F3Anim;
+            tile.Fringe4 = map.Tile[x, y].Fringe4;
+            tile.F4Anim = map.Tile[x, y].F4Anim;
+            tile.Fringe5 = map.Tile[x, y].Fringe5;
+            tile.F5Anim = map.Tile[x, y].F5Anim;
             tile.Type = map.Tile[x, y].Type;
             tile.Data1 = map.Tile[x, y].Data1;
             tile.Data2 = map.Tile[x, y].Data2;
@@ -95,10 +80,22 @@ namespace Server.Maps
             tile.AnimSet = map.Tile[x, y].AnimSet;
             tile.Mask2Set = map.Tile[x, y].Mask2Set;
             tile.M2AnimSet = map.Tile[x, y].M2AnimSet;
+            tile.Mask3Set = map.Tile[x, y].Mask3Set;
+            tile.M3AnimSet = map.Tile[x, y].M3AnimSet;
+            tile.Mask4Set = map.Tile[x, y].Mask4Set;
+            tile.M4AnimSet = map.Tile[x, y].M4AnimSet;
+            tile.Mask5Set = map.Tile[x, y].Mask5Set;
+            tile.M5AnimSet = map.Tile[x, y].M5AnimSet;
             tile.FringeSet = map.Tile[x, y].FringeSet;
             tile.FAnimSet = map.Tile[x, y].FAnimSet;
             tile.Fringe2Set = map.Tile[x, y].Fringe2Set;
             tile.F2AnimSet = map.Tile[x, y].F2AnimSet;
+            tile.Fringe3Set = map.Tile[x, y].Fringe3Set;
+            tile.F3AnimSet = map.Tile[x, y].F3AnimSet;
+            tile.Fringe4Set = map.Tile[x, y].Fringe4Set;
+            tile.F4AnimSet = map.Tile[x, y].F4AnimSet;
+            tile.Fringe5Set = map.Tile[x, y].Fringe5Set;
+            tile.F5AnimSet = map.Tile[x, y].F5AnimSet;
         }
 
         public static void CloneMapNpcs(IMap sourceMap, IMap destinationMap)

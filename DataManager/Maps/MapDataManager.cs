@@ -96,46 +96,74 @@ namespace DataManager.Maps
             }
 
             // Load map tiles
-            query = "SELECT map_tiles.X, map_tiles.Y, map_tiles.Ground, map_tiles.GroundAnim, map_tiles.Mask, map_tiles.MaskAnim, " +
-                "map_tiles.Mask2, map_tiles.Mask2Anim, map_tiles.Fringe, map_tiles.FringeAnim, map_tiles.Fringe2, " +
-                "map_tiles.Fringe2Anim, map_tiles.Type, map_tiles.Data1, map_tiles.Data2, map_tiles.Data3, map_tiles.String1, " +
+            query = "SELECT map_tiles.X, map_tiles.Y, map_tiles.Ground, map_tiles.GroundAnim, " +
+                "map_tiles.Mask, map_tiles.MaskAnim, map_tiles.Mask2, map_tiles.Mask2Anim, map_tiles.Mask3, map_tiles.Mask3Anim, map_tiles.Mask4, map_tiles.Mask4Anim, map_tiles.Mask5, map_tiles.Mask5Anim, " +
+                "map_tiles.Fringe, map_tiles.FringeAnim, map_tiles.Fringe2, map_tiles.Fringe2Anim, map_tiles.Fringe3, map_tiles.Fringe3Anim, map_tiles.Fringe4, map_tiles.Fringe4Anim, map_tiles.Fringe5, map_tiles.Fringe5Anim, " +
+                "map_tiles.Type, map_tiles.Data1, map_tiles.Data2, map_tiles.Data3, map_tiles.String1, " +
                 "map_tiles.String2, map_tiles.String3, map_tiles.Light, map_tiles.GroundTileset, map_tiles.GroundAnimTileset, " +
                 "map_tiles.MaskTileset, map_tiles.MaskAnimTileset, map_tiles.Mask2Tileset, map_tiles.Mask2AnimTileset, " +
-                "map_tiles.FringeTileset, map_tiles.FringeAnimTileset, map_tiles.Fringe2Tileset, map_tiles.Fringe2AnimTileset " +
+                "map_tiles.Mask3Tileset, map_tiles.Mask3AnimTileset, map_tiles.Mask4Tileset, map_tiles.Mask4AnimTileset, " +
+                "map_tiles.Mask5Tileset, map_tiles.Mask5AnimTileset, " +
+                "map_tiles.FringeTileset, map_tiles.FringeAnimTileset, map_tiles.Fringe2Tileset, map_tiles.Fringe2AnimTileset, " +
+                "map_tiles.Fringe3Tileset, map_tiles.Fringe3AnimTileset, map_tiles.Fringe4Tileset, map_tiles.Fringe4AnimTileset, " +
+                "map_tiles.Fringe5Tileset, map_tiles.Fringe5AnimTileset " +
                 "FROM map_tiles WHERE map_tiles.MapID = \'" + database.VerifyValueString(mapID) + "\'";
             foreach (DataColumnCollection row in database.RetrieveRowsEnumerable(query)) {
                 Tile tile = new Tile();
-                int counter = 0;
-                int x = Convert.ToInt32(row[counter++].Value);
-                int y = Convert.ToInt32(row[counter++].Value);
-                tile.Ground = Convert.ToInt32(row[counter++].Value);
-                tile.GroundAnim = Convert.ToInt32(row[counter++].Value);
-                tile.Mask = Convert.ToInt32(row[counter++].Value);
-                tile.Anim = Convert.ToInt32(row[counter++].Value);
-                tile.Mask2 = Convert.ToInt32(row[counter++].Value);
-                tile.M2Anim = Convert.ToInt32(row[counter++].Value);
-                tile.Fringe = Convert.ToInt32(row[counter++].Value);
-                tile.FAnim = Convert.ToInt32(row[counter++].Value);
-                tile.Fringe2 = Convert.ToInt32(row[counter++].Value);
-                tile.F2Anim = Convert.ToInt32(row[counter++].Value);
-                tile.Type = Convert.ToInt32(row[counter++].Value);
-                tile.Data1 = Convert.ToInt32(row[counter++].Value);
-                tile.Data2 = Convert.ToInt32(row[counter++].Value);
-                tile.Data3 = Convert.ToInt32(row[counter++].Value);
-                tile.String1 = row[counter++].ValueString;
-                tile.String2 = row[counter++].ValueString;
-                tile.String3 = row[counter++].ValueString;
-                tile.RDungeonMapValue = Convert.ToInt32(row[counter++].Value);
-                tile.GroundSet = Convert.ToInt32(row[counter++].Value);
-                tile.GroundAnimSet = Convert.ToInt32(row[counter++].Value);
-                tile.MaskSet = Convert.ToInt32(row[counter++].Value);
-                tile.AnimSet = Convert.ToInt32(row[counter++].Value);
-                tile.Mask2Set = Convert.ToInt32(row[counter++].Value);
-                tile.M2AnimSet = Convert.ToInt32(row[counter++].Value);
-                tile.FringeSet = Convert.ToInt32(row[counter++].Value);
-                tile.FAnimSet = Convert.ToInt32(row[counter++].Value);
-                tile.Fringe2Set = Convert.ToInt32(row[counter++].Value);
-                tile.F2AnimSet = Convert.ToInt32(row[counter++].Value);
+                int x = Convert.ToInt32(row["X"].Value);
+                int y = Convert.ToInt32(row["Y"].Value);
+                tile.Ground = Convert.ToInt32(row["Ground"].Value);
+                tile.GroundAnim = Convert.ToInt32(row["GroundAnim"].Value);
+                tile.Mask = Convert.ToInt32(row["Mask"].Value);
+                tile.Anim = Convert.ToInt32(row["MaskAnim"].Value);
+                tile.Mask2 = Convert.ToInt32(row["Mask2"].Value);
+                tile.M2Anim = Convert.ToInt32(row["Mask2Anim"].Value);
+                tile.Mask3 = Convert.ToInt32(row["Mask3"].Value);
+                tile.M3Anim = Convert.ToInt32(row["Mask3Anim"].Value);
+                tile.Mask4 = Convert.ToInt32(row["Mask4"].Value);
+                tile.M4Anim = Convert.ToInt32(row["Mask4Anim"].Value);
+                tile.Mask5 = Convert.ToInt32(row["Mask5"].Value);
+                tile.M5Anim = Convert.ToInt32(row["Mask5Anim"].Value);
+                tile.Fringe = Convert.ToInt32(row["Fringe"].Value);
+                tile.FAnim = Convert.ToInt32(row["FringeAnim"].Value);
+                tile.Fringe2 = Convert.ToInt32(row["Fringe2"].Value);
+                tile.F2Anim = Convert.ToInt32(row["Fringe2Anim"].Value);
+                tile.Fringe3 = Convert.ToInt32(row["Fringe3"].Value);
+                tile.F3Anim = Convert.ToInt32(row["Fringe3Anim"].Value);
+                tile.Fringe4 = Convert.ToInt32(row["Fringe4"].Value);
+                tile.F4Anim = Convert.ToInt32(row["Fringe4Anim"].Value);
+                tile.Fringe5 = Convert.ToInt32(row["Fringe5"].Value);
+                tile.F5Anim = Convert.ToInt32(row["Fringe5Anim"].Value);
+                tile.Type = Convert.ToInt32(row["Type"].Value);
+                tile.Data1 = Convert.ToInt32(row["Data1"].Value);
+                tile.Data2 = Convert.ToInt32(row["Data2"].Value);
+                tile.Data3 = Convert.ToInt32(row["Data3"].Value);
+                tile.String1 = row["String1"].ValueString;
+                tile.String2 = row["String2"].ValueString;
+                tile.String3 = row["String3"].ValueString;
+                tile.RDungeonMapValue = Convert.ToInt32(row["Light"].Value);
+                tile.GroundSet = Convert.ToInt32(row["GroundTileset"].Value);
+                tile.GroundAnimSet = Convert.ToInt32(row["GroundAnimTileset"].Value);
+                tile.MaskSet = Convert.ToInt32(row["MaskTileset"].Value);
+                tile.AnimSet = Convert.ToInt32(row["MaskAnimTileset"].Value);
+                tile.Mask2Set = Convert.ToInt32(row["Mask2Tileset"].Value);
+                tile.M2AnimSet = Convert.ToInt32(row["Mask2AnimTileset"].Value);
+                tile.Mask3Set = Convert.ToInt32(row["Mask3Tileset"].Value);
+                tile.M3AnimSet = Convert.ToInt32(row["Mask3AnimTileset"].Value);
+                tile.Mask4Set = Convert.ToInt32(row["Mask4Tileset"].Value);
+                tile.M4AnimSet = Convert.ToInt32(row["Mask4AnimTileset"].Value);
+                tile.Mask5Set = Convert.ToInt32(row["Mask5Tileset"].Value);
+                tile.M5AnimSet = Convert.ToInt32(row["Mask5AnimTileset"].Value);
+                tile.FringeSet = Convert.ToInt32(row["FringeTileset"].Value);
+                tile.FAnimSet = Convert.ToInt32(row["FringeAnimTileset"].Value);
+                tile.Fringe2Set = Convert.ToInt32(row["Fringe2Tileset"].Value);
+                tile.F2AnimSet = Convert.ToInt32(row["Fringe2AnimTileset"].Value);
+                tile.Fringe3Set = Convert.ToInt32(row["Fringe3Tileset"].Value);
+                tile.F3AnimSet = Convert.ToInt32(row["Fringe3AnimTileset"].Value);
+                tile.Fringe4Set = Convert.ToInt32(row["Fringe4Tileset"].Value);
+                tile.F4AnimSet = Convert.ToInt32(row["Fringe4AnimTileset"].Value);
+                tile.Fringe5Set = Convert.ToInt32(row["Fringe5Tileset"].Value);
+                tile.F5AnimSet = Convert.ToInt32(row["Fringe5AnimTileset"].Value);
 
                 if (x < rawMap.Tile.GetLength(0) && y < rawMap.Tile.GetLength(1)) {
                     rawMap.Tile[x, y] = tile;
@@ -649,9 +677,12 @@ namespace DataManager.Maps
 
             // Save map tiles
             multiRowInsert.UpdateParameters("map_tiles", new string[] {"MapID", "X", "Y", "Ground", "GroundAnim", "Mask",
-                "MaskAnim", "Mask2", "Mask2Anim", "Fringe", "FringeAnim", "Fringe2", "Fringe2Anim", "Type", "Data1", "Data2", "Data3", "String1",
-                "String2", "String3", "Light", "GroundTileset", "GroundAnimTileset", "MaskTileset", "MaskAnimTileset",
-                "Mask2Tileset", "Mask2AnimTileset", "FringeTileset", "FringeAnimTileset", "Fringe2Tileset", "Fringe2AnimTileset" });
+                "MaskAnim", "Mask2", "Mask2Anim", "Mask3", "Mask3Anim", "Mask4", "Mask4Anim", "Mask5", "Mask5Anim",
+                "Fringe", "FringeAnim", "Fringe2", "Fringe2Anim", "Fringe3", "Fringe3Anim", "Fringe4", "Fringe4Anim", "Fringe5", "Fringe5Anim",
+                "Type", "Data1", "Data2", "Data3", "String1",
+                "String2", "String3", "Light", "GroundTileset", "GroundAnimTileset",
+                "MaskTileset", "MaskAnimTileset", "Mask2Tileset", "Mask2AnimTileset", "Mask3Tileset", "Mask3AnimTileset", "Mask4Tileset", "Mask4AnimTileset", "Mask5Tileset", "Mask5AnimTileset",
+                "FringeTileset", "FringeAnimTileset", "Fringe2Tileset", "Fringe2AnimTileset", "Fringe3Tileset", "Fringe3AnimTileset", "Fringe4Tileset", "Fringe4AnimTileset", "Fringe5Tileset", "Fringe5AnimTileset" });
 
             for (int x = 0; x <= rawMap.MaxX; x++) {
                 for (int y = 0; y <= rawMap.MaxY; y++) {
@@ -665,11 +696,14 @@ namespace DataManager.Maps
 
                     Tile tile = rawMap.Tile[x, y];
 
-                    multiRowInsert.AddColumnData(tile.Ground, tile.GroundAnim, tile.Mask, tile.Anim, tile.Mask2, tile.M2Anim,
-                        tile.Fringe, tile.FAnim, tile.Fringe2, tile.F2Anim, tile.Type, tile.Data1, tile.Data2, tile.Data3);
+                    multiRowInsert.AddColumnData(tile.Ground, tile.GroundAnim, 
+                        tile.Mask, tile.Anim, tile.Mask2, tile.M2Anim, tile.Mask3, tile.M3Anim, tile.Mask4, tile.M4Anim, tile.Mask5, tile.M5Anim,
+                        tile.Fringe, tile.FAnim, tile.Fringe2, tile.F2Anim, tile.Fringe3, tile.F3Anim, tile.Fringe4, tile.F4Anim, tile.Fringe5, tile.F5Anim,
+                        tile.Type, tile.Data1, tile.Data2, tile.Data3);
                     multiRowInsert.AddColumnData(tile.String1, tile.String2, tile.String3);
-                    multiRowInsert.AddColumnData(tile.RDungeonMapValue, tile.GroundSet, tile.GroundAnimSet, tile.MaskSet, tile.AnimSet,
-                        tile.Mask2Set, tile.M2AnimSet, tile.FringeSet, tile.FAnimSet, tile.Fringe2Set, tile.F2AnimSet);
+                    multiRowInsert.AddColumnData(tile.RDungeonMapValue, tile.GroundSet, tile.GroundAnimSet, 
+                        tile.MaskSet, tile.AnimSet, tile.Mask2Set, tile.M2AnimSet, tile.Mask3Set, tile.M3AnimSet, tile.Mask4Set, tile.M4AnimSet, tile.Mask5Set, tile.M5AnimSet,
+                        tile.FringeSet, tile.FAnimSet, tile.Fringe2Set, tile.F2AnimSet, tile.Fringe3Set, tile.F3AnimSet, tile.Fringe4Set, tile.F4AnimSet, tile.Fringe5Set, tile.F5AnimSet);
 
                     multiRowInsert.AddRowClosing();
                 }
