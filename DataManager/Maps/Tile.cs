@@ -26,149 +26,208 @@ namespace DataManager.Maps
     {
         #region Properties
 
-        public int Anim {
+        public int Anim
+        {
             get;
             set;
         }
 
-        public int AnimSet {
+        public int AnimSet
+        {
             get;
             set;
         }
 
-        public int Data1 {
+        public int Data1
+        {
             get;
             set;
         }
 
-        public int Data2 {
+        public int Data2
+        {
             get;
             set;
         }
 
-        public int Data3 {
+        public int Data3
+        {
             get;
             set;
         }
 
-        public bool DoorOpen {
+        public bool DoorOpen
+        {
             get;
             set;
         }
 
-        public int F2Anim {
+        public int F2Anim
+        {
             get;
             set;
         }
 
-        public int F2AnimSet {
+        public int F2AnimSet
+        {
             get;
             set;
         }
 
-        public int FAnim {
+        public int FAnim
+        {
             get;
             set;
         }
 
-        public int FAnimSet {
+        public int FAnimSet
+        {
             get;
             set;
         }
 
-        public int Fringe {
+        public int Fringe
+        {
             get;
             set;
         }
 
-        public int Fringe2 {
+        public int Fringe2
+        {
             get;
             set;
         }
 
-        public int Fringe2Set {
+        public int Fringe2Set
+        {
             get;
             set;
         }
 
-        public int FringeSet {
+        public int FringeSet
+        {
             get;
             set;
         }
 
-        public int Ground {
+        public int Ground
+        {
             get;
             set;
         }
 
-        public int GroundSet {
+        public int GroundSet
+        {
             get;
             set;
         }
 
-        public int GroundAnim {
+        public int GroundAnim
+        {
             get;
             set;
         }
 
-        public int GroundAnimSet {
+        public int GroundAnimSet
+        {
             get;
             set;
         }
-        public int RDungeonMapValue {
-            get;
-            set;
-        }
-
-        public int M2Anim {
-            get;
-            set;
-        }
-
-        public int M2AnimSet {
+        public int RDungeonMapValue
+        {
             get;
             set;
         }
 
-        public int Mask {
+        public int M2Anim
+        {
             get;
             set;
         }
 
-        public int Mask2 {
+        public int M2AnimSet
+        {
             get;
             set;
         }
 
-        public int Mask2Set {
+        public int Mask
+        {
             get;
             set;
         }
 
-        public int MaskSet {
+        public int Mask2
+        {
             get;
             set;
         }
 
-        public string String1 {
+        public int Mask2Set
+        {
             get;
             set;
         }
 
-        public string String2 {
+        public int MaskSet
+        {
             get;
             set;
         }
 
-        public string String3 {
+        public string String1
+        {
             get;
             set;
         }
 
-        public int Type {
+        public string String2
+        {
             get;
             set;
         }
+
+        public string String3
+        {
+            get;
+            set;
+        }
+
+        public int Type
+        {
+            get;
+            set;
+        }
+
+        public int Fringe3 { get; set; }
+        public int Fringe3Set { get; set; }
+        public int F3Anim { get; set; }
+        public int F3AnimSet { get; set; }
+
+        public int Fringe4 { get; set; }
+        public int Fringe4Set { get; set; }
+        public int F4Anim { get; set; }
+        public int F4AnimSet { get; set; }
+
+        public int Fringe5 { get; set; }
+        public int Fringe5Set { get; set; }
+        public int F5Anim { get; set; }
+        public int F5AnimSet { get; set; }
+
+        public int Mask3 { get; set; }
+        public int Mask3Set { get; set; }
+        public int M3Anim { get; set; }
+        public int M3AnimSet { get; set; }
+
+        public int Mask4 { get; set; }
+        public int Mask4Set { get; set; }
+        public int M4Anim { get; set; }
+        public int M4AnimSet { get; set; }
+
+        public int Mask5 { get; set; }
+        public int Mask5Set { get; set; }
+        public int M5Anim { get; set; }
+        public int M5AnimSet { get; set; }
 
         #endregion Properties
     }

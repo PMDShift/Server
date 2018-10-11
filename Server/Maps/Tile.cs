@@ -223,6 +223,150 @@ namespace Server.Maps
             set { tile.Type = (int)value; }
         }
 
+        public int F3Anim
+        {
+            get { return tile.F3Anim; }
+            set { tile.F3Anim = value; }
+        }
+
+        public int F3AnimSet
+        {
+            get { return tile.F3AnimSet; }
+            set { tile.F3AnimSet = value; }
+        }
+
+        public int Fringe3
+        {
+            get { return tile.Fringe3; }
+            set { tile.Fringe3 = value; }
+        }
+
+        public int Fringe3Set
+        {
+            get { return tile.Fringe3Set; }
+            set { tile.Fringe3Set = value; }
+        }
+
+        public int F4Anim
+        {
+            get { return tile.F4Anim; }
+            set { tile.F4Anim = value; }
+        }
+
+        public int F4AnimSet
+        {
+            get { return tile.F4AnimSet; }
+            set { tile.F4AnimSet = value; }
+        }
+
+        public int Fringe4
+        {
+            get { return tile.Fringe4; }
+            set { tile.Fringe4 = value; }
+        }
+
+        public int Fringe4Set
+        {
+            get { return tile.Fringe4Set; }
+            set { tile.Fringe4Set = value; }
+        }
+
+        public int F5Anim
+        {
+            get { return tile.F5Anim; }
+            set { tile.F5Anim = value; }
+        }
+
+        public int F5AnimSet
+        {
+            get { return tile.F5AnimSet; }
+            set { tile.F5AnimSet = value; }
+        }
+
+        public int Fringe5
+        {
+            get { return tile.Fringe5; }
+            set { tile.Fringe5 = value; }
+        }
+
+        public int Fringe5Set
+        {
+            get { return tile.Fringe5Set; }
+            set { tile.Fringe5Set = value; }
+        }
+
+        public int M3Anim
+        {
+            get { return tile.M3Anim; }
+            set { tile.M3Anim = value; }
+        }
+
+        public int M3AnimSet
+        {
+            get { return tile.F5AnimSet; }
+            set { tile.F5AnimSet = value; }
+        }
+
+        public int Mask3
+        {
+            get { return tile.Mask3; }
+            set { tile.Mask3 = value; }
+        }
+
+        public int Mask3Set
+        {
+            get { return tile.Mask3Set; }
+            set { tile.Mask3Set = value; }
+        }
+
+        public int M4Anim
+        {
+            get { return tile.M4Anim; }
+            set { tile.M4Anim = value; }
+        }
+
+        public int M4AnimSet
+        {
+            get { return tile.F5AnimSet; }
+            set { tile.F5AnimSet = value; }
+        }
+
+        public int Mask4
+        {
+            get { return tile.Mask4; }
+            set { tile.Mask4 = value; }
+        }
+
+        public int Mask4Set
+        {
+            get { return tile.Mask4Set; }
+            set { tile.Mask4Set = value; }
+        }
+
+        public int M5Anim
+        {
+            get { return tile.M5Anim; }
+            set { tile.M5Anim = value; }
+        }
+
+        public int M5AnimSet
+        {
+            get { return tile.F5AnimSet; }
+            set { tile.F5AnimSet = value; }
+        }
+
+        public int Mask5
+        {
+            get { return tile.Mask5; }
+            set { tile.Mask5 = value; }
+        }
+
+        public int Mask5Set
+        {
+            get { return tile.Mask5Set; }
+            set { tile.Mask5Set = value; }
+        }
+
         #endregion Properties
     }
 }

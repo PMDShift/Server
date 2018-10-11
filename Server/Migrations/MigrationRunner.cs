@@ -49,6 +49,7 @@ namespace Server.Migrations
                 .ConfigureRunner(rb => rb
                     // Add SQLite support to FluentMigrator
                     .AddMySql5()
+                    .WithGlobalCommandTimeout(TimeSpan.Zero)
                     // Set the connection string
                     .WithGlobalConnectionString(databaseConnection.Database.ConnectionString)
                     // Define the assembly containing the migrations
