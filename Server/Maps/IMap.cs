@@ -36,6 +36,7 @@ namespace Server.Maps
         int ZoneID { get; set; }
 
         string YouTubeMusicID { get; set; }
+        Enums.GameplayMode GameplayMode { get; set; }
 
         TickCount ActivationTime
         {

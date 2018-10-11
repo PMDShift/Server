@@ -11,8 +11,8 @@ namespace Server.Migrations
     {
         public override void Up()
         {
-            Create.Column("Mask3").OnTable("map_tiles").AsInt32().Nullable();
-            Create.Column("Mask3Anim").OnTable("map_tiles").AsInt32().Nullable();
+            Create.Column("Mask3").OnTable("map_tiles").AsInt32().WithDefaultValue(0);
+            Create.Column("Mask3Anim").OnTable("map_tiles").AsInt32().WithDefaultValue(0);
             Create.Column("Mask4").OnTable("map_tiles").AsInt32().WithDefaultValue(0);
             Create.Column("Mask4Anim").OnTable("map_tiles").AsInt32().WithDefaultValue(0);
             Create.Column("Mask5").OnTable("map_tiles").AsInt32().WithDefaultValue(0);

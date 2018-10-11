@@ -50,6 +50,12 @@ namespace Server.Maps
 
         #region Properties
 
+        public Enums.GameplayMode GameplayMode
+        {
+            get { return (Enums.GameplayMode)rawMap.GameplayMode; }
+            set { rawMap.GameplayMode = (int)value; }
+        }
+
         public bool IsSandboxed
         {
             get { return rawMap.IsSandboxed; }

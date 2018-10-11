@@ -639,6 +639,7 @@ namespace Server.Network
             }
 
             packet.AppendParameter(map.YouTubeMusicID);
+            packet.AppendParameter((int)map.GameplayMode);
 
             for (y = 0; y <= map.MaxY; y++)
             {
