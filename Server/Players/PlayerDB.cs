@@ -1573,6 +1573,7 @@ namespace Server.Players
             AvailableExpKitModules.Add(new AvailableExpKitModule(Enums.ExpKitModules.Chat, false));
             AvailableExpKitModules.Add(new AvailableExpKitModule(Enums.ExpKitModules.Counter, false));
             AvailableExpKitModules.Add(new AvailableExpKitModule(Enums.ExpKitModules.FriendsList, false));
+            AvailableExpKitModules.Add(new AvailableExpKitModule(Enums.ExpKitModules.Mentions, false));
 
             if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
             {

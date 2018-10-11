@@ -91,7 +91,8 @@ namespace Server {
             Counter,
             Party,
             FriendsList,
-            MapReport
+            MapReport,
+            Mentions
         }
 
         public enum MapMoral {
