@@ -87,7 +87,7 @@ namespace Server.RDungeons
                 "up, " +
                 "allow_recruit, " +
                 "allow_exp, " +
-                "time_limit, is_sandboxed, zone_id " +
+                "time_limit, is_sandboxed, zone_id, is_turn_based " +
                 "FROM rdungeon WHERE rdungeon.num = \'" + dungeonNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -108,6 +108,7 @@ namespace Server.RDungeons
                 dungeon.WindTimer = row["time_limit"].ValueString.ToInt();
                 dungeon.IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
                 dungeon.ZoneID = row["zone_id"].ValueString.ToInt();
+                dungeon.IsTurnBased = row["is_turn_based"].ValueString.ToBool();
             }
 
             query = "SELECT floor_num, " +
@@ -785,7 +786,7 @@ namespace Server.RDungeons
         public static void SaveRDungeon(int dungeonNum)
         {
             if (rdungeons.RDungeons.ContainsKey(dungeonNum) == false)
-                rdungeons.RDungeons.Add(dungeonNum, new RDungeon(dungeonNum));
+                rdungeons.RDungeons.Add(dungeonNum, new RDungeon(dungeonNum) { IsSandboxed = true });
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))
             {
                 var database = dbConnection.Database;
@@ -807,7 +808,8 @@ namespace Server.RDungeons
                     database.CreateColumn(false, "allow_exp", rdungeons[dungeonNum].Exp.ToIntString()),
                     database.CreateColumn(false, "time_limit", rdungeons[dungeonNum].WindTimer.ToString()),
                     database.CreateColumn(false, "is_sandboxed", rdungeons[dungeonNum].IsSandboxed.ToIntString()),
-                    database.CreateColumn(false, "zone_id", rdungeons[dungeonNum].ZoneID.ToString())
+                    database.CreateColumn(false, "zone_id", rdungeons[dungeonNum].ZoneID.ToString()),
+                    database.CreateColumn(false, "is_turn_based", rdungeons[dungeonNum].IsTurnBased.ToIntString())
                 });
 
                 for (int i = 0; i < rdungeons[dungeonNum].Floors.Count; i++)

@@ -3034,7 +3034,7 @@ namespace Server.Network
             packet.AppendParameter(dungeonIndex.ToString());
             if (dungeon == null)
                 dungeon = new RDungeon(dungeonIndex);
-            packet.AppendParameters(dungeon.DungeonName, ((int)dungeon.Direction).ToString(), dungeon.Floors.Count.ToString(), dungeon.Recruitment.ToIntString(), dungeon.Exp.ToIntString(), dungeon.WindTimer.ToString(), dungeon.DungeonIndex.ToString());
+            packet.AppendParameters(dungeon.DungeonName, ((int)dungeon.Direction).ToString(), dungeon.Floors.Count.ToString(), dungeon.Recruitment.ToIntString(), dungeon.Exp.ToIntString(), dungeon.WindTimer.ToString(), dungeon.DungeonIndex.ToString(), dungeon.IsTurnBased.ToIntString());
             for (int i = 0; i < dungeon.Floors.Count; i++)
             {
                 //Generator Options

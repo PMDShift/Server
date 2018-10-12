@@ -87,7 +87,13 @@ namespace Server.RDungeons
             map.MaxNpcs = floor.NpcMax;
             map.NpcSpawnTime = floor.NpcSpawnTime;
 
-
+            if (dungeon.IsTurnBased)
+            {
+                map.GameplayMode = Enums.GameplayMode.TurnBased;
+            } else
+            {
+                map.GameplayMode = Enums.GameplayMode.RealTime;
+            }
 
             if (Globals.ServerWeather != Enums.Weather.Ambiguous)
             {

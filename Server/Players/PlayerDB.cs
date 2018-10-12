@@ -2342,6 +2342,11 @@ namespace Server.Players
 
         public bool CanViewZone(int zoneID)
         {
+            if (Access == Enums.Rank.Scripter)
+            {
+                return true;
+            }
+
             if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
             {
                 return false;
@@ -2359,6 +2364,11 @@ namespace Server.Players
 
         public bool CanEditZone(int zoneID)
         {
+            if (Access == Enums.Rank.Scripter)
+            {
+                return true;
+            }
+
             if (zoneID < 0 || zoneID > Zones.ZoneManager.Zones.Count)
             {
                 return false;
