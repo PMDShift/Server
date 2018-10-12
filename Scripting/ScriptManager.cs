@@ -210,7 +210,11 @@ namespace Server.Scripting
             }
 
             if (compilationResult.Success) {
-                return System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                var tempFile = Path.GetTempFileName();
+                File.Copy(path, tempFile, true);
+                File.Delete(path);
+
+                return System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(tempFile);
             } else {
                 return null;
             }
