@@ -32,6 +32,8 @@ namespace Server.Maps
             get { return Enums.MapType.Void; }
         }
 
+        public TurnManager TurnManager => new TurnManager(this);
+
         public int Down
         {
             get { return 0; }

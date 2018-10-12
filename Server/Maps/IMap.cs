@@ -32,6 +32,8 @@ namespace Server.Maps
             get;
         }
 
+        TurnManager TurnManager { get; }
+
         bool IsSandboxed { get; set; }
         int ZoneID { get; set; }
 

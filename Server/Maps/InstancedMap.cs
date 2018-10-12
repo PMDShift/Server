@@ -31,6 +31,8 @@ namespace Server.Maps
 
         Object lockObject = new object();
 
+        public TurnManager TurnManager => new TurnManager(this);
+
         #region Constructors
 
         public InstancedMap(DataManager.Maps.InstancedMap baseMap)

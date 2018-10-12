@@ -637,6 +637,15 @@ namespace Server.Network
                 }
             }
 
+            if (map.GameplayMode == Enums.GameplayMode.TurnBased)
+            {
+                if (client.ClientEdition != Constants.ALTERNATE_CLIENT_EDITION)
+                {
+                    Messenger.PlayerMsg(client, "You can't enter this map with your client (turn-based gameplay not supported).", Text.BrightRed);
+                    return;
+                }
+            }
+
             if (client.Player.LoggedIn && map.MapType == Enums.MapType.Void)
             {
                 Maps.Void @void = map as Maps.Void;
@@ -3406,6 +3415,11 @@ namespace Server.Network
         public static void FadeOutMusic(Client client, int milliseconds)
         {
             Messenger.SendDataTo(client, TcpPacket.CreatePacket("fademusic", milliseconds.ToString()));
+        }
+
+        public static void SendTurnCompleteToMap(IMap map)
+        {
+            Messenger.SendDataToMap(map.MapID, TcpPacket.CreatePacket("turncomplete"));
         }
 
         public static void SendMapLatestPropertiesTo(Client client)

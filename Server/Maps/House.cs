@@ -29,6 +29,8 @@ namespace Server.Maps
 
         Object lockObject = new object();
 
+        public TurnManager TurnManager => new TurnManager(this);
+
         public int Room
         {
             get { return baseMap.Room; }

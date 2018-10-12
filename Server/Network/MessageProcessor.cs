@@ -40,6 +40,7 @@ using PMDCP.Sockets;
 using Server.Tournaments;
 using Server.Database;
 using System.IO;
+using Server.Players.Turns;
 
 namespace Server.Network
 {
@@ -152,6 +153,7 @@ namespace Server.Network
                                     {
                                         client.SetMacAddress(parse[11]);
                                         client.SetBiosIdentification(parse[12]);
+                                        client.SetClientEdition(parse[10]);
                                         // Check if they aren't banned
                                         if (Bans.IsIPBanned(dbConnection, client) == Enums.BanType.Ban || Bans.IsMacBanned(dbConnection, client) == Enums.BanType.Ban)
                                         {
@@ -460,6 +462,10 @@ namespace Server.Network
                             {
                                 return;
                             }
+                            if (client.Player.Map.GameplayMode == Enums.GameplayMode.TurnBased)
+                            {
+                                return;
+                            }
                             int dir = parse[1].ToInt();
                             int speed = parse[2].ToInt();
 
@@ -472,7 +478,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)speed, false);
+                            MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)speed, false, false);
                         }
                         break;
                     case "critmove":
@@ -481,6 +487,10 @@ namespace Server.Network
                             {
                                 return;
                             }
+                            if (client.Player.Map.GameplayMode == Enums.GameplayMode.TurnBased)
+                            {
+                                return;
+                            }
                             int dir = parse[1].ToInt();
                             int speed = parse[2].ToInt();
 
@@ -493,7 +503,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)speed, true);
+                            MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)speed, true, false);
                         }
                         break;
                     case "playerdir":
@@ -527,7 +537,7 @@ namespace Server.Network
 
                             if (MovementProcessor.WillWalkOnWarp(client, (Enums.Direction)dir))
                             {
-                                MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)1, true);
+                                MovementProcessor.ProcessMovement(client, (Enums.Direction)dir, (Enums.Speed)1, true, false);
                             }
                             else
                             {
@@ -674,6 +684,35 @@ namespace Server.Network
                         {
                             if (client.Player.GettingMap) return;
                             client.Player.GetActiveRecruit().UseMove(parse[1].ToInt(-1));
+                        }
+                        break;
+                    #endregion
+                    #region Turn-Based Gameplay
+                    case "stepscommitment":
+                        {
+                            if (client.Player.Map.GameplayMode != Enums.GameplayMode.TurnBased)
+                            {
+                                return;
+                            }
+
+                            var path = new List<Enums.Direction>();
+
+                            var count = parse[1].ToInt();
+                            var n = 2;
+                            for (var i = 0; i < count; i++)
+                            {
+                                var direction = (Enums.Direction)parse[n].ToInt();
+
+                                path.Add(direction);
+
+                                n += 1;
+                            }
+
+                            var commitment = new StepsCommitment(path);
+
+                            client.Player.CommitmentState.QueueCommitment(commitment);
+
+                            client.Player.Map.TurnManager.CheckTurns();
                         }
                         break;
                     #endregion

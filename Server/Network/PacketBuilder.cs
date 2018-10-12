@@ -1322,9 +1322,15 @@ namespace Server.Network
             //hitlist.AddPacketToOthers(client.Player.GetActiveRecruit(), client.Player.Map, CreatePlayerConfusion(client), Enums.OutdateType.Condition);
         }
 
-        public static void AppendPlayerMove(Client client, PacketHitList hitlist, Enums.Direction direction, Enums.Speed speed)
+        public static void AppendPlayerMove(Client client, PacketHitList hitlist, Enums.Direction direction, Enums.Speed speed, bool includeSelf)
         {
-            hitlist.AddPacketToOthers(client.Player.GetActiveRecruit(), client.Player.Map, CreatePlayerMovePacket(client, direction, speed), Enums.OutdateType.Location);
+            var packet = CreatePlayerMovePacket(client, direction, speed);
+            hitlist.AddPacketToOthers(client.Player.GetActiveRecruit(), client.Player.Map, packet, Enums.OutdateType.Location);
+
+            if (includeSelf)
+            {
+                hitlist.AddPacket(client, packet);
+            }
         }
 
 

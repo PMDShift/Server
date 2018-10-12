@@ -26,6 +26,7 @@ namespace Server.Maps
         internal DataManager.Maps.Map baseMap;
         Object lockObject = new object();
 
+        public TurnManager TurnManager => new TurnManager(this);
 
         #region Constructors
 
