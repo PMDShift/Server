@@ -32,6 +32,7 @@ namespace Server.RDungeons
         public int DungeonIndex { get; set; }
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
+        public bool IsTurnBased { get; set; }
 
         public List<RDungeonFloor> Floors { get; set; }
 

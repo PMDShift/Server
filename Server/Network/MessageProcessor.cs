@@ -2209,7 +2209,8 @@ namespace Server.Network
                             RDungeonManager.RDungeons[z].Exp = parse[6].ToBool();
                             RDungeonManager.RDungeons[z].WindTimer = parse[7].ToInt();
                             RDungeonManager.RDungeons[z].DungeonIndex = parse[8].ToInt();
-                            int n = 9;
+                            RDungeonManager.RDungeons[z].IsTurnBased = parse[9].ToBool();
+                            int n = 10;
                             RDungeonManager.RDungeons[z].Floors.Clear();
                             for (int i = 0; i < maxFloors; i++)
                             {
