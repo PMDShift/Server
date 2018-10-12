@@ -32,6 +32,7 @@ using Server.Tournaments;
 using Server.Statistics;
 using System.Threading;
 using Server.Database;
+using Server.Players.Turns;
 
 namespace Server.Players
 {
@@ -86,6 +87,8 @@ namespace Server.Players
         #endregion Fields
 
         #region Properties
+
+        public CommitmentState CommitmentState { get; }
 
         public ulong PendingDiscordId { get; set; }
 
@@ -896,6 +899,8 @@ namespace Server.Players
         public Player(Client client)
         {
             this.client = client;
+
+            this.CommitmentState = new CommitmentState();
 
             dataLock = new ReaderWriterLockSlim();
             storyPlaybackCache = new StoryPlaybackCache();

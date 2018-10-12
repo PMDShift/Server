@@ -175,7 +175,7 @@ namespace Server.AI
             return false;
         }
 
-        internal static void ProcessMovement(Client client, Enums.Direction direction, Enums.Speed speed, bool critical)
+        internal static bool ProcessMovement(Client client, Enums.Direction direction, Enums.Speed speed, bool critical, bool includeSelf)
         {
             PacketHitList hitlist = null;
             PacketHitList.MethodStart(ref hitlist);
@@ -194,7 +194,7 @@ namespace Server.AI
                 if (!NetworkManager.IsPlaying(client))
                 {
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (Ranks.IsDisallowed(client, Enums.Rank.Monitor) || client.Player.ProtectionOff)
@@ -215,7 +215,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (player.LoadingStory)
@@ -226,7 +226,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (player.Dead)
@@ -237,7 +237,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (player.GetActiveRecruit().StatusAilment == Enums.StatusAilment.Freeze || player.GetActiveRecruit().StatusAilment == Enums.StatusAilment.Sleep)
@@ -248,7 +248,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 player.Direction = direction;
@@ -270,7 +270,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (player.Map.Tile[player.X, player.Y].Type == Enums.TileType.Slow && (Enums.Speed)player.Map.Tile[player.X, player.Y].Data2 > speed)
@@ -286,7 +286,7 @@ namespace Server.AI
                             }
                             PacketBuilder.AppendOwnXY(client, hitlist);
                             PacketHitList.MethodEnded(ref hitlist);
-                            return;
+                            return false;
                         }
                         mobilityList /= 2;
                     }
@@ -309,7 +309,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
                 if (player.Y > map.MaxY)
                 {
@@ -320,7 +320,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
                 if (player.X < 0)
                 {
@@ -331,7 +331,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
                 if (player.Y < 0)
                 {
@@ -342,7 +342,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendOwnXY(client, hitlist);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
                 #endregion
 
@@ -358,14 +358,14 @@ namespace Server.AI
                                 if (map.Tile[player.X, player.Y - 1].Type != Enums.TileType.Key && map.Tile[player.X, player.Y - 1].Type != Enums.TileType.Door)
                                 {
                                     player.Y -= 1;
-                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 }
                                 else
                                 {
                                     if (map.Tile[player.X, player.Y - 1].DoorOpen == true)
                                     {
                                         player.Y -= 1;
-                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                     }
                                     else
                                     {
@@ -375,7 +375,7 @@ namespace Server.AI
                                         }
                                         PacketBuilder.AppendOwnXY(client, hitlist);
                                         PacketHitList.MethodEnded(ref hitlist);
-                                        return;
+                                        return false;
                                     }
                                 }
                             }
@@ -387,7 +387,7 @@ namespace Server.AI
                                 }
                                 PacketBuilder.AppendOwnXY(client, hitlist);
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         else
@@ -395,13 +395,13 @@ namespace Server.AI
                             if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Up))
                             {
                                 SeamlessWorldHelper.SwitchSeamlessMaps(client, map.Up, player.X, Constants.MAX_MAP_Y);
-                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 if (critical)
                                 {
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                             else if (map.Up > 0)
                             {
@@ -411,7 +411,7 @@ namespace Server.AI
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         break;
@@ -423,14 +423,14 @@ namespace Server.AI
                                 if (map.Tile[player.X, player.Y + 1].Type != Enums.TileType.Key && map.Tile[player.X, player.Y + 1].Type != Enums.TileType.Door)
                                 {
                                     player.Y += 1;
-                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 }
                                 else
                                 {
                                     if (map.Tile[player.X, player.Y + 1].DoorOpen == true)
                                     {
                                         player.Y += 1;
-                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                     }
                                     else
                                     {
@@ -440,7 +440,7 @@ namespace Server.AI
                                         }
                                         PacketBuilder.AppendOwnXY(client, hitlist);
                                         PacketHitList.MethodEnded(ref hitlist);
-                                        return;
+                                        return false;
                                     }
                                 }
                             }
@@ -452,7 +452,7 @@ namespace Server.AI
                                 }
                                 PacketBuilder.AppendOwnXY(client, hitlist);
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         else
@@ -460,13 +460,13 @@ namespace Server.AI
                             if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Down))
                             {
                                 SeamlessWorldHelper.SwitchSeamlessMaps(client, map.Down, player.X, 0);
-                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 if (critical)
                                 {
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                             else if (map.Down > 0)
                             {
@@ -476,7 +476,7 @@ namespace Server.AI
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         break;
@@ -488,14 +488,14 @@ namespace Server.AI
                                 if (map.Tile[player.X - 1, player.Y].Type != Enums.TileType.Key && map.Tile[player.X - 1, player.Y].Type != Enums.TileType.Door)
                                 {
                                     player.X -= 1;
-                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 }
                                 else
                                 {
                                     if (map.Tile[player.X - 1, player.Y].DoorOpen == true)
                                     {
                                         player.X -= 1;
-                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                     }
                                     else
                                     {
@@ -505,7 +505,7 @@ namespace Server.AI
                                         }
                                         PacketBuilder.AppendOwnXY(client, hitlist);
                                         PacketHitList.MethodEnded(ref hitlist);
-                                        return;
+                                        return false;
                                     }
                                 }
                             }
@@ -517,7 +517,7 @@ namespace Server.AI
                                 }
                                 PacketBuilder.AppendOwnXY(client, hitlist);
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         else
@@ -525,13 +525,13 @@ namespace Server.AI
                             if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Left))
                             {
                                 SeamlessWorldHelper.SwitchSeamlessMaps(client, map.Left, Constants.MAX_MAP_X, player.Y);
-                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 if (critical)
                                 {
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                             else if (map.Left > 0)
                             {
@@ -541,7 +541,7 @@ namespace Server.AI
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         break;
@@ -553,14 +553,14 @@ namespace Server.AI
                                 if (map.Tile[player.X + 1, player.Y].Type != Enums.TileType.Key && map.Tile[player.X + 1, player.Y].Type != Enums.TileType.Door)
                                 {
                                     player.X += 1;
-                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                    PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 }
                                 else
                                 {
                                     if (map.Tile[player.X + 1, player.Y].DoorOpen == true)
                                     {
                                         player.X += 1;
-                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                        PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                     }
                                     else
                                     {
@@ -570,7 +570,7 @@ namespace Server.AI
                                         }
                                         PacketBuilder.AppendOwnXY(client, hitlist);
                                         PacketHitList.MethodEnded(ref hitlist);
-                                        return;
+                                        return false;
                                     }
                                 }
                             }
@@ -582,7 +582,7 @@ namespace Server.AI
                                 }
                                 PacketBuilder.AppendOwnXY(client, hitlist);
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         else
@@ -590,13 +590,13 @@ namespace Server.AI
                             if (SeamlessWorldHelper.IsMapSeamless(map, Enums.MapID.Right))
                             {
                                 SeamlessWorldHelper.SwitchSeamlessMaps(client, map.Right, 0, player.Y);
-                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed);
+                                PacketBuilder.AppendPlayerMove(client, hitlist, direction, speed, includeSelf);
                                 if (critical)
                                 {
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                             else if (map.Right > 0)
                             {
@@ -606,7 +606,7 @@ namespace Server.AI
                                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                                 }
                                 PacketHitList.MethodEnded(ref hitlist);
-                                return;
+                                return false;
                             }
                         }
                         break;
@@ -694,7 +694,7 @@ namespace Server.AI
                     //    hitlist.AddPacket(client, PacketBuilder.CreateBattleMsg("Outlaws can't use healing tiles!", Text.BrightRed));
                     //}
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 //Check for kill tile, and if so kill them
@@ -707,7 +707,7 @@ namespace Server.AI
 
                     player.SetHP(player.GetMaxHP());
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 //check for doors
@@ -812,7 +812,7 @@ namespace Server.AI
                         Messenger.PlayerWarp(client, mapNum, X, Y);
                     }
 
-                    return;
+                    return false;
                 }
 
                 // Check for key trigger open
@@ -837,7 +837,7 @@ namespace Server.AI
                         }
                         hitlist.AddPacketToMap(map, PacketBuilder.CreateSoundPacket("key.wav"));
                         PacketHitList.MethodEnded(ref hitlist);
-                        return;
+                        return false;
                     }
                 }
 
@@ -854,7 +854,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check for guild shop
@@ -880,7 +880,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check for Link Shop
@@ -903,7 +903,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check if player stepped on sprite changing tile
@@ -914,7 +914,7 @@ namespace Server.AI
                         hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You already have this sprite!", Text.BrightRed));
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                         PacketHitList.MethodEnded(ref hitlist);
-                        return;
+                        return false;
                     }
                     else
                     {
@@ -937,7 +937,7 @@ namespace Server.AI
                     }
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check if player stepped on notice tile
@@ -957,7 +957,7 @@ namespace Server.AI
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     }
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check if player stepped on sound tile
@@ -969,7 +969,7 @@ namespace Server.AI
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     }
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 //Check if player stepped on a scripted tile
@@ -978,7 +978,7 @@ namespace Server.AI
                     Scripting.ScriptManager.InvokeSub("ScriptedTile", map, client.Player.GetActiveRecruit(), map.Tile[player.X, player.Y].Data1, map.Tile[player.X, player.Y].String1, map.Tile[player.X, player.Y].String2, map.Tile[player.X, player.Y].String3, hitlist);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 // Check if player stepped on Bank tile
@@ -987,7 +987,7 @@ namespace Server.AI
                     Messenger.OpenBank(client);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.Assembly)
@@ -996,14 +996,14 @@ namespace Server.AI
                     Messenger.OpenAssembly(client);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.Evolution)
                 {
                     EvolutionManager.StartEvolution(player);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.Story)
@@ -1011,7 +1011,7 @@ namespace Server.AI
                     StoryManager.PlayStory(client, map.Tile[player.X, player.Y].Data1);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.MissionBoard)
@@ -1019,7 +1019,7 @@ namespace Server.AI
                     Messenger.OpenMissionBoard(client);
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
-                    return;
+                    return false;
                 }
 
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.RDungeonGoal)
@@ -1058,7 +1058,7 @@ namespace Server.AI
                         }
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                         PacketHitList.MethodEnded(ref hitlist);
-                        return;
+                        return false;
                     }
                     else
                     {
@@ -1113,14 +1113,14 @@ namespace Server.AI
                             }
                             PacketBuilder.AppendPlayerLock(client, hitlist, false);
                             PacketHitList.MethodEnded(ref hitlist);
-                            return;
+                            return false;
                         }
                         else
                         {
                             hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("All surviving players on the floor must be on the goal in order to continue.", Text.WhiteSmoke));
                             PacketBuilder.AppendPlayerLock(client, hitlist, false);
                             PacketHitList.MethodEnded(ref hitlist);
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -1289,6 +1289,8 @@ namespace Server.AI
                 Exceptions.ErrorLogger.WriteToErrorLog(ex, "Player movement processing, Index: " + client.Player.CharID + " Direction: " + direction.ToString() + " Speed: " + speed.ToString() + " Map: " + client.Player.MapID + " X: " + client.Player.X.ToString() + " Y: " + client.Player.Y.ToString());
             }
             PacketHitList.MethodEnded(ref hitlist);
+
+            return true;
         }
 
 

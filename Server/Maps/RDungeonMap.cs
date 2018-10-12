@@ -29,6 +29,8 @@ namespace Server.Maps
 
         public const string ID_PREFIX = "rd";
 
+        public TurnManager TurnManager => new TurnManager(this);
+
         public RDungeonMap(DataManager.Maps.RDungeonMap baseMap)
             : base(baseMap)
         {

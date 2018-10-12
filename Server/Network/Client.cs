@@ -114,6 +114,8 @@ namespace Server.Network
             get { return biosId; }
         }
 
+        public string ClientEdition { get; private set; }
+
         #endregion Properties
 
         public void InitializeClientSystem()
@@ -305,6 +307,11 @@ namespace Server.Network
         internal void SetBiosIdentification(string biosId)
         {
             this.biosId = biosId;
+        }
+
+        internal void SetClientEdition(string clientEdition)
+        {
+            this.ClientEdition = clientEdition;
         }
     }
 }
