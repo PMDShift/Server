@@ -2635,7 +2635,7 @@ namespace Server.Network
                             Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                             return;
                         }
-                        if (!client.Player.CanViewZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                        if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
                         {
                             Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                             return;
@@ -2943,6 +2943,16 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
+                                return;
+                            }
 
                             int x = parse[1].ToInt();
                             int y = parse[2].ToInt();
@@ -2989,6 +2999,16 @@ namespace Server.Network
                             if (client.Player.Map.MapType != Enums.MapType.Standard && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                                 return;
                             }
 
@@ -3045,6 +3065,16 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
+                                return;
+                            }
 
                             int layer = parse[1].ToInt();
                             int set = parse[2].ToInt();
@@ -3089,6 +3119,16 @@ namespace Server.Network
                             if (client.Player.Map.MapType != Enums.MapType.Standard && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+                            if (!client.Player.CanEditZone(client.Player.Map.ZoneID) && client.Player.Map.MapType != Enums.MapType.House)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this map (not assigned).", Text.BrightRed);
                                 return;
                             }
 
