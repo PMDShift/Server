@@ -303,8 +303,8 @@ namespace Server.Maps
 
         public int M3AnimSet
         {
-            get { return tile.F5AnimSet; }
-            set { tile.F5AnimSet = value; }
+            get { return tile.M3AnimSet; }
+            set { tile.M3AnimSet = value; }
         }
 
         public int Mask3
@@ -327,8 +327,8 @@ namespace Server.Maps
 
         public int M4AnimSet
         {
-            get { return tile.F5AnimSet; }
-            set { tile.F5AnimSet = value; }
+            get { return tile.M4AnimSet; }
+            set { tile.M4AnimSet = value; }
         }
 
         public int Mask4
@@ -351,8 +351,8 @@ namespace Server.Maps
 
         public int M5AnimSet
         {
-            get { return tile.F5AnimSet; }
-            set { tile.F5AnimSet = value; }
+            get { return tile.M5AnimSet; }
+            set { tile.M5AnimSet = value; }
         }
 
         public int Mask5
