@@ -2241,8 +2241,9 @@ namespace Server.Network
                                 RDungeonManager.RDungeons[z].Floors[i].GoalX = parse[n + 23].ToInt();
                                 RDungeonManager.RDungeons[z].Floors[i].GoalY = parse[n + 24].ToInt();
                                 RDungeonManager.RDungeons[z].Floors[i].Music = parse[n + 25];
+                                RDungeonManager.RDungeons[z].Floors[i].YouTubeVideoId = parse[n + 26];
 
-                                n += 26;
+                                n += 27;
 
                                 RDungeonManager.RDungeons[z].Floors[i].StairsX = parse[n].ToInt();
                                 RDungeonManager.RDungeons[z].Floors[i].StairsSheet = parse[n + 1].ToInt();

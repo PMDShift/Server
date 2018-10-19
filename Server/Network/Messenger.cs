@@ -3050,7 +3050,7 @@ namespace Server.Network
                                         dungeon.Floors[i].Options.CraterFuzzy.ToIntString(),
                                         dungeon.Floors[i].Options.MinChambers.ToString(), dungeon.Floors[i].Options.MaxChambers.ToString());
                 packet.AppendParameters(dungeon.Floors[i].Darkness, (int)dungeon.Floors[i].GoalType, dungeon.Floors[i].GoalMap, dungeon.Floors[i].GoalX, dungeon.Floors[i].GoalY);
-                packet.AppendParameter(dungeon.Floors[i].Music);
+                packet.AppendParameters(dungeon.Floors[i].Music, dungeon.Floors[i].YouTubeVideoId);
                 //Terrain
                 packet.AppendParameters(dungeon.Floors[i].StairsX.ToString(), dungeon.Floors[i].StairsSheet.ToString(),
                                         dungeon.Floors[i].mGroundX.ToString(), dungeon.Floors[i].mGroundSheet.ToString(),
