@@ -344,7 +344,8 @@ namespace Server.RDungeons
                 "goal_x, " +
                 "goal_y, " +
                 "darkness, " +
-                "music " +
+                "music, " +
+                "youtube_video_id " +
                 "FROM rdungeon_floor WHERE rdungeon_floor.num = \'" + dungeonNum + "\'";
 
             List<DataColumnCollection> columnCollections = database.RetrieveRows(query);
@@ -601,6 +602,8 @@ namespace Server.RDungeons
                 floor.GoalY = columnCollection["goal_y"].ValueString.ToInt();
                 floor.Darkness = columnCollection["darkness"].ValueString.ToInt();
                 floor.Music = columnCollection["music"].ValueString;
+                floor.YouTubeVideoId = columnCollection["youtube_video_id"].ValueString;
+
 
                 string query2 = "SELECT item_index, " +
                     "item_num, " +
@@ -1060,7 +1063,8 @@ namespace Server.RDungeons
                     database.CreateColumn(false, "goal_x", rdungeons[dungeonNum].Floors[i].GoalX.ToString()),
                     database.CreateColumn(false, "goal_y", rdungeons[dungeonNum].Floors[i].GoalY.ToString()),
                     database.CreateColumn(false, "darkness", rdungeons[dungeonNum].Floors[i].Darkness.ToString()),
-                    database.CreateColumn(false, "music", rdungeons[dungeonNum].Floors[i].Music)
+                    database.CreateColumn(false, "music", rdungeons[dungeonNum].Floors[i].Music),
+                    database.CreateColumn(false, "youtube_video_id", rdungeons[dungeonNum].Floors[i].YouTubeVideoId)
                 });
 
                     for (int j = 0; j < rdungeons[dungeonNum].Floors[i].Items.Count; j++)

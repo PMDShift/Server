@@ -86,6 +86,7 @@ namespace Server.RDungeons
             map.MinNpcs = floor.NpcMin;
             map.MaxNpcs = floor.NpcMax;
             map.NpcSpawnTime = floor.NpcSpawnTime;
+            map.YouTubeMusicID = floor.YouTubeVideoId;
 
             if (dungeon.IsTurnBased)
             {
