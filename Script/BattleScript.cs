@@ -7447,14 +7447,14 @@ namespace Script {
                             }
                             break;
                         */
-                        case 304: {//registeel
-                                map.RemoveNpc(npc.MapSlot);
-                                if (map.IsNpcSlotEmpty(5)) {
-                                    BossBattles.EndRegisteelBattle(client);
-                                }
-                            }
-                            break;/*
-                        case 305: {//bronzong
+                        //case 304: {//registeel
+                        //        map.RemoveNpc(npc.MapSlot);
+                        //        if (map.IsNpcSlotEmpty(5)) {
+                        //            BossBattles.EndRegisteelBattle(client);
+                        //        }
+                        //    }
+                        //    break;
+                        /*case 305: {//bronzong
                                 map.RemoveNpc(npc.MapSlot);
                                 if (map.IsNpcSlotEmpty(1) && map.IsNpcSlotEmpty(2) && (npc.MapSlot == 1 || npc.MapSlot == 2)) {
                                     if (client.Player.GetStoryState(43) == true) {
@@ -7469,49 +7469,49 @@ namespace Script {
                                 }
                             }
                             break;*/
-                        case 220: {//Murkrow minions 2.0
-                                if (map.IsNpcSlotEmpty(14)) {
-                                    map.RemoveNpc(npc.MapSlot);
-                                }
+                        //case 220: {//Murkrow minions 2.0
+                        //        if (map.IsNpcSlotEmpty(14)) {
+                        //            map.RemoveNpc(npc.MapSlot);
+                        //        }
 
-                                for (int i = 1; i < 14; i++) {
-                                    if (map.IsNpcSlotEmpty(i) == false) {
-                                        return;
-                                    }
-                                }
-                                StoryManager.PlayStory(client, 160);
-                            }
-                            break;
-                        case 221: {//Honchkrow
-                                map.RemoveNpc(npc.MapSlot);
-                                for (int i = 1; i < 14; i++) {
-                                    if (map.IsNpcSlotEmpty(i) == false) {
-                                        map.RemoveNpc(i);
-                                    }
-                                }
-                                StoryManager.PlayStory(client, 161);
-                            }
-                            break;
-                        case 224: {//Murkrow minions
-                                map.RemoveNpc(npc.MapSlot);
-                                for (int i = 1; i < 14; i++) {
-                                    if (map.IsNpcSlotEmpty(i) == false) {
-                                        return;
-                                    }
-                                }
-                                StoryManager.PlayStory(client, 160);
-                            }
-                            break;
-                        case 259:
-                        case 306: {
-                                if (map.Name == "Iceberg Cave") {
-                                    map.RemoveNpc(npc.MapSlot);
-                                    if (map.IsNpcSlotEmpty(1) && map.IsNpcSlotEmpty(2) && map.IsNpcSlotEmpty(3)) {
-                                        BossBattles.EndRegiceBattle(client);
-                                    }
-                                }
-                            }
-                            break;
+                        //        for (int i = 1; i < 14; i++) {
+                        //            if (map.IsNpcSlotEmpty(i) == false) {
+                        //                return;
+                        //            }
+                        //        }
+                        //        StoryManager.PlayStory(client, 160);
+                        //    }
+                        //    break;
+                        //case 221: {//Honchkrow
+                        //        map.RemoveNpc(npc.MapSlot);
+                        //        for (int i = 1; i < 14; i++) {
+                        //            if (map.IsNpcSlotEmpty(i) == false) {
+                        //                map.RemoveNpc(i);
+                        //            }
+                        //        }
+                        //        StoryManager.PlayStory(client, 161);
+                        //    }
+                        //    break;
+                        //case 224: {//Murkrow minions
+                        //        map.RemoveNpc(npc.MapSlot);
+                        //        for (int i = 1; i < 14; i++) {
+                        //            if (map.IsNpcSlotEmpty(i) == false) {
+                        //                return;
+                        //            }
+                        //        }
+                        //        StoryManager.PlayStory(client, 160);
+                        //    }
+                        //    break;
+                        //case 259:
+                        //case 306: {
+                        //        if (map.Name == "Iceberg Cave") {
+                        //            map.RemoveNpc(npc.MapSlot);
+                        //            if (map.IsNpcSlotEmpty(1) && map.IsNpcSlotEmpty(2) && map.IsNpcSlotEmpty(3)) {
+                        //                BossBattles.EndRegiceBattle(client);
+                        //            }
+                        //        }
+                        //    }
+                        //    break;
                         //case 177: {
                         //    map.RemoveNpc(npc.MapSlot);
                         //    if (map.IsNpcSlotEmpty(1) && map.IsNpcSlotEmpty(2) && map.IsNpcSlotEmpty(3) && map.IsNpcSlotEmpty(4) &&
@@ -7583,13 +7583,13 @@ namespace Script {
                         //        Messenger.PlayerMsg(client, "The exit was opened!", Text.Yellow);
                         //    }
                         //    break;
-                        case 805: {//spiritomb defeated
-                                map.RemoveNpc(npc.MapSlot);
-                                map.SetAttribute(9, 2, Enums.TileType.Scripted, 36, 0, 0, "21", "30", "");
-                                map.SetTile(9, 2, 96, 4, 1);
-                                StoryManager.PlayStory(client, 303);
-                            }
-                            break;
+                        //case 805: {//spiritomb defeated
+                        //        map.RemoveNpc(npc.MapSlot);
+                        //        map.SetAttribute(9, 2, Enums.TileType.Scripted, 36, 0, 0, "21", "30", "");
+                        //        map.SetTile(9, 2, 96, 4, 1);
+                        //        StoryManager.PlayStory(client, 303);
+                        //    }
+                        //    break;
                             /*
                         case 440: {//Articuno*
                                 map.RemoveNpc(1);
@@ -7599,48 +7599,48 @@ namespace Script {
                             }
                             break;
                             */
-                        case 404: {//Heatran
-                                map.RemoveNpc(1);
-                                map.SetTile(10, 6, 96, 4, 3);
-                                map.SetAttribute(10, 6, Enums.TileType.Scripted, 46, 0, 0, "18", "1313", "12:12");
-                                //NetScript.PlayStory(index, 171);
-                            }
-                            break;
-                        case 579:
-                        case 558:
-                        case 559:
-                        case 560:
-                        case 571:
-                        case 572:
-                        case 854:
-                        case 855:
-                        case 856:
-                        case 857:
-                        case 858:
-                        case 859:
-                        case 860:
-                        case 861:
-                        case 862:
-                        case 863: { //normal PBA enemies + boss
-                                if (map.Name == "Pitch-Black Pit") {
-                                    int remainingEnemies = 0;
-            						for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
-            							if (!map.IsNpcSlotEmpty(i)) remainingEnemies++;
-            						}
-            						if (remainingEnemies <= 1) {
-                                        BossBattles.EndBossBattle(client, "Pitch-Black Pit");
-                                    }
-                                } else PitchBlackAbyss.UnlockRoom(client, map);
-                        	}
-                        	break;
-                        case 139: {
-                                BossBattles.EndBossBattle(client, "ThunderstormForest");
-                            }
-                            break;
-                        case 177: {
-                                BossBattles.EndBossBattle(client, "ThunderstormForestPart2");
-                            }
-                            break;
+                  //      case 404: {//Heatran
+                  //              map.RemoveNpc(1);
+                  //              map.SetTile(10, 6, 96, 4, 3);
+                  //              map.SetAttribute(10, 6, Enums.TileType.Scripted, 46, 0, 0, "18", "1313", "12:12");
+                  //              //NetScript.PlayStory(index, 171);
+                  //          }
+                  //          break;
+                  //      case 579:
+                  //      case 558:
+                  //      case 559:
+                  //      case 560:
+                  //      case 571:
+                  //      case 572:
+                  //      case 854:
+                  //      case 855:
+                  //      case 856:
+                  //      case 857:
+                  //      case 858:
+                  //      case 859:
+                  //      case 860:
+                  //      case 861:
+                  //      case 862:
+                  //      case 863: { //normal PBA enemies + boss
+                  //              if (map.Name == "Pitch-Black Pit") {
+                  //                  int remainingEnemies = 0;
+            						//for (int i = 0; i < Constants.MAX_MAP_NPCS; i++) {
+            						//	if (!map.IsNpcSlotEmpty(i)) remainingEnemies++;
+            						//}
+            						//if (remainingEnemies <= 1) {
+                  //                      BossBattles.EndBossBattle(client, "Pitch-Black Pit");
+                  //                  }
+                  //              } else PitchBlackAbyss.UnlockRoom(client, map);
+                  //      	}
+                  //      	break;
+                  //      case 139: {
+                  //              BossBattles.EndBossBattle(client, "ThunderstormForest");
+                  //          }
+                  //          break;
+                  //      case 177: {
+                  //              BossBattles.EndBossBattle(client, "ThunderstormForestPart2");
+                  //          }
+                  //          break;
                             /*
                         case 588:
                         case 587: { // EST Boss A Wave 1
@@ -7664,25 +7664,25 @@ namespace Script {
                             }
                             break;
                             */
-                        case 963: {// Joey, Exbel Woods Clearing
-                        		int recruitIndex = -1;
-                        		using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
-                                	recruitIndex = client.Player.AddToRecruitmentBank(dbConnection, client.Player.CreateRecruitFromNpc(npc));
-                                }
-								int openSlot = client.Player.FindOpenTeamSlot();
-                                if (recruitIndex != -1 && openSlot != -1) {
+        //                case 963: {// Joey, Exbel Woods Clearing
+        //                		int recruitIndex = -1;
+        //                		using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players)) {
+        //                        	recruitIndex = client.Player.AddToRecruitmentBank(dbConnection, client.Player.CreateRecruitFromNpc(npc));
+        //                        }
+								//int openSlot = client.Player.FindOpenTeamSlot();
+        //                        if (recruitIndex != -1 && openSlot != -1) {
                                 	
-                                	client.Player.AddToTeam(recruitIndex, openSlot);
-                                	client.Player.Team[openSlot].HP = client.Player.Team[openSlot].MaxHP;
-                                	Messenger.BattleMsg(client, "You have recruited a new team member!", Text.BrightGreen);
+        //                        	client.Player.AddToTeam(recruitIndex, openSlot);
+        //                        	client.Player.Team[openSlot].HP = client.Player.Team[openSlot].MaxHP;
+        //                        	Messenger.BattleMsg(client, "You have recruited a new team member!", Text.BrightGreen);
 
-                                	Messenger.SendActiveTeam(client);
-                                } else {
-                                	Messenger.BattleMsg(client, "You cant recruit! You have too many team members in the assembly!", Text.BrightRed);
-                                }
-                                doBossCheck = true;
-	                        }
-	                        break;
+        //                        	Messenger.SendActiveTeam(client);
+        //                        } else {
+        //                        	Messenger.BattleMsg(client, "You cant recruit! You have too many team members in the assembly!", Text.BrightRed);
+        //                        }
+        //                        doBossCheck = true;
+	       //                 }
+	       //                 break;
                         default: {
                                 doBossCheck = true;
                             }
