@@ -391,7 +391,7 @@ namespace Server.Discord.Commands
             {
                 responseBuilder.AppendLine($"**{zoneResourceGroup.Key}**");
 
-                foreach (var zoneResource in zoneResourceGroup)
+                foreach (var zoneResource in zoneResourceGroup.OrderBy(x => x.Num))
                 {
                     var realResourceNumber = zoneResource.Num;
 
