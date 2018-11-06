@@ -93,7 +93,10 @@ namespace Server.Stories
         {
             if (client.Player.CurrentChapter != null)
             {
-                client.Player.StoryPlaybackCache.Add(story);
+                if (client.Player.CurrentChapter.ID != story.ID)
+                {
+                    client.Player.StoryPlaybackCache.Add(story);
+                }
             }
             else
             {

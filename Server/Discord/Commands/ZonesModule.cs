@@ -354,6 +354,36 @@ namespace Server.Discord.Commands
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
         }
 
+        [Command("preset")]
+        [Summary("Add a preset of resources to a zone.")]
+        [RequireOwner]
+        public async Task AddPresetAsync(int id, ZonePresetType presetType)
+        {
+            var addedResources = new List<ZoneResource>();
+
+            switch (presetType)
+            {
+                case ZonePresetType.RDungeon:
+                    {
+                        addedResources.AddRange(ZoneManager.AddResources(id, ZoneResourceType.Dungeons, 1));
+                        addedResources.AddRange(ZoneManager.AddResources(id, ZoneResourceType.RDungeons, 1));
+                        addedResources.AddRange(ZoneManager.AddResources(id, ZoneResourceType.Maps, 5));
+                        addedResources.AddRange(ZoneManager.AddResources(id, ZoneResourceType.NPCs, 25));
+                        addedResources.AddRange(ZoneManager.AddResources(id, ZoneResourceType.Stories, 5));
+                    }
+                    break;
+            }
+
+            var responseBuilder = new StringBuilder();
+            responseBuilder.AppendLine("New resources have been added:");
+            responseBuilder.AppendLine();
+            var resourceListing = GenerateResourceListing(addedResources);
+
+            responseBuilder.Append(resourceListing);
+
+            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+        }
+
         private string GenerateResourceListing(IReadOnlyCollection<ZoneResource> zoneResources)
         {
             var responseBuilder = new StringBuilder();
@@ -361,9 +391,20 @@ namespace Server.Discord.Commands
             {
                 responseBuilder.AppendLine($"**{zoneResourceGroup.Key}**");
 
-                foreach (var zoneResource in zoneResourceGroup)
+                foreach (var zoneResource in zoneResourceGroup.OrderBy(x => x.Num))
                 {
-                    responseBuilder.AppendLine($"{zoneResource.Num} - {zoneResource.Name}");
+                    var realResourceNumber = zoneResource.Num;
+
+                    switch (zoneResource.Type)
+                    {
+                        case ZoneResourceType.Stories:
+                        case ZoneResourceType.RDungeons:
+                        case ZoneResourceType.Dungeons:
+                            realResourceNumber++;
+                            break;
+                    }
+
+                    responseBuilder.AppendLine($"{realResourceNumber} - {zoneResource.Name}");
                 }
             }
 
