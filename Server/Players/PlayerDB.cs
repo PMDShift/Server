@@ -446,6 +446,7 @@ namespace Server.Players
             recruit.Species = npc.Species;
             recruit.Form = npc.Form;
             recruit.PermanentForm = npc.Form;
+            recruit.Shiny = npc.Shiny;
             recruit.Sex = npc.Sex;
 
             if (npc.Level <= 0)
@@ -495,6 +496,7 @@ namespace Server.Players
                 recruit.RecruitIndex = index;
                 recruit.Level = requestedRecruit.Level;
                 recruit.Species = requestedRecruit.Species;
+                recruit.Shiny = requestedRecruit.Shiny;
                 recruit.Form = requestedRecruit.Form;
                 recruit.PermanentForm = requestedRecruit.PermanentForm;
                 recruit.Sex = requestedRecruit.Sex;
