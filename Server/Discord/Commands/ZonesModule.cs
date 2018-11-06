@@ -393,7 +393,18 @@ namespace Server.Discord.Commands
 
                 foreach (var zoneResource in zoneResourceGroup)
                 {
-                    responseBuilder.AppendLine($"{zoneResource.Num} - {zoneResource.Name}");
+                    var realResourceNumber = zoneResource.Num;
+
+                    switch (zoneResource.Type)
+                    {
+                        case ZoneResourceType.Stories:
+                        case ZoneResourceType.RDungeons:
+                        case ZoneResourceType.Dungeons:
+                            realResourceNumber++;
+                            break;
+                    }
+
+                    responseBuilder.AppendLine($"{realResourceNumber} - {zoneResource.Name}");
                 }
             }
 
