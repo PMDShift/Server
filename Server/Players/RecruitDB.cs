@@ -1008,10 +1008,22 @@ namespace Server.Players
                     {
                         if (setup.moveIndex == -1)
                         {
+                            var npcObject = Npcs.NpcManager.Npcs[npc.Num];
+
                             Stories.Story story = new Stories.Story();
                             Stories.StoryBuilderSegment segment = Stories.StoryBuilder.BuildStory();
-                            Stories.StoryBuilder.AppendSaySegment(segment, Npcs.NpcManager.Npcs[npc.Num].Name.Trim() + ": " + Npcs.NpcManager.Npcs[npc.Num].AttackSay.Trim(),
-                                Npcs.NpcManager.Npcs[npc.Num].Species, 0, 0);
+                            Stories.StoryBuilder.AppendSaySegment(segment, Npcs.NpcManager.Npcs[npc.Num].Name.Trim() + ": " + Npcs.NpcManager.Npcs[npc.Num].AttackSay.Trim(), Npcs.NpcManager.Npcs[npc.Num].Species, 0, 0);
+
+                            if (!string.IsNullOrEmpty(npcObject.AttackSay2))
+                            {
+                                Stories.StoryBuilder.AppendSaySegment(segment, npcObject.Name.Trim() + ": " + npcObject.AttackSay2.Trim(), npcObject.Species, 0, 0);
+                            }
+
+                            if (!string.IsNullOrEmpty(npcObject.AttackSay3))
+                            {
+                                Stories.StoryBuilder.AppendSaySegment(segment, npcObject.Name.Trim() + ": " + npcObject.AttackSay3.Trim(), npcObject.Species, 0, 0);
+                            }
+
                             segment.AppendToStory(story);
                             Stories.StoryManager.PlayStory(owner, story);
                         }

@@ -3528,18 +3528,20 @@ namespace Server.Network
                             // Update the npc
                             npc.Name = parse[2];
                             npc.AttackSay = parse[3];
-                            npc.Form = parse[4].ToInt();
-                            npc.Species = parse[5].ToInt();
-                            npc.ShinyChance = parse[6].ToInt();
-                            npc.Behavior = (Enums.NpcBehavior)parse[7].ToInt();
-                            npc.RecruitRate = parse[8].ToInt();
-                            npc.AIScript = parse[9];
-                            npc.SpawnsAtDawn = parse[10].ToBool();
-                            npc.SpawnsAtDay = parse[11].ToBool();
-                            npc.SpawnsAtDusk = parse[12].ToBool();
-                            npc.SpawnsAtNight = parse[13].ToBool();
+                            npc.AttackSay2 = parse[4];
+                            npc.AttackSay3 = parse[5];
+                            npc.Form = parse[6].ToInt();
+                            npc.Species = parse[7].ToInt();
+                            npc.ShinyChance = parse[8].ToInt();
+                            npc.Behavior = (Enums.NpcBehavior)parse[9].ToInt();
+                            npc.RecruitRate = parse[10].ToInt();
+                            npc.AIScript = parse[11];
+                            npc.SpawnsAtDawn = parse[12].ToBool();
+                            npc.SpawnsAtDay = parse[13].ToBool();
+                            npc.SpawnsAtDusk = parse[14].ToBool();
+                            npc.SpawnsAtNight = parse[15].ToBool();
 
-                            int z = 14;
+                            int z = 16;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {

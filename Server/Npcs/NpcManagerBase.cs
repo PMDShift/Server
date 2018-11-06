@@ -74,6 +74,8 @@ namespace Server.Npcs
 
             string query = "SELECT name, " +
                 "attack_say, " +
+                "attack_say_2, " +
+                "attack_say_3, " +
                 "species, " +
                 "form, " +
                 "behavior, " +
@@ -97,6 +99,8 @@ namespace Server.Npcs
             {
                 npcs[npcNum].Name = row["name"].ValueString;
                 npcs[npcNum].AttackSay = row["attack_say"].ValueString;
+                npcs[npcNum].AttackSay2 = row["attack_say_2"].ValueString;
+                npcs[npcNum].AttackSay3 = row["attack_say_3"].ValueString;
                 npcs[npcNum].Species = row["species"].ValueString.ToInt();
                 npcs[npcNum].Form = row["form"].ValueString.ToInt();
                 npcs[npcNum].Behavior = (Enums.NpcBehavior)row["behavior"].ValueString.ToInt();
@@ -170,6 +174,8 @@ namespace Server.Npcs
                     database.CreateColumn(false, "num", npcNum.ToString()),
                     database.CreateColumn(false, "name", npcs[npcNum].Name),
                     database.CreateColumn(false, "attack_say", npcs[npcNum].AttackSay),
+                    database.CreateColumn(false, "attack_say_2", npcs[npcNum].AttackSay2),
+                    database.CreateColumn(false, "attack_say_3", npcs[npcNum].AttackSay3),
                     database.CreateColumn(false, "species", npcs[npcNum].Species.ToString()),
                     database.CreateColumn(false, "form", npcs[npcNum].Form.ToString()),
                     database.CreateColumn(false, "behavior", ((int)npcs[npcNum].Behavior).ToString()),

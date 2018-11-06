@@ -2998,6 +2998,8 @@ namespace Server.Network
             packet.AppendParameters(
                  NpcManager.Npcs[NPCNum].Name,
                  NpcManager.Npcs[NPCNum].AttackSay,
+                 NpcManager.Npcs[NPCNum].AttackSay2,
+                 NpcManager.Npcs[NPCNum].AttackSay3,
                  NpcManager.Npcs[NPCNum].Form.ToString(),
                  NpcManager.Npcs[NPCNum].Species.ToString(),
                  NpcManager.Npcs[NPCNum].ShinyChance.ToString(),
