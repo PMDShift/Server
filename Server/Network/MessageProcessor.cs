@@ -4409,7 +4409,7 @@ namespace Server.Network
                         break;
                     case "setsprite":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4431,7 +4431,7 @@ namespace Server.Network
                         break;
                     case "setplayersprite":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Admin))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4454,7 +4454,7 @@ namespace Server.Network
                         break;
                     case "maprespawn":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4481,7 +4481,7 @@ namespace Server.Network
                         break;
                     case "kickplayer":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4514,7 +4514,7 @@ namespace Server.Network
                         break;
                     case "banplayer":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4586,7 +4586,7 @@ namespace Server.Network
                         break;
                     case "warptome":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(parse[1]);
                                 if (n != null)
@@ -4611,10 +4611,22 @@ namespace Server.Network
                         break;
                     case "warploc":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper) || client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
+                            if (client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
                             {
-                                Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
+                            } else
+                            {
+                                if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                                {
+                                    return;
+                                }
+
+                                if (!client.Player.CanEditZone(client.Player.Map.ZoneID))
+                                {
+                                    return;
+                                }
                             }
+                            
+                            Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
                         }
                         break;
                     case "arrowhit":
