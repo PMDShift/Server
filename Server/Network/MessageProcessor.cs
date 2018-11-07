@@ -1878,6 +1878,12 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (map.IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "Unable to change sprites on a sandboxed map.", Text.BrightRed);
+                                return;
+                            }
+
                             if (map.Tile[client.Player.X, client.Player.Y].Data2 == 0)
                             {
                                 client.Player.GetActiveRecruit().SetSpecies(map.Tile[client.Player.X, client.Player.Y].Data1);
