@@ -858,29 +858,32 @@ namespace Server.AI
                 }
 
                 // Check for guild shop
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
+                if (!map.IsSandboxed)
                 {
-                    if (client.Player.GuildAccess > 0)
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
                     {
-                        //manage or view guild
-                        Messenger.SendGuildMenu(client);
-                    }
-                    else
-                    {
-                        //register guild
-                        if (client.Player.ExplorerRank >= Guilds.GuildManager.MIN_RANK)
+                        if (client.Player.GuildAccess > 0)
                         {
-                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Guilds can be created for " + Guilds.GuildManager.CREATE_PRICE + " " + Items.ItemManager.Items[1].Name + " per founder.", Text.Yellow));
-                            Messenger.SendGuildCreation(client);
+                            //manage or view guild
+                            Messenger.SendGuildMenu(client);
                         }
                         else
                         {
-                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Register a guild here.  You can create a guild when your explorer rank is " + Guilds.GuildManager.MIN_RANK + " or higher.", Text.Green));
+                            //register guild
+                            if (client.Player.ExplorerRank >= Guilds.GuildManager.MIN_RANK)
+                            {
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Guilds can be created for " + Guilds.GuildManager.CREATE_PRICE + " " + Items.ItemManager.Items[1].Name + " per founder.", Text.Yellow));
+                                Messenger.SendGuildCreation(client);
+                            }
+                            else
+                            {
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Register a guild here.  You can create a guild when your explorer rank is " + Guilds.GuildManager.MIN_RANK + " or higher.", Text.Green));
+                            }
                         }
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
                     }
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
                 }
 
                 // Check for Link Shop

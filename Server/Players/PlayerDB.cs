@@ -71,7 +71,7 @@ namespace Server.Players
             leaderData.Name = name;
             leaderData.Sex = (byte)sex;
             leaderData.Species = 0;
-            leaderData.Form = 1;
+            leaderData.Form = 0;
             leaderData.Level = 1;
             leaderData.HP = -1;
 

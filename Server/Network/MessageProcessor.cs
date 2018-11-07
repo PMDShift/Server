@@ -1878,6 +1878,12 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (map.IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "Unable to change sprites on a sandboxed map.", Text.BrightRed);
+                                return;
+                            }
+
                             if (map.Tile[client.Player.X, client.Player.Y].Data2 == 0)
                             {
                                 client.Player.GetActiveRecruit().SetSpecies(map.Tile[client.Player.X, client.Player.Y].Data1);
@@ -3528,18 +3534,20 @@ namespace Server.Network
                             // Update the npc
                             npc.Name = parse[2];
                             npc.AttackSay = parse[3];
-                            npc.Form = parse[4].ToInt();
-                            npc.Species = parse[5].ToInt();
-                            npc.ShinyChance = parse[6].ToInt();
-                            npc.Behavior = (Enums.NpcBehavior)parse[7].ToInt();
-                            npc.RecruitRate = parse[8].ToInt();
-                            npc.AIScript = parse[9];
-                            npc.SpawnsAtDawn = parse[10].ToBool();
-                            npc.SpawnsAtDay = parse[11].ToBool();
-                            npc.SpawnsAtDusk = parse[12].ToBool();
-                            npc.SpawnsAtNight = parse[13].ToBool();
+                            npc.AttackSay2 = parse[4];
+                            npc.AttackSay3 = parse[5];
+                            npc.Form = parse[6].ToInt();
+                            npc.Species = parse[7].ToInt();
+                            npc.ShinyChance = parse[8].ToInt();
+                            npc.Behavior = (Enums.NpcBehavior)parse[9].ToInt();
+                            npc.RecruitRate = parse[10].ToInt();
+                            npc.AIScript = parse[11];
+                            npc.SpawnsAtDawn = parse[12].ToBool();
+                            npc.SpawnsAtDay = parse[13].ToBool();
+                            npc.SpawnsAtDusk = parse[14].ToBool();
+                            npc.SpawnsAtNight = parse[15].ToBool();
 
-                            int z = 14;
+                            int z = 16;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {
@@ -4401,7 +4409,7 @@ namespace Server.Network
                         break;
                     case "setsprite":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4423,7 +4431,7 @@ namespace Server.Network
                         break;
                     case "setplayersprite":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Admin))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4446,7 +4454,7 @@ namespace Server.Network
                         break;
                     case "maprespawn":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4473,7 +4481,7 @@ namespace Server.Network
                         break;
                     case "kickplayer":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4506,7 +4514,7 @@ namespace Server.Network
                         break;
                     case "banplayer":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning");
                                 return;
@@ -4578,7 +4586,7 @@ namespace Server.Network
                         break;
                     case "warptome":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(parse[1]);
                                 if (n != null)
@@ -4603,10 +4611,22 @@ namespace Server.Network
                         break;
                     case "warploc":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper) || client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
+                            if (client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
                             {
-                                Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
+                            } else
+                            {
+                                if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
+                                {
+                                    return;
+                                }
+
+                                if (!client.Player.CanEditZone(client.Player.Map.ZoneID))
+                                {
+                                    return;
+                                }
                             }
+                            
+                            Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
                         }
                         break;
                     case "arrowhit":

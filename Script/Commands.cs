@@ -2073,7 +2073,7 @@ namespace Script
                         break;
                     case "/givetokens":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n;
                                 n = ClientManager.FindClient(command[1]);
@@ -2176,7 +2176,7 @@ namespace Script
                         break;
                     case "/pk":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command.CommandArgs.Count >= 2)
                                 {
@@ -2244,7 +2244,7 @@ namespace Script
                         break;
                     case "/addnews":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command.CommandArgs.Count >= 2)
                                 {
@@ -2268,7 +2268,7 @@ namespace Script
                         break;
                     case "/reloadnews":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Server.Settings.LoadNews();
                                 Messenger.PlayerMsg(client, "News have been reloaded!", Text.Yellow);
@@ -2287,7 +2287,7 @@ namespace Script
                         break;
                     case "/givemove":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(command[1]);
                                 if (n != null)
@@ -2349,7 +2349,7 @@ namespace Script
                         break;
                     case "/learnmove":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 int move = command[1].ToInt();
                                 if (move <= MoveManager.Moves.MaxMoves)
@@ -2363,7 +2363,7 @@ namespace Script
                         break;
                     case "/give":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(command[1]);
                                 int itemAmount = command[2].ToInt();
@@ -2435,7 +2435,7 @@ namespace Script
                         break;
                     case "/take":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(command[1]);
                                 int itemAmount = command[2].ToInt();
@@ -2767,7 +2767,7 @@ namespace Script
                         break;
                     case "/finditemuse":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (joinedArgs.IsNumeric())
                                 {
@@ -2911,7 +2911,7 @@ namespace Script
                         break;
                     case "/findmoverange":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor) && joinedArgs.IsNumeric())
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter) && joinedArgs.IsNumeric())
                             {
                                 Enums.MoveRange range = (Enums.MoveRange)joinedArgs.ToInt();
                                 int movesFound = 0;
@@ -2934,7 +2934,7 @@ namespace Script
                         break;
                     case "/findrdungeon":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 int itemsFound = 0;
                                 for (int i = 0; i < RDungeonManager.RDungeons.Count; i++)
@@ -2955,7 +2955,7 @@ namespace Script
                         break;
                     case "/finddungeon":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 int itemsFound = 0;
                                 for (int i = 1; i < DungeonManager.Dungeons.Count; i++)
@@ -2988,7 +2988,7 @@ namespace Script
                     //clearstorytile
                     case "/unlockstory":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
                                 client.Player.SetStoryState(command[1].ToInt() - 1, false);
                                 Messenger.PlayerMsg(client, "Chapter " + (command[1].ToInt()) + " has been unlocked!", Text.Yellow);
@@ -3006,7 +3006,7 @@ namespace Script
                         break;
                     case "/resetstats":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Admin))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(joinedArgs);
                                 if (n != null)
@@ -3024,7 +3024,7 @@ namespace Script
                         break;
                     case "/recruitnum":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Admin))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(joinedArgs);
                                 if (n != null)
@@ -3036,7 +3036,7 @@ namespace Script
                         break;
                     case "/storytest":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.PlayerWarp(client, 500, 7, 9);
                                 Messenger.PlayerMsg(client, "Welcome to the story test map!", Text.Yellow);
@@ -3101,7 +3101,7 @@ namespace Script
                         {
                             try
                             {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                                 {
                                     string playerName = command[1];
                                     string muteTimeDays = "-----";
@@ -3206,7 +3206,7 @@ namespace Script
                         break;
                     case "/jail":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command.CommandArgs.Count == 2)
                                 {
@@ -3243,7 +3243,7 @@ namespace Script
                         break;
                     case "/unjail":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command.CommandArgs.Count == 2)
                                 {
@@ -3310,7 +3310,7 @@ namespace Script
                     case "/tostart*":
                     case "/tostart":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 string playerName = joinedArgs;
                                 Client n;
@@ -3341,7 +3341,7 @@ namespace Script
                         break;
                     case "/world":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.PlayerWarp(client, 538, 10, 17);
                                 Messenger.PlayerMsg(client, "Welcome to the World Map!", Text.BrightGreen);
@@ -3370,7 +3370,7 @@ namespace Script
                     case "/warpmeto*":
                     case "/warpmeto":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
                                 Client target;
                                 string[] subCommand = command[0].Split('*');
@@ -3397,7 +3397,7 @@ namespace Script
                     case "/warptome*":
                     case "/warptome":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client target;
                                 string[] subCommand = command[0].Split('*');
@@ -3435,7 +3435,7 @@ namespace Script
                     case "/map*":
                     case "/map":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
                                 string playerName = command[1];
                                 Client n;
@@ -3489,7 +3489,7 @@ namespace Script
                         break;
                     case "/playerin":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 //if (command[1].IsNumeric()) {
                                 //Messenger.PlayerMsg(client, "Players in this map :", Text.Yellow);
@@ -3518,7 +3518,7 @@ namespace Script
                         break;
                     case "/playerindungeon":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command[1].IsNumeric())
                                 {
@@ -3540,7 +3540,7 @@ namespace Script
                         break;
                     case "/playerintc":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
 
                                 foreach (Client i in ClientManager.GetClients())
@@ -3558,7 +3558,7 @@ namespace Script
                         break;
                     case "/playerindungeons":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 int total = 0;
                                 foreach (Client i in ClientManager.GetClients())
@@ -3577,7 +3577,7 @@ namespace Script
                         break;
                     case "/hp":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(joinedArgs);
                                 if (n != null)
@@ -3593,7 +3593,7 @@ namespace Script
                         break;
                     case "/playerid":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
 
                                 Client n = ClientManager.FindClient(joinedArgs);
@@ -3606,7 +3606,7 @@ namespace Script
                         break;
                     case "/forceswap":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
 
                                 Client n = ClientManager.FindClient(command[1]);
@@ -3631,7 +3631,7 @@ namespace Script
                     case "/info*":
                     case "/info":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n;
                                 string[] subCommand = command[0].Split('*');
@@ -3670,7 +3670,7 @@ namespace Script
                         break;
                     case "/statusinfo":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
 
                                 Client n = ClientManager.FindClient(joinedArgs);
@@ -4087,7 +4087,7 @@ namespace Script
                         {
                             try
                             {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                                 {
                                     if (client.Player.Map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)client.Player.Map).RDungeonIndex > -1)
                                     {
@@ -4308,7 +4308,7 @@ namespace Script
                         break;
                     case "/testailment":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command[1].IsNumeric() && command[1].ToInt() >= 0 && command[1].ToInt() < 6)
                                 {
@@ -4327,7 +4327,7 @@ namespace Script
                         break;
                     case "/addvstatus":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command[1].IsNumeric())
                                 {
@@ -4352,7 +4352,7 @@ namespace Script
                         break;
                     case "/removevstatus":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 client.Player.GetActiveRecruit().VolatileStatus.Clear();
                                 PacketBuilder.AppendVolatileStatus(client, hitlist);
@@ -4384,7 +4384,7 @@ namespace Script
                         break;*/
                     case "/checkailment":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.PlayerMsg(client, client.Player.GetActiveRecruit().StatusAilment.ToString() + client.Player.GetActiveRecruit().StatusAilmentCounter.ToString(), Text.BrightRed);
                             }
@@ -4392,7 +4392,7 @@ namespace Script
                         break;
                     case "/checkdungeons":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(joinedArgs);
                                 if (n != null)
@@ -4882,7 +4882,7 @@ namespace Script
                         break;
                     case "/testrecall":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Messenger.SendRecallMenu(client, false);
                             }
@@ -4910,7 +4910,7 @@ namespace Script
                         break;
                     case "/setgender":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(command[1]);
                                 if (n != null)
@@ -4934,7 +4934,7 @@ namespace Script
                         {
                             try
                             {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                                 {
                                     using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
                                     {
@@ -4954,7 +4954,7 @@ namespace Script
                         break;
                     case "/fixhouse":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 Client n = ClientManager.FindClient(command[1]);
                                 if (n != null)

@@ -26,6 +26,8 @@ namespace Server.Npcs
     {
         public string Name { get; set; }
         public string AttackSay { get; set; }
+        public string AttackSay2 { get; set; }
+        public string AttackSay3 { get; set; }
 
         public int Form { get; set; }
 
@@ -52,6 +54,8 @@ namespace Server.Npcs
         {
             Name = "";
             AttackSay = "";
+            AttackSay2 = "";
+            AttackSay3 = "";
             Drops = new NpcDrop[Constants.MAX_NPC_DROPS];
             for (int i = 0; i < Constants.MAX_NPC_DROPS; i++)
             {
