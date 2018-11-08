@@ -31,6 +31,7 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("**Zone Details**");
             responseBuilder.AppendLine();
             responseBuilder.AppendLine($"Name: `{zone.Name}`");
+            responseBuilder.AppendLine($"Open for Editing: {zone.IsOpen}");
             responseBuilder.AppendLine();
 
             responseBuilder.AppendLine("**Options:**");
