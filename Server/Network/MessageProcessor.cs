@@ -1203,6 +1203,10 @@ namespace Server.Network
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited in this area.", Text.Yellow);
                                                 }
+                                                else if (map.IsSandboxed)
+                                                {
+                                                    Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited on a sandboxed map.", Text.Yellow);
+                                                }
                                                 else if (map.ActiveNpc[i].Level >= client.Player.GetActiveRecruit().Level)
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "'s level is too high for you to recruit it.", Text.Yellow);
@@ -1213,8 +1217,16 @@ namespace Server.Network
 
                                                     if (map.ActiveNpc[i].Shiny == Enums.Coloration.Shiny)
                                                     {
-                                                        Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! Recruit it!", Text.Yellow);
-                                                    } else
+                                                        if (recruitRate > 0)
+                                                        {
+                                                            Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! Recruit it!", Text.Yellow);
+                                                        }
+                                                        else
+                                                        {
+                                                            Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! You have a " + (recruitRate / 10f) + "% chance of recruiting it.", Text.Yellow);
+                                                        }
+                                                    }
+                                                    else
                                                     {
                                                         Messenger.PlayerMsg(client, "You have a " + (recruitRate / 10f) + "% of recruiting " + NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "!", Text.Yellow);
                                                     }
@@ -1299,8 +1311,9 @@ namespace Server.Network
                                 if (map.Tile[newX, newY].Type == Enums.TileType.ScriptedSign)
                                 {
                                     Scripting.ScriptManager.InvokeSub("ScriptedSign", client, map.Tile[newX, newY].Data1, map.Tile[newX, newY].String1, map.Tile[newX, newY].String2, map.Tile[newX, newY].String3, dir);
-                                } 
-                                else if (map.Tile[newX, newY].Type == Enums.TileType.Sign) {
+                                }
+                                else if (map.Tile[newX, newY].Type == Enums.TileType.Sign)
+                                {
                                     Stories.Story story = new Stories.Story();
                                     Stories.StoryBuilderSegment segment = Stories.StoryBuilder.BuildStory();
 
@@ -4613,7 +4626,8 @@ namespace Server.Network
                         {
                             if (client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
                             {
-                            } else
+                            }
+                            else
                             {
                                 if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
                                 {
@@ -4625,7 +4639,7 @@ namespace Server.Network
                                     return;
                                 }
                             }
-                            
+
                             Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
                         }
                         break;

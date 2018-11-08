@@ -2702,7 +2702,13 @@ namespace Server.Combat
 
                     try
                     {
-                        if (!((Recruit)setup.Attacker).Owner.Player.Map.RecruitEnabled)
+                        var ownerPlayer = ((Recruit)setup.Attacker).Owner.Player;
+
+                        if (!ownerPlayer.Map.RecruitEnabled)
+                        {
+                            skipRecruit = true;
+                        }
+                        if (ownerPlayer.Map.IsSandboxed)
                         {
                             skipRecruit = true;
                         }
