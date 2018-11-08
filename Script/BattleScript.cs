@@ -5514,7 +5514,7 @@ namespace Script {
                             if (setup.Hit && setup.KnockedOut && setup.Defender.HP <= 0) {
                                 if (setup.Defender.CharacterType == Enums.CharacterType.MapNpc && setup.Attacker.CharacterType == Enums.CharacterType.Recruit) {
 	                                int payout = setup.Attacker.Level + setup.Defender.Level;
-	                                setup.DefenderMap.SpawnItem(1, payout, false, false, "", setup.Defender.X, setup.Defender.Y, ((Recruit)setup.Attacker).Owner);
+	                                setup.DefenderMap.SpawnItem(1, payout, false, false, "", setup.DefenderMap.IsSandboxed, setup.Defender.X, setup.Defender.Y, ((Recruit)setup.Attacker).Owner);
                                 }
                             }
                         }
@@ -6277,7 +6277,7 @@ namespace Script {
                             	//if the trap is revealed, destroy it
                             	if (setup.Attacker.HasActiveItem(116) && WillTrapActivate(setup.Attacker, setup.AttackerMap, x, y)) {
                             		//spawn item
-                            		setup.AttackerMap.SpawnItem(GetTrapItem(tile.Data1), 1, false, false, "", x, y, null);
+                            		setup.AttackerMap.SpawnItem(GetTrapItem(tile.Data1), 1, false, false, "", setup.AttackerMap.IsSandboxed, x, y, null);
                             		setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSoundPacket("Magic22.wav"), setup.Attacker.X, setup.Attacker.Y, 10);
                             		setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(505, x, y));
                             		//delete trap
@@ -6293,7 +6293,7 @@ namespace Script {
 	                        		if (setup.AttackerMap.ActiveItem[i].X == x && setup.AttackerMap.ActiveItem[i].Y == y) {
 	                        			setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateSpellAnim(491, x, y));
 	                        			setup.AttackerMap.SpawnItemSlot(i, setup.AttackerMap.ActiveItem[i].Num, setup.AttackerMap.ActiveItem[i].Value,
-	                            		setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag,
+	                            		setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag, setup.AttackerMap.ActiveItem[i].IsSandboxed,
 	                            		setup.AttackerMap.ActiveItem[i].X, setup.AttackerMap.ActiveItem[i].Y, null);
 	                        		}
 	                        	}

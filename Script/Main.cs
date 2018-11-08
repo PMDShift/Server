@@ -781,7 +781,7 @@ namespace Script
                                     Messenger.PlayerWarp(warpClient, 1426, 18, 43);
                                     int players = (warpClient.Player.Map.PlayersOnMap.Count - 1) % 4;
 
-                                    warpClient.Player.Map.SpawnItem(533, 1, false, false, "373;374;375;376;377;378;379;382", 17 + 2 * (players % 2), 11 + 2 * (players / 2), warpClient);
+                                    warpClient.Player.Map.SpawnItem(533, 1, false, false, "373;374;375;376;377;378;379;382", warpClient.Player.Map.IsSandboxed, 17 + 2 * (players % 2), 11 + 2 * (players / 2), warpClient);
                                     if (warpClient.Player.Map.ActiveItem[players].Num != 0)
                                     {
                                         warpClient.Player.Map.ActiveItem[players].TimeDropped = new TickCount(Core.GetTickCount().Tick + 600000);
@@ -812,7 +812,7 @@ namespace Script
                             DungeonRules.ExitDungeon(client, 1361, 6, 7);
                             if (client.Player.Map.MapType == Enums.MapType.Instanced && ((InstancedMap)client.Player.Map).MapBase == 1361)
                             {
-                                client.Player.Map.SpawnItem(49, 1, false, false, "", 8, 8, null);
+                                client.Player.Map.SpawnItem(49, 1, false, false, "", client.Player.Map.IsSandboxed, 8, 8, null);
                             }
                         }
                         break;
@@ -1001,7 +1001,7 @@ namespace Script
                                         case 74: tag = "717;793;544;353;451;53,8;120,1,120;287"; break;
                                         case 75: tag = "108;685;397;300;744,4;47;447;789"; break;
                                     }
-                                    iMap.SpawnItem(itemNum, 0, false, false, tag, itemX, itemY, null);
+                                    iMap.SpawnItem(itemNum, 0, false, false, tag, client.Player.Map.IsSandboxed, itemX, itemY, null);
 
                                     if (client.Player.Name == "Hayarotle" || client.Player.Name == "Sprinko")
                                     {
@@ -6882,7 +6882,7 @@ namespace Script
                                         if (y < 0) y = 0;
                                         if (y >= setup.AttackerMap.MaxY) y = setup.AttackerMap.MaxY - 1;
                                         setup.AttackerMap.SpawnItemSlot(i, setup.AttackerMap.ActiveItem[i].Num, setup.AttackerMap.ActiveItem[i].Value,
-                                        setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag, x, y, null);
+                                        setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag, setup.AttackerMap.ActiveItem[i].IsSandboxed, x, y, null);
                                     }
                                 }
                                 setup.PacketStack.AddPacketToMap(setup.AttackerMap, PacketBuilder.CreateBattleMsg("Items were pulled close to " + setup.Attacker.Name + "!", Text.WhiteSmoke), setup.Attacker.X, setup.Attacker.Y, 10);
@@ -7369,7 +7369,7 @@ namespace Script
                                 if (setup.AttackerMap.ActiveItem[i].Num != 0 && setup.AttackerMap.ActiveItem[i].Hidden)
                                 {
                                     setup.AttackerMap.SpawnItemSlot(i, setup.AttackerMap.ActiveItem[i].Num, setup.AttackerMap.ActiveItem[i].Value,
-                                    setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag,
+                                    setup.AttackerMap.ActiveItem[i].Sticky, false, setup.AttackerMap.ActiveItem[i].Tag, setup.AttackerMap.ActiveItem[i].IsSandboxed,
                                     setup.AttackerMap.ActiveItem[i].X, setup.AttackerMap.ActiveItem[i].Y, null);
                                 }
                             }
@@ -9275,7 +9275,7 @@ namespace Script
 
             if (x != -1)
             {
-                map.SpawnItem(itemNum, amount, sticky, hidden, tag, x, y, null);
+                map.SpawnItem(itemNum, amount, sticky, hidden, tag, map.IsSandboxed, x, y, null);
             }
         }
 

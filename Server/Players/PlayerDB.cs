@@ -949,7 +949,7 @@ namespace Server.Players
                     //map.ActiveItem[i].Y = Y;
                     //map.ActiveItem[i].PlayerFor = "";
                     //map.ActiveItem[i].TimeDropped = new TickCount(0);
-                    if (map.Tile[X, Y].Type == Enums.TileType.DropShop && map.Tile[X, Y].String1 != CharID && !ignorePrice)
+                    if (map.Tile[X, Y].Type == Enums.TileType.DropShop && map.Tile[X, Y].String1 != CharID && !ignorePrice && !inventory[invSlot].IsSandboxed)
                     {
                         if (String.IsNullOrEmpty(map.Tile[X, Y].String1))
                         {
@@ -982,6 +982,10 @@ namespace Server.Players
                         {
                             Msg = "x" + ItemManager.Items[itemNum].Name.Trim();
                         }
+                        else if (Inventory[invSlot].IsSandboxed)
+                        {
+                            Msg = "s" + ItemManager.Items[itemNum].Name.Trim();
+                        }
                         else
                         {
                             Msg = ItemManager.Items[itemNum].Name.Trim();
@@ -1012,6 +1016,8 @@ namespace Server.Players
                             TakeItem = true;
                         }
 
+                        bool isSandboxed = Inventory[invSlot].IsSandboxed;
+
                         if (TakeItem == true)
                         {
                             // Check to see if its held by anyone
@@ -1025,6 +1031,7 @@ namespace Server.Players
                             Inventory[invSlot].Amount = 0;
                             Inventory[invSlot].Sticky = false;
                             Inventory[invSlot].Tag = "";
+                            Inventory[invSlot].IsSandboxed = false;
 
                             //check for held-in-bag
 
@@ -1046,7 +1053,7 @@ namespace Server.Players
                         Messenger.SendInventoryUpdate(client, invSlot);
 
                         // Spawn the item before we set the num or we'll get a different free map item slot
-                        map.SpawnItemSlot(i, itemNum, amount, sticky, false, tag, X, Y, playerFor);
+                        map.SpawnItemSlot(i, itemNum, amount, sticky, false, tag, isSandboxed, X, Y, playerFor);
 
                         Scripting.ScriptManager.InvokeSub("OnDropItem", GetActiveRecruit(), invSlot, map.ActiveItem[i]);
                     }
@@ -1117,6 +1124,10 @@ namespace Server.Players
                                         Inventory[n].Num = map.ActiveItem[i].Num;
                                         Inventory[n].Sticky = map.ActiveItem[i].Sticky;
                                         Inventory[n].Tag = map.ActiveItem[i].Tag;
+                                        if (map.IsSandboxed)
+                                        {
+                                            Inventory[n].IsSandboxed = true;
+                                        }
 
                                         if (Inventory[n].Sticky)
                                         {
@@ -1158,7 +1169,7 @@ namespace Server.Players
                                         // Erase item from the map ~ done in spawnitemslot
 
                                         Messenger.SendInventoryUpdate(client, n);
-                                        map.SpawnItemSlot(i, -1, 0, false, false, "", X, Y, null);
+                                        map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, X, Y, null);
                                         Messenger.PlayerMsg(client, Msg, Text.Yellow);
 
                                         Scripting.ScriptManager.InvokeSub("OnPickupItem", GetActiveRecruit(), n, Inventory[n]);

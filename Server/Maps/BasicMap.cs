@@ -155,7 +155,7 @@ namespace Server.Maps
             return -1;
         }
 
-        public void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor)
+        public void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, bool isSandboxed, int x, int y, Client playerFor)
         {
             // Check for subscript out of range
             if (itemNum < 0 || itemNum > ItemManager.Items.MaxItems)
@@ -166,11 +166,11 @@ namespace Server.Maps
             // Find open map item slot
             int openSlot = FindOpenItemSlot();
 
-            this.SpawnItemSlot(openSlot, itemNum, itemVal, sticky, hidden, tag, x, y, playerFor);
+            this.SpawnItemSlot(openSlot, itemNum, itemVal, sticky, hidden, tag, isSandboxed, x, y, playerFor);
         }
 
 
-        public void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor)
+        public void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, bool isSandboxed, int x, int y, Client playerFor)
         {
             // Check for subscript out of range
             if (itemSlot < 0 || itemSlot > Constants.MAX_MAP_ITEMS || itemNum < -1 || itemNum > ItemManager.Items.MaxItems)
@@ -185,6 +185,7 @@ namespace Server.Maps
                 ActiveItem[itemSlot].Sticky = sticky;
                 ActiveItem[itemSlot].Hidden = hidden;
                 ActiveItem[itemSlot].Tag = tag;
+                ActiveItem[itemSlot].IsSandboxed = isSandboxed;
                 if (playerFor == null)
                 {
                     ActiveItem[itemSlot].TimeDropped = new TickCount(0);
@@ -221,22 +222,22 @@ namespace Server.Maps
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically
                         if ((ItemManager.Items[Tile[X, Y].Data1].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data1].StackCap > 0) && Tile[X, Y].Data2 <= 0)
                         {
-                            SpawnItem(Tile[X, Y].Data1, 1, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data1, 1, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
                         }
                         else
                         {
-                            SpawnItem(Tile[X, Y].Data1, Tile[X, Y].Data2, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data1, Tile[X, Y].Data2, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
                         }
                     }
                     else if (Tile[X, Y].Type == Enums.TileType.DropShop && Tile[X, Y].Data2 > 0)
                     {
                         if ((ItemManager.Items[Tile[X, Y].Data2].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data2].StackCap > 0) && Tile[X, Y].Data2 <= 0)
                         {
-                            SpawnItem(Tile[X, Y].Data2, 1, false, false, Tile[X, Y].String2, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data2, 1, false, false, Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
                         }
                         else
                         {
-                            SpawnItem(Tile[X, Y].Data2, Tile[X, Y].Data3, false, false, Tile[X, Y].String2, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data2, Tile[X, Y].Data3, false, false, Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
                         }
                     }
                 }

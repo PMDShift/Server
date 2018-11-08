@@ -950,7 +950,7 @@ namespace DataManager.Players
 
             // Load inventory
             query = "SELECT inventory.ItemSlot, inventory.ItemNum, inventory.Amount, " +
-                "inventory.Sticky, inventory.Tag " +
+                "inventory.Sticky, inventory.Tag, inventory.is_sandboxed " +
                 "FROM inventory " +
                 "WHERE inventory.CharID = \'" + playerData.CharID + "\';";
             foreach (DataColumnCollection columnCollection in database.RetrieveRowsEnumerable(query)) {
@@ -961,6 +961,7 @@ namespace DataManager.Players
                     invItem.Amount = columnCollection["Amount"].ValueString.ToInt(0);
                     invItem.Sticky = columnCollection["Sticky"].ValueString.ToBool();
                     invItem.Tag = columnCollection["Tag"].ValueString;
+                    invItem.IsSandboxed = columnCollection["is_sandboxed"].ValueString.ToBool();
 
                     playerData.Inventory.Add(itemSlot, invItem);
                 }
@@ -1730,7 +1731,8 @@ namespace DataManager.Players
                     database.CreateColumn(false, "ItemNum", invItem.Num.ToString()),
                     database.CreateColumn(false, "Amount", invItem.Amount.ToString()),
                     database.CreateColumn(false, "Sticky", invItem.Sticky.ToIntString()),
-                    database.CreateColumn(false, "Tag", invItem.Tag)
+                    database.CreateColumn(false, "Tag", invItem.Tag),
+                    database.CreateColumn(false, "is_sandboxed", invItem.IsSandboxed.ToIntString())
                 });
             }
         }
@@ -1742,7 +1744,8 @@ namespace DataManager.Players
                 database.CreateColumn(false, "ItemNum", item.Num.ToString()),
                 database.CreateColumn(false, "Amount", item.Amount.ToString()),
                 database.CreateColumn(false, "Sticky", item.Sticky.ToIntString()),
-                database.CreateColumn(false, "Tag", item.Tag)
+                database.CreateColumn(false, "Tag", item.Tag),
+                database.CreateColumn(false, "is_sandboxed", item.IsSandboxed.ToIntString())
             });
         }
 
@@ -1755,7 +1758,8 @@ namespace DataManager.Players
                     database.CreateColumn(false, "ItemNum", invItem.Num.ToString()),
                     database.CreateColumn(false, "Amount", invItem.Amount.ToString()),
                     database.CreateColumn(false, "Sticky", invItem.Sticky.ToIntString()),
-                    database.CreateColumn(false, "Tag", invItem.Tag)
+                    database.CreateColumn(false, "Tag", invItem.Tag),
+                    database.CreateColumn(false, "is_sandboxed", invItem.IsSandboxed.ToIntString())
                 });
             }
         }

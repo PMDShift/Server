@@ -2880,7 +2880,7 @@ namespace Server.Network
                             // Clear out it all
                             for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                             {
-                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                 map.ClearActiveItem(i);
                             }
 
@@ -4477,7 +4477,7 @@ namespace Server.Network
                                 IMap map = client.Player.GetCurrentMap();
                                 for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                                 {
-                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                     map.ClearActiveItem(i);
                                 }
                                 map.SpawnItems();
@@ -5298,6 +5298,12 @@ namespace Server.Network
                                 {
                                     Messenger.StorageMessage(client, "The storage is full!");
                                     return;
+                                }
+
+                                if (client.Player.Inventory[slot].IsSandboxed)
+                                {
+                                    Messenger.StorageMessage(client, "You can't deposit a sandboxed item!");
+                                    return; 
                                 }
 
                                 if (amount > client.Player.Inventory[slot].Amount)

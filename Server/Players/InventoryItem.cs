@@ -89,6 +89,16 @@ namespace Server.Players
             }
         }
 
+        public bool IsSandboxed
+        {
+            get { return baseInventoryItem.IsSandboxed; }
+            set
+            {
+                baseInventoryItem.IsSandboxed = value;
+                updated = true;
+            }
+        }
+
         public bool Updated
         {
             get { return updated; }

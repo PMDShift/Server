@@ -79,6 +79,11 @@ namespace Server.Maps
             get { return rawItem.PlayerFor; }
             set { rawItem.PlayerFor = value; }
         }
+        public bool IsSandboxed
+        {
+            get { return rawItem.IsSandboxed; }
+            set { rawItem.IsSandboxed = value; }
+        }
         public TickCount TimeDropped { get; set; }
     }
 }
