@@ -130,7 +130,7 @@ namespace Script
                                     var rdungeonNumber = command[1].ToInt() - 1;
                                     var rdungeon = RDungeonManager.RDungeons[rdungeonNumber];
 
-                                    if (rdungeon.IsSandboxed && client.Player.CanViewZone(rdungeon.ZoneID))
+                                    if (rdungeon.IsZoneOrObjectSandboxed() && client.Player.CanViewZone(rdungeon.ZoneID))
                                     {
                                         client.Player.BeginTempStatMode(level, false);
                                         client.Player.WarpToRDungeon(command[1].ToInt() - 1, floor - 1);
