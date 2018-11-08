@@ -1203,7 +1203,7 @@ namespace Server.Network
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited in this area.", Text.Yellow);
                                                 }
-                                                else if (map.IsSandboxed)
+                                                else if (map.IsZoneOrObjectSandboxed())
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited on a sandboxed map.", Text.Yellow);
                                                 }
@@ -1891,7 +1891,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (map.IsSandboxed)
+                            if (map.IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "Unable to change sprites on a sandboxed map.", Text.BrightRed);
                                 return;
@@ -2650,7 +2650,7 @@ namespace Server.Network
                             return;
                         }
 
-                        if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                        if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                         {
                             Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                             return;
@@ -2706,7 +2706,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -2880,7 +2880,7 @@ namespace Server.Network
                             // Clear out it all
                             for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                             {
-                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                 map.ClearActiveItem(i);
                             }
 
@@ -2963,7 +2963,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3021,7 +3021,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3085,7 +3085,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3141,7 +3141,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -4477,7 +4477,7 @@ namespace Server.Network
                                 IMap map = client.Player.GetCurrentMap();
                                 for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                                 {
-                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                     map.ClearActiveItem(i);
                                 }
                                 map.SpawnItems();

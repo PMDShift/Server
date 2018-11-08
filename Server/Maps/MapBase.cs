@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using DataManager.Maps;
+using Server.Zones;
 // This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
@@ -227,5 +228,16 @@ namespace Server.Maps
             set { rawMap.ExpEnabled = value; }
         }
         #endregion Properties
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            } else
+            {
+                return IsSandboxed;
+            }
+        }
     }
 }

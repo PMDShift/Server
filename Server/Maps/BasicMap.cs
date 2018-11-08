@@ -222,22 +222,22 @@ namespace Server.Maps
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically
                         if ((ItemManager.Items[Tile[X, Y].Data1].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data1].StackCap > 0) && Tile[X, Y].Data2 <= 0)
                         {
-                            SpawnItem(Tile[X, Y].Data1, 1, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data1, 1, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsZoneOrObjectSandboxed(), X, Y, null);
                         }
                         else
                         {
-                            SpawnItem(Tile[X, Y].Data1, Tile[X, Y].Data2, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data1, Tile[X, Y].Data2, Tile[X, Y].Data3.ToString().ToBool(), Tile[X, Y].String1.ToBool(), Tile[X, Y].String2, this.IsZoneOrObjectSandboxed(), X, Y, null);
                         }
                     }
                     else if (Tile[X, Y].Type == Enums.TileType.DropShop && Tile[X, Y].Data2 > 0)
                     {
                         if ((ItemManager.Items[Tile[X, Y].Data2].Type == Enums.ItemType.Currency || ItemManager.Items[Tile[X, Y].Data2].StackCap > 0) && Tile[X, Y].Data2 <= 0)
                         {
-                            SpawnItem(Tile[X, Y].Data2, 1, false, false, Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data2, 1, false, false, Tile[X, Y].String2, this.IsZoneOrObjectSandboxed(), X, Y, null);
                         }
                         else
                         {
-                            SpawnItem(Tile[X, Y].Data2, Tile[X, Y].Data3, false, false, Tile[X, Y].String2, this.IsSandboxed, X, Y, null);
+                            SpawnItem(Tile[X, Y].Data2, Tile[X, Y].Data3, false, false, Tile[X, Y].String2, this.IsZoneOrObjectSandboxed(), X, Y, null);
                         }
                     }
                 }
@@ -403,7 +403,7 @@ namespace Server.Maps
 
                 if (Moral == Enums.MapMoral.None)
                 {
-                    ActiveNpc[npcSlot].GenerateHeldItem(this.IsSandboxed);
+                    ActiveNpc[npcSlot].GenerateHeldItem(this.IsZoneOrObjectSandboxed());
                 }
 
                 if (Server.Math.Rand(0, 100) < npc.StartStatusChance)

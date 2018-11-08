@@ -635,7 +635,7 @@ namespace Server.Maps
 
                             // Erase item from the map ~ done in spawnitemslot
 
-                            map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsSandboxed, X, Y, null);
+                            map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
 
                             Scripting.ScriptManager.InvokeSub("OnPickupItem", this, -1, HeldItem);
                             return;

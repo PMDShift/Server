@@ -858,7 +858,7 @@ namespace Server.AI
                 }
 
                 // Check for guild shop
-                if (!map.IsSandboxed)
+                if (!map.IsZoneOrObjectSandboxed())
                 {
                     if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
                     {

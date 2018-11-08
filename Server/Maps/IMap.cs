@@ -237,6 +237,8 @@ namespace Server.Maps
 
         #endregion Properties
 
+        bool IsZoneOrObjectSandboxed();
+
         void ClearActiveItem(int itemSlot);
         void ClearActiveNpc(int npcSlot);
         int FindOpenItemSlot();

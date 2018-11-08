@@ -2708,7 +2708,7 @@ namespace Server.Combat
                         {
                             skipRecruit = true;
                         }
-                        if (ownerPlayer.Map.IsSandboxed)
+                        if (ownerPlayer.Map.IsZoneOrObjectSandboxed())
                         {
                             skipRecruit = true;
                         }

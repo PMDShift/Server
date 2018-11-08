@@ -2250,7 +2250,7 @@ namespace Script
                             int players = 0;
                             foreach (Client target in client.Player.Map.GetClients())
                             {
-                                client.Player.Map.SpawnItem(452, 1, false, false, "", client.Player.Map.IsSandboxed, 8 + 2 * (players % 2), 5 + 2 * (players / 2), target);
+                                client.Player.Map.SpawnItem(452, 1, false, false, "", client.Player.Map.IsZoneOrObjectSandboxed(), 8 + 2 * (players % 2), 5 + 2 * (players / 2), target);
                                 players++;
                             }
                         }
@@ -2267,7 +2267,7 @@ namespace Script
                             int players = 0;
                             foreach (Client target in client.Player.Map.GetClients())
                             {
-                                client.Player.Map.SpawnItem(452, 1, false, false, "", client.Player.Map.IsSandboxed, 8 + 2 * (players % 2), 6 + 2 * (players / 2), target);
+                                client.Player.Map.SpawnItem(452, 1, false, false, "", client.Player.Map.IsZoneOrObjectSandboxed(), 8 + 2 * (players % 2), 6 + 2 * (players / 2), target);
                                 players++;
                             }
                         }

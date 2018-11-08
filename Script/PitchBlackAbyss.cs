@@ -701,7 +701,7 @@ namespace Script {
         			}
         			//Messenger.PlayerMsg(client, "item spawning", Text.Black);
         			//imap.SetAttribute(randx, randy, Enums.TileType.Item, itemnum, amount, 0, "", para, "");
-        			imap.SpawnItem(itemnum, amount, false, false, para, imap.IsSandboxed, randx, randy, null);
+        			imap.SpawnItem(itemnum, amount, false, false, para, imap.IsZoneOrObjectSandboxed(), randx, randy, null);
         		} else i--;
         	}
         }

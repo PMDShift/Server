@@ -623,7 +623,7 @@ namespace Server.Network
 
         public static bool PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound)
         {
-            if (map.IsSandboxed && map.MapType != Enums.MapType.House)
+            if (map.IsZoneOrObjectSandboxed() && map.MapType != Enums.MapType.House)
             {
                 if (!client.Player.CanViewZone(map.ZoneID) && client.Player.LoggedIn)
                 {
@@ -646,7 +646,7 @@ namespace Server.Network
                 }
             }
 
-            if (!map.IsSandboxed || !client.Player.CanEditZone(map.ZoneID)) 
+            if (!map.IsZoneOrObjectSandboxed() || !client.Player.CanEditZone(map.ZoneID)) 
             {
                 client.Player.ProtectionOff = true;
             }

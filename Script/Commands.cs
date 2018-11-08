@@ -2363,7 +2363,7 @@ namespace Script
 
                             if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
-                                if (map.IsSandboxed && !client.Player.CanEditZone(map.ZoneID))
+                                if (map.IsZoneOrObjectSandboxed() && client.Player.CanEditZone(map.ZoneID))
                                 {
                                     if (client.Player.ProtectionOff)
                                     {
