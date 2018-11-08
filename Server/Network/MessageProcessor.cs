@@ -3404,6 +3404,12 @@ namespace Server.Network
                                 return;
                             }
 
+                            if (!EvolutionManagerBase.Evolutions[n].IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this evolution (evolution not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
                             Messenger.SendEditEvoTo(client, n);
                         }
                         break;
@@ -3424,8 +3430,16 @@ namespace Server.Network
                                 Messenger.HackingAttempt(client, "Invalid Evolution Index");
                                 return;
                             }
+
+                            if (!EvolutionManagerBase.Evolutions[n].IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this evolution (evolution not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
                             Evolution evo = new Evolution();
 
+                            evo.IsSandboxed = EvolutionManager.Evolutions[n].IsSandboxed;
 
                             evo.Name = parse[2];
                             evo.Species = parse[3].ToInt();
@@ -4204,6 +4218,8 @@ namespace Server.Network
                         break;
                     case "savemission":
                         {
+                            return;
+
                             WonderMails.MissionPool missionPool = new WonderMails.MissionPool();
 
                             int difficulty = parse[1].ToInt() - 1;
@@ -4268,6 +4284,8 @@ namespace Server.Network
                                 Messenger.HackingAttempt(client, "Invalid mission client");
                                 return;
                             }
+
+                            return;
 
                             Messenger.SendEditMissionTo(client, n - 1);
                         }
