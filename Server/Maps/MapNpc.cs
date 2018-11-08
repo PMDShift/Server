@@ -425,7 +425,7 @@ namespace Server.Maps
             Type2 = pokemon.Type2;
         }
 
-        public void GenerateHeldItem()
+        public void GenerateHeldItem(bool isSandboxed)
         {
             //add sticky?
             List<InventoryItem> possibleDrops = new List<InventoryItem>();
@@ -439,6 +439,7 @@ namespace Server.Maps
                         drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                         drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
                         drop.Tag = NpcManager.Npcs[Num].Drops[i].Tag;
+                        drop.IsSandboxed = isSandboxed;
                         possibleDrops.Add(drop);
                     }
                     else
@@ -451,6 +452,7 @@ namespace Server.Maps
                                 drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                                 drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
                                 drop.Tag = NpcManager.Npcs[Num].Drops[i].Tag;
+                                drop.IsSandboxed = isSandboxed;
                                 possibleDrops.Add(drop);
                             }
                         }

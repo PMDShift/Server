@@ -1124,10 +1124,7 @@ namespace Server.Players
                                         Inventory[n].Num = map.ActiveItem[i].Num;
                                         Inventory[n].Sticky = map.ActiveItem[i].Sticky;
                                         Inventory[n].Tag = map.ActiveItem[i].Tag;
-                                        if (map.IsSandboxed)
-                                        {
-                                            Inventory[n].IsSandboxed = true;
-                                        }
+                                        Inventory[n].IsSandboxed = map.ActiveItem[i].IsSandboxed;
 
                                         if (Inventory[n].Sticky)
                                         {

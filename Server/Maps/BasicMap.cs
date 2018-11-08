@@ -403,7 +403,7 @@ namespace Server.Maps
 
                 if (Moral == Enums.MapMoral.None)
                 {
-                    ActiveNpc[npcSlot].GenerateHeldItem();
+                    ActiveNpc[npcSlot].GenerateHeldItem(this.IsSandboxed);
                 }
 
                 if (Server.Math.Rand(0, 100) < npc.StartStatusChance)
