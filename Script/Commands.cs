@@ -109,6 +109,16 @@ namespace Script
 
 				switch (command[0])
 				{
+                    case "/zone":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            {
+                                var zoneID = client.Player.Map.ZoneID;
+
+                                Messenger.PlayerMsg(client, $"Zone: {zoneID}", Text.BrightGreen);
+                            }
+                        }
+                        break;
                     case "/testrdungeon":
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
