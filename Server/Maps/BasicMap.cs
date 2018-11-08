@@ -397,7 +397,14 @@ namespace Server.Maps
 
                 ActiveNpc[npcSlot].HP = ActiveNpc[npcSlot].MaxHP;
 
-                ActiveNpc[npcSlot].Direction = (Enums.Direction)Server.Math.Rand(0, 4);
+                if (NpcManager.Npcs[NPCNum].Behavior == Enums.NpcBehavior.Shopkeeper)
+                {
+                    ActiveNpc[npcSlot].Direction = Enums.Direction.Down;
+                }
+                else
+                {
+                    ActiveNpc[npcSlot].Direction = (Enums.Direction)Server.Math.Rand(0, 4);
+                }
 
                 ActiveNpc[npcSlot].GenerateMoveset();
 
