@@ -1617,6 +1617,22 @@ namespace Server.Players
 
         #region Level x system
 
+        public bool IsInTempStatMode()
+        {
+            for (var i = 0; i < Team.Length; i++)
+            {
+                if (Team[i].Loaded)
+                {
+                    if (Team[i].InTempMode)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void BeginTempStatMode(int level, bool keepMoves)
         {
             PacketHitList hitlist = null;
@@ -1731,6 +1747,8 @@ namespace Server.Players
 
             PacketBuilder.AppendPlayerMoves(client, hitlist);
             PacketBuilder.AppendActiveTeam(client, hitlist);
+
+            PacketHitList.MethodEnded(ref hitlist);
         }
 
         public void RestoreRecruitStats(int slot)

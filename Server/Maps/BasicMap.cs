@@ -357,7 +357,7 @@ namespace Server.Maps
             }
 
             NPCNum = npc.NpcNum;
-            if (NPCNum > 0)
+            if (NPCNum > 0 && NpcManager.Npcs[NPCNum].ZoneID == this.ZoneID)
             {
                 ActiveNpc[npcSlot].Num = NPCNum;
                 ActiveNpc[npcSlot].Target = null;

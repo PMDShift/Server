@@ -702,6 +702,14 @@ namespace Server.Network
                 }
             }
 
+            if (oldMap != null && oldMap.ZoneID != map.ZoneID)
+            {
+                if (client.Player.IsInTempStatMode())
+                {
+                    client.Player.EndTempStatMode();
+                }
+            }
+
             if (map.MapType == Enums.MapType.Standard)
             {
                 Map sMap = map as Map;

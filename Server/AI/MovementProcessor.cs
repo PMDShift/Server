@@ -1045,6 +1045,7 @@ namespace Server.AI
                                     //client.Player.dungeonIndex = -1;
                                     //client.Player.dungeonFloor = -1;
                                     hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
+                                    client.Player.EndTempStatMode();
                                     Messenger.PlayerWarp(client, Settings.Crossroads, Settings.StartX, Settings.StartY);
                                 }
                             }

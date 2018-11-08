@@ -109,7 +109,30 @@ namespace Script
 
 				switch (command[0])
 				{
-					case "/sandbox": {
+                    case "/testrdungeon":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            {
+                                if (command[1].IsNumeric())
+                                {
+                                    int floor = 1;
+                                    if (command.CommandArgs.Count > 2 && command[2].IsNumeric())
+                                    {
+                                        floor = command[2].ToInt();
+                                    }
+
+                                    var level = 1;
+                                    if (command.CommandArgs.Count > 3 && command[3].IsNumeric())
+                                    {
+                                        level = command[3].ToInt();
+                                    }
+                                    client.Player.BeginTempStatMode(level, false);
+                                    client.Player.WarpToRDungeon(command[1].ToInt() - 1, floor - 1);
+                                }
+                            }
+                        }
+                        break;
+                    case "/sandbox": {
 							// TODO: Only allow entering sandbox mode if assigned to at least one zone
 							// TODO: Only allow entering sandbox mode if on the overworld
 							client.Player.PlayerData.IsSandboxed = !client.Player.PlayerData.IsSandboxed;
@@ -4045,7 +4068,7 @@ namespace Script
                         break;
                     case "/rstart":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command[1].IsNumeric())
                                 {
