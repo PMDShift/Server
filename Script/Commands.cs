@@ -126,8 +126,15 @@ namespace Script
                                     {
                                         level = command[3].ToInt();
                                     }
-                                    client.Player.BeginTempStatMode(level, false);
-                                    client.Player.WarpToRDungeon(command[1].ToInt() - 1, floor - 1);
+
+                                    var rdungeonNumber = command[1].ToInt() - 1;
+                                    var rdungeon = RDungeonManager.RDungeons[rdungeonNumber];
+
+                                    if (rdungeon.IsSandboxed && client.Player.CanViewZone(rdungeon.ZoneID))
+                                    {
+                                        client.Player.BeginTempStatMode(level, false);
+                                        client.Player.WarpToRDungeon(command[1].ToInt() - 1, floor - 1);
+                                    }
                                 }
                             }
                         }
