@@ -525,21 +525,21 @@ namespace Server.Network
             SendDataTo(client, TcpPacket.CreatePacket("changehousebounds", House.TILE_PRICE));
         }
 
-        public static void PlayerWarpToVoid(Client client)
+        public static bool PlayerWarpToVoid(Client client)
         {
-            IMap map = MapManager.RetrieveMap("void-" + client.Player.CharID);
-            PlayerWarp(client, map, 10, 7);
+            var map = MapManager.RetrieveMap("void-" + client.Player.CharID);
+            return PlayerWarp(client, map, 10, 7);
         }
 
-        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room)
+        public static bool PlayerWarpToHouse(Client client, string houseOwnerID, int room)
         {
-            PlayerWarpToHouse(client, houseOwnerID, room, true);
+            return PlayerWarpToHouse(client, houseOwnerID, room, true);
         }
 
-        public static void PlayerWarpToHouse(Client client, string houseOwnerID, int room, bool tileCheck)
+        public static bool PlayerWarpToHouse(Client client, string houseOwnerID, int room, bool tileCheck)
         {
-            string houseID = MapManager.GenerateHouseID(houseOwnerID, room);
-            IMap map = MapManager.RetrieveMap(houseID, true);
+            var houseID = MapManager.GenerateHouseID(houseOwnerID, room);
+            var map = MapManager.RetrieveMap(houseID, true);
             bool mapModified = false;
             if (map == null)
             {
@@ -563,25 +563,25 @@ namespace Server.Network
             {
                 map.Save();
             }
-            PlayerWarp(client, map, ((House)map).StartX, ((House)map).StartY, tileCheck);
+            return PlayerWarp(client, map, ((House)map).StartX, ((House)map).StartY, tileCheck);
         }
 
-        public static void PlayerXYWarp(Client client, int x, int y)
+        public static bool PlayerXYWarp(Client client, int x, int y)
         {
-            PlayerWarp(client, client.Player.Map, x, y);
+            return PlayerWarp(client, client.Player.Map, x, y);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y)
+        public static bool PlayerWarp(Client client, string mapID, int x, int y)
         {
-            PlayerWarp(client, mapID, x, y, true);
+            return PlayerWarp(client, mapID, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck)
+        public static bool PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck)
         {
-            PlayerWarp(client, mapID, x, y, tileCheck, true);
+            return PlayerWarp(client, mapID, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck, bool playSound)
+        public static bool PlayerWarp(Client client, string mapID, int x, int y, bool tileCheck, bool playSound)
         {
             if (mapID.StartsWith("void"))
             {
@@ -589,46 +589,46 @@ namespace Server.Network
                 if (charID != client.Player.CharID)
                 {
                     // You can't go to someone elses void
-                    return;
+                    return false;
                 }
             }
 
-            PlayerWarp(client, MapManager.RetrieveMap(mapID, true), x, y, tileCheck, playSound);
+            return PlayerWarp(client, MapManager.RetrieveMap(mapID, true), x, y, tileCheck, playSound);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y)
+        public static bool PlayerWarp(Client client, int mapNum, int x, int y)
         {
-            PlayerWarp(client, mapNum, x, y, true);
+            return PlayerWarp(client, mapNum, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck)
+        public static bool PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck)
         {
-            PlayerWarp(client, mapNum, x, y, tileCheck, true);
+            return PlayerWarp(client, mapNum, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck, bool playSound)
+        public static bool PlayerWarp(Client client, int mapNum, int x, int y, bool tileCheck, bool playSound)
         {
-            PlayerWarp(client, MapManager.RetrieveMap(mapNum, true), x, y, tileCheck, playSound);
+            return PlayerWarp(client, MapManager.RetrieveMap(mapNum, true), x, y, tileCheck, playSound);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y)
+        public static bool PlayerWarp(Client client, IMap map, int x, int y)
         {
-            PlayerWarp(client, map, x, y, true);
+            return PlayerWarp(client, map, x, y, true);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck)
+        public static bool PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck)
         {
-            PlayerWarp(client, map, x, y, tileCheck, true);
+            return PlayerWarp(client, map, x, y, tileCheck, true);
         }
 
-        public static void PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound)
+        public static bool PlayerWarp(Client client, IMap map, int x, int y, bool tileCheck, bool playSound)
         {
             if (map.IsSandboxed && map.MapType != Enums.MapType.House)
             {
                 if (!client.Player.CanViewZone(map.ZoneID) && client.Player.LoggedIn)
                 {
                     Messenger.PlayerMsg(client, "Unable to warp to a sandboxed map that you are not assigned to.", Text.BrightRed);
-                    return;
+                    return false;
                 }
 
                 if (!client.Player.PlayerData.IsSandboxed)
@@ -642,8 +642,13 @@ namespace Server.Network
                 if (client.ClientEdition != Constants.ALTERNATE_CLIENT_EDITION)
                 {
                     Messenger.PlayerMsg(client, "You can't enter this map with your client (turn-based gameplay not supported).", Text.BrightRed);
-                    return;
+                    return false;
                 }
+            }
+
+            if (!map.IsSandboxed || !client.Player.CanEditZone(map.ZoneID)) 
+            {
+                client.Player.ProtectionOff = true;
             }
 
             if (client.Player.LoggedIn && map.MapType == Enums.MapType.Void)
@@ -651,7 +656,7 @@ namespace Server.Network
                 Maps.Void @void = map as Maps.Void;
                 if (@void.PlayerOwner.CharID != client.Player.CharID)
                 {
-                    return;
+                    return false;
                 }
             }
             if (x > map.MaxX)
@@ -685,7 +690,7 @@ namespace Server.Network
                         StoryManager.PlayStory(client, map.Tile[x, y].Data1);
                     }
                 }
-                return;
+                return true;
             }
 
             if (oldMap != null && oldMap.MapType == Enums.MapType.Void)
@@ -693,7 +698,7 @@ namespace Server.Network
                 Maps.Void @void = oldMap as Maps.Void;
                 if (@void.SafeExit == false)
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -839,6 +844,8 @@ namespace Server.Network
             //}
 
             //client.Player.GettingMap = true;
+
+            return true;
         }
 
         //public static void SendOpenJobList(Client client) {

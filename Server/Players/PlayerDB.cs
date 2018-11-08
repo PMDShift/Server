@@ -1476,14 +1476,17 @@ namespace Server.Players
 
                 map.ProcessingPaused = true;
                 Messenger.SendDataTo(client, TcpPacket.CreatePacket("floorchangedisplay", map.Name, "1500"));
-                Messenger.PlayerWarp(client, map, map.StartX, map.StartY);
-                if (generated)
+                var hasWarped = Messenger.PlayerWarp(client, map, map.StartX, map.StartY);
+                if (hasWarped)
                 {
-                    map.SpawnNpcs();
-                    map.NpcSpawnWait = new Server.TickCount(Core.GetTickCount().Tick);
-                }
+                    if (generated)
+                    {
+                        map.SpawnNpcs();
+                        map.NpcSpawnWait = new Server.TickCount(Core.GetTickCount().Tick);
+                    }
 
-                ScriptManager.InvokeSub("EnterRDungeon", client, dungeonNum, floor);
+                    ScriptManager.InvokeSub("EnterRDungeon", client, dungeonNum, floor);
+                }
             }
         }
 

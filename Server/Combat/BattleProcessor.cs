@@ -1777,7 +1777,7 @@ namespace Server.Combat
 
             if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit)
             {
-                if (Ranks.IsDisallowed(((Recruit)setup.Attacker).Owner, Enums.Rank.Monitor) || ((Recruit)setup.Attacker).Owner.Player.ProtectionOff)
+                if (((Recruit)setup.Attacker).Owner.Player.ProtectionOff)
                 {
                     ((Recruit)setup.Attacker).Owner.Player.Hunted = true;
                     PacketBuilder.AppendHunted(((Recruit)setup.Attacker).Owner, setup.PacketStack);

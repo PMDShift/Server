@@ -2329,21 +2329,30 @@ namespace Script
                     //serverontime, obsolete
                     case "/hunt":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            var map = client.Player.Map;
+
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
-                                if (client.Player.ProtectionOff)
+                                if (map.IsSandboxed && !client.Player.CanEditZone(map.ZoneID))
                                 {
-                                    client.Player.ProtectionOff = false;
-                                    client.Player.Hunted = false;
-                                    Messenger.PlayerMsg(client, "You are no longer hunted.", Text.BrightGreen);
+                                    if (client.Player.ProtectionOff)
+                                    {
+                                        client.Player.ProtectionOff = false;
+                                        client.Player.Hunted = false;
+                                        Messenger.PlayerMsg(client, "You are no longer hunted.", Text.BrightGreen);
+                                    }
+                                    else
+                                    {
+                                        client.Player.ProtectionOff = true;
+                                        client.Player.Hunted = true;
+                                        Messenger.PlayerMsg(client, "You are now hunted.", Text.BrightGreen);
+                                    }
+                                    PacketBuilder.AppendHunted(client, hitlist);
                                 }
                                 else
                                 {
-                                    client.Player.ProtectionOff = true;
-                                    client.Player.Hunted = true;
-                                    Messenger.PlayerMsg(client, "You are now hunted.", Text.BrightGreen);
+                                    Messenger.PlayerMsg(client, "You can't change hunted mode here.", Text.BrightRed);
                                 }
-                                PacketBuilder.AppendHunted(client, hitlist);
                             }
                         }
                         break;

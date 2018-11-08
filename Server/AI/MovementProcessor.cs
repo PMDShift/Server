@@ -197,7 +197,7 @@ namespace Server.AI
                     return false;
                 }
 
-                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor) || client.Player.ProtectionOff)
+                if (client.Player.ProtectionOff)
                 {
                     player.Hunted = true;
                     PacketBuilder.AppendHunted(client, hitlist);
