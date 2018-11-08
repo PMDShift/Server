@@ -36,8 +36,6 @@ namespace Server.RDungeons
 
         public List<RDungeonFloor> Floors { get; set; }
 
-
-
         public int RDungeonIndex;
 
 
@@ -46,6 +44,18 @@ namespace Server.RDungeons
             RDungeonIndex = rDungeonIndex;
             DungeonName = "";
             Floors = new List<RDungeonFloor>();
+        }
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            }
+            else
+            {
+                return IsSandboxed;
+            }
         }
     }
 }
