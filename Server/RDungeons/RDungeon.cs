@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Zones;
 
 namespace Server.RDungeons
 {
