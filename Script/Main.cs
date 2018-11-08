@@ -5208,7 +5208,6 @@ namespace Script
 
                             if (item != -1)
                             {
-
                                 Recruit recruit = new Recruit(client);
                                 //recruit.SpriteOverride = -1;
                                 recruit.Level = 1;
@@ -5252,30 +5251,36 @@ namespace Script
                                     }
                                 }
 
-
-                                int openSlot = client.Player.FindOpenTeamSlot();
-                                int recruitIndex = -1;
-                                using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+                                if (!client.Player.Inventory[item].IsSandboxed)
                                 {
-                                    recruitIndex = client.Player.AddToRecruitmentBank(dbConnection, recruit);
+                                    int openSlot = client.Player.FindOpenTeamSlot();
+                                    int recruitIndex = -1;
+                                    using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Players))
+                                    {
+                                        recruitIndex = client.Player.AddToRecruitmentBank(dbConnection, recruit);
+                                    }
+
+
+                                    if (recruitIndex != -1)
+                                    {
+                                        client.Player.AddToTeam(recruitIndex, openSlot);
+                                        client.Player.Team[openSlot].HP = client.Player.Team[openSlot].MaxHP;
+                                        Messenger.BattleMsg(client, "You have recruited a new team member!", Text.BrightGreen);
+
+                                        Messenger.SendActiveTeam(client);
+                                    }
+
+                                    client.Player.TakeItemSlot(item, 1, true);
+
+                                    if (recruitArgs.Length > 1) client.Player.GiveItem(recruitArgs[1].ToInt(), 1);
                                 }
-
-
-                                if (recruitIndex != -1)
+                                else
                                 {
-                                    client.Player.AddToTeam(recruitIndex, openSlot);
-                                    client.Player.Team[openSlot].HP = client.Player.Team[openSlot].MaxHP;
-                                    Messenger.BattleMsg(client, "You have recruited a new team member!", Text.BrightGreen);
+                                    Messenger.PlayerMsg(client, "It fled!", Text.BrightRed);
 
-                                    Messenger.SendActiveTeam(client);
+                                    client.Player.TakeItemSlot(item, 1, true);
                                 }
-
-                                client.Player.TakeItemSlot(item, 1, true);
-
-                                if (recruitArgs.Length > 1) client.Player.GiveItem(recruitArgs[1].ToInt(), 1);
-
                             }
-
                         }
                         break;
                     case 48:
