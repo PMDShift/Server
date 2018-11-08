@@ -425,7 +425,7 @@ namespace Server.Maps
             Type2 = pokemon.Type2;
         }
 
-        public void GenerateHeldItem()
+        public void GenerateHeldItem(bool isSandboxed)
         {
             //add sticky?
             List<InventoryItem> possibleDrops = new List<InventoryItem>();
@@ -439,6 +439,7 @@ namespace Server.Maps
                         drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                         drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
                         drop.Tag = NpcManager.Npcs[Num].Drops[i].Tag;
+                        drop.IsSandboxed = isSandboxed;
                         possibleDrops.Add(drop);
                     }
                     else
@@ -451,6 +452,7 @@ namespace Server.Maps
                                 drop.Num = NpcManager.Npcs[Num].Drops[i].ItemNum;
                                 drop.Amount = NpcManager.Npcs[Num].Drops[i].ItemValue;
                                 drop.Tag = NpcManager.Npcs[Num].Drops[i].Tag;
+                                drop.IsSandboxed = isSandboxed;
                                 possibleDrops.Add(drop);
                             }
                         }
@@ -578,13 +580,13 @@ namespace Server.Maps
                     {
                         if (val >= HeldItem.Amount)
                         {
-                            currentMap.SpawnItemSlot(i, HeldItem.Num, HeldItem.Amount, HeldItem.Sticky, false, HeldItem.Tag, X, Y, playerFor);
+                            currentMap.SpawnItemSlot(i, HeldItem.Num, HeldItem.Amount, HeldItem.Sticky, false, HeldItem.Tag, HeldItem.IsSandboxed, X, Y, playerFor);
                             RemoveFromActiveItemList(HeldItem.Num);
                             HeldItem = null;
                         }
                         else
                         {
-                            currentMap.SpawnItemSlot(i, HeldItem.Num, val, false, false, HeldItem.Tag, X, Y, playerFor);
+                            currentMap.SpawnItemSlot(i, HeldItem.Num, val, false, false, HeldItem.Tag, HeldItem.IsSandboxed, X, Y, playerFor);
                             HeldItem.Amount -= val;
                         }
                         Scripting.ScriptManager.InvokeSub("OnDropItem", this, -1, currentMap.ActiveItem[i]);
@@ -633,7 +635,7 @@ namespace Server.Maps
 
                             // Erase item from the map ~ done in spawnitemslot
 
-                            map.SpawnItemSlot(i, -1, 0, false, false, "", X, Y, null);
+                            map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
 
                             Scripting.ScriptManager.InvokeSub("OnPickupItem", this, -1, HeldItem);
                             return;

@@ -202,7 +202,7 @@ namespace DataManager.Maps
 
             { // Load map active items
                 query = "SELECT mapstate_activeitem.Slot, mapstate_activeitem.Number, mapstate_activeitem.Value, mapstate_activeitem.Sticky, " +
-                   "mapstate_activeitem.Tag, mapstate_activeitem.Hidden, mapstate_activeitem.X, mapstate_activeitem.Y, " +
+                   "mapstate_activeitem.Tag, mapstate_activeitem.Hidden, mapstate_activeitem.is_sandboxed, mapstate_activeitem.X, mapstate_activeitem.Y, " +
                    "mapstate_activeitem.TimeRemaining, mapstate_activeitem.ItemOwner " +
                    "FROM mapstate_activeitem WHERE mapstate_activeitem.MapID = \'" + mapID + "\'";
                 foreach (DataColumnCollection row in database.RetrieveRowsEnumerable(query)) {
@@ -214,6 +214,7 @@ namespace DataManager.Maps
                     mapItem.Sticky = row[counter++].ValueString.ToBool();
                     mapItem.Tag = row[counter++].ValueString;
                     mapItem.Hidden = row[counter++].ValueString.ToBool();
+                    mapItem.IsSandboxed = row[counter++].ValueString.ToBool();
                     mapItem.X = Convert.ToInt32(row[counter++].Value);
                     mapItem.Y = Convert.ToInt32(row[counter++].Value);
                     mapItem.TimeRemaining = Convert.ToInt32(row[counter++].Value);
@@ -420,7 +421,7 @@ namespace DataManager.Maps
 
             // Save active item data
             MultiRowInsert multiRowInsert = new MultiRowInsert(database, "mapstate_activeitem", "MapID", "Slot", "Number", "Value",
-                "Sticky", "Tag", "Hidden", "X", "Y", "TimeRemaining", "ItemOwner");
+                "Sticky", "Tag", "Hidden", "is_sandboxed", "X", "Y", "TimeRemaining", "ItemOwner");
 
             for (int i = 0; i < mapDump.ActiveItem.Length; i++) {
                 if (mapDump.ActiveItem[i].Num > 0) {
@@ -431,6 +432,7 @@ namespace DataManager.Maps
                     multiRowInsert.AddColumnData(mapID);
                     multiRowInsert.AddColumnData(i, item.Num, item.Value);
                     multiRowInsert.AddColumnData(item.Sticky.ToIntString(), item.Tag, item.Hidden.ToIntString());
+                    multiRowInsert.AddColumnData(item.IsSandboxed.ToIntString());
                     multiRowInsert.AddColumnData(item.X, item.Y, item.TimeRemaining);
                     multiRowInsert.AddColumnData(item.PlayerFor);
 

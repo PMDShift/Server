@@ -109,7 +109,37 @@ namespace Script
 
 				switch (command[0])
 				{
-					case "/sandbox": {
+                    case "/testrdungeon":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+                            {
+                                if (command[1].IsNumeric())
+                                {
+                                    int floor = 1;
+                                    if (command.CommandArgs.Count > 2 && command[2].IsNumeric())
+                                    {
+                                        floor = command[2].ToInt();
+                                    }
+
+                                    var level = 1;
+                                    if (command.CommandArgs.Count > 3 && command[3].IsNumeric())
+                                    {
+                                        level = command[3].ToInt();
+                                    }
+
+                                    var rdungeonNumber = command[1].ToInt() - 1;
+                                    var rdungeon = RDungeonManager.RDungeons[rdungeonNumber];
+
+                                    if (rdungeon.IsSandboxed && client.Player.CanViewZone(rdungeon.ZoneID))
+                                    {
+                                        client.Player.BeginTempStatMode(level, false);
+                                        client.Player.WarpToRDungeon(command[1].ToInt() - 1, floor - 1);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "/sandbox": {
 							// TODO: Only allow entering sandbox mode if assigned to at least one zone
 							// TODO: Only allow entering sandbox mode if on the overworld
 							client.Player.PlayerData.IsSandboxed = !client.Player.PlayerData.IsSandboxed;
@@ -2329,21 +2359,30 @@ namespace Script
                     //serverontime, obsolete
                     case "/hunt":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            var map = client.Player.Map;
+
+                            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
                             {
-                                if (client.Player.ProtectionOff)
+                                if (map.IsZoneOrObjectSandboxed() && client.Player.CanEditZone(map.ZoneID))
                                 {
-                                    client.Player.ProtectionOff = false;
-                                    client.Player.Hunted = false;
-                                    Messenger.PlayerMsg(client, "You are no longer hunted.", Text.BrightGreen);
+                                    if (client.Player.ProtectionOff)
+                                    {
+                                        client.Player.ProtectionOff = false;
+                                        client.Player.Hunted = false;
+                                        Messenger.PlayerMsg(client, "You are no longer hunted.", Text.BrightGreen);
+                                    }
+                                    else
+                                    {
+                                        client.Player.ProtectionOff = true;
+                                        client.Player.Hunted = true;
+                                        Messenger.PlayerMsg(client, "You are now hunted.", Text.BrightGreen);
+                                    }
+                                    PacketBuilder.AppendHunted(client, hitlist);
                                 }
                                 else
                                 {
-                                    client.Player.ProtectionOff = true;
-                                    client.Player.Hunted = true;
-                                    Messenger.PlayerMsg(client, "You are now hunted.", Text.BrightGreen);
+                                    Messenger.PlayerMsg(client, "You can't change hunted mode here.", Text.BrightRed);
                                 }
-                                PacketBuilder.AppendHunted(client, hitlist);
                             }
                         }
                         break;
@@ -4036,7 +4075,7 @@ namespace Script
                         break;
                     case "/rstart":
                         {
-                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 if (command[1].IsNumeric())
                                 {

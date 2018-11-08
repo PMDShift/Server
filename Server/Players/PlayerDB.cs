@@ -949,7 +949,7 @@ namespace Server.Players
                     //map.ActiveItem[i].Y = Y;
                     //map.ActiveItem[i].PlayerFor = "";
                     //map.ActiveItem[i].TimeDropped = new TickCount(0);
-                    if (map.Tile[X, Y].Type == Enums.TileType.DropShop && map.Tile[X, Y].String1 != CharID && !ignorePrice)
+                    if (map.Tile[X, Y].Type == Enums.TileType.DropShop && map.Tile[X, Y].String1 != CharID && !ignorePrice && !inventory[invSlot].IsSandboxed)
                     {
                         if (String.IsNullOrEmpty(map.Tile[X, Y].String1))
                         {
@@ -982,6 +982,10 @@ namespace Server.Players
                         {
                             Msg = "x" + ItemManager.Items[itemNum].Name.Trim();
                         }
+                        else if (Inventory[invSlot].IsSandboxed)
+                        {
+                            Msg = "s" + ItemManager.Items[itemNum].Name.Trim();
+                        }
                         else
                         {
                             Msg = ItemManager.Items[itemNum].Name.Trim();
@@ -1012,6 +1016,8 @@ namespace Server.Players
                             TakeItem = true;
                         }
 
+                        bool isSandboxed = Inventory[invSlot].IsSandboxed;
+
                         if (TakeItem == true)
                         {
                             // Check to see if its held by anyone
@@ -1025,6 +1031,7 @@ namespace Server.Players
                             Inventory[invSlot].Amount = 0;
                             Inventory[invSlot].Sticky = false;
                             Inventory[invSlot].Tag = "";
+                            Inventory[invSlot].IsSandboxed = false;
 
                             //check for held-in-bag
 
@@ -1046,7 +1053,7 @@ namespace Server.Players
                         Messenger.SendInventoryUpdate(client, invSlot);
 
                         // Spawn the item before we set the num or we'll get a different free map item slot
-                        map.SpawnItemSlot(i, itemNum, amount, sticky, false, tag, X, Y, playerFor);
+                        map.SpawnItemSlot(i, itemNum, amount, sticky, false, tag, isSandboxed, X, Y, playerFor);
 
                         Scripting.ScriptManager.InvokeSub("OnDropItem", GetActiveRecruit(), invSlot, map.ActiveItem[i]);
                     }
@@ -1117,6 +1124,7 @@ namespace Server.Players
                                         Inventory[n].Num = map.ActiveItem[i].Num;
                                         Inventory[n].Sticky = map.ActiveItem[i].Sticky;
                                         Inventory[n].Tag = map.ActiveItem[i].Tag;
+                                        Inventory[n].IsSandboxed = map.ActiveItem[i].IsSandboxed;
 
                                         if (Inventory[n].Sticky)
                                         {
@@ -1158,7 +1166,7 @@ namespace Server.Players
                                         // Erase item from the map ~ done in spawnitemslot
 
                                         Messenger.SendInventoryUpdate(client, n);
-                                        map.SpawnItemSlot(i, -1, 0, false, false, "", X, Y, null);
+                                        map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
                                         Messenger.PlayerMsg(client, Msg, Text.Yellow);
 
                                         Scripting.ScriptManager.InvokeSub("OnPickupItem", GetActiveRecruit(), n, Inventory[n]);
@@ -1476,14 +1484,17 @@ namespace Server.Players
 
                 map.ProcessingPaused = true;
                 Messenger.SendDataTo(client, TcpPacket.CreatePacket("floorchangedisplay", map.Name, "1500"));
-                Messenger.PlayerWarp(client, map, map.StartX, map.StartY);
-                if (generated)
+                var hasWarped = Messenger.PlayerWarp(client, map, map.StartX, map.StartY);
+                if (hasWarped)
                 {
-                    map.SpawnNpcs();
-                    map.NpcSpawnWait = new Server.TickCount(Core.GetTickCount().Tick);
-                }
+                    if (generated)
+                    {
+                        map.SpawnNpcs();
+                        map.NpcSpawnWait = new Server.TickCount(Core.GetTickCount().Tick);
+                    }
 
-                ScriptManager.InvokeSub("EnterRDungeon", client, dungeonNum, floor);
+                    ScriptManager.InvokeSub("EnterRDungeon", client, dungeonNum, floor);
+                }
             }
         }
 
@@ -1614,6 +1625,22 @@ namespace Server.Players
 
         #region Level x system
 
+        public bool IsInTempStatMode()
+        {
+            for (var i = 0; i < Team.Length; i++)
+            {
+                if (Team[i].Loaded)
+                {
+                    if (Team[i].InTempMode)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void BeginTempStatMode(int level, bool keepMoves)
         {
             PacketHitList hitlist = null;
@@ -1728,6 +1755,8 @@ namespace Server.Players
 
             PacketBuilder.AppendPlayerMoves(client, hitlist);
             PacketBuilder.AppendActiveTeam(client, hitlist);
+
+            PacketHitList.MethodEnded(ref hitlist);
         }
 
         public void RestoreRecruitStats(int slot)

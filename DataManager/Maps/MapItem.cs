@@ -28,6 +28,7 @@ namespace DataManager.Maps
         public bool Sticky { get; set; }
         public bool Hidden { get; set; }
         public string Tag { get; set; }
+        public bool IsSandboxed { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public string PlayerFor { get; set; }

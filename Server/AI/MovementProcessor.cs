@@ -197,7 +197,7 @@ namespace Server.AI
                     return false;
                 }
 
-                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor) || client.Player.ProtectionOff)
+                if (client.Player.ProtectionOff)
                 {
                     player.Hunted = true;
                     PacketBuilder.AppendHunted(client, hitlist);
@@ -858,7 +858,7 @@ namespace Server.AI
                 }
 
                 // Check for guild shop
-                if (!map.IsSandboxed)
+                if (!map.IsZoneOrObjectSandboxed())
                 {
                     if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
                     {
@@ -1045,6 +1045,7 @@ namespace Server.AI
                                     //client.Player.dungeonIndex = -1;
                                     //client.Player.dungeonFloor = -1;
                                     hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
+                                    client.Player.EndTempStatMode();
                                     Messenger.PlayerWarp(client, Settings.Crossroads, Settings.StartX, Settings.StartY);
                                 }
                             }

@@ -180,7 +180,7 @@ namespace Server.RDungeons
                         if (itemX > -1)
                         {
                             map.SpawnItem(floor.Items[slot].ItemNum, Server.Math.Rand(floor.Items[slot].MinAmount, floor.Items[slot].MaxAmount + 1),
-                                          (Server.Math.Rand(0, 100) < floor.Items[slot].StickyRate), floor.Items[slot].Hidden, floor.Items[slot].Tag, itemX, itemY, null);
+                                          (Server.Math.Rand(0, 100) < floor.Items[slot].StickyRate), floor.Items[slot].Hidden, floor.Items[slot].Tag, map.IsZoneOrObjectSandboxed(), itemX, itemY, null);
                             spawned = true;
                         }
                     }

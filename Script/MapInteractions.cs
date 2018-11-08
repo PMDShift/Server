@@ -3728,7 +3728,7 @@ namespace Script
                         {
                             if (map.Tile[x, y].String1.IsNumeric())
                             {
-                                map.SpawnItem(map.Tile[x, y].String1.ToInt(), 1, false, false, map.Tile[x, y].String2, x, y, null);
+                                map.SpawnItem(map.Tile[x, y].String1.ToInt(), 1, false, false, map.Tile[x, y].String2, map.IsZoneOrObjectSandboxed(), x, y, null);
                             }
                             intArray[x, y] = map.Tile[x, y].String3.ToInt();
                             RDungeonFloorGen.AmbiguateTile(map.Tile[x, y]);

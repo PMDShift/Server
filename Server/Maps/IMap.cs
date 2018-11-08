@@ -237,12 +237,14 @@ namespace Server.Maps
 
         #endregion Properties
 
+        bool IsZoneOrObjectSandboxed();
+
         void ClearActiveItem(int itemSlot);
         void ClearActiveNpc(int npcSlot);
         int FindOpenItemSlot();
         int FindOpenNpcSlot();
-        void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor);
-        void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, int x, int y, Client playerFor);
+        void SpawnItemSlot(int itemSlot, int itemNum, int itemVal, bool sticky, bool hidden, string tag, bool isSandboxed, int x, int y, Client playerFor);
+        void SpawnItem(int itemNum, int itemVal, bool sticky, bool hidden, string tag, bool isSandboxed, int x, int y, Client playerFor);
         void SpawnItems();
         void SpawnNpc();
         void SpawnNpc(bool checkSight);

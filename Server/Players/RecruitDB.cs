@@ -795,7 +795,7 @@ namespace Server.Players
             owner.Player.Map.ProcessingPaused = false;
 
 
-            if (Ranks.IsDisallowed(owner, Enums.Rank.Monitor) || owner.Player.ProtectionOff)
+            if (owner.Player.ProtectionOff)
             {
                 owner.Player.Hunted = true;
                 Messenger.SendHunted(owner);

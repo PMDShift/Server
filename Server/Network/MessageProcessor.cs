@@ -1203,6 +1203,10 @@ namespace Server.Network
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited in this area.", Text.Yellow);
                                                 }
+                                                else if (map.IsZoneOrObjectSandboxed())
+                                                {
+                                                    Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " cannot be recruited on a sandboxed map.", Text.Yellow);
+                                                }
                                                 else if (map.ActiveNpc[i].Level >= client.Player.GetActiveRecruit().Level)
                                                 {
                                                     Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "'s level is too high for you to recruit it.", Text.Yellow);
@@ -1213,8 +1217,16 @@ namespace Server.Network
 
                                                     if (map.ActiveNpc[i].Shiny == Enums.Coloration.Shiny)
                                                     {
-                                                        Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! Recruit it!", Text.Yellow);
-                                                    } else
+                                                        if (recruitRate > 0)
+                                                        {
+                                                            Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! Recruit it!", Text.Yellow);
+                                                        }
+                                                        else
+                                                        {
+                                                            Messenger.PlayerMsg(client, NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + " is sparkling! You have a " + (recruitRate / 10f) + "% chance of recruiting it.", Text.Yellow);
+                                                        }
+                                                    }
+                                                    else
                                                     {
                                                         Messenger.PlayerMsg(client, "You have a " + (recruitRate / 10f) + "% of recruiting " + NpcManager.Npcs[map.ActiveNpc[i].Num].Name.Trim() + "!", Text.Yellow);
                                                     }
@@ -1299,8 +1311,9 @@ namespace Server.Network
                                 if (map.Tile[newX, newY].Type == Enums.TileType.ScriptedSign)
                                 {
                                     Scripting.ScriptManager.InvokeSub("ScriptedSign", client, map.Tile[newX, newY].Data1, map.Tile[newX, newY].String1, map.Tile[newX, newY].String2, map.Tile[newX, newY].String3, dir);
-                                } 
-                                else if (map.Tile[newX, newY].Type == Enums.TileType.Sign) {
+                                }
+                                else if (map.Tile[newX, newY].Type == Enums.TileType.Sign)
+                                {
                                     Stories.Story story = new Stories.Story();
                                     Stories.StoryBuilderSegment segment = Stories.StoryBuilder.BuildStory();
 
@@ -1878,7 +1891,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (map.IsSandboxed)
+                            if (map.IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "Unable to change sprites on a sandboxed map.", Text.BrightRed);
                                 return;
@@ -2637,7 +2650,7 @@ namespace Server.Network
                             return;
                         }
 
-                        if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                        if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                         {
                             Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                             return;
@@ -2693,7 +2706,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -2867,7 +2880,7 @@ namespace Server.Network
                             // Clear out it all
                             for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                             {
-                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                 map.ClearActiveItem(i);
                             }
 
@@ -2950,7 +2963,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3008,7 +3021,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3072,7 +3085,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -3128,7 +3141,7 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit a non-standard map!", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.Map.IsSandboxed && client.Player.Map.MapType != Enums.MapType.House)
+                            if (!client.Player.Map.IsZoneOrObjectSandboxed() && client.Player.Map.MapType != Enums.MapType.House)
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this map (map not sandboxed).", Text.BrightRed);
                                 return;
@@ -4464,7 +4477,7 @@ namespace Server.Network
                                 IMap map = client.Player.GetCurrentMap();
                                 for (int i = 0; i < Constants.MAX_MAP_ITEMS; i++)
                                 {
-                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
+                                    map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), map.ActiveItem[i].X, map.ActiveItem[i].Y, null);
                                     map.ClearActiveItem(i);
                                 }
                                 map.SpawnItems();
@@ -4613,7 +4626,8 @@ namespace Server.Network
                         {
                             if (client.Player.Map.MapType == Enums.MapType.House && ((House)client.Player.Map).OwnerID == client.Player.CharID)
                             {
-                            } else
+                            }
+                            else
                             {
                                 if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
                                 {
@@ -4625,7 +4639,7 @@ namespace Server.Network
                                     return;
                                 }
                             }
-                            
+
                             Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
                         }
                         break;
@@ -5284,6 +5298,12 @@ namespace Server.Network
                                 {
                                     Messenger.StorageMessage(client, "The storage is full!");
                                     return;
+                                }
+
+                                if (client.Player.Inventory[slot].IsSandboxed)
+                                {
+                                    Messenger.StorageMessage(client, "You can't deposit a sandboxed item!");
+                                    return; 
                                 }
 
                                 if (amount > client.Player.Inventory[slot].Amount)

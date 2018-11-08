@@ -42,6 +42,8 @@ namespace Server.Discord.Commands
                     if (role != null)
                     {
                         await (Context.User as IGuildUser).AddRoleAsync(role);
+
+                        await Context.Channel.SendMessageAsync("You have been added to the requested team.");
                     }
                 }
             }
@@ -60,6 +62,8 @@ namespace Server.Discord.Commands
                     if (role != null)
                     {
                         await (Context.User as IGuildUser).RemoveRoleAsync(role);
+
+                        await Context.Channel.SendMessageAsync("You have been removed from the requested team.");
                     }
                 }
             }

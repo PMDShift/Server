@@ -195,7 +195,9 @@ namespace Server.Scripting
                     syntaxTrees.Add(SyntaxFactory.ParseSyntaxTree(sourceText));
                 }
             }
-            string fileName = "CompiledScript.dll";
+
+            var uniqueId = Guid.NewGuid();
+            string fileName = $"CompiledScript-{uniqueId.ToString()}.dll";
 
             var compilation = CSharpCompilation.Create(fileName)
               .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))

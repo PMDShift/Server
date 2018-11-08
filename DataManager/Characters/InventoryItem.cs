@@ -53,6 +53,8 @@ namespace DataManager.Characters
             }
         }
 
+        public bool IsSandboxed { get; set; }
+
         public InventoryItem() {
             Tag = "";
         }
