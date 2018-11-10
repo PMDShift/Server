@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -555,141 +555,179 @@ namespace Script {
         	//	return null;
         	//}
         }
-		
-		public static Story CreatePreDungeonStory(Client client, string param1, string param2, string param3, bool random) {
-			
-			Story story = new Story();
-			
-			StorySegment segment = new StorySegment();
+
+        public static Story CreatePreDungeonStory(Client client, string param1, string param2, string param3, bool random)
+        {
+            var offsetSegment = 1;
+
+            Story story = new Story();
+
+            StorySegment segment = new StorySegment();
             segment.Action = Enums.StoryAction.PlayerPadlock;
             segment.AddParameter("MovementState", "Lock");
             story.Segments.Add(segment);
-            
-			if (param3 == "") {
-				//continuing a dungeon
-				
-				segment = new StorySegment();
-				segment.Action = Enums.StoryAction.AskQuestion;
-				segment.AddParameter("Question", "Will you go on?");
-				segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
-				segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-				segment.AddParameter("Mugshot", "-1");
-				story.Segments.Add(segment);
-			} else {
-				
-				string dungeonName = "";
-				string reqString = "";
-				string restrictionString = "";
-				
-				if (param3.IsNumeric()) {
-					//official dungeon
-					
-					dungeonName = DungeonManager.Dungeons[param3.ToInt() - 1].Name;
-					
-					if (DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList.ContainsKey(1)) {
-						reqString = DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList[1];
-					}
-					
-					if (DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList.ContainsKey(2)) {
-						restrictionString = DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList[2];
-					}
-				} else {
-					//unofficial dungeon
-					
-					dungeonName = param3.Split(':')[0];
-					reqString = param3.Split(':')[1];
-					restrictionString = param3.Split(':')[2];
-				}
-				
-				
-				if (CheckDungeonRequirements(client, reqString.Split(';'))) {
-				
-					
-					if (restrictionString != "") {
-						
-						AppendEntranceWarning(story, dungeonName, restrictionString.Split(';'));
-						
-						segment = new StorySegment();
-						segment.Action = Enums.StoryAction.AskQuestion;
-						segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
-						segment.AddParameter("SegmentOnYes", "3");
-						segment.AddParameter("SegmentOnNo", (story.Segments.Count + 4).ToString());
-						segment.AddParameter("Mugshot", "-1");
-						story.Segments.Insert(1, segment);
-						
-						
-						segment = new StorySegment();
-						segment.Action = Enums.StoryAction.AskQuestion;
-						segment.AddParameter("Question", "Is that OK?");
-						segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
-						segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-						segment.AddParameter("Mugshot", "-1");
-						story.Segments.Add(segment);
-						
-					} else {
-						
-						segment = new StorySegment();
-						segment.Action = Enums.StoryAction.AskQuestion;
-						segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
-						segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
-						segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-						segment.AddParameter("Mugshot", "-1");
-						story.Segments.Insert(1, segment);
-						
-					}
-					
-				} else {
-					
-					
-						AppendEntranceReqs(story, dungeonName, reqString.Split(';'));
-						
-						segment = new StorySegment();
-			            segment.Action = Enums.StoryAction.GoToSegment;
-			            segment.AddParameter("Segment", (story.Segments.Count + 3).ToString());
-			
-			            story.Segments.Add(segment);
-						
-						segment = new StorySegment();
-						segment.Action = Enums.StoryAction.AskQuestion;
-						segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
-						segment.AddParameter("SegmentOnYes", "3");
-						segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-						segment.AddParameter("Mugshot", "-1");
-						story.Segments.Insert(1, segment);
-						
-					
-				}
-				
-			}
-			
-			segment = new StorySegment();
+
+            if (param1.IsNumeric())
+            {
+                var rdungeonID = param1.ToInt() - 1;
+
+                if (Server.RDungeons.RDungeonManager.RDungeons[rdungeonID].IsZoneOrObjectSandboxed())
+                {
+                    segment = new StorySegment();
+                    segment.Action = Enums.StoryAction.Say;
+                    segment.AddParameter("Text", "WARNING: The dungeon you are about to enter is sandboxed.");
+                    segment.AddParameter("Mugshot", "-1");
+                    segment.Parameters.Add("Speed", "0");
+                    segment.Parameters.Add("PauseLocation", "0");
+                    story.Segments.Add(segment);
+
+                    offsetSegment++;
+                }
+            }
+
+            if (param3 == "")
+            {
+                //continuing a dungeon
+
+                segment = new StorySegment();
+                segment.Action = Enums.StoryAction.AskQuestion;
+                segment.AddParameter("Question", "Will you go on?");
+                segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
+                segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                segment.AddParameter("Mugshot", "-1");
+                story.Segments.Add(segment);
+            }
+            else
+            {
+
+                string dungeonName = "";
+                string reqString = "";
+                string restrictionString = "";
+
+                if (param3.IsNumeric())
+                {
+                    //official dungeon
+
+                    dungeonName = DungeonManager.Dungeons[param3.ToInt() - 1].Name;
+
+                    if (DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList.ContainsKey(1))
+                    {
+                        reqString = DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList[1];
+                    }
+
+                    if (DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList.ContainsKey(2))
+                    {
+                        restrictionString = DungeonManager.Dungeons[param3.ToInt() - 1].ScriptList[2];
+                    }
+                }
+                else
+                {
+                    //unofficial dungeon
+
+                    dungeonName = param3.Split(':')[0];
+                    reqString = param3.Split(':')[1];
+                    restrictionString = param3.Split(':')[2];
+                }
+
+
+                if (CheckDungeonRequirements(client, reqString.Split(';')))
+                {
+
+
+                    if (restrictionString != "")
+                    {
+
+                        AppendEntranceWarning(story, dungeonName, restrictionString.Split(';'));
+
+                        segment = new StorySegment();
+                        segment.Action = Enums.StoryAction.AskQuestion;
+                        segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
+                        segment.AddParameter("SegmentOnYes", "3");
+                        segment.AddParameter("SegmentOnNo", (story.Segments.Count + 4).ToString());
+                        segment.AddParameter("Mugshot", "-1");
+                        story.Segments.Insert(offsetSegment, segment);
+
+
+                        segment = new StorySegment();
+                        segment.Action = Enums.StoryAction.AskQuestion;
+                        segment.AddParameter("Question", "Is that OK?");
+                        segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
+                        segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                        segment.AddParameter("Mugshot", "-1");
+                        story.Segments.Add(segment);
+
+                    }
+                    else
+                    {
+
+                        segment = new StorySegment();
+                        segment.Action = Enums.StoryAction.AskQuestion;
+                        segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
+                        segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
+                        segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                        segment.AddParameter("Mugshot", "-1");
+                        story.Segments.Insert(offsetSegment, segment);
+
+                    }
+
+                }
+                else
+                {
+
+
+                    AppendEntranceReqs(story, dungeonName, reqString.Split(';'));
+
+                    segment = new StorySegment();
+                    segment.Action = Enums.StoryAction.GoToSegment;
+                    segment.AddParameter("Segment", (story.Segments.Count + 3).ToString());
+
+                    story.Segments.Add(segment);
+
+                    segment = new StorySegment();
+                    segment.Action = Enums.StoryAction.AskQuestion;
+                    segment.AddParameter("Question", "Will you enter " + dungeonName + "?");
+                    segment.AddParameter("SegmentOnYes", "3");
+                    segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                    segment.AddParameter("Mugshot", "-1");
+                    story.Segments.Insert(offsetSegment, segment);
+
+
+                }
+
+            }
+
+            segment = new StorySegment();
             segment.Action = Enums.StoryAction.RunScript;
-            if (random) {
-            	segment.AddParameter("ScriptIndex", "42");
-            } else {
-            	segment.AddParameter("ScriptIndex", "52");
+            if (random)
+            {
+                segment.AddParameter("ScriptIndex", "42");
+            }
+            else
+            {
+                segment.AddParameter("ScriptIndex", "52");
             }
             segment.AddParameter("ScriptParam1", param1);
             segment.AddParameter("ScriptParam2", param2);
             segment.AddParameter("ScriptParam3", param3);
             segment.AddParameter("Pause", "1");
             story.Segments.Add(segment);
-			
-			
-			segment = new StorySegment();
+
+
+            segment = new StorySegment();
             segment.Action = Enums.StoryAction.PlayerPadlock;
             segment.AddParameter("MovementState", "Unlock");
             story.Segments.Add(segment);
-			
-			foreach (StorySegment segments in story.Segments) {
-				//Messenger.AdminMsg(segments.Action.ToString(), Text.Black);
-			}
-			
-			return story;
-		
-		}
-		
-		public static void StartRDungeon(Client client, string param1, string param2, string param3) {
+
+            foreach (StorySegment segments in story.Segments)
+            {
+                //Messenger.AdminMsg(segments.Action.ToString(), Text.Black);
+            }
+
+            return story;
+
+        }
+
+        public static void StartRDungeon(Client client, string param1, string param2, string param3) {
 			
 			if (client.Player.PartyID == null) {
 				StartRDungeonSolo(client, param1, param2, param3);

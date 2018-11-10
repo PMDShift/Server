@@ -130,6 +130,7 @@ namespace Server.Maps
             destinationMap.Indoors = sourceMap.Indoors;
             destinationMap.Moral = sourceMap.Moral;
             destinationMap.Music = sourceMap.Music;
+            destinationMap.YouTubeMusicID = sourceMap.YouTubeMusicID;
             destinationMap.Name = sourceMap.Name;
             destinationMap.OriginalDarkness = sourceMap.OriginalDarkness;
             destinationMap.Weather = sourceMap.Weather;
