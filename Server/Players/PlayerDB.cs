@@ -1518,7 +1518,12 @@ namespace Server.Players
             {
                 if (DungeonCompletionCounts.ValueByIndex(i) > 0)
                 {
-                    dungeons.Add(DungeonCompletionCounts.KeyByIndex(i));
+                    var dungeonId = DungeonCompletionCounts.KeyByIndex(i);
+
+                    if (!Dungeons.DungeonManager.Dungeons[dungeonId].IsZoneOrObjectSandboxed())
+                    {
+                        dungeons.Add(DungeonCompletionCounts.KeyByIndex(i));
+                    }
                 }
             }
 
