@@ -1032,6 +1032,15 @@ namespace Script
                             }
                         }
                         break;
+                    case 30:
+                        {
+                            client.Player.IncrementDungeonCompletionCount(param1 - 1, 1);
+
+                            var extendedPlayer = exPlayer.Get(client);
+
+                            DungeonRules.ExitDungeon(client, MapManager.RetrieveMap(extendedPlayer.SpawnMap), extendedPlayer.SpawnX, extendedPlayer.SpawnY);
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
@@ -9593,9 +9602,11 @@ namespace Script
             {
                 int completedJobs = 0;
 
+                var winMap = "s1";
+
                 Story story = new Story();
                 StoryBuilderSegment segment = StoryBuilder.BuildStory();
-                StoryBuilder.AppendWarpAction(segment, "s737", 39, 17);
+                StoryBuilder.AppendWarpAction(segment, winMap, 10, 5);
                 StoryBuilder.AppendPlayMusicAction(segment, "PMD2) Job Clear!.ogg", true, true);
                 foreach (WonderMailJob mission in client.Player.JobList.JobList)
                 {
@@ -9605,12 +9616,12 @@ namespace Script
                         MissionPool missionPool = WonderMailManager.Missions[(int)mission.Mission.Difficulty - 1];
 
 
-                        StoryBuilder.AppendCreateFNPCAction(segment, "0", "s737", 39, 16, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
+                        StoryBuilder.AppendCreateFNPCAction(segment, "0", winMap, 9, 4, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
                         StoryBuilder.AppendChangeFNPCDirAction(segment, "0", Enums.Direction.Down);
                         if (mission.Mission.MissionType == Enums.MissionType.Escort)
                         {
                             PokemonForm target = Pokedex.GetPokemonForm(mission.Mission.Data1, mission.Mission.Data1);
-                            StoryBuilder.AppendCreateFNPCAction(segment, "1", "s737", 40, 16, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
+                            StoryBuilder.AppendCreateFNPCAction(segment, "1", winMap, 10, 4, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
                             StoryBuilder.AppendChangeFNPCDirAction(segment, "1", Enums.Direction.Down);
                         }
                         if (mission.Mission.MissionType == Enums.MissionType.Escort)

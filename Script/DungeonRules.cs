@@ -26,6 +26,7 @@ using Server.Players;
 using Server.Stories;
 using Server.Dungeons;
 using Server.Players.Parties;
+using Server.Maps;
 
 namespace Script {
     public class DungeonRules {
@@ -890,29 +891,44 @@ namespace Script {
         
         
         public static void ExitDungeon(Client client, int exitMap, int x, int y) {
-        	if (Ranks.IsAllowed(client, Enums.Rank.Mapper)) {
-        		Messenger.AdminMsg(client.Player.Name + "Completed dungeon.", Text.Blue);
-        	}
+            ExitDungeon(client, MapManager.RetrieveMap(exitMap), x, y);
+        }
+
+        public static void ExitDungeon(Client client, IMap exitMap, int x, int y)
+        {
+            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
+            {
+                Messenger.AdminMsg(client.Player.Name + "Completed dungeon.", Text.Blue);
+            }
             int left = 0;
-            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                if (client.Player.Team[i].RecruitIndex < -1) {
+            for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+            {
+                if (client.Player.Team[i].RecruitIndex < -1)
+                {
                     client.Player.RemoveFromTeam(i);
                     left++;
                 }
             }
-            if (left > 1) {
+            if (left > 1)
+            {
                 Messenger.PlayerMsg(client, "Some members left the team.", Text.Grey);
                 client.Player.SwapActiveRecruit(0);
-            } else if (left > 0) {
+            }
+            else if (left > 0)
+            {
                 Messenger.PlayerMsg(client, "A member left the team.", Text.Grey);
                 client.Player.SwapActiveRecruit(0);
             }
             bool mission = client.Player.HandleMissionRewardDump();
-            if (!mission) {
-                if (exitMap > 0) {
-                	Messenger.PlayerWarp(client, exitMap, x, y);
-                } else {
-                	exPlayer.Get(client).WarpToSpawn(false);
+            if (!mission)
+            {
+                if (exitMap != null)
+                {
+                    Messenger.PlayerWarp(client, exitMap, x, y);
+                }
+                else
+                {
+                    exPlayer.Get(client).WarpToSpawn(false);
                 }
             }
         }
