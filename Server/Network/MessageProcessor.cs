@@ -4207,9 +4207,9 @@ namespace Server.Network
                     #region Missions
                     case "requesteditmission":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
-                                Messenger.HackingAttempt(client, "Admin cloning");
+                                Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
                                 return;
                             }
 
@@ -4218,7 +4218,11 @@ namespace Server.Network
                         break;
                     case "savemission":
                         {
-                            return;
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                            {
+                                Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
+                                return;
+                            }
 
                             WonderMails.MissionPool missionPool = new WonderMails.MissionPool();
 
@@ -4271,9 +4275,9 @@ namespace Server.Network
                         break;
                     case "editmission":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
-                                Messenger.HackingAttempt(client, "Admin cloning");
+                                Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
                                 return;
                             }
 
@@ -4284,8 +4288,6 @@ namespace Server.Network
                                 Messenger.HackingAttempt(client, "Invalid mission client");
                                 return;
                             }
-
-                            return;
 
                             Messenger.SendEditMissionTo(client, n - 1);
                         }
