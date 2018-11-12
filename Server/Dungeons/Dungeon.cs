@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PMDCP.Core;
+using Server.Zones;
 
 namespace Server.Dungeons
 {
@@ -50,6 +51,18 @@ namespace Server.Dungeons
             randomMaps = new List<RandomDungeonMap>();
             Name = "";
             ScriptList = new ListPair<int, string>();
+        }
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            }
+            else
+            {
+                return IsSandboxed;
+            }
         }
     }
 }

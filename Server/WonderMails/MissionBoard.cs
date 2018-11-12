@@ -160,7 +160,7 @@ namespace Server.WonderMails
                     break;
                 }
             }
-            for (int i = 0; i < generateCount; i++)
+            for (int i = 0; i < generateCount * 2; i++)
             {
                 GenerateMission();
             }
