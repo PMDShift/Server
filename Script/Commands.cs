@@ -109,6 +109,23 @@ namespace Script
 
 				switch (command[0])
 				{
+                    case "/transferzone":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                client.Player.Map.ZoneID = joinedArgs.ToInt();
+
+                                client.Player.Map.Save();
+
+                                Messenger.PlayerMsg(client, "Zone transferred.", Text.BrightGreen);
+                            }
+                        }
+                        break;
+                    case "/shrug":
+                        {
+                            Messenger.MapMsg(client.Player.MapID, client.Player.Name + @": ¯\_(ツ)_/¯", Text.White);
+                        }
+                        break;
                     case "/zone":
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Mapper))

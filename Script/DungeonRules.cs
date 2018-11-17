@@ -896,10 +896,6 @@ namespace Script {
 
         public static void ExitDungeon(Client client, IMap exitMap, int x, int y)
         {
-            if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
-            {
-                Messenger.AdminMsg(client.Player.Name + "Completed dungeon.", Text.Blue);
-            }
             int left = 0;
             for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
             {
@@ -919,6 +915,12 @@ namespace Script {
                 Messenger.PlayerMsg(client, "A member left the team.", Text.Grey);
                 client.Player.SwapActiveRecruit(0);
             }
+
+            if (!client.Player.Map.IsZoneOrObjectSandboxed())
+            {
+                client.Player.MissionBoard.GenerateMission();
+            }
+
             bool mission = client.Player.HandleMissionRewardDump();
             if (!mission)
             {
