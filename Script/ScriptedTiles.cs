@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace Script 
+namespace Script
 {
-	using System;
+    using System;
     using System.Collections.Generic;
     using System.Text;
 
@@ -41,43 +41,57 @@ namespace Script
     using Server.Events.Player.TriggerEvents;
     using Server.WonderMails;
     using Server.Tournaments;
-    
-	public partial class Main {
-	
-		public static void ScriptedTile(IMap map, ICharacter character, int script, string param1, string param2, string param3, PacketHitList hitlist) {
-            try {
+
+    public partial class Main
+    {
+
+        public static void ScriptedTile(IMap map, ICharacter character, int script, string param1, string param2, string param3, PacketHitList hitlist)
+        {
+            try
+            {
                 PacketHitList.MethodStart(ref hitlist);
                 Client client = null;
-                if (character.CharacterType == Enums.CharacterType.Recruit) {
+                if (character.CharacterType == Enums.CharacterType.Recruit)
+                {
                     client = ((Recruit)character).Owner;
                 }
-                switch (script) {
-                    case 0: {
-                            if (character.CharacterType == Enums.CharacterType.Recruit) {
+                switch (script)
+                {
+                    case 0:
+                        {
+                            if (character.CharacterType == Enums.CharacterType.Recruit)
+                            {
                                 hitlist.AddPacket(((Recruit)character).Owner, PacketBuilder.CreateChatMsg("Empty Script", Text.Black));
                             }
                         }
                         break;
-                    case 1: { // Story runner
-                            if (exPlayer.Get(client).StoryEnabled) {
+                    case 1:
+                        { // Story runner
+                            if (exPlayer.Get(client).StoryEnabled)
+                            {
                                 int storyNum = param1.ToInt() - 1;
-                                if (client.Player.GetStoryState(storyNum) == false) {
+                                if (client.Player.GetStoryState(storyNum) == false)
+                                {
                                     StoryManager.PlayStory(client, storyNum);
                                 }
                             }
                         }
                         break;
 
-                    case 2: {//Explosion trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 2:
+                        {//Explosion trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on an Explosion Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 3: {//Chestnut Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 3:
+                        {//Chestnut Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Chestnut Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
@@ -85,16 +99,20 @@ namespace Script
                         }
                         break;
 
-                    case 4: {//PP-Zero Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 4:
+                        {//PP-Zero Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on an PP-Zero Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 5: {//Grimy Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 5:
+                        {//Grimy Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Grimy Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
@@ -102,39 +120,51 @@ namespace Script
                         }
                         break;
 
-                    case 6: {//Poison Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 6:
+                        {//Poison Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Poison Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 7: {//Random Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 7:
+                        {//Random Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Random Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
-                                if (Server.Math.Rand(0, 10) + 6 < map.Tile[character.X, character.Y].Data2) {
+                                if (Server.Math.Rand(0, 10) + 6 < map.Tile[character.X, character.Y].Data2)
+                                {
                                     RemoveTrap(map, character.X, character.Y, hitlist);
                                 }
                             }
                         }
                         break;
-                    case 8: {//Appraisal;
-                            if (client != null) {
+                    case 8:
+                        {//Appraisal;
+                            if (client != null)
+                            {
                                 int boxes = 0;
-                                for (int i = 1; i <= client.Player.Inventory.Count; i++) {
+                                for (int i = 1; i <= client.Player.Inventory.Count; i++)
+                                {
                                     if (client.Player.Inventory[i].Num != 0
                                         && ItemManager.Items[client.Player.Inventory[i].Num].Type == Enums.ItemType.Scripted
                                         && ItemManager.Items[client.Player.Inventory[i].Num].Data1 == 12
-                                        && !client.Player.Inventory[i].Sticky) {
+                                        && !client.Player.Inventory[i].Sticky)
+                                    {
                                         boxes++;
                                     }
                                 }
-                                if (boxes > 0) {
+                                if (boxes > 0)
+                                {
                                     Messenger.AskQuestion(client, "Appraisal", "Will you have your boxes opened?  It will cost " + 150 * boxes + " Poké.", -1);
-                                } else {
+                                }
+                                else
+                                {
                                     Story story = new Story();
                                     StoryBuilderSegment segment = StoryBuilder.BuildStory();
                                     StoryBuilder.AppendSaySegment(segment, "You can bring your treasure boxes here to have them opened for 150 Poké each.", -1, 0, 0);
@@ -144,24 +174,32 @@ namespace Script
                             }
                         }
                         break;
-                    case 9: {//Un-sticky;
-                            if (client != null) {
+                    case 9:
+                        {//Un-sticky;
+                            if (client != null)
+                            {
                                 Messenger.AskQuestion(client, "Unsticky", "Will you have your sticky items cleansed?", -1);
 
                             }
                         }
                         break;
-                    case 10: {//Full heal
-                            if (client != null) {
-                                for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
-                                    if (client.Player.Team[i].Loaded) { // Yes, there needs to be a check
+                    case 10:
+                        {//Full heal
+                            if (client != null)
+                            {
+                                for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++)
+                                {
+                                    if (client.Player.Team[i].Loaded)
+                                    { // Yes, there needs to be a check
                                         client.Player.Team[i].HP = client.Player.Team[i].MaxHP;
                                         client.Player.Team[i].RestoreBelly();
                                         client.Player.Team[i].StatusAilment = Enums.StatusAilment.OK;
                                         client.Player.Team[i].StatusAilmentCounter = 0;
 
-                                        for (int j = 0; j < 4; j++) {
-                                            if (client.Player.GetActiveRecruit().Moves[i].MoveNum != 0) {
+                                        for (int j = 0; j < 4; j++)
+                                        {
+                                            if (client.Player.GetActiveRecruit().Moves[i].MoveNum != 0)
+                                            {
 
                                                 client.Player.Team[i].Moves[j].CurrentPP = client.Player.Team[i].Moves[j].MaxPP;
                                             }
@@ -179,9 +217,12 @@ namespace Script
                         }
                         break;
 
-                    case 11: {//Warp out of Destiny Cavern
-                            if (client != null) {
-                                if (Settings.NewCharForm > 0) {
+                    case 11:
+                        {//Warp out of Destiny Cavern
+                            if (client != null)
+                            {
+                                if (Settings.NewCharForm > 0)
+                                {
                                     //for (int i = 0; i < 4; i++) {
 
                                     client.Player.GetActiveRecruit().GenerateMoveset();
@@ -189,8 +230,10 @@ namespace Script
                                     //if (client.Player.Team[i].Loaded) {//does there need to be a check for if the team member of the slot is there?
                                     //   client.Player.Team[i].HP = client.Player.Team[i].MaxHP;
 
-                                    for (int j = 0; j < Constants.MAX_PLAYER_MOVES; j++) {
-                                        if (client.Player.GetActiveRecruit().Moves[j].MoveNum != 0) {
+                                    for (int j = 0; j < Constants.MAX_PLAYER_MOVES; j++)
+                                    {
+                                        if (client.Player.GetActiveRecruit().Moves[j].MoveNum != 0)
+                                        {
 
                                             client.Player.GetActiveRecruit().Moves[j].CurrentPP = client.Player.GetActiveRecruit().Moves[j].MaxPP;
                                         }
@@ -198,21 +241,23 @@ namespace Script
                                     //}
                                     //}
                                     //Messenger.PlayerWarp(client, 1, 10, 7);
-            						exPlayer.Get(client).SpawnMap = "s1035";
-		                            exPlayer.Get(client).SpawnX = 9;
-		                            exPlayer.Get(client).SpawnY = 7;
-            						StoryManager.PlayStory(client, 639);
-            						//StoryManager.PlayStory(client, 640);
+                                    exPlayer.Get(client).SpawnMap = "s1035";
+                                    exPlayer.Get(client).SpawnX = 9;
+                                    exPlayer.Get(client).SpawnY = 7;
+                                    StoryManager.PlayStory(client, 639);
+                                    //StoryManager.PlayStory(client, 640);
                                     //} else {
-                                   	//	StoryManager.PlayStory(client, StoryConstruction.CreateIntroStory(client));
-                                	//}
+                                    //	StoryManager.PlayStory(client, StoryConstruction.CreateIntroStory(client));
+                                    //}
                                 }
                             }
                         }
                         break;
 
-                    case 12: {//Next floor of a different dungeon
-                            if (client != null && map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)map).RDungeonIndex > -1) {
+                    case 12:
+                        {//Next floor of a different dungeon
+                            if (client != null && map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)map).RDungeonIndex > -1)
+                            {
 
                                 PartyManager.AttemptPartyWarp(client, (Client warpClient) =>
                                 {
@@ -223,30 +268,38 @@ namespace Script
                         }
                         break;
 
-                    case 13: {//drop from the sky
-                            if (client != null) {
-                            	Messenger.AskQuestion(client, "SkyDrop:"+param1+":"+param2, "Will you land at " + param3 + "?", -1);
+                    case 13:
+                        {//drop from the sky
+                            if (client != null)
+                            {
+                                Messenger.AskQuestion(client, "SkyDrop:" + param1 + ":" + param2, "Will you land at " + param3 + "?", -1);
                             }
                         }
                         break;
-                    case 14: {//Fly
-                            if (client != null) {
+                    case 14:
+                        {//Fly
+                            if (client != null)
+                            {
                                 Messenger.PlayerMsg(client, "A strong updraft can be felt from here...", Text.Grey);
                                 //Messenger.PlaySound(client, "Magic632.wav");
                                 hitlist.AddPacket(client, PacketBuilder.CreateSoundPacket("Magic632.wav"));
                             }
                         }
                         break;
-                    case 15: {// Warp Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 15:
+                        {// Warp Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Warp Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 16: {// Pokemon Trap (unfinished)
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 16:
+                        {// Pokemon Trap (unfinished)
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Pokémon Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
@@ -254,92 +307,119 @@ namespace Script
                             }
                         }
                         break;
-                    case 17: {// Spikes
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 17:
+                        {// Spikes
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on the Spikes!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 18: {// Toxic spikes
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 18:
+                        {// Toxic spikes
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on the Toxic Spikes!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 19: { // Stealth Rock
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 19:
+                        { // Stealth Rock
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Stealth Rock Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 20: { // Void
-                            if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Scripter)) {
+                    case 20:
+                        { // Void
+                            if (client != null)
+                            {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                                {
                                     Messenger.PlayerWarpToVoid(client);
                                 }
                             }
                         }
                         break;
-                    case 21: {//completed level x dungeon
-                            if (client != null) {
+                    case 21:
+                        {//completed level x dungeon
+                            if (client != null)
+                            {
                                 client.Player.EndTempStatMode();
                                 exPlayer.Get(client).WarpToSpawn(false);
                             }
                         }
                         break;
-                    case 22: {
+                    case 22:
+                        {
                             //Anti-suicide; doesn't do anything here
                         }
                         break;
-                    case 23: {//sticky trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 23:
+                        {//sticky trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Sticky Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 24: {//Admin-only
-                            if (client != null) {
-                                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
+                    case 24:
+                        {//Admin-only
+                            if (client != null)
+                            {
+                                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
+                                {
                                     BlockPlayer(client);
                                     Messenger.PlayerMsg(client, "You must be an Admin to get through!", Text.BrightRed);
                                 }
                             }
                         }
                         break;
-                    case 25: {//mud trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 25:
+                        {//mud trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Mud Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
-                                if (Server.Math.Rand(0, 10) + 2 < map.Tile[character.X, character.Y].Data2) {
+                                if (Server.Math.Rand(0, 10) + 2 < map.Tile[character.X, character.Y].Data2)
+                                {
                                     RemoveTrap(map, character.X, character.Y, hitlist);
                                 }
                             }
                         }
                         break;
-                    case 26: {//wonder tile
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 26:
+                        {//wonder tile
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Wonder Tile!", Text.BrightGreen), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 27: {//activation
-                            if (client != null) {
+                    case 27:
+                        {//activation
+                            if (client != null)
+                            {
                                 List<int> switches = new List<int>();
-                                foreach (Client i in map.GetClients()) {
+                                foreach (Client i in map.GetClients())
+                                {
                                     if (i.Player.Map.Tile[i.Player.X, i.Player.Y].Type == Enums.TileType.Scripted
-                                    && i.Player.Map.Tile[i.Player.X, i.Player.Y].Data1 == 27) {
-                                        if (!switches.Contains(i.Player.Map.Tile[i.Player.X, i.Player.Y].Data2)) {
+                                    && i.Player.Map.Tile[i.Player.X, i.Player.Y].Data1 == 27)
+                                    {
+                                        if (!switches.Contains(i.Player.Map.Tile[i.Player.X, i.Player.Y].Data2))
+                                        {
                                             switches.Add(i.Player.Map.Tile[i.Player.X, i.Player.Y].Data2);
                                         }
                                     }
@@ -348,16 +428,22 @@ namespace Script
 
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a switch!", Text.BrightGreen), character.X, character.Y, 50);
 
-                                if (switches.Count >= param1.ToInt()) {
-                                    for (int x = 0; x < map.MaxX; x++) {
-                                        for (int y = 0; y < map.MaxY; y++) {
-                                            if (map.Tile[x, y].Type == Enums.TileType.RDungeonGoal) {
+                                if (switches.Count >= param1.ToInt())
+                                {
+                                    for (int x = 0; x < map.MaxX; x++)
+                                    {
+                                        for (int y = 0; y < map.MaxY; y++)
+                                        {
+                                            if (map.Tile[x, y].Type == Enums.TileType.RDungeonGoal)
+                                            {
                                                 map.Tile[x, y].Mask2Set = 4;
                                                 map.Tile[x, y].Mask2 = 1;
                                                 map.Tile[x, y].Data1 = 1;
                                                 map.TempChange = true;
                                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateTilePacket(x, y, map));
-                                            } else if (map.Tile[x, y].Type == Enums.TileType.Scripted && map.Tile[x, y].Data1 == 27) {
+                                            }
+                                            else if (map.Tile[x, y].Type == Enums.TileType.Scripted && map.Tile[x, y].Data1 == 27)
+                                            {
                                                 map.Tile[x, y].Type = Enums.TileType.Walkable;
                                                 map.Tile[x, y].Fringe = 0;
                                                 map.Tile[x, y].FAnim = 0;
@@ -368,11 +454,15 @@ namespace Script
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg("The passage to the next floor was opened!", Text.BrightGreen), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateSoundPacket("Magic127.wav"), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleDivider(), character.X, character.Y, 50);
-                                } else if (param1.ToInt() - switches.Count == 1) {
+                                }
+                                else if (param1.ToInt() - switches.Count == 1)
+                                {
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg("1 more needs to be pressed at the same time...", Text.BrightGreen), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateSoundPacket("Magic126.wav"), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleDivider(), character.X, character.Y, 50);
-                                } else {
+                                }
+                                else
+                                {
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg((param1.ToInt() - switches.Count) + " more need to be pressed at the same time...", Text.BrightGreen), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateSoundPacket("Magic126.wav"), character.X, character.Y, 50);
                                     hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleDivider(), character.X, character.Y, 50);
@@ -380,30 +470,43 @@ namespace Script
                             }
                         }
                         break;
-                    case 28: {//Trip Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 28:
+                        {//Trip Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Trip Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 29: {//CTF Red Flag Tile
-                            if (ActiveCTF.GameState == CTF.CTFGameState.Started) {
-                                if (exPlayer.Get(client).InCTF) {
-                                    if (exPlayer.Get(client).CTFSide != CTF.Teams.Red) {
-                                        if (ActiveCTF.RedFlags > 0) {
-                                            if (ActiveCTF.RedFlagHolder == null) {
-                                                if (exPlayer.Get(client).CTFState == CTF.PlayerState.Free) {
+                    case 29:
+                        {//CTF Red Flag Tile
+                            if (ActiveCTF.GameState == CTF.CTFGameState.Started)
+                            {
+                                if (exPlayer.Get(client).InCTF)
+                                {
+                                    if (exPlayer.Get(client).CTFSide != CTF.Teams.Red)
+                                    {
+                                        if (ActiveCTF.RedFlags > 0)
+                                        {
+                                            if (ActiveCTF.RedFlagHolder == null)
+                                            {
+                                                if (exPlayer.Get(client).CTFState == CTF.PlayerState.Free)
+                                                {
                                                     exPlayer.Get(client).CTFState = CTF.PlayerState.HoldingFlag;
                                                     ActiveCTF.RedFlagHolder = client;
                                                     ActiveCTF.RedFlags--;
                                                     ActiveCTF.CTFMsg(client.Player.Name + " has stolen a red flag!", Text.Yellow);
                                                 }
-                                            } else {
+                                            }
+                                            else
+                                            {
                                                 Messenger.PlayerMsg(client, ActiveCTF.RedFlagHolder.Player.Name + " is already holding a flag!", Text.Yellow);
                                             }
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             Messenger.PlayerMsg(client, "The red team has no more flags!", Text.Yellow);
                                         }
                                     }
@@ -411,61 +514,80 @@ namespace Script
                             }
                         }
                         break;
-                    case 30: {//CTF Blue Flag Tile
-                            if (ActiveCTF.GameState == CTF.CTFGameState.Started) {
-                                if (exPlayer.Get(client).InCTF && exPlayer.Get(client).CTFSide != CTF.Teams.Blue) {
-                                    if (ActiveCTF.BlueFlags > 0) {
-                                        if (ActiveCTF.BlueFlagHolder == null) {
-                                            if (exPlayer.Get(client).CTFState == CTF.PlayerState.Free) {
+                    case 30:
+                        {//CTF Blue Flag Tile
+                            if (ActiveCTF.GameState == CTF.CTFGameState.Started)
+                            {
+                                if (exPlayer.Get(client).InCTF && exPlayer.Get(client).CTFSide != CTF.Teams.Blue)
+                                {
+                                    if (ActiveCTF.BlueFlags > 0)
+                                    {
+                                        if (ActiveCTF.BlueFlagHolder == null)
+                                        {
+                                            if (exPlayer.Get(client).CTFState == CTF.PlayerState.Free)
+                                            {
                                                 exPlayer.Get(client).CTFState = CTF.PlayerState.HoldingFlag;
                                                 ActiveCTF.BlueFlagHolder = client;
                                                 ActiveCTF.BlueFlags--;
                                                 ActiveCTF.CTFMsg(client.Player.Name + " has stolen a blue flag!", Text.Yellow);
                                             }
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             Messenger.PlayerMsg(client, ActiveCTF.BlueFlagHolder.Player.Name + " is already holding a flag!", Text.Yellow);
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         Messenger.PlayerMsg(client, "The blue team has no more flags!", Text.Yellow);
                                     }
                                 }
                             }
                         }
                         break;
-                    case 31: {//CTF Red Flag Check
-                            if (ActiveCTF.GameState == CTF.CTFGameState.Started) {
+                    case 31:
+                        {//CTF Red Flag Check
+                            if (ActiveCTF.GameState == CTF.CTFGameState.Started)
+                            {
                                 ActiveCTF.CheckFlag(client, CTF.Teams.Blue);
                             }
                         }
                         break;
-                    case 32: {//CTF Blue Flag Check
-                            if (ActiveCTF.GameState == CTF.CTFGameState.Started) {
+                    case 32:
+                        {//CTF Blue Flag Check
+                            if (ActiveCTF.GameState == CTF.CTFGameState.Started)
+                            {
                                 ActiveCTF.CheckFlag(client, CTF.Teams.Red);
                             }
                         }
                         break;
-                    case 33: {//R Dungeon Goal for secret rooms; doesn't do anything here
+                    case 33:
+                        {//R Dungeon Goal for secret rooms; doesn't do anything here
                             client.Player.WarpToRDungeon(param1.ToInt() - 1, param2.ToInt() - 1);
                             //if (client.Player.Map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)client.Player.Map).RDungeonIndex > -1) {
                             //	client.Player.WarpToDungeon(((RDungeonMap)client.Player.Map).RDungeonIndex, ((RDungeonMap)client.Player.Map).RDungeonFloor + 1);
                             //}
                         }
                         break;
-                    case 34: {//Reveals stairs when stepped on
+                    case 34:
+                        {//Reveals stairs when stepped on
                             //if (client.Player.JobList.HasCompletedMission("dsksanasd984r487") == false) {
                             //    client.Player.JobList.AddJob("dsksanasd984r487");
                             //} else {
                             //    Messenger.PlayerMsg(client, "There are no special missions that you can play. Come back later!", Text.BrightRed);
                             //}
-                            if (character.CharacterType != Enums.CharacterType.MapNpc) {
+                            if (character.CharacterType != Enums.CharacterType.MapNpc)
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 map.Tile[character.X, character.Y].Data1 = 35;
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg("Stairs appeared!", Text.BrightRed), character.X, character.Y, 10);
                             }
                         }
                         break;
-                    case 35: {//R Dungeon secret room
-                    		if (client != null && map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)map).RDungeonIndex > -1) {
+                    case 35:
+                        {//R Dungeon secret room
+                            if (client != null && map.MapType == Enums.MapType.RDungeonMap && ((RDungeonMap)map).RDungeonIndex > -1)
+                            {
 
                                 InstancedMap iMap = null;
 
@@ -504,8 +626,10 @@ namespace Script
                             }
                         }
                         break;
-                    case 36: {// Dungeon Entrance (Random)
-                            if (client != null) {
+                    case 36:
+                        {// Dungeon Entrance (Random)
+                            if (client != null)
+                            {
                                 //RDungeonManager.LoadRDungeon(param1.ToInt() - 1);
                                 Story story = DungeonRules.CreatePreDungeonStory(client, param1, param2, param3, true);
                                 StoryManager.PlayStory(client, story);
@@ -524,16 +648,20 @@ namespace Script
                             }
                         }
                         break;
-                    case 37: { // Dungeon Entrance (mapped)
-                            if (client != null) {
+                    case 37:
+                        { // Dungeon Entrance (mapped)
+                            if (client != null)
+                            {
 
                                 Story story = DungeonRules.CreatePreDungeonStory(client, param1, param2, param3, false);
                                 StoryManager.PlayStory(client, story);
                             }
                         }
                         break;
-                    case 38: {// Housing Center
-                            if (client != null) {
+                    case 38:
+                        {// Housing Center
+                            if (client != null)
+                            {
                                 exPlayer.Get(client).HousingCenterMap = client.Player.MapID;
                                 exPlayer.Get(client).HousingCenterX = client.Player.X;
                                 exPlayer.Get(client).HousingCenterY = client.Player.Y;
@@ -542,55 +670,70 @@ namespace Script
                             }
                         }
                         break;
-                    case 39: { // Pitfall trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 39:
+                        { // Pitfall trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Pitfall Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 40: { // Evolution block tile
-                            if (client != null) {
-                                if (exPlayer.Get(client).EvolutionActive == false) {
+                    case 40:
+                        { // Evolution block tile
+                            if (client != null)
+                            {
+                                if (exPlayer.Get(client).EvolutionActive == false)
+                                {
                                     BlockPlayer(client);
                                     //    Messenger.PlayerMsg(client, "You can't enter this room!", Text.BrightRed);
                                 }
                             }
                         }
                         break;
-                    case 41: { // Boss battle
-                            if (client != null) {
+                    case 41:
+                        { // Boss battle
+                            if (client != null)
+                            {
                                 //BossBattles.StartBossBattle(client, param1);
                             }
                         }
                         break;
-                    case 42: { // Seal Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 42:
+                        { // Seal Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Seal Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 43: { // Slow Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 43:
+                        { // Slow Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Slow Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 44: { // Spin Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 44:
+                        { // Spin Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Spin Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 45: { // DungeonAttempted
-                            if (client != null) {
+                    case 45:
+                        { // DungeonAttempted
+                            if (client != null)
+                            {
                                 int dungeonIndex = param1.ToInt();
                                 int warpMap = param2.ToInt();
                                 int warpX = param3.Split(':')[0].ToInt();
@@ -601,8 +744,10 @@ namespace Script
                             }
                         }
                         break;
-                    case 46: {//Dungeon completion count incrementer
-                            if (client != null) {
+                    case 46:
+                        {//Dungeon completion count incrementer
+                            if (client != null)
+                            {
 
                                 PartyManager.AttemptPartyWarp(client, (Client warpClient) =>
                                 {
@@ -623,20 +768,26 @@ namespace Script
                             }
                         }
                         break;
-                    case 47: {//Dungeon exit without increment
-                            
+                    case 47:
+                        {//Dungeon exit without increment
+
                         }
                         break;
-                    case 48: { // Removes snowballs
-                            if (client != null) {
-                                if (client.Player.HasItem(152) > 0) {
+                    case 48:
+                        { // Removes snowballs
+                            if (client != null)
+                            {
+                                if (client.Player.HasItem(152) > 0)
+                                {
                                     client.Player.TakeItem(152, 1);
                                 }
                             }
                         }
                         break;
-                    case 49: { // Sweet scent trap (summon)
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 49:
+                        { // Sweet scent trap (summon)
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Summon Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
@@ -644,8 +795,10 @@ namespace Script
                             }
                         }
                         break;
-                    case 50: { // GRUUUUUDGE Trap (Grudge)
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 50:
+                        { // GRUUUUUDGE Trap (Grudge)
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Grudge Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
@@ -653,42 +806,54 @@ namespace Script
                             }
                         }
                         break;
-                    case 51: { // SelfDestruct Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 51:
+                        { // SelfDestruct Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Selfdestruct Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 52: { // Sleep Trap /slumber
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 52:
+                        { // Sleep Trap /slumber
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Slumber Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 53: { // Fan Trap /Gust
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                    case 53:
+                        { // Fan Trap /Gust
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Gust Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 54: { // Arena
-                            if (client != null) {
+                    case 54:
+                        { // Arena
+                            if (client != null)
+                            {
                                 bool canEnter = true;
-                                for (int i = 1; i <= client.Player.MaxInv; i++) {
+                                for (int i = 1; i <= client.Player.MaxInv; i++)
+                                {
                                     if (client.Player.Inventory[i].Num > 0
                                         && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.Held && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldByParty
-                                        && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldInBag) {
+                                        && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldInBag)
+                                    {
                                         bool held = false;
 
-                                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
+                                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                                        {
                                             if (client.Player.Team[j] != null
-                                                && client.Player.Team[j].HeldItemSlot == i) {
+                                                && client.Player.Team[j].HeldItemSlot == i)
+                                            {
                                                 held = true;
                                             }
 
@@ -698,7 +863,8 @@ namespace Script
                                     }
                                 }
 
-                                if (!canEnter) {
+                                if (!canEnter)
+                                {
                                     Story story = new Story();
                                     StorySegment segment = new StorySegment();
                                     segment.Action = Enums.StoryAction.Say;
@@ -707,45 +873,52 @@ namespace Script
                                     segment.Parameters.Add("Speed", "0");
                                     segment.Parameters.Add("PauseLocation", "0");
                                     story.Segments.Add(segment);
-                                    
+
                                     segment = new StorySegment();
-									segment.Action = Enums.StoryAction.AskQuestion;
-									segment.AddParameter("Question", "All items that do not fit arena restrictions will be sent to storage.  Is that OK?");
-									segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
-									segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-									segment.AddParameter("Mugshot", "-1");
-									story.Segments.Add(segment);
-									
-									segment = new StorySegment();
-						            segment.Action = Enums.StoryAction.RunScript;
-						            segment.AddParameter("ScriptIndex", "61");
-						            segment.AddParameter("ScriptParam1", param1);
-						            segment.AddParameter("ScriptParam2", param2);
-						            segment.AddParameter("ScriptParam3", param3);
-						            segment.AddParameter("Pause", "1");
-						            story.Segments.Add(segment);
+                                    segment.Action = Enums.StoryAction.AskQuestion;
+                                    segment.AddParameter("Question", "All items that do not fit arena restrictions will be sent to storage.  Is that OK?");
+                                    segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
+                                    segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                                    segment.AddParameter("Mugshot", "-1");
+                                    story.Segments.Add(segment);
+
+                                    segment = new StorySegment();
+                                    segment.Action = Enums.StoryAction.RunScript;
+                                    segment.AddParameter("ScriptIndex", "61");
+                                    segment.AddParameter("ScriptParam1", param1);
+                                    segment.AddParameter("ScriptParam2", param2);
+                                    segment.AddParameter("ScriptParam3", param3);
+                                    segment.AddParameter("Pause", "1");
+                                    story.Segments.Add(segment);
 
                                     StoryManager.PlayStory(client, story);
 
-                                } else {
+                                }
+                                else
+                                {
                                     EnterArena(client, character, map, param2, param3, hitlist);
                                 }
                             }
                         }
                         break;
-                    case 55: { // Staff Elevator
-                            if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
+                    case 55:
+                        { // Staff Elevator
+                            if (client != null)
+                            {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                {
                                     // TODO: OpenStaffElevator(client);
                                 }
                             }
                         }
                         break;
-                    case 56: { // Pitch-Black Abyss warps
-                            if (client != null) {
-                            	//if DungeonMap.Length < 1
-                            		//GenerateMap
-                            	/*Enums.Direction dir;
+                    case 56:
+                        { // Pitch-Black Abyss warps
+                            if (client != null)
+                            {
+                                //if DungeonMap.Length < 1
+                                //GenerateMap
+                                /*Enums.Direction dir;
             					if (param1.ToInt() == 1) {
             						dir = Enums.Direction.Up;
             					} else if (param1.ToInt() == 2) {
@@ -755,68 +928,91 @@ namespace Script
             					} else { //param1.ToInt() = 4
             						dir = Enums.Direction.Right;
            						}*/
-           						//switch to use dir when done rewriting GetDungeonRoom
-           						if (exPlayer.Get(client).DungeonGenerated == false) {
-                    				PitchBlackAbyss.GenerateMap(client);
-                    			}
-                                PitchBlackAbyss.GetDungeonRoom(client, param1.ToInt()); 
+                                //switch to use dir when done rewriting GetDungeonRoom
+                                if (exPlayer.Get(client).DungeonGenerated == false)
+                                {
+                                    PitchBlackAbyss.GenerateMap(client);
+                                }
+                                PitchBlackAbyss.GetDungeonRoom(client, param1.ToInt());
                             }
                         }
                         break;
-                    case 57: { // Pitch-Black Abyss entrance
-                            if (client != null) {
-                                if (client.Player.MapID == MapManager.GenerateMapID(1545)) { //easy PBA
-                                	PitchBlackAbyss.InitializeMap(client, PitchBlackAbyss.Difficulty.Easy);
-                                	PitchBlackAbyss.GenerateMap(client);
-                                	Story story = DungeonRules.CreatePreDungeonStory(client, "1546", "9:9", "22", false);
-                                	StoryManager.PlayStory(client, story);
+                    case 57:
+                        { // Pitch-Black Abyss entrance
+                            if (client != null)
+                            {
+                                if (client.Player.MapID == MapManager.GenerateMapID(1545))
+                                { //easy PBA
+                                    PitchBlackAbyss.InitializeMap(client, PitchBlackAbyss.Difficulty.Easy);
+                                    PitchBlackAbyss.GenerateMap(client);
+                                    Story story = DungeonRules.CreatePreDungeonStory(client, "1546", "9:9", "22", false);
+                                    StoryManager.PlayStory(client, story);
                                 }
                             }
                         }
                         break;
-                    case 58: { // Electrostasis Tower Electrolock tile
-                            if (client != null) {
+                    case 58:
+                        { // Electrostasis Tower Electrolock tile
+                            if (client != null)
+                            {
                                 ElectrostasisTower.SteppedOnElectrolock(client, param1.ToInt());
                             }
                         }
                         break;
-                    case 59: { // Electrostasis Tower Sublevel Setter
-                            if (client != null) {
+                    case 59:
+                        { // Electrostasis Tower Sublevel Setter
+                            if (client != null)
+                            {
                                 string[] splitData = param2.Split(':');
                                 ElectrostasisTower.SetSublevelCheckpoint(client, param1.ToInt(), splitData[0], splitData[1].ToInt(), splitData[2].ToInt());
                             }
                         }
                         break;
-                    case 60: { // Warp to tournament hub
-                            if (client != null) {
-                                if (client.Player.Tournament != null) {
+                    case 60:
+                        { // Warp to tournament hub
+                            if (client != null)
+                            {
+                                if (client.Player.Tournament != null)
+                                {
                                     client.Player.Tournament.WarpToHub(client);
                                 }
                             }
                         }
                         break;
-                    case 61: { // Warp to tournament combat map
-                            if (client != null) {
-                                if (client.Player.Tournament != null && client.Player.TournamentMatchUp != null) {
+                    case 61:
+                        { // Warp to tournament combat map
+                            if (client != null)
+                            {
+                                if (client.Player.Tournament != null && client.Player.TournamentMatchUp != null)
+                                {
                                     client.Player.TournamentMatchUp.WarpToCombatMap(client);
                                 }
                             }
                         }
                         break;
-                    case 62: { // Open tournament spectator selection list
-                            if (client != null) {
-                                if (client.Player.Tournament == null) {
+                    case 62:
+                        { // Open tournament spectator selection list
+                            if (client != null)
+                            {
+                                if (client.Player.Tournament == null)
+                                {
                                     Messenger.SendTournamentSpectateListingTo(client, null);
-                                } else {
+                                }
+                                else
+                                {
                                     client.Player.Tournament.WarpToHub(client);
                                 }
                             }
                         }
                         break;
-                    case 63: { // Leave tournament waiting room
-                            if (client != null) {
-                                if (client.Player.TournamentMatchUp == null) { // Prevent leaving if the player is in a match-up
-                                    if (client.Player.Tournament != null) {
+                    case 63:
+                        { // Leave tournament waiting room
+                            if (client != null)
+                            {
+                                if (client.Player.TournamentMatchUp == null)
+                                { // Prevent leaving if the player is in a match-up
+                                    if (client.Player.Tournament != null)
+                                    {
                                         client.Player.Tournament.RemoveRegisteredPlayer(client);
                                     }
                                     Messenger.PlayerWarp(client, 1192, 10, 10);
@@ -824,22 +1020,27 @@ namespace Script
                             }
                         }
                         break;
-                    case 64: {
-                            if (exPlayer.Get(client).StoryEnabled) {
+                    case 64:
+                        {
+                            if (exPlayer.Get(client).StoryEnabled)
+                            {
                                 int[] rangeStart;
                                 int[] rangeEnd;
                                 string[] data1 = param1.Split('!');
                                 string[] data2 = param2.Split(':');
                                 rangeStart = new int[data1.Length];
                                 rangeEnd = new int[data1.Length];
-                                for (int i = 0; i < data1.Length; i++) {
+                                for (int i = 0; i < data1.Length; i++)
+                                {
                                     string[] vals = data1[i].Split(':');
                                     rangeStart[i] = vals[0].ToInt();
                                     rangeEnd[i] = vals[1].ToInt();
                                 }
                                 int currentStorySection = client.Player.StoryHelper.ReadSetting("[MainStory]-CurrentSection").ToInt();
-                                for (int i = 0; i < rangeStart.Length; i++) {
-                                    if (currentStorySection >= rangeStart[i] && currentStorySection <= rangeEnd[i]) {
+                                for (int i = 0; i < rangeStart.Length; i++)
+                                {
+                                    if (currentStorySection >= rangeStart[i] && currentStorySection <= rangeEnd[i])
+                                    {
                                         BlockPlayer(client);
                                         Messenger.PlayerMsg(client, data2[i], Text.BrightRed);
                                         break;
@@ -848,158 +1049,213 @@ namespace Script
                             }
                         }
                         break;
-                    case 65: {//dungeon completion block
-                            if (client != null) {
-                                if (client.Player.GetDungeonCompletionCount(param1.ToInt()-1) < 1) {
+                    case 65:
+                        {//dungeon completion block
+                            if (client != null)
+                            {
+                                if (client.Player.GetDungeonCompletionCount(param1.ToInt() - 1) < 1)
+                                {
                                     BlockPlayer(client);
                                     Messenger.PlayerMsg(client, "You must complete " + DungeonManager.Dungeons[param1.ToInt() - 1].Name + " to get through!", Text.BrightRed);
                                 }
                             }
                         }
                         break;
-                    case 66: {// Delite Plaza exit warp
-                    		if (!string.IsNullOrEmpty(exPlayer.Get(client).PlazaEntranceMap)) {
-                    			Messenger.PlayerWarp(client, exPlayer.Get(client).PlazaEntranceMap, exPlayer.Get(client).PlazaEntranceX, exPlayer.Get(client).PlazaEntranceY);
-                    		
-                    			exPlayer.Get(client).PlazaEntranceMap = null;
-                    			exPlayer.Get(client).PlazaEntranceX = 0;
-                    			exPlayer.Get(client).PlazaEntranceY = 0;
-                    		} else {
-                    			Messenger.PlayerWarp(client, 737, 6, 41);
-                    		}
-                    	}
-                    	break;
-                    case 67: {// Auction master + bid winner only
-                    		if (client.Player.CharID != Auction.AuctionMaster && client.Player.CharID != Auction.LastAuctionMaster && client.Player.Name != Auction.HighestBidder
-                    			&& Ranks.IsDisallowed(client, Enums.Rank.Monitor)) {
-                    			BlockPlayer(client);
-                    		}
-                    	}
-                    	break;
-                    case 68: {// key-blocked next floor of different dungeon
-                    	if (client != null) {
-                    			int slot = 0;
-	                    		for (int i = 1; i <= client.Player.Inventory.Count; i++) {
-					                if (client.Player.Inventory[i].Num == param2.ToInt() && !client.Player.Inventory[i].Sticky) {
-					                    slot = i;
-					                    break;
-					                }
-					            }
-	                            if (slot > 0) {
-	                                Messenger.AskQuestion(client, "UseItem:"+param2, "Will you use your " + ItemManager.Items[param2.ToInt()].Name + " on this tile?", -1);
-	                            } else {
-	                    			Messenger.PlaySoundToMap(client.Player.MapID, "magic132.wav");
-	                    			//Messenger.PlayerMsg(client, Server.RDungeons.RDungeonManager.RDungeons[param1.ToInt()-1].DungeonName, Text.Pink);
-	                            	Messenger.PlayerMsg(client, "There is a peculiar marking on the floor... It seems to need a key.", Text.BrightRed);
-	                            }
-	                        }
-                    	}
-                    	break;
-                    case 69: {// next floor of different dungeon
-                    	if (client != null) {
-
-                            PartyManager.AttemptPartyWarp(client, (Client warpClient) =>
+                    case 66:
+                        {// Delite Plaza exit warp
+                            if (!string.IsNullOrEmpty(exPlayer.Get(client).PlazaEntranceMap))
                             {
-                                warpClient.Player.WarpToRDungeon(param1.ToInt() - 1, ((RDungeonMap)warpClient.Player.Map).RDungeonFloor + 1);
-                            });
+                                Messenger.PlayerWarp(client, exPlayer.Get(client).PlazaEntranceMap, exPlayer.Get(client).PlazaEntranceX, exPlayer.Get(client).PlazaEntranceY);
+
+                                exPlayer.Get(client).PlazaEntranceMap = null;
+                                exPlayer.Get(client).PlazaEntranceX = 0;
+                                exPlayer.Get(client).PlazaEntranceY = 0;
+                            }
+                            else
+                            {
+                                Messenger.PlayerWarp(client, 737, 6, 41);
+                            }
+                        }
+                        break;
+                    case 67:
+                        {// Auction master + bid winner only
+                            if (client.Player.CharID != Auction.AuctionMaster && client.Player.CharID != Auction.LastAuctionMaster && client.Player.Name != Auction.HighestBidder
+                                && Ranks.IsDisallowed(client, Enums.Rank.Monitor))
+                            {
+                                BlockPlayer(client);
+                            }
+                        }
+                        break;
+                    case 68:
+                        {// key-blocked next floor of different dungeon
+                            if (client != null)
+                            {
+                                int slot = 0;
+                                for (int i = 1; i <= client.Player.Inventory.Count; i++)
+                                {
+                                    if (client.Player.Inventory[i].Num == param2.ToInt() && !client.Player.Inventory[i].Sticky)
+                                    {
+                                        slot = i;
+                                        break;
+                                    }
+                                }
+                                if (slot > 0)
+                                {
+                                    Messenger.AskQuestion(client, "UseItem:" + param2, "Will you use your " + ItemManager.Items[param2.ToInt()].Name + " on this tile?", -1);
+                                }
+                                else
+                                {
+                                    Messenger.PlaySoundToMap(client.Player.MapID, "magic132.wav");
+                                    //Messenger.PlayerMsg(client, Server.RDungeons.RDungeonManager.RDungeons[param1.ToInt()-1].DungeonName, Text.Pink);
+                                    Messenger.PlayerMsg(client, "There is a peculiar marking on the floor... It seems to need a key.", Text.BrightRed);
+                                }
+                            }
+                        }
+                        break;
+                    case 69:
+                        {// next floor of different dungeon
+                            if (client != null)
+                            {
+
+                                PartyManager.AttemptPartyWarp(client, (Client warpClient) =>
+                                {
+                                    warpClient.Player.WarpToRDungeon(param1.ToInt() - 1, ((RDungeonMap)warpClient.Player.Map).RDungeonFloor + 1);
+                                });
 
                             }
-                    	}
-                    	break;
-                    case 70: { // Shocker Trap
-                            if (WillTrapActivate(character, map, character.X, character.Y)) {
+                        }
+                        break;
+                    case 70:
+                        { // Shocker Trap
+                            if (WillTrapActivate(character, map, character.X, character.Y))
+                            {
                                 RevealTrap(map, character.X, character.Y, hitlist);
                                 hitlist.AddPacketToMap(map, PacketBuilder.CreateBattleMsg(character.Name + " stepped on a Shocker Trap!", Text.BrightRed), character.X, character.Y, 10);
                                 ActivateTrap(map, character.X, character.Y, script, hitlist);
                             }
                         }
                         break;
-                    case 71: {// fossil revival
-                    	if (client != null) {
-                    			if (Server.Globals.ServerTime != Enums.Time.Night) { 
-                    				Story story = new Story();
-		                            StoryBuilderSegment segment = StoryBuilder.BuildStory();
-		                            if (string.IsNullOrEmpty(param1)) {
-		                            StoryBuilder.AppendSaySegment(segment, "The light of " + Server.Globals.ServerTime.ToString().ToLower() + " is seeping down from above.", -1, 0, 0);
-		                            } else if (param1.ToInt() == 1) {
-		                            	StoryBuilder.AppendSaySegment(segment, "A bizzare light of " + Server.Globals.ServerTime.ToString().ToLower() + " is seeping down from above.", -1, 0, 0);
-		                            }
-		                            
-		                            segment.AppendToStory(story);
-		                            StoryManager.PlayStory(client, story);
-                    			} else {
-                    				int slot = 0;
-                    				int itemNum = -1;
-		                    		for (int i = 1; i <= client.Player.Inventory.Count; i++) {
-		                    		if (string.IsNullOrEmpty(param1)) {
-						                if (client.Player.Inventory[i].Num >= 791 && client.Player.Inventory[i].Num <= 799
-						                	&& !client.Player.Inventory[i].Sticky) {
-						                    slot = i;
-						                    itemNum = client.Player.Inventory[i].Num;
-						                    break;
-						                }
-						              } else if (param1.ToInt() == 1) {
-						              	if (client.Player.Inventory[i].Num == 846
-						                	&& !client.Player.Inventory[i].Sticky) {
-						                    slot = i;
-						                    itemNum = client.Player.Inventory[i].Num;
-						                    break;
-						                }
-						              }
-						            }
-		                            if (slot > 0) {
-		                            	if (string.IsNullOrEmpty(param1)) {
-		                                Messenger.AskQuestion(client, "UseItem:"+itemNum, "Red moonlight is pouring down from above... Will you hold up your " + ItemManager.Items[itemNum].Name + " to the light?", -1);
-		                                } else if (param1.ToInt() == 1) {
-		                                	Messenger.AskQuestion(client, "UseItem:"+itemNum, "Your Wonder Egg is emanating a strong aura. Will you hold up your " + ItemManager.Items[itemNum].Name + " to the light?", -1);
-		                                }
-		                                Messenger.PlaySoundToMap(client.Player.MapID, "magic848.wav");
-		                            } else {
-		                            
-	                    				Story story = new Story();
-			                            StoryBuilderSegment segment = StoryBuilder.BuildStory();
-			                            if (string.IsNullOrEmpty(param1)) {
-			                            StoryBuilder.AppendSaySegment(segment, "Red moonlight is pouring down from above...", -1, 0, 0);
-			                            } else if (param1.ToInt() == 1) {
-			                            	StoryBuilder.AppendSaySegment(segment, "A bizzare light is seeping down from above...", -1, 0, 0);
-			                            }
-			                            segment.AppendToStory(story);
-			                            StoryManager.PlayStory(client, story);
-			                            
-	                    				Messenger.PlaySoundToMap(client.Player.MapID, "magic848.wav");
-                    				}
-                    			}
-	                        }
-                    	}
-                    	break;
-                    case 72: { // Warp to hard mode entrance
-                            if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
-                                	Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
+                    case 71:
+                        {// fossil revival
+                            if (client != null)
+                            {
+                                if (Server.Globals.ServerTime != Enums.Time.Night)
+                                {
+                                    Story story = new Story();
+                                    StoryBuilderSegment segment = StoryBuilder.BuildStory();
+                                    if (string.IsNullOrEmpty(param1))
+                                    {
+                                        StoryBuilder.AppendSaySegment(segment, "The light of " + Server.Globals.ServerTime.ToString().ToLower() + " is seeping down from above.", -1, 0, 0);
+                                    }
+                                    else if (param1.ToInt() == 1)
+                                    {
+                                        StoryBuilder.AppendSaySegment(segment, "A bizzare light of " + Server.Globals.ServerTime.ToString().ToLower() + " is seeping down from above.", -1, 0, 0);
+                                    }
+
+                                    segment.AppendToStory(story);
+                                    StoryManager.PlayStory(client, story);
+                                }
+                                else
+                                {
+                                    int slot = 0;
+                                    int itemNum = -1;
+                                    for (int i = 1; i <= client.Player.Inventory.Count; i++)
+                                    {
+                                        if (string.IsNullOrEmpty(param1))
+                                        {
+                                            if (client.Player.Inventory[i].Num >= 791 && client.Player.Inventory[i].Num <= 799
+                                                && !client.Player.Inventory[i].Sticky)
+                                            {
+                                                slot = i;
+                                                itemNum = client.Player.Inventory[i].Num;
+                                                break;
+                                            }
+                                        }
+                                        else if (param1.ToInt() == 1)
+                                        {
+                                            if (client.Player.Inventory[i].Num == 846
+                                              && !client.Player.Inventory[i].Sticky)
+                                            {
+                                                slot = i;
+                                                itemNum = client.Player.Inventory[i].Num;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (slot > 0)
+                                    {
+                                        if (string.IsNullOrEmpty(param1))
+                                        {
+                                            Messenger.AskQuestion(client, "UseItem:" + itemNum, "Red moonlight is pouring down from above... Will you hold up your " + ItemManager.Items[itemNum].Name + " to the light?", -1);
+                                        }
+                                        else if (param1.ToInt() == 1)
+                                        {
+                                            Messenger.AskQuestion(client, "UseItem:" + itemNum, "Your Wonder Egg is emanating a strong aura. Will you hold up your " + ItemManager.Items[itemNum].Name + " to the light?", -1);
+                                        }
+                                        Messenger.PlaySoundToMap(client.Player.MapID, "magic848.wav");
+                                    }
+                                    else
+                                    {
+
+                                        Story story = new Story();
+                                        StoryBuilderSegment segment = StoryBuilder.BuildStory();
+                                        if (string.IsNullOrEmpty(param1))
+                                        {
+                                            StoryBuilder.AppendSaySegment(segment, "Red moonlight is pouring down from above...", -1, 0, 0);
+                                        }
+                                        else if (param1.ToInt() == 1)
+                                        {
+                                            StoryBuilder.AppendSaySegment(segment, "A bizzare light is seeping down from above...", -1, 0, 0);
+                                        }
+                                        segment.AppendToStory(story);
+                                        StoryManager.PlayStory(client, story);
+
+                                        Messenger.PlaySoundToMap(client.Player.MapID, "magic848.wav");
+                                    }
                                 }
                             }
                         }
                         break;
-                    case 73: { // Warp from hard mode entrance
-                            if (client != null) {
-                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor)) {
-                                	Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
+                    case 72:
+                        { // Warp to hard mode entrance
+                            if (client != null)
+                            {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                {
+                                    Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
                                 }
                             }
                         }
                         break;
-                    case 74: { // Tanren Arena
-                            if (client != null) {
+                    case 73:
+                        { // Warp from hard mode entrance
+                            if (client != null)
+                            {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                {
+                                    Messenger.PlayerWarp(client, param1.ToInt(), param2.ToInt(), param3.ToInt());
+                                }
+                            }
+                        }
+                        break;
+                    case 74:
+                        { // Tanren Arena
+                            if (client != null)
+                            {
                                 bool canEnter = true;
-                                for (int i = 1; i <= client.Player.MaxInv; i++) {
+                                for (int i = 1; i <= client.Player.MaxInv; i++)
+                                {
                                     if (client.Player.Inventory[i].Num > 0
                                         && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.Held && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldByParty
-                                        && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldInBag) {
+                                        && ItemManager.Items[client.Player.Inventory[i].Num].Type != Enums.ItemType.HeldInBag)
+                                    {
                                         bool held = false;
 
-                                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++) {
+                                        for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                                        {
                                             if (client.Player.Team[j] != null
-                                                && client.Player.Team[j].HeldItemSlot == i) {
+                                                && client.Player.Team[j].HeldItemSlot == i)
+                                            {
                                                 held = true;
                                             }
 
@@ -1009,7 +1265,8 @@ namespace Script
                                     }
                                 }
 
-                                if (!canEnter) {
+                                if (!canEnter)
+                                {
                                     Story story = new Story();
                                     StorySegment segment = new StorySegment();
                                     segment.Action = Enums.StoryAction.Say;
@@ -1018,126 +1275,152 @@ namespace Script
                                     segment.Parameters.Add("Speed", "0");
                                     segment.Parameters.Add("PauseLocation", "0");
                                     story.Segments.Add(segment);
-                                    
+
                                     segment = new StorySegment();
-									segment.Action = Enums.StoryAction.AskQuestion;
-									segment.AddParameter("Question", "All items that do not fit arena restrictions will be sent to storage.  Is that OK?");
-									segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
-									segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
-									segment.AddParameter("Mugshot", "-1");
-									story.Segments.Add(segment);
-									
-									segment = new StorySegment();
-						            segment.Action = Enums.StoryAction.RunScript;
-						            segment.AddParameter("ScriptIndex", "61");
-						            segment.AddParameter("ScriptParam1", param1);
-						            segment.AddParameter("ScriptParam2", param2);
-						            segment.AddParameter("ScriptParam3", param3);
-						            segment.AddParameter("Pause", "1");
-						            story.Segments.Add(segment);
+                                    segment.Action = Enums.StoryAction.AskQuestion;
+                                    segment.AddParameter("Question", "All items that do not fit arena restrictions will be sent to storage.  Is that OK?");
+                                    segment.AddParameter("SegmentOnYes", (story.Segments.Count + 2).ToString());
+                                    segment.AddParameter("SegmentOnNo", (story.Segments.Count + 3).ToString());
+                                    segment.AddParameter("Mugshot", "-1");
+                                    story.Segments.Add(segment);
+
+                                    segment = new StorySegment();
+                                    segment.Action = Enums.StoryAction.RunScript;
+                                    segment.AddParameter("ScriptIndex", "61");
+                                    segment.AddParameter("ScriptParam1", param1);
+                                    segment.AddParameter("ScriptParam2", param2);
+                                    segment.AddParameter("ScriptParam3", param3);
+                                    segment.AddParameter("Pause", "1");
+                                    story.Segments.Add(segment);
 
                                     StoryManager.PlayStory(client, story);
 
-                                } else {
+                                }
+                                else
+                                {
                                     client.Player.BeginTempStatMode(50, true);
                                     EnterArena(client, character, map, param2, param3, hitlist);
                                 }
                             }
                         }
                         break;
-                	case 75: {
-    						for (int i = 1; i <= client.Player.MaxInv; i++) {
-                				if (client.Player.Inventory[i].Num > -1) {
-                					BlockPlayer(client);
-                					Messenger.PlayerMsg(client, "You cannot have any items in your inventory!", Text.Red);
-                					break;
-                				}
-                			}
-                			
-                			for (int j = 1; j < Constants.MAX_ACTIVETEAM; j++) {
-                            	if (client.Player.Team[j] != null) {
-                                	BlockPlayer(client);
-                					Messenger.PlayerMsg(client, "You cannot have any team members in your team!", Text.Red);
-                					break;
-                            	}
+                    case 75:
+                        {
+                            for (int i = 1; i <= client.Player.MaxInv; i++)
+                            {
+                                if (client.Player.Inventory[i].Num > -1)
+                                {
+                                    BlockPlayer(client);
+                                    Messenger.PlayerMsg(client, "You cannot have any items in your inventory!", Text.Red);
+                                    break;
+                                }
+                            }
+
+                            for (int j = 1; j < Constants.MAX_ACTIVETEAM; j++)
+                            {
+                                if (client.Player.Team[j] != null)
+                                {
+                                    BlockPlayer(client);
+                                    Messenger.PlayerMsg(client, "You cannot have any team members in your team!", Text.Red);
+                                    break;
+                                }
 
                             }
- 	               		}
-                		break;
-                	case 76: {//Dive
-                            if (client != null) {
+                        }
+                        break;
+                    case 76:
+                        {//Dive
+                            if (client != null)
+                            {
                                 Messenger.PlayerMsg(client, "The water goes pretty deep here...", Text.Grey);
                                 //Messenger.PlaySound(client, "Magic477.wav");
                                 hitlist.AddPacket(client, PacketBuilder.CreateSoundPacket("Magic477.wav"));
                             }
                         }
                         break;
-                    case 77: { // Asks a question
-                    	if (client != null) {
-                    		int slot = 0;
-                    		int itemNum = -1;
-                    		int npcToSpawn = param1.ToInt();
-                    		int itemToUse = param2.ToInt();
-                    		string questionAsked = param3;
-                    		
-                    		for (int i = 1; i <= client.Player.Inventory.Count; i++) {
-                    			if (client.Player.Inventory[i].Num == param2.ToInt()
-                    				&& !client.Player.Inventory[i].Sticky) {
-                    					slot = i;
-                    					itemNum = client.Player.Inventory[i].Num;
-                    					break;
-                    				}
-                    		}
-                    		
-                    		if (slot > 0) {
-                    			Messenger.AskQuestion(client, "UseItem:"+itemNum, param3, -1);
-                    		}
-                    	}
-                    }
-                    break;
-                    case 78: {// warp everyone to respective locations
-                    	if (client != null) {
-							
-				            IMap sourceMap = client.Player.Map;
-				            Tile clientTile = sourceMap.Tile[client.Player.X, client.Player.Y];
-				            if (client.Player.PartyID == null)
-				            {
-				            	Messenger.PlayerWarp(client, clientTile.String1.ToInt(), clientTile.String2.ToInt(), clientTile.String3.ToInt());
-				            }
-				            else
-				            {
-				                bool warp = true;
-				                Party party = PartyManager.FindPlayerParty(client);
-				                foreach (Client member in party.GetOnlineMemberClients())
-				                {
-									Tile tile = sourceMap.Tile[member.Player.X, member.Player.Y];
-				                    if (/*!member.Player.Dead &&*/ member.Player.MapID == client.Player.MapID && (clientTile.Type != tile.Type || clientTile.Data1 != tile.Data1 || clientTile.String1 != tile.String1))
-				                    {
-				                        warp = false;
-				                    }
-				                }
-				
-				                if (warp)
-				                {
-				                    foreach (Client member in party.GetOnlineMemberClients())
-				                    {
-				                        if (member.Player.Map != sourceMap) continue;
-										Tile tile = sourceMap.Tile[member.Player.X, member.Player.Y];
-				            			Messenger.PlayerWarp(member, tile.String1.ToInt(), tile.String2.ToInt(), tile.String3.ToInt());
-				                    }
-				                }
-				                else
-				                {
-				                    Messenger.PlayerMsg(client, "All surviving players must be on the East or West stairs in order to continue.", Text.WhiteSmoke);
-				                }
-				            }
+                    case 77:
+                        { // Asks a question
+                            if (client != null)
+                            {
+                                int slot = 0;
+                                int itemNum = -1;
+                                int npcToSpawn = param1.ToInt();
+                                int itemToUse = param2.ToInt();
+                                string questionAsked = param3;
+
+                                for (int i = 1; i <= client.Player.Inventory.Count; i++)
+                                {
+                                    if (client.Player.Inventory[i].Num == param2.ToInt()
+                                        && !client.Player.Inventory[i].Sticky)
+                                    {
+                                        slot = i;
+                                        itemNum = client.Player.Inventory[i].Num;
+                                        break;
+                                    }
+                                }
+
+                                if (slot > 0)
+                                {
+                                    Messenger.AskQuestion(client, "UseItem:" + itemNum, param3, -1);
+                                }
+                            }
+                        }
+                        break;
+                    case 78:
+                        {// warp everyone to respective locations
+                            if (client != null)
+                            {
+
+                                IMap sourceMap = client.Player.Map;
+                                Tile clientTile = sourceMap.Tile[client.Player.X, client.Player.Y];
+                                if (client.Player.PartyID == null)
+                                {
+                                    Messenger.PlayerWarp(client, clientTile.String1.ToInt(), clientTile.String2.ToInt(), clientTile.String3.ToInt());
+                                }
+                                else
+                                {
+                                    bool warp = true;
+                                    Party party = PartyManager.FindPlayerParty(client);
+                                    foreach (Client member in party.GetOnlineMemberClients())
+                                    {
+                                        Tile tile = sourceMap.Tile[member.Player.X, member.Player.Y];
+                                        if (/*!member.Player.Dead &&*/ member.Player.MapID == client.Player.MapID && (clientTile.Type != tile.Type || clientTile.Data1 != tile.Data1 || clientTile.String1 != tile.String1))
+                                        {
+                                            warp = false;
+                                        }
+                                    }
+
+                                    if (warp)
+                                    {
+                                        foreach (Client member in party.GetOnlineMemberClients())
+                                        {
+                                            if (member.Player.Map != sourceMap) continue;
+                                            Tile tile = sourceMap.Tile[member.Player.X, member.Player.Y];
+                                            Messenger.PlayerWarp(member, tile.String1.ToInt(), tile.String2.ToInt(), tile.String3.ToInt());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Messenger.PlayerMsg(client, "All surviving players must be on the East or West stairs in order to continue.", Text.WhiteSmoke);
+                                    }
+                                }
 
                             }
-                    	}
-                    	break;	                  
+                        }
+                        break;
+                    case 79:
+                        {
+                            if (!string.IsNullOrEmpty(exPlayer.Get(client).PlazaEntranceMap))
+                            {
+                                Messenger.PlayerWarp(client, exPlayer.Get(client).PlazaEntranceMap, exPlayer.Get(client).PlazaEntranceX, exPlayer.Get(client).PlazaEntranceY);
+                            }
+                        }
+                        break;
                 }
                 PacketHitList.MethodEnded(ref hitlist);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Messenger.AdminMsg("Error: ScriptedTile", Text.Black);
                 Messenger.AdminMsg(script + ", " + param1 + " " + param2 + " " + param3, Text.Black);
                 Messenger.AdminMsg(map.Name, Text.Black);
@@ -1145,8 +1428,10 @@ namespace Script
             }
         }
 
-        public static string ScriptedTileInfo(Client client, int scriptNum) {
-            switch (scriptNum) {
+        public static string ScriptedTileInfo(Client client, int scriptNum)
+        {
+            switch (scriptNum)
+            {
                 case 0:
                     return scriptNum + ": Empty";
                 case 1:
@@ -1281,29 +1566,31 @@ namespace Script
                     return scriptNum + ": Completion Count check";
                 case 66:
                     return scriptNum + ": Delite Plaza Exit";
-                case 67: 
-                	return scriptNum + ": Auction Block";
-                case 70: 
-                	return scriptNum + ": Shocker Trap";
-                case 71: 
-                	return scriptNum + ": Fossil Revival";
-                case 72: 
-                	return scriptNum + ": To Hard Entrance";
-                case 73: 
-                	return scriptNum + ": From Hard Entrance";
-                case 74: 
-                	return scriptNum + ": Tanren Arena Entrance";
+                case 67:
+                    return scriptNum + ": Auction Block";
+                case 70:
+                    return scriptNum + ": Shocker Trap";
+                case 71:
+                    return scriptNum + ": Fossil Revival";
+                case 72:
+                    return scriptNum + ": To Hard Entrance";
+                case 73:
+                    return scriptNum + ": From Hard Entrance";
+                case 74:
+                    return scriptNum + ": Tanren Arena Entrance";
                 case 75:
-                	return scriptNum + ": Dodgeball Block";
+                    return scriptNum + ": Dodgeball Block";
                 case 76:
-                	return scriptNum + ": Dive";
-               	case 77: 
-               		return scriptNum + ": Spawn on Item Use";
-               	case 78: 
-               		return scriptNum + ": Friendship Forest Warps";
+                    return scriptNum + ": Dive";
+                case 77:
+                    return scriptNum + ": Spawn on Item Use";
+                case 78:
+                    return scriptNum + ": Friendship Forest Warps";
+                case 79:
+                    return scriptNum + ": Exit Plaza";
                 default:
                     return scriptNum.ToString() + ": Unknown";
             }
         }
-	}
+    }
 }
