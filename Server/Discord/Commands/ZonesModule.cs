@@ -212,6 +212,31 @@ namespace Server.Discord.Commands
             }
         }
 
+        [Command("rename")]
+        [Summary("Rename a zone.")]
+        public async Task RenameAsync(int zoneID, string zoneName)
+        {
+            if (!ZoneManager.Zones.Zones.ContainsKey(zoneID))
+            {
+                await Context.Channel.SendMessageAsync("Invalid zone id specified.");
+                return;
+            }
+
+            if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
+            {
+                await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
+                return;
+            }
+
+            var zone = ZoneManager.Zones[zoneID];
+
+            zone.Name = zoneName;
+
+            ZoneManager.SaveZone(zoneID);
+
+            await Context.Channel.SendMessageAsync($"The zone has been renamed to `{zone.Name}`!");
+        }
+
         [Command("enable")]
         [Summary("Enable a zone option.")]
         public async Task EnableAsync(int zoneID, ZoneOption zoneOption)

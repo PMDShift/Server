@@ -5507,6 +5507,11 @@ namespace Script
                             }
                         }
                         break;
+                    case 72:
+                        { // Warp to spawn
+                            exPlayer.Get(client).WarpToSpawn(false);
+                        }
+                        break;
 
 
                 }
@@ -9602,12 +9607,14 @@ namespace Script
             {
                 int completedJobs = 0;
 
-                var winMap = "s1";
+                var winMap = "s190";
+                var winX = 13;
+                var winY = 8;
 
                 Story story = new Story();
                 StoryBuilderSegment segment = StoryBuilder.BuildStory();
-                StoryBuilder.AppendWarpAction(segment, winMap, 10, 5);
-                StoryBuilder.AppendPlayMusicAction(segment, "PMD2) Job Clear!.ogg", true, true);
+                StoryBuilder.AppendWarpAction(segment, winMap, winX, winY);
+                // StoryBuilder.AppendPlayMusicAction(segment, "PMD2) Job Clear!.ogg", true, true);
                 foreach (WonderMailJob mission in client.Player.JobList.JobList)
                 {
                     if (mission.Accepted == Enums.JobStatus.Finished)
@@ -9616,12 +9623,12 @@ namespace Script
                         MissionPool missionPool = WonderMailManager.Missions[(int)mission.Mission.Difficulty - 1];
 
 
-                        StoryBuilder.AppendCreateFNPCAction(segment, "0", winMap, 9, 4, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
+                        StoryBuilder.AppendCreateFNPCAction(segment, "0", winMap, winX, winY - 1, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
                         StoryBuilder.AppendChangeFNPCDirAction(segment, "0", Enums.Direction.Down);
                         if (mission.Mission.MissionType == Enums.MissionType.Escort)
                         {
-                            PokemonForm target = Pokedex.GetPokemonForm(mission.Mission.Data1, mission.Mission.Data1);
-                            StoryBuilder.AppendCreateFNPCAction(segment, "1", winMap, 10, 4, missionPool.MissionClients[mission.Mission.MissionClientIndex].Species);
+                            PokemonForm target = Pokedex.GetPokemonForm(mission.Mission.Data1, 0);
+                            StoryBuilder.AppendCreateFNPCAction(segment, "1", winMap, winX - 1, winY - 1, mission.Mission.Data1);
                             StoryBuilder.AppendChangeFNPCDirAction(segment, "1", Enums.Direction.Down);
                         }
                         if (mission.Mission.MissionType == Enums.MissionType.Escort)
@@ -9665,10 +9672,16 @@ namespace Script
                         {
                             StoryBuilder.AppendSaySegment(segment, "You have been awarded with " + expRewarded + " explorer points!", -1, 0, 0);
                         }
+
                         StoryBuilder.AppendPauseAction(segment, 1000);
                         StoryBuilder.AppendMapVisibilityAction(segment, true);
                     }
                 }
+
+                StoryBuilder.AppendMapVisibilityAction(segment, false);
+                StoryBuilder.AppendRunScriptAction(segment, 72, "", "", "", true);
+                StoryBuilder.AppendPauseAction(segment, 1000);
+                StoryBuilder.AppendMapVisibilityAction(segment, true);
 
                 StoryBuilder.AppendPlayMusicAction(segment, "%mapmusic%", true, true);
                 segment.AppendToStory(story);

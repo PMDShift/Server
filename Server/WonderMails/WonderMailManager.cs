@@ -129,6 +129,14 @@ namespace Server.WonderMails
             for (int i = 0; i < missionPools.MissionPools[difficulty].MissionClients.Count; i++)
             {
                 MissionClientData data = missionPools.MissionPools[difficulty].MissionClients[i];
+
+                database.AddRow("mission_client", new IDataColumn[]
+                {
+                    database.CreateColumn(true, "Rank", difficulty.ToString()),
+                    database.CreateColumn(true, "ClientIndex", i.ToString()),
+                    database.CreateColumn(false, "DexNum", data.Species.ToString()),
+                    database.CreateColumn(false, "FormNum", data.Form.ToString())
+                });
             }
 
             database.ExecuteNonQuery("DELETE FROM mission_enemy WHERE Rank = \'" + difficulty + "\'");

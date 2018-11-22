@@ -3011,6 +3011,7 @@ namespace Server.Network
         {
             TcpPacket packet = new TcpPacket("editnpc");
             packet.AppendParameters(
+                 NPCNum.ToString(),
                  NpcManager.Npcs[NPCNum].Name,
                  NpcManager.Npcs[NPCNum].AttackSay,
                  NpcManager.Npcs[NPCNum].AttackSay2,

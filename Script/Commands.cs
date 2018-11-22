@@ -107,8 +107,25 @@ namespace Script
                 PacketHitList.MethodStart(ref hitlist);
 
 
-				switch (command[0])
-				{
+                switch (command[0])
+                {
+                    case "/transferzone":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                client.Player.Map.ZoneID = joinedArgs.ToInt();
+
+                                client.Player.Map.Save();
+
+                                Messenger.PlayerMsg(client, "Zone transferred.", Text.BrightGreen);
+                            }
+                        }
+                        break;
+                    case "/shrug":
+                        {
+                            Messenger.MapMsg(client.Player.MapID, client.Player.Name + @": ¯\_(ツ)_/¯", Text.White);
+                        }
+                        break;
                     case "/zone":
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Mapper))
@@ -149,179 +166,187 @@ namespace Script
                             }
                         }
                         break;
-                    case "/sandbox": {
-							// TODO: Only allow entering sandbox mode if assigned to at least one zone
-							// TODO: Only allow entering sandbox mode if on the overworld
-							client.Player.PlayerData.IsSandboxed = !client.Player.PlayerData.IsSandboxed;
-							Messenger.PlayerMsg(client, "Sandbox mode is now " + (client.Player.PlayerData.IsSandboxed ? "enabled." : "disabled."), Text.BrightGreen);
-						}
-						break;
-					case "/enablediscord": {
-							client.Player.PlayerData.CanLinkDiscord = true;
-							Messenger.PlayerMsg(client, "Discord connecting enabled!", Text.BrightGreen);
-						}
-						break;
-					case "/disablediscord": {
-							client.Player.PlayerData.CanLinkDiscord = false;
-							Messenger.PlayerMsg(client, "Discord connecting disabled!", Text.BrightGreen);
-						}
-						break;
-					case "/resetdiscord": {
-							client.Player.PendingDiscordId = 0;
-							Messenger.PlayerMsg(client, "Discord connecting reset!", Text.BrightGreen);
-						}
-						break;
-					case "/discordinfo": {
-							if (client.Player.PlayerData.LinkedDiscordId > 0) {
-								Messenger.PlayerMsg(client, "Your account is linked with Discord.", Text.BrightGreen);
-							} else {
-								Messenger.PlayerMsg(client, "Your account is NOT linked with Discord.", Text.BrightGreen);
-							}
-						}
-						break;
-					case "/savelogs":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
-							{
-								Logger.SaveLogs();
-								Messenger.PlayerMsg(client, "Logs have been saved.", Text.BrightGreen);
-							}
-						}
-						break;
-					case "/textstory":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
-							{
-								Story story = new Story();
+                    case "/sandbox":
+                        {
+                            // TODO: Only allow entering sandbox mode if assigned to at least one zone
+                            // TODO: Only allow entering sandbox mode if on the overworld
+                            client.Player.PlayerData.IsSandboxed = !client.Player.PlayerData.IsSandboxed;
+                            Messenger.PlayerMsg(client, "Sandbox mode is now " + (client.Player.PlayerData.IsSandboxed ? "enabled." : "disabled."), Text.BrightGreen);
+                        }
+                        break;
+                    case "/enablediscord":
+                        {
+                            client.Player.PlayerData.CanLinkDiscord = true;
+                            Messenger.PlayerMsg(client, "Discord connecting enabled!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/disablediscord":
+                        {
+                            client.Player.PlayerData.CanLinkDiscord = false;
+                            Messenger.PlayerMsg(client, "Discord connecting disabled!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/resetdiscord":
+                        {
+                            client.Player.PendingDiscordId = 0;
+                            Messenger.PlayerMsg(client, "Discord connecting reset!", Text.BrightGreen);
+                        }
+                        break;
+                    case "/discordinfo":
+                        {
+                            if (client.Player.PlayerData.LinkedDiscordId > 0)
+                            {
+                                Messenger.PlayerMsg(client, "Your account is linked with Discord.", Text.BrightGreen);
+                            }
+                            else
+                            {
+                                Messenger.PlayerMsg(client, "Your account is NOT linked with Discord.", Text.BrightGreen);
+                            }
+                        }
+                        break;
+                    case "/savelogs":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                Logger.SaveLogs();
+                                Messenger.PlayerMsg(client, "Logs have been saved.", Text.BrightGreen);
+                            }
+                        }
+                        break;
+                    case "/textstory":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                Story story = new Story();
 
-								StoryBuilderSegment segment = new StoryBuilderSegment();
+                                StoryBuilderSegment segment = new StoryBuilderSegment();
 
-								StoryBuilder.AppendSaySegment(segment, joinedArgs, 25, 0, 0);
+                                StoryBuilder.AppendSaySegment(segment, joinedArgs, 25, 0, 0);
 
-								segment.AppendToStory(story);
+                                segment.AppendToStory(story);
 
-								foreach (Client i in client.Player.Map.GetClients())
-								{
-									StoryManager.PlayStory(i, story);
-								}
-							}
-						}
-						break;
-					case "/spawnminions":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
-							{
-								for (int i = 0; i < joinedArgs.ToInt(); i++)
-								{
-									MapNpcPreset npc = new MapNpcPreset();
-									npc.SpawnX = 22; //-1;
-									npc.SpawnY = 32; //-1;
-									npc.NpcNum = 1368;
-									npc.MinLevel = 90;
-									npc.MaxLevel = 100;
-									client.Player.Map.SpawnNpc(npc);
-								}
-							}
-						}
-						break;
-					case "/serverstatus":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
-							{
-								Server.Globals.ServerStatus = joinedArgs;
-								Server.Logging.ChatLogger.AppendToChatLog("Staff", "[Server Status] " + client.Player.Name + " changed the server status to: '" + joinedArgs + "'");
-							}
-						}
-						break;
-					case "/togglequiz":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
-							{
-								InQuiz = !InQuiz;
-								QuestionReady = false;
-								Messenger.AdminMsg("[Staff] In Quiz: " + InQuiz.ToString(), Text.BrightBlue);
-							}
-						}
-						break;
-					case "/questionready":
-						{
-							if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
-							{
-								QuestionReady = true;
-								Messenger.AdminMsg("[Staff] Question Ready: " + QuestionReady.ToString(), Text.BrightGreen);
-								for (int a = 8; a >= 0; a--)
-								{
-									Messenger.MapMsg(client.Player.MapID, "You can answer in: " + a, Text.BrightGreen);
-									System.Threading.Thread.Sleep(1000);
-									CanAnswer = false;
-								}
+                                foreach (Client i in client.Player.Map.GetClients())
+                                {
+                                    StoryManager.PlayStory(i, story);
+                                }
+                            }
+                        }
+                        break;
+                    case "/spawnminions":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                for (int i = 0; i < joinedArgs.ToInt(); i++)
+                                {
+                                    MapNpcPreset npc = new MapNpcPreset();
+                                    npc.SpawnX = 22; //-1;
+                                    npc.SpawnY = 32; //-1;
+                                    npc.NpcNum = 1368;
+                                    npc.MinLevel = 90;
+                                    npc.MaxLevel = 100;
+                                    client.Player.Map.SpawnNpc(npc);
+                                }
+                            }
+                        }
+                        break;
+                    case "/serverstatus":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            {
+                                Server.Globals.ServerStatus = joinedArgs;
+                                Server.Logging.ChatLogger.AppendToChatLog("Staff", "[Server Status] " + client.Player.Name + " changed the server status to: '" + joinedArgs + "'");
+                            }
+                        }
+                        break;
+                    case "/togglequiz":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            {
+                                InQuiz = !InQuiz;
+                                QuestionReady = false;
+                                Messenger.AdminMsg("[Staff] In Quiz: " + InQuiz.ToString(), Text.BrightBlue);
+                            }
+                        }
+                        break;
+                    case "/questionready":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                            {
+                                QuestionReady = true;
+                                Messenger.AdminMsg("[Staff] Question Ready: " + QuestionReady.ToString(), Text.BrightGreen);
+                                for (int a = 8; a >= 0; a--)
+                                {
+                                    Messenger.MapMsg(client.Player.MapID, "You can answer in: " + a, Text.BrightGreen);
+                                    System.Threading.Thread.Sleep(1000);
+                                    CanAnswer = false;
+                                }
 
-								Messenger.MapMsg(client.Player.MapID, "You can now buzz in!", Text.BrightGreen);
-								CanAnswer = true;
-							}
-						}
-						break;
-					case "/yatterman":
-						{
-							if (client.Player.CharID.Substring(1).ToInt() % 2 == 0)
-							{
-								Messenger.PlayerMsg(client, "All of the PINK", System.Drawing.Color.LimeGreen);
-							}
-							else
-							{
-								Messenger.PlayerMsg(client, "Slightly less PINK", Text.White);
-							}
-						}
-						break;
-					case "/glomp":
-						{
-							if (client.Player.Muted == false)
-							{
-								if (client.Player.CharID.Substring(1).ToInt() % 2 == 0)
-								{
-									Messenger.MapMsg(client.Player.MapID, "Plusle Power! " + client.Player.Name + " used Glomp!", Text.Red);
-								}
-								else
-								{
-									Messenger.MapMsg(client.Player.MapID, "Minun Power! " + client.Player.Name + " used Glomp!", Text.Cyan);
-								}
+                                Messenger.MapMsg(client.Player.MapID, "You can now buzz in!", Text.BrightGreen);
+                                CanAnswer = true;
+                            }
+                        }
+                        break;
+                    case "/yatterman":
+                        {
+                            if (client.Player.CharID.Substring(1).ToInt() % 2 == 0)
+                            {
+                                Messenger.PlayerMsg(client, "All of the PINK", System.Drawing.Color.LimeGreen);
+                            }
+                            else
+                            {
+                                Messenger.PlayerMsg(client, "Slightly less PINK", Text.White);
+                            }
+                        }
+                        break;
+                    case "/glomp":
+                        {
+                            if (client.Player.Muted == false)
+                            {
+                                if (client.Player.CharID.Substring(1).ToInt() % 2 == 0)
+                                {
+                                    Messenger.MapMsg(client.Player.MapID, "Plusle Power! " + client.Player.Name + " used Glomp!", Text.Red);
+                                }
+                                else
+                                {
+                                    Messenger.MapMsg(client.Player.MapID, "Minun Power! " + client.Player.Name + " used Glomp!", Text.Cyan);
+                                }
 
-							}
-							else
-							{
-								Messenger.PlayerMsg(client, "You are muted!", Text.BrightRed);
-							}
+                            }
+                            else
+                            {
+                                Messenger.PlayerMsg(client, "You are muted!", Text.BrightRed);
+                            }
 
-						}
-						break;
+                        }
+                        break;
 
-					case "/setquizanswer":
-						{
-							if (InQuiz)
-							{
-								if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
-								{
-									QuizAnswer = joinedArgs.ToLower();
-									Messenger.AdminMsg("[Staff] Quiz answer set to: " + QuizAnswer, Text.BrightBlue);
-								}
-							}
+                    case "/setquizanswer":
+                        {
+                            if (InQuiz)
+                            {
+                                if (Ranks.IsAllowed(client, Enums.Rank.Monitor))
+                                {
+                                    QuizAnswer = joinedArgs.ToLower();
+                                    Messenger.AdminMsg("[Staff] Quiz answer set to: " + QuizAnswer, Text.BrightBlue);
+                                }
+                            }
 
-						}
-						break;
-					case "/buzz":
-						{
-							if (InQuiz && QuestionReady && CanAnswer)
-							{
-								//QuestionReady = false;
-								foreach (Client i in client.Player.Map.GetClients())
-								{
-									if (i.IsPlaying())
-									{
+                        }
+                        break;
+                    case "/buzz":
+                        {
+                            if (InQuiz && QuestionReady && CanAnswer)
+                            {
+                                //QuestionReady = false;
+                                foreach (Client i in client.Player.Map.GetClients())
+                                {
+                                    if (i.IsPlaying())
+                                    {
 
-										Messenger.BattleMsg(i, client.Player.Name + " has answered with: " + joinedArgs, Text.BrightGreen);
+                                        Messenger.BattleMsg(i, client.Player.Name + " has answered with: " + joinedArgs, Text.BrightGreen);
 
 
-										/* Story story = new Story();
+                                        /* Story story = new Story();
 
                                          StoryBuilderSegment segment = new StoryBuilderSegment();
 
@@ -331,52 +356,56 @@ namespace Script
                                          segment.AppendToStory(story);
 
                                          StoryManager.PlayStory(i, story);*/
-									}
+                                    }
 
 
-								}
-								if (CanAnswer && joinedArgs.ToLower() == QuizAnswer)
-								{
-									foreach (Client i in client.Player.Map.GetClients())
-									{
-										Messenger.PlayerMsg(i, client.Player.Name + " has answered correctly! The answer was: " + QuizAnswer, Text.Yellow);
+                                }
+                                if (CanAnswer && joinedArgs.ToLower() == QuizAnswer)
+                                {
+                                    foreach (Client i in client.Player.Map.GetClients())
+                                    {
+                                        Messenger.PlayerMsg(i, client.Player.Name + " has answered correctly! The answer was: " + QuizAnswer, Text.Yellow);
 
-									}
-									QuestionReady = false;
-									QuizAnswer = "";
-								}
-							}
-						}
-						break;
-					case "/d":
-					case "/roll":
-						{
-							int roll = 0;
-							if (int.TryParse(joinedArgs, out roll) && roll > 0)
-							{
-								Messenger.MapMsg(client.Player.MapID, $"{client.Player.Name} rolled {Server.Math.Rand(1, roll + 1)} (1-{roll})", Text.Teammate);
-							}
-							else
-							{
-								Messenger.PlayerMsg(client, "That is not a valid roll.", Text.Unselectable);
-							}
-						}
-						break;
-                    /*case "/plaza": {
+                                    }
+                                    QuestionReady = false;
+                                    QuizAnswer = "";
+                                }
+                            }
+                        }
+                        break;
+                    case "/d":
+                    case "/roll":
+                        {
+                            int roll = 0;
+                            if (int.TryParse(joinedArgs, out roll) && roll > 0)
+                            {
+                                Messenger.MapMsg(client.Player.MapID, $"{client.Player.Name} rolled {Server.Math.Rand(1, roll + 1)} (1-{roll})", Text.Teammate);
+                            }
+                            else
+                            {
+                                Messenger.PlayerMsg(client, "That is not a valid roll.", Text.Unselectable);
+                            }
+                        }
+                        break;
+                    case "/plaza":
+                        {
                             //if (Ranks.IsAllowed(client, Server.Enums.Rank.Monitor)) {
                             IMap map = client.Player.Map;
-                            //if (map.MapType == Enums.MapType.Standard && map.Name.StartsWith("Exbel")) {
-                            //	exPlayer.Get(client).PlazaEntranceMap = client.Player.MapID;
-                            //	exPlayer.Get(client).PlazaEntranceX = client.Player.X;
-                            //	exPlayer.Get(client).PlazaEntranceY = client.Player.Y;
-                				
-                            //	Messenger.PlayerWarp(client, 1777, 16, 20);
-                            //	Messenger.PlayerMsg(client, "Welcome to the plaza!", Text.BrightGreen);
-                            //} else {
+                            if (map.MapType == Enums.MapType.Standard)
+                            {
+                                exPlayer.Get(client).PlazaEntranceMap = client.Player.MapID;
+                                exPlayer.Get(client).PlazaEntranceX = client.Player.X;
+                                exPlayer.Get(client).PlazaEntranceY = client.Player.Y;
+
+                                Messenger.PlayerWarp(client, 149, 18, 13);
+                                Messenger.PlayerMsg(client, "Welcome to the plaza!", Text.BrightGreen);
+                            }
+                            else
+                            {
                                 Messenger.PlayerMsg(client, "You cannot enter the plaza from here!", Text.BrightRed);
-                            //}
+                            }
                         }
-                        break;*/
+                        break;
                     //case "/leaveplaza": {
                     //        IMap map = client.Player.Map;
                     //        if (map.Name == "Delite Plaza") {
@@ -707,7 +736,7 @@ namespace Script
                         break;
                     case "/createtourney":
                         {
-			    Messenger.PlayerMsg(client, "You are making a tourney!", Text.BrightRed);
+                            Messenger.PlayerMsg(client, "You are making a tourney!", Text.BrightRed);
                             Tournament tourney = TournamentManager.CreateTournament(client, joinedArgs, "s1193", 10, 10);
                             tourney.AddCombatMap("s1194");
                         }
@@ -890,7 +919,7 @@ namespace Script
                                     Messenger.PlayerMsg(client, "Everyone has been saved!", Text.Yellow);
                                 }
                                 catch { }
-                                System.Threading.Thread shutdownTimerThread = new System.Threading.Thread(delegate()
+                                System.Threading.Thread shutdownTimerThread = new System.Threading.Thread(delegate ()
                                 {
                                     waitingTime = 30;
                                     for (int i = waitingTime; i >= 1; i--)
