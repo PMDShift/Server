@@ -1564,6 +1564,13 @@ namespace Server.Network
 
                                                     if (recruitIndex != -1)
                                                     {
+                                                        if (client.Player.RequestedRecruit.Shiny == Enums.Coloration.Shiny)
+                                                        {
+                                                            var pokemon = Pokedex.Pokedex.GetPokemon(client.Player.RequestedRecruit.Species);
+
+                                                            Messenger.GlobalMsg($"{client.Player.DisplayName} has recruited a shiny {pokemon.Name}!", Text.BrightGreen);
+                                                        }
+
                                                         client.Player.AddToTeam(recruitIndex, openSlot);
                                                         client.Player.Team[openSlot].HP = client.Player.Team[openSlot].MaxHP;
                                                         Messenger.BattleMsg(client, "You have recruited a new team member!", Text.BrightGreen);
