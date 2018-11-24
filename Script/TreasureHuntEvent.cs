@@ -33,7 +33,7 @@ namespace Script
 
         public string Name => "Treasure Hunt";
 
-        public string IntroductionMessage => "Treasure has been scattered throughout the overworld! Find it all! Kill others to steal their treasure!";
+        public string IntroductionMessage => "Treasure has been scattered throughout the overworld! Find it all!";
 
         public TreasureHuntData Data { get; private set; }
 
@@ -93,6 +93,19 @@ namespace Script
             Data.EventItems = new TreasureHuntData.TreasureData[] {
                 new TreasureHuntData.TreasureData() { MapID = "s152", X = 21, Y = 15, Claimed = false }
             };
+
+            var activatedMaps = new HashSet<string>();
+            foreach (var client in EventManager.GetRegisteredClients())
+            {
+                CleanupTreasures(client);
+
+                if (!activatedMaps.Contains(client.Player.MapID))
+                {
+                    OnActivateMap(client.Player.Map);
+
+                    activatedMaps.Add(client.Player.MapID);
+                }
+            }
         }
 
         public void End()
@@ -100,6 +113,16 @@ namespace Script
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 Messenger.PlayerWarp(client, 152, 15, 16);
+            }
+        }
+
+        private void CleanupTreasures(Client client)
+        {
+            var treasureCount = client.Player.HasItem(TreasureItemID);
+
+            if (treasureCount > 0)
+            {
+                client.Player.TakeItem(TreasureItemID, treasureCount);
             }
         }
 
@@ -120,6 +143,8 @@ namespace Script
 
             foreach (var client in EventManager.GetRegisteredClients())
             {
+                CleanupTreasures(client);
+                
                 var story = new Story();
                 var segment = StoryBuilder.BuildStory();
                 StoryBuilder.AppendSaySegment(segment, $"And the winners are...!", -1, 0, 0);
@@ -153,3 +178,4 @@ namespace Script
         }
     }
 }
+
