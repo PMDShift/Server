@@ -45,6 +45,7 @@ namespace Script
 
     using DataManager.Players;
     using Server.Database;
+    using Server.Events;
 
     public partial class Main
     {
@@ -4548,6 +4549,17 @@ namespace Script
                         }
                         break;
 
+                    case "EventRegistrationConfirm":
+                        {
+                            EventManager.RegisterCharacter(client);
+
+                            var story = new Story();
+                            var segment = StoryBuilder.BuildStory();
+                            StoryBuilder.AppendSaySegment(segment, "You have been registered for this event!", -1, 0, 0);
+                            segment.AppendToStory(story);
+                            StoryManager.PlayStory(client, story);
+                        }
+                        break;
                 }
             }
             catch (Exception ex)

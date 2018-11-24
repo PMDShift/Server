@@ -2337,6 +2337,11 @@ namespace Script
                             }
                         }
                         break;
+                    case 23:
+                        {
+                            Messenger.AskQuestion(client, "EventRegistrationConfirm", "Would you like to register for this event?", -1);
+                        }
+                        break;
 
                 }
             }
@@ -2398,6 +2403,8 @@ namespace Script
                     return scriptNum + ": Snowball Game";
                 case 22:
                     return scriptNum + ": Zone Credits";
+                case 23:
+                    return scriptNum + ": Event Registration";
                 default:
                     return scriptNum.ToString() + ": Unknown";
             }

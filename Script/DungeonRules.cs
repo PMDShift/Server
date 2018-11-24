@@ -888,10 +888,18 @@ namespace Script {
                 }
             if (joined) Messenger.SendActiveTeam(client);
         }
-        
-        
-        public static void ExitDungeon(Client client, int exitMap, int x, int y) {
-            ExitDungeon(client, MapManager.RetrieveMap(exitMap), x, y);
+
+
+        public static void ExitDungeon(Client client, int exitMap, int x, int y)
+        {
+            if (exitMap > 0)
+            {
+                ExitDungeon(client, MapManager.RetrieveMap(exitMap), x, y);
+            }
+            else
+            {
+                ExitDungeon(client, null, x, y);
+            }
         }
 
         public static void ExitDungeon(Client client, IMap exitMap, int x, int y)
