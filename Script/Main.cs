@@ -42,6 +42,7 @@ namespace Script
     using Server.Events.Player.TriggerEvents;
     using Server.WonderMails;
     using Server.Tournaments;
+    using Server.Events;
 
     using DataManager.Players;
     using Server.Database;
@@ -2624,6 +2625,11 @@ namespace Script
                 {
                     ActiveSnowballGames.Values[i].EndGame();
                 }
+                 
+                if (!string.IsNullOrEmpty(EventManager.ActiveEventIdentifier) && ActiveEvent != null)
+                {
+                    EventManager.SaveEventData(ActiveEvent.Save());
+                }
 
                 foreach (Client i in ClientManager.GetClients())
                 {
@@ -2642,6 +2648,13 @@ namespace Script
         public static void AfterScriptReload()
         {
             ServerInit();
+
+            if (!string.IsNullOrEmpty(EventManager.ActiveEventIdentifier))
+            {
+                ActiveEvent = BuildEvent(EventManager.ActiveEventIdentifier);
+
+                ActiveEvent.Load(EventManager.LoadEventData());
+            }
 
             foreach (Client i in ClientManager.GetClients())
             {
@@ -4548,6 +4561,20 @@ namespace Script
                                 StoryBuilderSegment segment = StoryBuilder.BuildStory();
                                 StoryBuilder.AppendSaySegment(segment, "...", Pokedex.FindByName("Delibird").ID, 0, 0);
                                 StoryBuilder.AppendSaySegment(segment, "Delibird will remember this.", -1, 0, 0);
+                                segment.AppendToStory(story);
+                                StoryManager.PlayStory(client, story);
+                            }
+                        }
+                        break;
+                    case "EventRegistrationConfirm":
+                        {
+                            if (answer == "Yes")
+                            {
+                                EventManager.RegisterCharacter(client);
+
+                                Story story = new Story();
+                                StoryBuilderSegment segment = StoryBuilder.BuildStory();
+                                StoryBuilder.AppendSaySegment(segment, "You have been registered for the event!", -1, 0, 0);
                                 segment.AppendToStory(story);
                                 StoryManager.PlayStory(client, story);
                             }

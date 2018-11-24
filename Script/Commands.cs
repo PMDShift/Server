@@ -42,6 +42,7 @@ namespace Script
     using Server.WonderMails;
     using Server.Tournaments;
     using Server.Database;
+    using Server.Events;
     using DataManager.Players;
     using PMDCP.DatabaseConnector;
 
@@ -109,6 +110,77 @@ namespace Script
 
                 switch (command[0])
                 {
+                    case "/finishevent":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                if (ActiveEvent != null)
+                                {
+                                    ActiveEvent = null;
+                                    EventManager.ActiveEventIdentifier = null;
+                                }
+
+                                EventManager.RegisteredCharacters.Clear();
+                            }
+                        }
+                        break;
+                    case "/setevent":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                var eventInstance = BuildEvent(joinedArgs);
+
+                                if (eventInstance == null)
+                                {
+                                    Messenger.PlayerMsg(client, $"Invalid event type: {joinedArgs}", Text.BrightRed);
+                                    return;
+                                }
+
+                                EventManager.ActiveEventIdentifier = eventInstance.Identifier;
+                                ActiveEvent = eventInstance;
+
+                                Messenger.PlayerMsg(client, $"The event has been set to {ActiveEvent.Name}!", Text.BrightGreen);
+                            }
+                        }
+                        break;
+                    case "/startevent":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                foreach (var registeredClient in EventManager.GetRegisteredClients())
+                                {
+                                    ActiveEvent.ConfigurePlayer(registeredClient);
+
+                                    Story story = new Story();
+                                    StoryBuilderSegment segment = StoryBuilder.BuildStory();
+                                    StoryBuilder.AppendSaySegment(segment, $"This event is... {ActiveEvent.Name}!", -1, 0, 0);
+                                    StoryBuilder.AppendSaySegment(segment, ActiveEvent.IntroductionMessage, -1, 0, 0);
+                                    StoryBuilder.AppendSaySegment(segment, "The event has now begun!", -1, 0, 0);
+                                    segment.AppendToStory(story);
+                                    StoryManager.PlayStory(registeredClient, story);
+                                }
+
+                                ActiveEvent.Start();
+                            }
+                        }
+                        break;
+                    case "/endevent":
+                        {
+                            if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
+                            {
+                                foreach (var registeredClient in EventManager.GetRegisteredClients())
+                                {
+                                    Story story = new Story();
+                                    StoryBuilderSegment segment = StoryBuilder.BuildStory();
+                                    StoryBuilder.AppendSaySegment(segment, $"The event is now finished!", -1, 0, 0);
+                                    segment.AppendToStory(story);
+                                    StoryManager.PlayStory(registeredClient, story);
+                                }
+
+                                ActiveEvent.End();
+                            }
+                        }
+                        break;
                     case "/transferzone":
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Scripter))

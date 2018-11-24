@@ -4,13 +4,19 @@ using System.Text;
 using Newtonsoft.Json;
 using Server.Network;
 
-namespace Script.Events
+namespace Script
 {
     public class TreasureHuntEvent : IEvent
     {
         public class TreasureHuntData
         {
         }
+
+        public string Identifier => "treasurehunt";
+
+        public string Name => "Treasure Hunt";
+
+        public string IntroductionMessage => "Treasure has been scattered throughout the overworld! Find it all!";
 
         public TreasureHuntData Data { get; private set; }
 
@@ -31,6 +37,16 @@ namespace Script.Events
 
         public void ConfigurePlayer(Client client)
         {
+        }
+
+        public void Start()
+        {
+
+        }
+
+        public void End()
+        {
+
         }
     }
 }
