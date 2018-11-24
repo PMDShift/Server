@@ -45,7 +45,6 @@ namespace Script
 
     using DataManager.Players;
     using Server.Database;
-    using Server.Events;
 
     public partial class Main
     {
@@ -56,6 +55,8 @@ namespace Script
         public static CTF ActiveCTF;
 
         public static PMDCP.Core.ListPair<string, SnowballGame> ActiveSnowballGames = new PMDCP.Core.ListPair<string, SnowballGame>();
+
+        public static int ExpBonus = 20;
 
         public static void ServerInit()
         {
@@ -134,6 +135,10 @@ namespace Script
 
                 Messenger.PlayerMsg(client, "Welcome to " + Settings.GameName + "! It is currently " + Server.Globals.ServerTime + ".", Text.White);
 
+                if (ExpBonus > 0)
+                {
+                    Messenger.PlayerMsg(client, $"A {ExpBonus}% exp bonus is active!", Text.BrightGreen);
+                }
 
                 int count = 0;
                 foreach (Client i in ClientManager.GetClients())
@@ -2336,7 +2341,7 @@ namespace Script
         {
             try
             {
-                exp *= (ulong)(100 + client.Player.GetActiveRecruit().EXPBoost); // Temp EXP Boost. 100 to 135
+                exp *= (ulong)(100 + ExpBonus + client.Player.GetActiveRecruit().EXPBoost); // Temp EXP Boost. 100 to 135
                 exp /= 100;
 
                 if (client.Player.GetActiveRecruit().HasActiveItem(720))
@@ -4549,17 +4554,6 @@ namespace Script
                         }
                         break;
 
-                    case "EventRegistrationConfirm":
-                        {
-                            EventManager.RegisterCharacter(client);
-
-                            var story = new Story();
-                            var segment = StoryBuilder.BuildStory();
-                            StoryBuilder.AppendSaySegment(segment, "You have been registered for this event!", -1, 0, 0);
-                            segment.AppendToStory(story);
-                            StoryManager.PlayStory(client, story);
-                        }
-                        break;
                 }
             }
             catch (Exception ex)
