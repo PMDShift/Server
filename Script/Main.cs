@@ -2625,7 +2625,7 @@ namespace Script
                 {
                     ActiveSnowballGames.Values[i].EndGame();
                 }
-                 
+
                 if (!string.IsNullOrEmpty(EventManager.ActiveEventIdentifier) && ActiveEvent != null)
                 {
                     EventManager.SaveEventData(ActiveEvent.Save());
@@ -8404,6 +8404,14 @@ namespace Script
 
             return true;
 
+        }
+
+        public static void OnActivateMap(IMap map)
+        {
+            if (ActiveEvent != null)
+            {
+                ActiveEvent.OnActivateMap(map);
+            }
         }
 
         public static bool MaintenanceRestart = false;

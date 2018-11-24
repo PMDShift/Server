@@ -116,6 +116,8 @@ namespace Script
                             {
                                 if (ActiveEvent != null)
                                 {
+                                    ActiveEvent.AnnounceWinner();
+
                                     ActiveEvent = null;
                                     EventManager.ActiveEventIdentifier = null;
                                 }
@@ -173,6 +175,7 @@ namespace Script
                                     Story story = new Story();
                                     StoryBuilderSegment segment = StoryBuilder.BuildStory();
                                     StoryBuilder.AppendSaySegment(segment, $"The event is now finished!", -1, 0, 0);
+                                    StoryBuilder.AppendSaySegment(segment, $"Please wait as a winner is announced...", -1, 0, 0);
                                     segment.AppendToStory(story);
                                     StoryManager.PlayStory(registeredClient, story);
                                 }

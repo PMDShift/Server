@@ -11,6 +11,7 @@ using PMDCP.DatabaseConnector.MySql;
 using PMDCP.DatabaseConnector;
 using Server.Database;
 using Server.Zones;
+using Server.Scripting;
 // This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
@@ -308,6 +309,8 @@ namespace Server.Maps
         {
             map.ActivationTime = Core.GetTickCount();
             activeMaps.Add(map.MapID, map);
+
+            ScriptManager.InvokeSub("OnActivateMap", map);
         }
 
         /// <summary>

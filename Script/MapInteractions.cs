@@ -52,6 +52,11 @@ namespace Script
         {
             try
             {
+                if (ActiveEvent != null)
+                {
+                    ActiveEvent.OnPickupItem(character, itemSlot, invItem);
+                }
+
                 PacketHitList hitlist = null;
                 IMap map = MapManager.RetrieveActiveMap(character.MapID);
                 PacketHitList.MethodStart(ref hitlist);
