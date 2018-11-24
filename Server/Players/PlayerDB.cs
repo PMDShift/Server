@@ -674,7 +674,7 @@ namespace Server.Players
             client.Player.Team[teamSlot].CalculateOriginalSprite();
             client.Player.Team[teamSlot].CalculateOriginalStats();
             client.Player.Team[teamSlot].HP = client.Player.Team[teamSlot].MaxHP;
-            client.Player.Team[teamSlot].MaxBelly = 100;
+            client.Player.Team[teamSlot].MaxBelly = client.Player.Team[teamSlot].CalculateBaseMaxBelly();
             client.Player.Team[teamSlot].Belly = client.Player.Team[teamSlot].MaxBelly;
             client.Player.Team[teamSlot].GenerateMoveset();
         }

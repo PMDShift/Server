@@ -174,6 +174,17 @@ namespace Server.Players
             SetForm(0);
         }
 
+       public int CalculateBaseMaxBelly()
+        {
+            if (Shiny == Enums.Coloration.Shiny)
+            {
+                return 200;
+            } else
+            {
+                return 100;
+            }
+        } 
+
         public void LoadFromRecruitData(RecruitData recruitData, int recruitIndex)
         {
             this.recruitData = recruitData;
@@ -192,7 +203,7 @@ namespace Server.Players
                 IQ = 0;
             if (MaxBelly <= 0)
             {
-                MaxBelly = 100;
+                MaxBelly = CalculateBaseMaxBelly();
                 Belly = MaxBelly;
             }
             if (Belly < 0 || Belly > MaxBelly)

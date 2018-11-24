@@ -877,9 +877,9 @@ namespace Script {
             }
             for (int i = 0; i < Constants.MAX_ACTIVETEAM; i++) {
                     if (client.Player.Team[i] != null) {
-                        if (client.Player.Team[i].MaxBelly > 100) {
+                        if (client.Player.Team[i].MaxBelly > client.Player.Team[i].CalculateBaseMaxBelly()) {
 
-                            client.Player.Team[i].MaxBelly = 100;
+                            client.Player.Team[i].MaxBelly = client.Player.Team[i].CalculateBaseMaxBelly();
 
                         }
                         client.Player.Team[i].RestoreBelly();
