@@ -134,6 +134,14 @@ namespace Script
                 client.Player.ExPlayer = new exPlayer(client);
                 exPlayer.Get(client).Load();
 
+                if (ActiveEvent != null)
+                {
+                    if (EventManager.IsRegistered(client))
+                    {
+                        ActiveEvent.ConfigurePlayer(client);
+                    }
+                }
+
                 Messenger.PlayerMsg(client, "Welcome to " + Settings.GameName + "! It is currently " + Server.Globals.ServerTime + ".", Text.White);
 
                 if (ExpBonus > 0)

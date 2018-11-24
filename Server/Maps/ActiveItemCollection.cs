@@ -23,7 +23,7 @@ using System.Text;
 
 namespace Server.Maps
 {
-    public class ActiveItemCollection
+    public class ActiveItemCollection 
     {
         DataManager.Maps.MapDump rawMap;
         MapItem[] mapItems;
@@ -63,6 +63,14 @@ namespace Server.Maps
         public System.Collections.IEnumerator GetEnumerator()
         {
             return mapItems.GetEnumerator();
+        }
+
+        public IEnumerable<MapItem> Enumerate()
+        {
+            foreach (var mapItem in mapItems)
+            {
+                yield return mapItem;
+            }
         }
     }
 }

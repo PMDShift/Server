@@ -17,6 +17,8 @@ namespace Script
     {
         public class TreasureHuntData
         {
+            public bool Started { get; set; }
+
             public class TreasureData
             {
                 public string MapID { get; set; }
@@ -26,7 +28,6 @@ namespace Script
             }
 
             public TreasureData[] EventItems = Array.Empty<TreasureData>();
-
         }
 
         public string Identifier => "treasurehunt";
@@ -56,13 +57,22 @@ namespace Script
 
         public void ConfigurePlayer(Client client)
         {
+            if (Data.Started)
+            {
+                client.Player.KillableAnywhere = true;
+            }
         }
 
         public void OnActivateMap(IMap map)
         {
             foreach (var eventItem in Data.EventItems.Where(x => !x.Claimed && x.MapID == map.MapID))
             {
-                map.SpawnItem(TreasureItemID, 1, false, false, "", true, eventItem.X, eventItem.Y, null);
+                var existingItem = map.ActiveItem.Enumerate().Where(x => x.Num == TreasureItemID && x.X == eventItem.X && x.Y == eventItem.Y).FirstOrDefault();
+
+                if (existingItem == null)
+                {
+                    map.SpawnItem(TreasureItemID, 1, false, false, "", true, eventItem.X, eventItem.Y, null);
+                }
             }
         }
 
@@ -91,21 +101,22 @@ namespace Script
         public void Start()
         {
             Data.EventItems = new TreasureHuntData.TreasureData[] {
-                new TreasureHuntData.TreasureData() { MapID = "s152", X = 21, Y = 15, Claimed = false }
+                new TreasureHuntData.TreasureData() { MapID = "s152", X = 21, Y = 15, Claimed = false },
+                new TreasureHuntData.TreasureData() { MapID = "s152", X = 20, Y = 15, Claimed = false },
+                new TreasureHuntData.TreasureData() { MapID = "s152", X = 22, Y = 15, Claimed = false },
             };
 
-            var activatedMaps = new HashSet<string>();
+
+            Data.Started = true;
+
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 CleanupTreasures(client);
 
-                if (!activatedMaps.Contains(client.Player.MapID))
-                {
-                    OnActivateMap(client.Player.Map);
-
-                    activatedMaps.Add(client.Player.MapID);
-                }
+                ConfigurePlayer(client);
             }
+
+            ActivateTreasures();
         }
 
         public void End()
@@ -113,6 +124,20 @@ namespace Script
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 Messenger.PlayerWarp(client, 152, 15, 16);
+            }
+        }
+
+        private void ActivateTreasures()
+        {
+            var activatedMaps = new HashSet<string>();
+            foreach (var client in EventManager.GetRegisteredClients())
+            {
+                if (!activatedMaps.Contains(client.Player.MapID))
+                {
+                    OnActivateMap(client.Player.Map);
+
+                    activatedMaps.Add(client.Player.MapID);
+                }
             }
         }
 

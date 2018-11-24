@@ -35,6 +35,7 @@ namespace DataManager.Players
         public bool Veteran { get; set; }
         public bool InTempMode { get; set; }
         public bool Dead { get; set; }
+        public bool KillableAnywhere { get; set; }
 
         public bool CanLinkDiscord { get; set; }
         public ulong LinkedDiscordId { get; set; }

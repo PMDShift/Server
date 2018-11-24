@@ -368,6 +368,12 @@ namespace Server.Players
             set;
         }
 
+        public bool KillableAnywhere
+        {
+            get { return playerData.KillableAnywhere; }
+            set { playerData.KillableAnywhere = value; }
+        }
+
         public bool Dead
         {
             get { return playerData.Dead; }

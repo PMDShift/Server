@@ -987,11 +987,26 @@ namespace Server.Players
                 if (i.CharacterType == Enums.CharacterType.Recruit)
                 {
                     Recruit recruit = i as Recruit;
-                    if (Ranks.IsAllowed(recruit.Owner, Enums.Rank.Monitor) && !recruit.Owner.Player.Hunted
-                        || (recruit.Owner.Player.Map.Tile[recruit.Owner.Player.X, recruit.Owner.Player.Y].Type == Enums.TileType.Arena) != (Owner.Player.Map.Tile[X, Y].Type == Enums.TileType.Arena))
+
+                    var canHit = true;
+
+                    if (Ranks.IsAllowed(recruit.Owner, Enums.Rank.Monitor) && !recruit.Owner.Player.Hunted)
                     {
+                        canHit = false;
                     }
-                    else
+
+                    if ((recruit.Owner.Player.Map.Tile[recruit.Owner.Player.X, recruit.Owner.Player.Y].Type == Enums.TileType.Arena) != (Owner.Player.Map.Tile[X, Y].Type == Enums.TileType.Arena))
+                    {
+                        canHit = false;
+                    }
+
+                    // Override to allow hitting the player ANYWHERE
+                    if (recruit.Owner.Player.KillableAnywhere)
+                    {
+                        canHit = true;
+                    }
+
+                    if (canHit)
                     {
                         setup.Defender = i;
                         BattleProcessor.MoveHitCharacter(setup);

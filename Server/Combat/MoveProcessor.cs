@@ -116,6 +116,11 @@ namespace Server.Combat
                 //if the character is oneself, then return self.  A dead self will still be considered "none"
                 if (defender == attacker) return Enums.CharacterMatchup.Self;
 
+                if (((Players.Recruit)defender).Owner.Player.KillableAnywhere)
+                {
+                    return Enums.CharacterMatchup.Foe;
+                }
+
                 bool targetInArena = (recruit.Owner.Player.X > 0 && recruit.Owner.Player.X <= recruit.Owner.Player.Map.MaxX
                             && recruit.Owner.Player.Y > 0 && recruit.Owner.Player.Y <= recruit.Owner.Player.Map.MaxY
                             && recruit.Owner.Player.Map.Tile[recruit.Owner.Player.X, recruit.Owner.Player.Y].Type == Enums.TileType.Arena);
