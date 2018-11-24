@@ -37,7 +37,7 @@ namespace Script
 
         public TreasureHuntData Data { get; private set; }
 
-        public static readonly int TreasureItemID = 1;
+        public static readonly int TreasureItemID = 980;
 
         public TreasureHuntEvent()
         {
@@ -62,7 +62,7 @@ namespace Script
         {
             foreach (var eventItem in Data.EventItems.Where(x => !x.Claimed && x.MapID == map.MapID))
             {
-                map.SpawnItem(TreasureItemID, 1, false, false, "", map.IsZoneOrObjectSandboxed(), eventItem.X, eventItem.Y, null);
+                map.SpawnItem(TreasureItemID, 1, false, false, "", true, eventItem.X, eventItem.Y, null);
             }
         }
 
@@ -80,7 +80,9 @@ namespace Script
                     {
                         eventItem.Claimed = true;
 
-                        Messenger.GlobalMsg($"{player.DisplayName} found some treasure!", Text.BrightGreen);
+                        var claimedCount = Data.EventItems.Where(x => x.Claimed).Count();
+
+                        Messenger.GlobalMsg($"{player.DisplayName} found some treasure! ({claimedCount}/{Data.EventItems.Length})", Text.BrightGreen);
                     }
                 }
             }
@@ -125,19 +127,19 @@ namespace Script
                 if (sortedRankings.Count >= 3)
                 {
                     StoryBuilder.AppendSaySegment(segment, "In third place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[2].Item1.Player.DisplayName}!", -1, 0, 0);
+                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[2].Item1.Player.DisplayName}, with a score of {sortedRankings[2].Item2}!", -1, 0, 0);
                 }
 
                 if (sortedRankings.Count >= 2)
                 {
                     StoryBuilder.AppendSaySegment(segment, "In second place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[1].Item1.Player.DisplayName}!", -1, 0, 0);
+                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[1].Item1.Player.DisplayName}, with a score of {sortedRankings[1].Item2}!", -1, 0, 0);
                 }
 
                 if (sortedRankings.Count >= 1)
                 {
                     StoryBuilder.AppendSaySegment(segment, "In first place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[1].Item1.Player.DisplayName}!", -1, 0, 0);
+                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[0].Item1.Player.DisplayName}, with a score of {sortedRankings[0].Item2}!", -1, 0, 0);
                 }
 
                 if (sortedRankings.Count == 0)

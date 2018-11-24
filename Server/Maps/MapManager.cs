@@ -308,9 +308,7 @@ namespace Server.Maps
         public static void UnsafeAddActiveMap(IMap map)
         {
             map.ActivationTime = Core.GetTickCount();
-            activeMaps.Add(map.MapID, map);
-
-            ScriptManager.InvokeSub("OnActivateMap", map);
+            activeMaps.Add(map.MapID, map); 
         }
 
         /// <summary>
@@ -459,6 +457,8 @@ namespace Server.Maps
                     // Spawn everything!
                     map.SpawnNpcs();
                     map.SpawnItems();
+
+                    ActivateMap(map);
                 }
 
                 return map;
@@ -671,6 +671,8 @@ namespace Server.Maps
                     // Spawn everything!
                     map.SpawnNpcs();
                     map.SpawnItems();
+
+                    ActivateMap(map);
                 }
 
                 return map;
@@ -679,6 +681,11 @@ namespace Server.Maps
             {
                 return RetrieveMap(MapManager.GenerateMapID(Settings.Crossroads));
             }
+        }
+
+        private static void ActivateMap(IMap map)
+        {
+            ScriptManager.InvokeSub("OnActivateMap", map);
         }
 
         public static string RetrieveBorderingMapID(IMap map, Enums.MapID mapID)
