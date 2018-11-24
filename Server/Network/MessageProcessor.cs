@@ -2186,7 +2186,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!RDungeonManager.RDungeons[n].IsSandboxed)
+                            if (!RDungeonManager.RDungeons[n].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;
@@ -2210,7 +2210,7 @@ namespace Server.Network
 
                             int z = parse[1].ToInt();
 
-                            if (!RDungeonManager.RDungeons[z].IsSandboxed)
+                            if (!RDungeonManager.RDungeons[z].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this random dungeon (random dungeon not sandboxed).", Text.BrightRed);
                                 return;

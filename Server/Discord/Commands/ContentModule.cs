@@ -59,6 +59,25 @@ namespace Server.Discord.Commands
 
                 await Context.Channel.SendMessageAsync($"\"{Moves.MoveManager.Moves[id].Name}\" (#{id}) has been sandboxed!");
             }
+
+            [RequireOwner]
+            [Command("item")]
+            public async Task ItemAsync(int id)
+            {
+                if (id < 1 || id > Items.ItemManager.Items.MaxItems)
+                {
+                    await Context.Channel.SendMessageAsync("Invalid item number.");
+                    return;
+                }
+
+                var content = Items.ItemManager.Items[id];
+
+                //content.IsBeingReviewed = false;
+                content.IsSandboxed = true;
+                Items.ItemManager.SaveItem(id);
+
+                await Context.Channel.SendMessageAsync($"\"{content.Name}\" (#{id}) has been sandboxed!");
+            }
         }
 
         [Group("review")]
@@ -111,6 +130,31 @@ namespace Server.Discord.Commands
 
                 await Context.Channel.SendMessageAsync($"The changes to \"{Moves.MoveManager.Moves[id].Name}\" (#{id}) have been approved.");
             }
+
+            [RequireOwner]
+            [Command("item")]
+            public async Task ItemAsync(int id)
+            {
+                if (id < 1 || id > Items.ItemManager.Items.MaxItems)
+                {
+                    await Context.Channel.SendMessageAsync("Invalid item number.");
+                    return;
+                }
+
+                var content = Items.ItemManager.Items[id];
+
+                if (!content.IsSandboxed)
+                {
+                    await Context.Channel.SendMessageAsync("This item is not currently being edited.");
+                    return;
+                }
+
+                //content.IsBeingReviewed = false;
+                content.IsSandboxed = false;
+                Items.ItemManager.SaveItem(id);
+
+                await Context.Channel.SendMessageAsync($"The changes to \"{content.Name}\" (#{id}) have been approved.");
+            }
         }
 
         [Group("refuse")]
@@ -135,6 +179,29 @@ namespace Server.Discord.Commands
                 Moves.MoveManager.Moves[id].IsBeingReviewed = false;
 
                 await Context.Channel.SendMessageAsync($"The changes to \"{Moves.MoveManager.Moves[id].Name}\" (#{id}) have been refused.");
+            }
+
+            [RequireOwner]
+            [Command("item")]
+            public async Task ItemAsync(int id)
+            {
+                if (id < 1 || id > Items.ItemManager.Items.MaxItems)
+                {
+                    await Context.Channel.SendMessageAsync("Invalid item number.");
+                    return;
+                }
+
+                var content = Items.ItemManager.Items[id];
+
+                if (!content.IsSandboxed)
+                {
+                    await Context.Channel.SendMessageAsync("This item is not currently being edited.");
+                    return;
+                }
+
+                //content.IsBeingReviewed = false;
+
+                await Context.Channel.SendMessageAsync($"The changes to \"{content.Name}\" (#{id}) have been refused.");
             }
         }
     }
