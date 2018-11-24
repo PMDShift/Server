@@ -647,6 +647,19 @@ namespace Server.Players
             }
         }
 
+        public string DisplayName
+        {
+            get
+            {
+                if (Team[ActiveSlot].Shiny == Enums.Coloration.Shiny)
+                {
+                    return $"*{Name}";
+                }
+
+                return Name;
+            }
+        }
+
         #endregion Properties
 
         public bool LoadCharacter(DatabaseConnection dbConnection, int characterSlot)

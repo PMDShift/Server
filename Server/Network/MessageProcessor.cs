@@ -724,10 +724,10 @@ namespace Server.Network
 
                             Logging.ChatLogger.AppendToChatLog("Global", client.Player.Name + ": " + parse[1]);
 
-                            string playerName = client.Player.Name;
+                            string playerName = client.Player.DisplayName;
                             if (client.Player.Access != Enums.Rank.Normal)
                             {
-                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                             }
 
                             Messenger.GlobalMsg("[Global] " + playerName + ": " + updatedMessage, Text.DarkGrey);
@@ -740,10 +740,10 @@ namespace Server.Network
 
                             Logging.ChatLogger.AppendToChatLog("Maps/Map " + client.Player.MapID, client.Player.Name + ": " + parse[1]);
 
-                            string playerName = client.Player.Name;
+                            string playerName = client.Player.DisplayName;
                             if (client.Player.Access != Enums.Rank.Normal)
                             {
-                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                             }
 
                             PacketHitList hitList = null;
@@ -761,10 +761,10 @@ namespace Server.Network
 
                             Logging.ChatLogger.AppendToChatLog("Maps/Map " + client.Player.MapID, "(MeMsg) " + client.Player.Name + " " + parse[1]);
 
-                            string playerName = client.Player.Name;
+                            string playerName = client.Player.DisplayName;
                             if (client.Player.Access != Enums.Rank.Normal)
                             {
-                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                             }
 
                             Messenger.MapMsg(client.Player.MapID, playerName + " " + updatedMessage, Text.Blue);
@@ -779,10 +779,10 @@ namespace Server.Network
 
                                 Logging.ChatLogger.AppendToChatLog("Global", "(Announcement) " + client.Player.Name + ": " + parse[1]);
 
-                                string playerName = client.Player.Name;
+                                string playerName = client.Player.DisplayName;
                                 if (client.Player.Access != Enums.Rank.Normal)
                                 {
-                                    playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                    playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                                 }
 
                                 Messenger.GlobalMsg("(Announcement) " + playerName + ": " + updatedMessage, Text.Green);
@@ -798,10 +798,10 @@ namespace Server.Network
 
                                 Logging.ChatLogger.AppendToChatLog("Staff", client.Player.Name + ": " + parse[1]);
 
-                                string playerName = client.Player.Name;
+                                string playerName = client.Player.DisplayName;
                                 if (client.Player.Access != Enums.Rank.Normal)
                                 {
-                                    playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                    playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                                 }
 
                                 Messenger.AdminMsg("[Staff] " + playerName + ": " + updatedMessage, Text.Cyan);
@@ -816,10 +816,10 @@ namespace Server.Network
                             //Messenger.PlayerMsg(client, client.Player[client].mName + " (" + client.Player[client].mGuildName + ") " + parse[1], Text.Green);
                             Logging.ChatLogger.AppendToChatLog("Guild Chat/" + client.Player.GuildName, "(" + client.Player.GuildName + ") " + client.Player.Name + parse[1]);
 
-                            string playerName = client.Player.Name;
+                            string playerName = client.Player.DisplayName;
                             if (client.Player.Access != Enums.Rank.Normal)
                             {
-                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                             }
 
                             foreach (Client i in ClientManager.GetClients())
@@ -863,16 +863,16 @@ namespace Server.Network
 
                                     Logging.ChatLogger.AppendToChatLog("PM/" + client.Player.Name, "(" + client.Player.Name + " tells " + msgto.Player.Name + ") " + parse[2]);
 
-                                    string playerName = client.Player.Name;
+                                    string playerName = client.Player.DisplayName;
                                     if (client.Player.Access != Enums.Rank.Normal)
                                     {
-                                        playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.Name + "[/c]";
+                                        playerName = "[c][" + Ranks.GetRankColor(client.Player.Access).ToArgb() + "]" + client.Player.DisplayName + "[/c]";
                                     }
 
-                                    string playerToName = msgto.Player.Name;
+                                    string playerToName = msgto.Player.DisplayName;
                                     if (msgto.Player.Access != Enums.Rank.Normal)
                                     {
-                                        playerToName = "[c][" + Ranks.GetRankColor(msgto.Player.Access).ToArgb() + "]" + msgto.Player.Name + "[/c]";
+                                        playerToName = "[c][" + Ranks.GetRankColor(msgto.Player.Access).ToArgb() + "]" + msgto.Player.DisplayName + "[/c]";
                                     }
 
                                     Messenger.PlayerMsg(client, "You tell " + playerToName + ", '" + updatedMessage + "'", Text.Pink);
