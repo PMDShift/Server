@@ -25,6 +25,8 @@ namespace Server.WonderMails
 {
     public class MissionPool
     {
+        public bool IsSandboxed { get; set; }
+
         private List<MissionClientData> missionClients;
         private List<MissionEnemyData> enemies;
         private List<MissionRewardData> rewards;

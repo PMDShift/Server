@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Server.Database;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -78,6 +79,30 @@ namespace Server.Discord.Commands
 
                 await Context.Channel.SendMessageAsync($"\"{content.Name}\" (#{id}) has been sandboxed!");
             }
+
+            [RequireOwner]
+            [Command("mission")]
+            public async Task MissionAsync(int id)
+            {
+                if (id < 1 || id > WonderMails.WonderMailManager.Missions.Count)
+                {
+                    await Context.Channel.SendMessageAsync("Invalid mission pool number.");
+                    return;
+                }
+
+                var actualId = id - 1;
+
+                var content = WonderMails.WonderMailManager.Missions[actualId];
+
+                //content.IsBeingReviewed = false;
+                content.IsSandboxed = true;
+                using (var dbConnection = new DatabaseConnection(DatabaseID.Data))
+                {
+                    WonderMails.WonderMailManager.SaveMissionPool(dbConnection, actualId);
+                }
+
+                await Context.Channel.SendMessageAsync($"Mission pool #{id} has been sandboxed!");
+            }
         }
 
         [Group("review")]
@@ -154,6 +179,36 @@ namespace Server.Discord.Commands
                 Items.ItemManager.SaveItem(id);
 
                 await Context.Channel.SendMessageAsync($"The changes to \"{content.Name}\" (#{id}) have been approved.");
+            }
+
+            [RequireOwner]
+            [Command("mission")]
+            public async Task MissionAsync(int id)
+            {
+                if (id < 1 || id > WonderMails.WonderMailManager.Missions.Count)
+                {
+                    await Context.Channel.SendMessageAsync("Invalid mission pool number.");
+                    return;
+                }
+
+                var actualId = id - 1;
+
+                var content = WonderMails.WonderMailManager.Missions[actualId]; ;
+
+                if (!content.IsSandboxed)
+                {
+                    await Context.Channel.SendMessageAsync("This mission pool is not currently being edited.");
+                    return;
+                }
+
+                //content.IsBeingReviewed = false;
+                content.IsSandboxed = true;
+                using (var dbConnection = new DatabaseConnection(DatabaseID.Data))
+                {
+                    WonderMails.WonderMailManager.SaveMissionPool(dbConnection, actualId);
+                }
+
+                await Context.Channel.SendMessageAsync($"The changes to mission pool #{id} have been approved.");
             }
         }
 

@@ -4087,7 +4087,7 @@ namespace Server.Network
                         {
                             if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
                             {
-                                Messenger.HackingAttempt(client, "Admin cloning");
+                                Messenger.HackingAttempt(client, "Admin cloning (dungeon editor)");
                                 return;
                             }
 
@@ -4098,7 +4098,7 @@ namespace Server.Network
                         {
                             if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
                             {
-                                Messenger.HackingAttempt(client, "Admin cloning");
+                                Messenger.HackingAttempt(client, "Admin cloning (dungeon editor)");
                                 return;
                             }
 
@@ -4110,7 +4110,7 @@ namespace Server.Network
                         {
                             if (Ranks.IsDisallowed(client, Enums.Rank.Mapper))
                             {
-                                Messenger.HackingAttempt(client, "Admin cloning");
+                                Messenger.HackingAttempt(client, "Admin cloning (dungeon editor)");
                                 return;
                             }
                             int n = parse[1].ToInt();
@@ -4214,7 +4214,7 @@ namespace Server.Network
                     #region Missions
                     case "requesteditmission":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
                                 return;
@@ -4225,15 +4225,23 @@ namespace Server.Network
                         break;
                     case "savemission":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
                                 return;
                             }
 
-                            WonderMails.MissionPool missionPool = new WonderMails.MissionPool();
 
                             int difficulty = parse[1].ToInt() - 1;
+
+                            if (!WonderMails.WonderMailManager.Missions[difficulty].IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this mission pool (mission pool not sandboxed).", Text.BrightRed);
+                                return;
+                            }
+
+                            WonderMails.MissionPool missionPool = new WonderMails.MissionPool();
+                            missionPool.IsSandboxed = true;
 
                             int clientCount = parse[2].ToInt();
                             int n = 3;
@@ -4282,7 +4290,7 @@ namespace Server.Network
                         break;
                     case "editmission":
                         {
-                            if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                            if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
                                 Messenger.HackingAttempt(client, "Admin cloning (mission editor)");
                                 return;
@@ -4293,6 +4301,12 @@ namespace Server.Network
                             if (n < 0 || n > 16)
                             {
                                 Messenger.HackingAttempt(client, "Invalid mission client");
+                                return;
+                            }
+
+                            if (!WonderMails.WonderMailManager.Missions[n - 1].IsSandboxed)
+                            {
+                                Messenger.PlayerMsg(client, "You can't edit this mission pool (mission pool not sandboxed).", Text.BrightRed);
                                 return;
                             }
 
@@ -5330,7 +5344,7 @@ namespace Server.Network
                                 if (client.Player.Inventory[slot].IsSandboxed)
                                 {
                                     Messenger.StorageMessage(client, "You can't deposit a sandboxed item!");
-                                    return; 
+                                    return;
                                 }
 
                                 if (amount > client.Player.Inventory[slot].Amount)
