@@ -9,6 +9,6 @@ install:
   - nuget restore Server.sln
 build_script:
   - dotnet publish Server.sln -c Release
-  - ps: docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASSWORD"
+  - ps: docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASSWORD" quay.io
   - ps: docker build -t quay.io/burningblaze/pmdshiftserver:latest .
   - ps: docker push quay.io/burningblaze/pmdshiftserver:latest
