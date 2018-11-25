@@ -16,9 +16,11 @@ namespace Script
         string IntroductionMessage { get; }
 
         void ConfigurePlayer(Client client);
+        void DeconfigurePlayer(Client client);
 
         void OnActivateMap(IMap map);
         void OnPickupItem(ICharacter character, int itemSlot, InventoryItem invItem);
+        void OnDeath(Client client);
 
         void Load(string data);
         string Save();

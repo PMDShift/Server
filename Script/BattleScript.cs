@@ -41,6 +41,7 @@ namespace Script
     using Server.WonderMails;
     using Server.Tournaments;
     using Server.Database;
+    using Server.Events;
 
     public partial class Main
     {
@@ -9191,6 +9192,14 @@ namespace Script
 
         public static void HandleDeath(PacketHitList hitlist, Client client, Enums.KillType killType, bool autoSwitch)
         {
+            if (ActiveEvent != null)
+            {
+                if (EventManager.IsRegistered(client))
+                {
+                    ActiveEvent.OnDeath(client);
+                }
+            }
+
             PacketHitList.MethodStart(ref hitlist);
 
             //aftermath

@@ -706,7 +706,7 @@ namespace Server.Network
             {
                 if (client.Player.IsInTempStatMode())
                 {
-                    client.Player.EndTempStatMode();
+                    //client.Player.EndTempStatMode();
                 }
             }
 

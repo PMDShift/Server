@@ -239,6 +239,14 @@ namespace Script
         {
             try
             {
+                if (ActiveEvent != null)
+                {
+                    if (EventManager.IsRegistered(client))
+                    {
+                        ActiveEvent.DeconfigurePlayer(client);
+                    }
+                }
+
                 //remove all bonded status
                 RemoveAllBondedExtraStatus(client.Player.GetActiveRecruit(), client.Player.Map, null, false);
 
@@ -2525,7 +2533,13 @@ namespace Script
 
         public static void RecruitAddedToTeam(Client client, int teamSlot, int recruitIndex)
         {
-
+            if (ActiveEvent != null)
+            {
+                if (EventManager.IsRegistered(client))
+                {
+                    ActiveEvent.ConfigurePlayer(client);
+                }
+            }
         }
 
         public static void BeforeRecruitRemovedFromTeam(Client client, int teamSlot)

@@ -59,8 +59,25 @@ namespace Script
         {
             if (Data.Started)
             {
-                client.Player.KillableAnywhere = true;
+                if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                {
+                    client.Player.KillableAnywhere = true;
+                }
+                client.Player.BeginTempStatMode(100, true);
             }
+        }
+
+        public void DeconfigurePlayer(Client client)
+        {
+            client.Player.KillableAnywhere = false;
+            client.Player.EndTempStatMode();
+
+            PacketHitList packetHitList = null;
+            PacketHitList.MethodStart(ref packetHitList);
+
+            Main.RefreshCharacterSpeedLimit(client.Player.GetActiveRecruit(), client.Player.Map, packetHitList);
+
+            PacketHitList.MethodEnded(ref packetHitList);
         }
 
         public void OnActivateMap(IMap map)
@@ -98,6 +115,38 @@ namespace Script
             }
         }
 
+        public void OnDeath(Client client)
+        {
+            if (Data.Started)
+            {
+                var itemCount = client.Player.HasItem(TreasureItemID);
+
+                if (itemCount > 0)
+                {
+                    var quantityToLose = (int)System.Math.Max(1, itemCount * 0.3f);
+
+                    client.Player.TakeItem(TreasureItemID, quantityToLose);
+
+                    Messenger.GlobalMsg($"{client.Player.DisplayName} lost {quantityToLose} treasure(s)!", Text.BrightGreen);
+
+                    var claimedTreasures = Data.EventItems.Where(x => x.Claimed).ToList();
+                    for (var i = 0; i < quantityToLose; i++)
+                    {
+                        if (claimedTreasures.Count > 0)
+                        {
+                            var index = Server.Math.Rand(0, claimedTreasures.Count);
+
+                            claimedTreasures[index].Claimed = false;
+
+                            claimedTreasures.RemoveAt(index);
+                        }
+                    }
+
+                    ActivateTreasures();
+                }
+            }
+        }
+
         public void Start()
         {
             Data.EventItems = new TreasureHuntData.TreasureData[] {
@@ -106,14 +155,11 @@ namespace Script
                 new TreasureHuntData.TreasureData() { MapID = "s152", X = 22, Y = 15, Claimed = false },
             };
 
-
             Data.Started = true;
 
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 CleanupTreasures(client);
-
-                ConfigurePlayer(client);
             }
 
             ActivateTreasures();
@@ -121,9 +167,27 @@ namespace Script
 
         public void End()
         {
+            Data.Started = false;
+
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 Messenger.PlayerWarp(client, 152, 15, 16);
+            }
+
+            foreach (var eventItem in Data.EventItems)
+            {
+                var map = MapManager.RetrieveActiveMap(eventItem.MapID);
+
+                if (map != null)
+                {
+                    for (var i = 0; i < map.ActiveItem.Length; i++)
+                    {
+                        if (map.ActiveItem[i].Num == TreasureItemID && map.ActiveItem[i].X == eventItem.X && map.ActiveItem[i].Y == eventItem.Y)
+                        {
+                            map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), eventItem.X, eventItem.Y, null);
+                        }
+                    }
+                }
             }
         }
 
@@ -169,7 +233,7 @@ namespace Script
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 CleanupTreasures(client);
-                
+
                 var story = new Story();
                 var segment = StoryBuilder.BuildStory();
                 StoryBuilder.AppendSaySegment(segment, $"And the winners are...!", -1, 0, 0);

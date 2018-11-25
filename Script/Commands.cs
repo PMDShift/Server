@@ -151,8 +151,6 @@ namespace Script
                             {
                                 foreach (var registeredClient in EventManager.GetRegisteredClients())
                                 {
-                                    ActiveEvent.ConfigurePlayer(registeredClient);
-
                                     Story story = new Story();
                                     StoryBuilderSegment segment = StoryBuilder.BuildStory();
                                     StoryBuilder.AppendSaySegment(segment, $"This event is... {ActiveEvent.Name}!", -1, 0, 0);
@@ -163,6 +161,11 @@ namespace Script
                                 }
 
                                 ActiveEvent.Start();
+
+                                foreach (var registeredClient in EventManager.GetRegisteredClients())
+                                {
+                                    ActiveEvent.ConfigurePlayer(registeredClient);
+                                }
                             }
                         }
                         break;
@@ -170,8 +173,12 @@ namespace Script
                         {
                             if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
+                                ActiveEvent.End();
+
                                 foreach (var registeredClient in EventManager.GetRegisteredClients())
                                 {
+                                    ActiveEvent.DeconfigurePlayer(registeredClient);
+
                                     Story story = new Story();
                                     StoryBuilderSegment segment = StoryBuilder.BuildStory();
                                     StoryBuilder.AppendSaySegment(segment, $"The event is now finished!", -1, 0, 0);
@@ -179,8 +186,6 @@ namespace Script
                                     segment.AppendToStory(story);
                                     StoryManager.PlayStory(registeredClient, story);
                                 }
-
-                                ActiveEvent.End();
                             }
                         }
                         break;
