@@ -9458,7 +9458,7 @@ namespace Script
             {
                 if (client.Player.Inventory[i].Num > 0)
                 {
-                    if (ItemManager.Items[client.Player.Inventory[i].Num].StackCap > 0 && ItemManager.Items[client.Player.GetActiveRecruit().HeldItem.Num].Loseable)
+                    if (ItemManager.Items[client.Player.Inventory[i].Num].StackCap > 0 && ItemManager.Items[client.Player.Inventory[i].Num].Loseable)
                     {
                         client.Player.TakeItem(client.Player.Inventory[i].Num, client.Player.Inventory[i].Amount);
                     }
