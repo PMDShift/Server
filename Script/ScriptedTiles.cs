@@ -752,9 +752,18 @@ namespace Script
                                 PartyManager.AttemptPartyWarp(client, (Client warpClient) =>
                                 {
                                     int dungeonIndex = param1.ToInt();
-                                    int warpMap = param2.ToInt();
-                                    int warpX = param3.Split(':')[0].ToInt();
-                                    int warpY = param3.Split(':')[1].ToInt();
+                                    int warpMap = -1;
+                                    int warpX = 0;
+                                    int warpY = 0;
+                                    if (!string.IsNullOrEmpty(param2))
+                                    {
+                                        warpMap = param2.ToInt();
+                                    }
+                                    if (!string.IsNullOrEmpty(param3))
+                                    {
+                                        warpX = param3.Split(':')[0].ToInt();
+                                        warpY = param3.Split(':')[1].ToInt();
+                                    }
 
                                     if (dungeonIndex > 0)
                                     {

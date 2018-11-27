@@ -9293,11 +9293,9 @@ namespace Script
 
             RemoveBuffs(client.Player.GetActiveRecruit());
 
-            if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
-            {
-                client.Player.Hunted = false;
-                PacketBuilder.AppendHunted(client, hitlist);
-            }
+            client.Player.Hunted = false;
+            PacketBuilder.AppendHunted(client, hitlist);
+
             client.Player.Dead = true;
             PacketBuilder.AppendDead(client, hitlist);
 
