@@ -3639,7 +3639,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Shops.ShopManager.Shops[n].IsSandboxed)
+                            if (!Shops.ShopManager.Shops[n].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;
@@ -3673,7 +3673,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Shops.ShopManager.Shops[ShopNum].IsSandboxed)
+                            if (!Shops.ShopManager.Shops[ShopNum].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this shop (shop not sandboxed).", Text.BrightRed);
                                 return;

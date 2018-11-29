@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Zones;
 
 namespace Server.Shops
 {
@@ -39,6 +40,18 @@ namespace Server.Shops
             for (int i = 0; i < Constants.MAX_TRADES; i++)
             {
                 Items[i] = new ShopItem();
+            }
+        }
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            }
+            else
+            {
+                return IsSandboxed;
             }
         }
     }
