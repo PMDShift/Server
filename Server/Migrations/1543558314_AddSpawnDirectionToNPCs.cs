@@ -7,7 +7,7 @@ namespace Server.Migrations
 {
     [Tags("data")]
     [Migration(1543558314)]
-    class AddSpawnDirectionToNPCs : AutoReversingMigration
+    public class AddSpawnDirectionToNPCs : AutoReversingMigration
     {
         public override void Up()
         {
