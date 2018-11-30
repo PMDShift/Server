@@ -4679,6 +4679,11 @@ namespace Server.Network
                                 {
                                     return;
                                 }
+
+                                if (!client.Player.Map.IsZoneOrObjectSandboxed() && Ranks.IsDisallowed(client, Enums.Rank.Scripter))
+                                {
+                                    return;
+                                }
                             }
 
                             Messenger.PlayerXYWarp(client, parse[1].ToInt(), parse[2].ToInt());
