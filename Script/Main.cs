@@ -215,9 +215,6 @@ namespace Script
                     Messenger.AdminMsg("[Staff] " + client.Player.Name + " is still in Jail!", Text.Pink);
                 }
 
-
-
-
                 //extra Status
                 RemoveAllBondedExtraStatus(client.Player.GetActiveRecruit(), client.Player.Map, null, false);
 
@@ -227,6 +224,15 @@ namespace Script
                     AskAfterDeathQuestion(client);
                 }
 
+                PacketHitList hitlist = null;
+                PacketHitList.MethodStart(ref hitlist);
+
+                if (client.Player.GetActiveRecruit().Shiny == Enums.Coloration.Shiny)
+                {
+                    PacketBuilder.AppendShinySparkle(client, hitlist);
+                }
+
+                PacketHitList.MethodEnded(ref hitlist);
             }
             catch (Exception ex)
             {
@@ -2600,7 +2606,7 @@ namespace Script
 
             if (client.Player.GetActiveRecruit().Shiny == Enums.Coloration.Shiny)
             {
-                //shiny sparkle
+                PacketBuilder.AppendShinySparkle(client, hitlist);
             }
 
             RefreshCharacterTraits(client.Player.GetActiveRecruit(), client.Player.Map, hitlist);

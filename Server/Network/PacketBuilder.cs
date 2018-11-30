@@ -914,6 +914,23 @@ namespace Server.Network
 
         */
 
+        public static void AppendShinySparkle(Client client, PacketHitList packetHitList)
+        {
+            var moveAnimation = new MoveAnimation()
+            {
+                AnimationIndex = 72,
+                Repetitions = 1,
+                FrameSpeed = 60,
+                AnimationType = Enums.MoveAnimationType.Normal
+            };
+
+            var x = client.Player.X;
+            var y = client.Player.Y;
+
+            var animationPacket = PacketBuilder.CreateSpellAnim(moveAnimation, x, y, x, y, 0);
+            hitlist.AddPacketToMap(client.Player.Map, animationPacket);
+        }
+
         public static void AppendMOTD(Client client, PacketHitList packetHitList)
         {
             var packet = TcpPacket.CreatePacket("motd", Settings.MOTD);
