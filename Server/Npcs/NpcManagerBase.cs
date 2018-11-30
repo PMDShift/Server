@@ -91,7 +91,8 @@ namespace Server.Npcs
                 "move3, " +
                 "move4, " +
                 "is_sandboxed, " +
-                "zone_id " +
+                "zone_id, " +
+                "spawn_direction " +
                 "FROM npc WHERE npc.num = \'" + npcNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -117,6 +118,7 @@ namespace Server.Npcs
                 npcs[npcNum].Moves[3] = row["move4"].ValueString.ToInt();
                 npcs[npcNum].IsSandboxed = row["is_sandboxed"].ValueString.ToBool();
                 npcs[npcNum].ZoneID = row["zone_id"].ValueString.ToInt();
+                npcs[npcNum].SpawnDirection = (Enums.Direction)row["spawn_direction"].ValueString.ToInt();
             }
 
             query = "SELECT drop_num, " +
@@ -191,7 +193,8 @@ namespace Server.Npcs
                     database.CreateColumn(false, "move3", npcs[npcNum].Moves[2].ToString()),
                     database.CreateColumn(false, "move4", npcs[npcNum].Moves[3].ToString()),
                     database.CreateColumn(false, "is_sandboxed", npcs[npcNum].IsSandboxed.ToIntString()),
-                    database.CreateColumn(false, "zone_id", npcs[npcNum].ZoneID.ToString())
+                    database.CreateColumn(false, "zone_id", npcs[npcNum].ZoneID.ToString()),
+                    database.CreateColumn(false, "spawn_direction", ((int)npcs[npcNum].SpawnDirection).ToString())
                 });
 
                 for (int i = 0; i < npcs[npcNum].Drops.Length; i++)

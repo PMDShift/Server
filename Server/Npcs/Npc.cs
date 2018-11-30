@@ -50,6 +50,8 @@ namespace Server.Npcs
         public bool IsSandboxed { get; set; }
         public int ZoneID { get; set; }
 
+        public Enums.Direction SpawnDirection { get; set; }
+
         public Npc()
         {
             Name = "";

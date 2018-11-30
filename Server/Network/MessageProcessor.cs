@@ -3580,8 +3580,9 @@ namespace Server.Network
                             npc.SpawnsAtDay = parse[13].ToBool();
                             npc.SpawnsAtDusk = parse[14].ToBool();
                             npc.SpawnsAtNight = parse[15].ToBool();
+                            npc.SpawnDirection = (Enums.Direction)parse[16].ToInt();
 
-                            int z = 16;
+                            int z = 17;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {

@@ -399,7 +399,7 @@ namespace Server.Maps
 
                 if (NpcManager.Npcs[NPCNum].Behavior == Enums.NpcBehavior.Shopkeeper)
                 {
-                    ActiveNpc[npcSlot].Direction = Enums.Direction.Down;
+                    ActiveNpc[npcSlot].Direction = NpcManager.Npcs[NPCNum].SpawnDirection;
                 }
                 else
                 {

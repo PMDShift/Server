@@ -928,7 +928,7 @@ namespace Server.Network
             var y = client.Player.Y;
 
             var animationPacket = PacketBuilder.CreateSpellAnim(moveAnimation, x, y, x, y, 0);
-            hitlist.AddPacketToMap(client.Player.Map, animationPacket);
+            packetHitList.AddPacketToMap(client.Player.Map, animationPacket);
         }
 
         public static void AppendMOTD(Client client, PacketHitList packetHitList)

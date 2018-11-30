@@ -3025,7 +3025,8 @@ namespace Server.Network
                  NpcManager.Npcs[NPCNum].SpawnsAtDawn.ToIntString(),
                  NpcManager.Npcs[NPCNum].SpawnsAtDay.ToIntString(),
                  NpcManager.Npcs[NPCNum].SpawnsAtDusk.ToIntString(),
-                 NpcManager.Npcs[NPCNum].SpawnsAtNight.ToIntString()
+                 NpcManager.Npcs[NPCNum].SpawnsAtNight.ToIntString(),
+                 ((int)NpcManager.Npcs[NPCNum].SpawnDirection).ToString()
              );
 
             for (int i = 0; i < NpcManager.Npcs[NPCNum].Moves.Length; i++)
