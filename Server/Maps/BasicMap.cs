@@ -298,6 +298,14 @@ namespace Server.Maps
             int NPCNum = npc.NpcNum;
             if (NPCNum <= 0) return false;
 
+            if (NpcManager.Npcs[NPCNum].SpawnWeather != Enums.Weather.Ambiguous)
+            {
+                if (this.Weather != NpcManager.Npcs[NPCNum].SpawnWeather)
+                {
+                    return false;
+                }
+            }
+
             switch (Globals.ServerTime)
             {
                 case Enums.Time.Dawn:

@@ -51,6 +51,7 @@ namespace Server.Npcs
         public int ZoneID { get; set; }
 
         public Enums.Direction SpawnDirection { get; set; }
+        public Enums.Weather SpawnWeather { get; set; }
 
         public Npc()
         {
@@ -64,6 +65,8 @@ namespace Server.Npcs
                 Drops[i] = new NpcDrop();
             }
             Moves = new int[4];
+
+            SpawnWeather = Enums.Weather.Ambiguous;
         }
     }
 }

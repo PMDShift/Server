@@ -3581,8 +3581,9 @@ namespace Server.Network
                             npc.SpawnsAtDusk = parse[14].ToBool();
                             npc.SpawnsAtNight = parse[15].ToBool();
                             npc.SpawnDirection = (Enums.Direction)parse[16].ToInt();
+                            npc.SpawnWeather = (Enums.Weather)parse[17].ToInt();
 
-                            int z = 17;
+                            int z = 18;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {
