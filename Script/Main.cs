@@ -4608,7 +4608,66 @@ namespace Script
                             }
                         }
                         break;
-
+                    case "CTFCreate":
+                        {
+                            if (answer == "Yes")
+                            {
+                                if (client.Player.MapID == MapManager.GenerateMapID(CTF.HUBMAP))
+                                {
+                                    if (ActiveCTF == null)
+                                    {
+                                        ActiveCTF = new CTF(CTF.CTFGameState.NotStarted);
+                                    }
+                                    if (ActiveCTF.GameState == CTF.CTFGameState.NotStarted)
+                                    {
+                                        ActiveCTF.CreateGame(client);
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        Messenger.PlayerMsg(client, "A game of Capture The Flag is already started!", Text.BrightRed);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "CTFRegistration":
+                        {
+                            if (client.Player.Muted)
+                            {
+                                Messenger.PlayerMsg(client, "You cannot join the game because you are muted!", Text.BrightRed);
+                            }
+                            if (client.Player.MapID == MapManager.GenerateMapID(CTF.HUBMAP))
+                            {
+                                if (ActiveCTF == null)
+                                {
+                                    Messenger.PlayerMsg(client, "No game has been started yet!", Text.BrightRed);
+                                }
+                                else if (ActiveCTF.GameState == CTF.CTFGameState.WaitingForPlayers)
+                                {
+                                    if (exPlayer.Get(client).InCTF == false)
+                                    {
+                                        ActiveCTF.AddToGame(client);
+                                    }
+                                    else
+                                    {
+                                        Messenger.PlayerMsg(client, "You have already joined the game!", Text.BrightRed);
+                                    }
+                                }
+                                else
+                                {
+                                    if (ActiveCTF.GameState == CTF.CTFGameState.Started)
+                                    {
+                                        Messenger.PlayerMsg(client, "There is already a game of Capture The Flag that has been started!", Text.BrightRed);
+                                    }
+                                    else
+                                    {
+                                        Messenger.PlayerMsg(client, "No game of Capture The Flag has been created yet!", Text.BrightRed);
+                                    }
+                                }
+                            }
+                        }
+                        break;
                 }
             }
             catch (Exception ex)

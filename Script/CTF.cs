@@ -1,4 +1,4 @@
-// This file is part of Mystery Dungeon eXtended.
+﻿// This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
 
@@ -31,19 +31,21 @@ namespace Script
 {
 	public class CTF
 	{
-		public const int MAXTEAMCOUNT = 25;
-		public const int MINTEAMCOUNT = 2;
-		
-		public const int REDMAP = 791;
-		public const int BLUEMAP = 792;
-		public const int HUBMAP = 793;
-		
-		public const int REDX = 23;
-		public const int REDY = 7;
-		public const int BLUEX = 15;
-		public const int BLUEY = 40;
-		
-		public enum PlayerState { Free, Jailed, HoldingFlag };
+        public const int MAXTEAMCOUNT = 25;
+        public const int MINTEAMCOUNT = 1;
+
+        public const int REDMAP = 275;
+        public const int BLUEMAP = 274;
+        public const int HUBMAP = 151;
+
+        public const int REDX = 25;
+        public const int REDY = 30;
+        public const int BLUEX = 25;
+        public const int BLUEY = 20;
+        public const int HUBX = 15;
+        public const int HUBY = 10;
+
+        public enum PlayerState { Free, Jailed, HoldingFlag };
 		public enum Teams { Red, Blue };
 		public enum CTFGameState { NotStarted, WaitingForPlayers, Started };
 		
@@ -100,6 +102,43 @@ namespace Script
 			Messenger.PlayerMsg(client, "You have created a new game of Capture The Flag! Say /ctfstart to start!", Text.Yellow);
 			Messenger.MapMsg(MapManager.GenerateMapID(HUBMAP), client.Player.Name + " has created a new game of Capture The Flag!", Text.Yellow);
 		}
+
+        public static void TriggerJoinRequest(Client client)
+        {
+            if (client.Player.Muted)
+            {
+                Messenger.PlayerMsg(client, "You cannot join the game because you are muted!", Text.BrightRed);
+            }
+            if (client.Player.MapID == MapManager.GenerateMapID(CTF.HUBMAP))
+            {
+                if (Main.ActiveCTF == null)
+                {
+                    Messenger.AskQuestion(client, "CTFCreate", "No game has been created yet. Would you like to create one?", -1);
+                }
+                else if (Main.ActiveCTF.GameState == CTF.CTFGameState.WaitingForPlayers)
+                {
+                    if (exPlayer.Get(client).InCTF == false)
+                    {
+                        Messenger.AskQuestion(client, "CTFRegistration", "Would you like to join the game?", -1);
+                    }
+                    else
+                    {
+                        Messenger.PlayerMsg(client, "You have already joined the game!", Text.BrightRed);
+                    }
+                }
+                else
+                {
+                    if (Main.ActiveCTF.GameState == CTF.CTFGameState.Started)
+                    {
+                        Messenger.PlayerMsg(client, "There is already a game of Capture The Flag that has been started!", Text.BrightRed);
+                    }
+                    else
+                    {
+                        Messenger.AskQuestion(client, "CTFCreate", "No game has been created yet. Would you like to create one?", -1);
+                    }
+                }
+            }
+        }
 		
 		public void AddToGame(Client client) {
 			if (PlayerCount < (MAXTEAMCOUNT * 2)) {
@@ -243,18 +282,18 @@ namespace Script
 				exPlayer.Get(GameLeader).UnloadCTF();
 				GameLeader.Player.Status = "";
 				Messenger.SendPlayerData(GameLeader);
-				Messenger.PlayerWarp(GameLeader, HUBMAP, 8, 8);
+				Messenger.PlayerWarp(GameLeader, HUBMAP, HUBX, HUBY);
 				for (int i = 0; i < MAXTEAMCOUNT; i++) {
 					if (BlueTeam[i] != null && BlueTeam[i] != GameLeader && exPlayer.Get(BlueTeam[i]).InCTF) {
 						exPlayer.Get(BlueTeam[i]).UnloadCTF();
-						Messenger.PlayerWarp(BlueTeam[i], HUBMAP, 8, 8);
+						Messenger.PlayerWarp(BlueTeam[i], HUBMAP, HUBX, HUBY);
 						Messenger.PlayerMsg(BlueTeam[i], "The leader has ended the game.", Text.Yellow);
 						BlueTeam[i].Player.Status = "";
 						Messenger.SendPlayerData(BlueTeam[i]);
 					}
 					if (RedTeam[i] != null && RedTeam[i] != GameLeader && exPlayer.Get(RedTeam[i]).InCTF) {
 						exPlayer.Get(RedTeam[i]).UnloadCTF();
-						Messenger.PlayerWarp(RedTeam[i], HUBMAP, 8, 8);
+						Messenger.PlayerWarp(RedTeam[i], HUBMAP, HUBX, HUBY);
 						Messenger.PlayerMsg(RedTeam[i], "The leader has ended the game.", Text.Yellow);
 						RedTeam[i].Player.Status = "";
 						Messenger.SendPlayerData(RedTeam[i]);
@@ -268,18 +307,18 @@ namespace Script
 			exPlayer.Get(GameLeader).UnloadCTF();
 			GameLeader.Player.Status = "";
 			Messenger.SendPlayerData(GameLeader);
-			Messenger.PlayerWarp(GameLeader, HUBMAP, 8, 8);
+			Messenger.PlayerWarp(GameLeader, HUBMAP, HUBX, HUBY);
 			for (int i = 0; i < MAXTEAMCOUNT; i++) {
 				if (BlueTeam[i] != null && BlueTeam[i] != GameLeader && exPlayer.Get(BlueTeam[i]).InCTF) {
 					exPlayer.Get(BlueTeam[i]).UnloadCTF();
-					Messenger.PlayerWarp(BlueTeam[i], HUBMAP, 8, 8);
+					Messenger.PlayerWarp(BlueTeam[i], HUBMAP, HUBX, HUBY);
 					Messenger.PlayerMsg(BlueTeam[i], Ender + " has ended the game.", Text.Yellow);
 					BlueTeam[i].Player.Status = "";
 					Messenger.SendPlayerData(BlueTeam[i]);
 				}
 				if (RedTeam[i] != null && RedTeam[i] != GameLeader && exPlayer.Get(RedTeam[i]).InCTF) {
 					exPlayer.Get(RedTeam[i]).UnloadCTF();
-					Messenger.PlayerWarp(RedTeam[i], HUBMAP, 8, 8);
+					Messenger.PlayerWarp(RedTeam[i], HUBMAP, HUBX, HUBY);
 					Messenger.PlayerMsg(RedTeam[i], Ender + " has ended the game.", Text.Yellow);
 					RedTeam[i].Player.Status = "";
 					Messenger.SendPlayerData(RedTeam[i]);
@@ -292,18 +331,18 @@ namespace Script
 			exPlayer.Get(GameLeader).UnloadCTF();
 			GameLeader.Player.Status = "";
 			Messenger.SendPlayerData(GameLeader);
-			Messenger.PlayerWarp(GameLeader, HUBMAP, 8, 8);
+			Messenger.PlayerWarp(GameLeader, HUBMAP, HUBX, HUBY);
 			for (int i = 0; i < MAXTEAMCOUNT; i++) {
 				if (BlueTeam[i] != null && BlueTeam[i] != GameLeader && exPlayer.Get(BlueTeam[i]).InCTF) {
 					exPlayer.Get(BlueTeam[i]).UnloadCTF();
-					Messenger.PlayerWarp(BlueTeam[i], HUBMAP, 8, 8);
+					Messenger.PlayerWarp(BlueTeam[i], HUBMAP, HUBX, HUBY);
 					Messenger.PlayerMsg(BlueTeam[i], "The game has ended.", Text.Yellow);
 					BlueTeam[i].Player.Status = "";
 					Messenger.SendPlayerData(BlueTeam[i]);
 				}
 				if (RedTeam[i] != null && RedTeam[i] != GameLeader && exPlayer.Get(RedTeam[i]).InCTF) {
 					exPlayer.Get(RedTeam[i]).UnloadCTF();
-					Messenger.PlayerWarp(RedTeam[i], HUBMAP, 8, 8);
+					Messenger.PlayerWarp(RedTeam[i], HUBMAP, HUBX, HUBY);
 					Messenger.PlayerMsg(RedTeam[i], "The game has ended.", Text.Yellow);
 					RedTeam[i].Player.Status = "";
 					Messenger.SendPlayerData(RedTeam[i]);

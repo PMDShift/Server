@@ -2347,7 +2347,11 @@ namespace Script
                             Messenger.AskQuestion(client, "EventRegistrationConfirm", "Would you like to register for this event?", -1);
                         }
                         break;
-
+                    case 24:
+                        {
+                            CTF.TriggerJoinRequest(client);
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
@@ -2410,6 +2414,8 @@ namespace Script
                     return scriptNum + ": Zone Credits";
                 case 23:
                     return scriptNum + ": Event Registration";
+                case 24:
+                    return scriptNum + ": CTF Registration/Creation";
                 default:
                     return scriptNum.ToString() + ": Unknown";
             }
