@@ -3238,11 +3238,11 @@ namespace Server.Network
                                 Messenger.PlayerMsg(client, "You can't edit this item (item not sandboxed).", Text.BrightRed);
                                 return;
                             }
-                            if (!client.Player.CanEditZone(Items.ItemManager.Items[n].ZoneID))
-                            {
-                                Messenger.PlayerMsg(client, "You can't edit this item (not assigned).", Text.BrightRed);
-                                return;
-                            }
+                            //if (!client.Player.CanEditZone(Items.ItemManager.Items[n].ZoneID))
+                            //{
+                            //    Messenger.PlayerMsg(client, "You can't edit this item (not assigned).", Text.BrightRed);
+                            //    return;
+                            //}
 
                             ItemManager.Items[n].Name = parse[2];
                             ItemManager.Items[n].Desc = parse[3];
