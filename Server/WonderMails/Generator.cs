@@ -205,7 +205,7 @@ namespace Server.WonderMails
                 }
                 else
                 {
-                    missionType = (Enums.MissionType)Server.Math.Rand(1, 3);
+                    missionType = (Enums.MissionType)Server.Math.Rand(1, 4);
                 }
 
                 mail.MissionType = missionType;
@@ -230,6 +230,8 @@ namespace Server.WonderMails
                 if (WonderMailManager.Missions[(int)mail.Difficulty - 1].Rewards.Count == 0) return null;
                 mail.RewardIndex = Server.Math.Rand(0, WonderMailManager.Missions[(int)mail.Difficulty - 1].Rewards.Count);
 
+                var missionPool = WonderMailManager.Missions[(int)mail.Difficulty - 1];
+
                 // Section 5
                 switch ((Enums.MissionType)mail.MissionType)
                 {
@@ -246,6 +248,12 @@ namespace Server.WonderMails
                             int index = Server.Math.Rand(0, WonderMailManager.Missions[0].MissionClients.Count);
                             mail.Data1 = WonderMailManager.Missions[0].MissionClients[index].Species;
                             mail.Data2 = WonderMailManager.Missions[0].MissionClients[index].Form;
+                            break;
+                        }
+                    case Enums.MissionType.Outlaw:
+                        {
+                            var index = Server.Math.Rand(0, missionPool.Enemies.Count);
+                            mail.Data1 = missionPool.Enemies[index].NpcNum;
                             break;
                         }
                     default:

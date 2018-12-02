@@ -52,6 +52,7 @@ namespace Server.Network
     using PMDCP.Core;
     using DataManager.Players;
     using Server.Database;
+    using System.Linq;
 
     public class Messenger
     {
@@ -646,7 +647,7 @@ namespace Server.Network
                 }
             }
 
-            if (!map.IsZoneOrObjectSandboxed() || !client.Player.CanEditZone(map.ZoneID)) 
+            if (!map.IsZoneOrObjectSandboxed() || !client.Player.CanEditZone(map.ZoneID))
             {
                 client.Player.ProtectionOff = true;
             }
@@ -704,7 +705,7 @@ namespace Server.Network
 
             if (oldMap != null && oldMap.ZoneID != map.ZoneID)
             {
-                if (client.Player.IsInTempStatMode()) 
+                if (client.Player.IsInTempStatMode())
                 {
                     client.Player.EndTempStatMode();
                 }
@@ -804,19 +805,65 @@ namespace Server.Network
             int targetsMissed = 0;
             for (int i = 0; i < client.Player.JobList.JobList.Count; i++)
             {
-                if (client.Player.JobList.JobList[i].Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(client.Player.JobList.JobList[i].Mission, map))
+                var job = client.Player.JobList.JobList[i];
+
+                if (job.Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(job.Mission, map))
                 {
-                    destinationReached = true;
-                    GoalPoint goalPoint = new GoalPoint();
-                    goalPoint.DetermineGoalPoint(map);
-                    goalPoint.JobListIndex = i;
-                    if (goalPoint.GoalX == -1 || goalPoint.GoalY == -1)
+                    switch (job.Mission.MissionType)
                     {
-                        targetsMissed++;
-                    }
-                    else
-                    {
-                        client.Player.ActiveGoalPoints.Add(goalPoint);
+                        case Enums.MissionType.Escort:
+                        case Enums.MissionType.ItemRetrieval:
+                        case Enums.MissionType.Rescue:
+                            {
+                                destinationReached = true;
+                                GoalPoint goalPoint = new GoalPoint();
+                                goalPoint.DetermineGoalPoint(map);
+                                goalPoint.JobListIndex = i;
+                                if (goalPoint.GoalX == -1 || goalPoint.GoalY == -1)
+                                {
+                                    targetsMissed++;
+                                }
+                                else
+                                {
+                                    client.Player.ActiveGoalPoints.Add(goalPoint);
+                                }
+                            }
+                            break;
+                        case Enums.MissionType.Outlaw:
+                            {
+                                destinationReached = true;
+
+                                var hasSpawned = map.ActiveNpc.Enumerate().Any(mapNpc => mapNpc.Num == job.Mission.Data1);
+
+                                if (!hasSpawned)
+                                {
+                                    var mapNpc = new MapNpcPreset();
+
+                                    GoalPoint goalPoint = new GoalPoint();
+                                    goalPoint.DetermineGoalPoint(map);
+                                    if (goalPoint.GoalX == -1 || goalPoint.GoalY == -1)
+                                    {
+                                        targetsMissed++;
+                                    }
+                                    else
+                                    {
+                                        mapNpc.SpawnX = goalPoint.GoalX;
+                                        mapNpc.SpawnY = goalPoint.GoalY;
+
+                                        mapNpc.NpcNum = job.Mission.Data1;
+
+                                        var averageLevel = (int)map.Npc.Enumerate().Average(npc => npc.MaxLevel);
+
+                                        var npcLevel = System.Math.Min(100, averageLevel + 10);
+
+                                        mapNpc.MinLevel = npcLevel;
+                                        mapNpc.MaxLevel = npcLevel;
+
+                                        map.SpawnNpc(mapNpc, false, false);
+                                    }
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -1466,7 +1513,7 @@ namespace Server.Network
                 SendDataToParty(party, PacketBuilder.CreatePartyMemberDataPacket(memberClient, slot));
             }
         }
-        
+
         public static void SendPartyMemberData(Client client, Client member, int slot) {
             SendDataTo(client, PacketBuilder.CreatePartyMemberDataPacket(member, slot));
         }
@@ -1911,11 +1958,11 @@ namespace Server.Network
             SendDataTo(client, PacketBuilder.CreateMapDataPacket(MapManager.RetrieveActiveMap(MapManager.GenerateMapID(mapNum))));
         }
 
-        
+
         public static void SendMapDone(Client client) {
             SendDataTo(client, TcpPacket.CreatePacket("mapdone"));
         }
-        
+
         public static void SendMapItemsTo(Client client) {
             IMap map = client.Player.GetCurrentMap();
             TcpPacket packet = new TcpPacket("mapitemdata");
@@ -1929,7 +1976,7 @@ namespace Server.Network
             packet.FinalizePacket();
             SendDataTo(client, packet);
         }
-        
+
 
         public static void SendMapItemsToMap(string mapID) {
             IMap map = MapManager.RetrieveActiveMap(mapID);
@@ -2266,14 +2313,14 @@ namespace Server.Network
             SendDataToMapBut(client, client.Player.MapID, TcpPacket.CreatePacket("playerstatused", client.ConnectionID.ToString(), ((int)client.Player.GetActiveRecruit().StatusAilment).ToString()));
 
         }
-        
+
 
         public static void SendSpeedLimit(Client client) {
             SendDataTo(client, TcpPacket.CreatePacket("speedlimit", ((int)client.Player.SpeedLimit).ToString()));
 
         }
 
-        
+
         public static void SendMobility(Client client) {
             int mobility = 0;
             for (int i = 15; i >= 0; i--) {

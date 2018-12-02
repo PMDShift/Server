@@ -9590,13 +9590,15 @@ namespace Script
         public static void CreateMissionInfo(WonderMail mail)
         {
             MissionPool pool = WonderMailManager.Missions[(int)mail.Difficulty - 1];
+
+            var total = mail.DungeonIndex * pool.MissionClients.Count * pool.Rewards.Count
+                        + mail.MissionClientIndex * pool.Rewards.Count
+                        + mail.RewardIndex;
+
             switch (mail.MissionType)
             {
                 case Enums.MissionType.Rescue:
                     {
-                        int total = mail.DungeonIndex * pool.MissionClients.Count * pool.Rewards.Count
-                            + mail.MissionClientIndex * pool.Rewards.Count
-                            + mail.RewardIndex;
                         switch (total % 8)
                         {
                             case 0:
@@ -9653,9 +9655,6 @@ namespace Script
                 case Enums.MissionType.ItemRetrieval:
                     {
                         Item item = ItemManager.Items[mail.Data1];
-                        int total = mail.DungeonIndex * pool.MissionClients.Count * pool.Rewards.Count
-                            + mail.MissionClientIndex * pool.Rewards.Count
-                            + mail.RewardIndex;
                         switch (total % 2)
                         {
                             case 0:
@@ -9676,9 +9675,6 @@ namespace Script
                     break;
                 case Enums.MissionType.Escort:
                     {
-                        int total = mail.DungeonIndex * pool.MissionClients.Count * pool.Rewards.Count
-                            + mail.MissionClientIndex * pool.Rewards.Count
-                            + mail.RewardIndex;
                         switch (total % 2)
                         {
                             case 0:
@@ -9696,6 +9692,34 @@ namespace Script
                         }
                     }
                     break;
+                case Enums.MissionType.Outlaw:
+                    {
+                        var npc = NpcManager.Npcs[mail.Data1];
+                        var pokemon = Pokedex.GetPokemon(npc.Species);
+
+                        switch (total % 3)
+                        {
+                            case 0:
+                                {
+                                    mail.Title = "Catch the outlaw!";
+                                    mail.Summary = $"{npc.Name} has escaped! Please catch them!";
+                                }
+                                break;
+                            case 1:
+                                {
+                                    mail.Title = $"Find that outlaw!";
+                                    mail.Summary = $"A {pokemon.Name} is on the loose! They must be brought to justice!";
+                                }
+                                break;
+                            case 2:
+                                {
+                                    mail.Title = $"{npc.Name} escaped!";
+                                    mail.Summary = $"We're looking for {npc.Name}! Find them, and you will be rewarded!";
+                                }
+                                break;
+                        }
+                    }
+                    break;
             }
             mail.Mugshot = WonderMailManager.Missions.MissionPools[(int)mail.Difficulty - 1].MissionClients[mail.MissionClientIndex].Species;
         }
@@ -9706,7 +9730,7 @@ namespace Script
             {
                 Story story = new Story();
                 StoryBuilderSegment segment = StoryBuilder.BuildStory();
-                StoryBuilder.AppendSaySegment(segment, "You have completed a mission!  Return to the mission board to claim your reward.", -1, 0, 0);
+                StoryBuilder.AppendSaySegment(segment, "You have completed a mission! Return to the mission board to claim your reward.", -1, 0, 0);
                 segment.AppendToStory(story);
                 StoryManager.PlayStory(client, story);
 

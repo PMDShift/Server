@@ -60,5 +60,13 @@ namespace Server.Maps
         {
             return mapNpcs.GetEnumerator();
         }
+
+        public IEnumerable<MapNpc> Enumerate()
+        {
+            foreach (var mapNpc in mapNpcs)
+            {
+                yield return mapNpc;
+            }
+        }
     }
 }

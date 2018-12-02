@@ -350,7 +350,11 @@ namespace Server.Maps
             SpawnNpc(npc, false);
         }
 
-        public void SpawnNpc(MapNpcPreset npc, bool checkSight)
+        public void SpawnNpc(MapNpcPreset npc, bool checkSight) {
+            SpawnNpc(npc, checkSight, true);
+        }
+
+        public void SpawnNpc(MapNpcPreset npc, bool checkSight, bool checkZones)
         {
             int NPCNum = 0;
             int X = 0;
@@ -366,7 +370,7 @@ namespace Server.Maps
             }
 
             NPCNum = npc.NpcNum;
-            if (NPCNum > 0 && NpcManager.Npcs[NPCNum].ZoneID == this.ZoneID)
+            if (NPCNum > 0 && (NpcManager.Npcs[NPCNum].ZoneID == this.ZoneID || !checkZones))
             {
                 ActiveNpc[npcSlot].Num = NPCNum;
                 ActiveNpc[npcSlot].Target = null;

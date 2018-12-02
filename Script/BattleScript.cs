@@ -9583,6 +9583,28 @@ namespace Script
                     break;
                 }
 
+                // Check if the player:
+                // 1) Has an active outlaw mission
+                // 2) Defeated the correct outlaw npc
+                if (attacker.CharacterType == Enums.CharacterType.Recruit)
+                {
+                    var owner = ((Recruit)attacker).Owner;
+
+                    for (int i = 0; i < client.Player.JobList.JobList.Count; i++)
+                    {
+                        var job = client.Player.JobList.JobList[i];
+
+                        if (job.Mission.MissionType == Enums.MissionType.Outlaw && job.Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(job.Mission, map))
+                        {
+                            if (job.Mission.Data1 == npc.Num)
+                            {
+                                client.Player.HandleMissionComplete(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (client != null)
                 {
 

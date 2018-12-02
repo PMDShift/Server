@@ -248,6 +248,7 @@ namespace Server.Maps
         void SpawnItems();
         void SpawnNpc();
         void SpawnNpc(bool checkSight);
+        void SpawnNpc(MapNpcPreset npc, bool checkSight, bool checkZones);
         void SpawnNpc(MapNpcPreset npc);
         void SpawnNpcs();
         void RemoveNpc(int npcSlot);
