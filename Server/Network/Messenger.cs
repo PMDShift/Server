@@ -803,6 +803,12 @@ namespace Server.Network
             client.Player.ActiveGoalPoints.Clear();
             bool destinationReached = false;
             int targetsMissed = 0;
+
+            var story = new Stories.Story();
+            var segment = Stories.StoryBuilder.BuildStory();
+
+            bool hasStory = false;
+
             for (int i = 0; i < client.Player.JobList.JobList.Count; i++)
             {
                 var job = client.Player.JobList.JobList[i];
@@ -847,6 +853,11 @@ namespace Server.Network
                                     }
                                     else
                                     {
+                                        hasStory = true;
+
+                                        var npcObject = Npcs.NpcManager.Npcs[job.Mission.Data1];
+                                        npcObject.AppendAttackSayStory(segment);
+
                                         mapNpc.SpawnX = goalPoint.GoalX;
                                         mapNpc.SpawnY = goalPoint.GoalY;
 
@@ -876,6 +887,13 @@ namespace Server.Network
                 }
             }
             SendActiveMissionGoalPoints(client);
+
+            if (hasStory)
+            {
+                segment.AppendToStory(story);
+
+                Stories.StoryManager.PlayStory(client, story);
+            }
 
 
             // Trigger event checking
