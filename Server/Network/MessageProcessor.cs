@@ -3475,7 +3475,7 @@ namespace Server.Network
                         // Prevent hacking
                         if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                         {
-                            Messenger.HackingAttempt(client, "Admin Cloning");
+                            Messenger.HackingAttempt(client, "Admin Cloning (npc editor)");
                             return;
                         }
 
@@ -3489,7 +3489,7 @@ namespace Server.Network
                             // Prevent hacking
                             if (Ranks.IsDisallowed(client, Enums.Rank.Developer))
                             {
-                                Messenger.HackingAttempt(client, "Admin Cloning");
+                                Messenger.HackingAttempt(client, "Admin Cloning (npc editor)");
                                 return;
                             }
 
@@ -3582,8 +3582,9 @@ namespace Server.Network
                             npc.SpawnsAtNight = parse[15].ToBool();
                             npc.SpawnDirection = (Enums.Direction)parse[16].ToInt();
                             npc.SpawnWeather = (Enums.Weather)parse[17].ToInt();
+                            npc.Story = parse[18].ToInt();
 
-                            int z = 18;
+                            int z = 19;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {

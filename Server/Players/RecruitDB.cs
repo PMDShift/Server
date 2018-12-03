@@ -174,16 +174,17 @@ namespace Server.Players
             SetForm(0);
         }
 
-       public int CalculateBaseMaxBelly()
+        public int CalculateBaseMaxBelly()
         {
             if (Shiny == Enums.Coloration.Shiny)
             {
                 return 200;
-            } else
+            }
+            else
             {
                 return 100;
             }
-        } 
+        }
 
         public void LoadFromRecruitData(RecruitData recruitData, int recruitIndex)
         {
@@ -1030,27 +1031,25 @@ namespace Server.Players
                             Scripting.ScriptManager.InvokeSub("ScriptedNpc", setup.Attacker, Npcs.NpcManager.Npcs[npc.Num].AIScript, npc.Num, owner.Player.Map, i);
                         }
                     }
+                    else if (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Story)
+                    {
+                        var npcObject = Npcs.NpcManager.Npcs[npc.Num];
+
+                        var storyChapter = npcObject.Story - 1;
+                        if (storyChapter <= -1 || !owner.Player.GetStoryState(storyChapter))
+                        {
+                            Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory());
+                        } else
+                        {
+                            Stories.StoryManager.PlayStory(owner, storyChapter);
+                        }
+                    }
                     else if (!string.IsNullOrEmpty(Npcs.NpcManager.Npcs[npc.Num].AttackSay) && (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Friendly || Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Shopkeeper))
                     {
                         if (setup.moveIndex == -1)
                         {
-                            var npcObject = Npcs.NpcManager.Npcs[npc.Num];
-
-                            Stories.Story story = new Stories.Story();
-                            Stories.StoryBuilderSegment segment = Stories.StoryBuilder.BuildStory();
-                            Stories.StoryBuilder.AppendSaySegment(segment, Npcs.NpcManager.Npcs[npc.Num].Name.Trim() + ": " + Npcs.NpcManager.Npcs[npc.Num].AttackSay.Trim(), Npcs.NpcManager.Npcs[npc.Num].Species, 0, 0);
-
-                            if (!string.IsNullOrEmpty(npcObject.AttackSay2))
-                            {
-                                Stories.StoryBuilder.AppendSaySegment(segment, npcObject.Name.Trim() + ": " + npcObject.AttackSay2.Trim(), npcObject.Species, 0, 0);
-                            }
-
-                            if (!string.IsNullOrEmpty(npcObject.AttackSay3))
-                            {
-                                Stories.StoryBuilder.AppendSaySegment(segment, npcObject.Name.Trim() + ": " + npcObject.AttackSay3.Trim(), npcObject.Species, 0, 0);
-                            }
-
-                            segment.AppendToStory(story);
+                            var story = Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory();
+                           
                             Stories.StoryManager.PlayStory(owner, story);
                         }
                     }

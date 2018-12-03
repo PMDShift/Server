@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Stories;
 
 namespace Server.Npcs
 {
@@ -53,6 +54,8 @@ namespace Server.Npcs
         public Enums.Direction SpawnDirection { get; set; }
         public Enums.Weather SpawnWeather { get; set; }
 
+        public int Story { get; set; }
+
         public Npc()
         {
             Name = "";
@@ -67,6 +70,33 @@ namespace Server.Npcs
             Moves = new int[4];
 
             SpawnWeather = Enums.Weather.Ambiguous;
+        }
+
+        public Story CreateAttackSayStory()
+        {
+            var story = new Stories.Story();
+            var segment = Stories.StoryBuilder.BuildStory();
+
+            AppendAttackSayStory(segment);
+
+            segment.AppendToStory(story);
+
+            return story;
+        }
+
+        public void AppendAttackSayStory(StoryBuilderSegment segment)
+        {
+            Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": " + this.AttackSay.Trim(), this.Species, 0, 0);
+
+            if (!string.IsNullOrEmpty(this.AttackSay2))
+            {
+                Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": " + this.AttackSay2.Trim(), this.Species, 0, 0);
+            }
+
+            if (!string.IsNullOrEmpty(this.AttackSay3))
+            {
+                Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": " + this.AttackSay3.Trim(), this.Species, 0, 0);
+            }
         }
     }
 }

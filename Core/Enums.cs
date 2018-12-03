@@ -158,7 +158,8 @@ namespace Server {
             Guard = 4,
             Scripted = 5,
             FullyScriptedAI = 6,
-            FleeOnsight = 7
+            FleeOnsight = 7,
+            Story = 8
         }
 
         public enum Rank {
@@ -234,7 +235,10 @@ namespace Server {
             ResetCamera = 29,
             AddTriggerEvent = 30,
             MovePlayer = 31,
-            ChangePlayerDir = 32
+            ChangePlayerDir = 32,
+            PadlockChapter = 33,
+            ExitStory = 34,
+            HasInventoryItem = 35
         }
 
         public enum ItemType {
