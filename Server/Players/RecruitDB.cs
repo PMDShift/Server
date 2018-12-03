@@ -1036,7 +1036,7 @@ namespace Server.Players
                         var npcObject = Npcs.NpcManager.Npcs[npc.Num];
 
                         var storyChapter = npcObject.Story - 1;
-                        if (storyChapter <= -1 || !owner.Player.GetStoryState(storyChapter))
+                        if (storyChapter <= -1 || owner.Player.GetStoryState(storyChapter))
                         {
                             Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory());
                         } else
