@@ -84,6 +84,18 @@ namespace Server.Npcs
             return story;
         }
 
+        public Story CreateInvalidClientStory()
+        {
+            var story = new Stories.Story();
+            var segment = Stories.StoryBuilder.BuildStory();
+
+            Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": Try talking to me again with the Crow client.", this.Species, 0, 0);
+
+            segment.AppendToStory(story);
+
+            return story;
+        }
+
         public void AppendAttackSayStory(StoryBuilderSegment segment)
         {
             Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": " + this.AttackSay.Trim(), this.Species, 0, 0);

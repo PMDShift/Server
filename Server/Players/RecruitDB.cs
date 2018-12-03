@@ -1041,7 +1041,13 @@ namespace Server.Players
                             Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory());
                         } else
                         {
-                            Stories.StoryManager.PlayStory(owner, storyChapter);
+                            if (owner.Player.GetClientEdition() == Constants.ALTERNATE_CLIENT_EDITION)
+                            {
+                                Stories.StoryManager.PlayStory(owner, storyChapter);
+                            } else
+                            {
+                                Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateInvalidClientStory());
+                            }
                         }
                     }
                     else if (!string.IsNullOrEmpty(Npcs.NpcManager.Npcs[npc.Num].AttackSay) && (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Friendly || Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Shopkeeper))
