@@ -409,6 +409,11 @@ namespace Server.Players
 
         public int HasItem(int itemNum, bool stickyCheck)
         {
+            return HasItem(itemNum, false, false);
+        }
+
+        public int HasItem(int itemNum, bool stickyCheck, bool sandboxCheck)
+        {
             if (client.IsPlaying() == false || itemNum < 0 || itemNum >= ItemManager.Items.MaxItems)
             {
                 return 0;
@@ -416,7 +421,7 @@ namespace Server.Players
 
             for (int i = 1; i <= Inventory.Count; i++)
             {
-                if (Inventory[i].Num == itemNum && (!stickyCheck || !Inventory[i].Sticky))
+                if (Inventory[i].Num == itemNum && (!stickyCheck || !Inventory[i].Sticky) && (sandboxCheck && !Inventory[i].IsSandboxed))
                 {
                     if (ItemManager.Items[Inventory[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[i].Num].StackCap > 0)
                     {

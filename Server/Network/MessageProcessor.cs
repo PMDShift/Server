@@ -5179,7 +5179,7 @@ namespace Server.Network
 
 
                             // Check if they have the item
-                            if (client.Player.HasItem(ShopManager.Shops[i].Items[z].GiveItem) >= ShopManager.Shops[i].Items[z].GiveValue * n)
+                            if (client.Player.HasItem(ShopManager.Shops[i].Items[z].GiveItem, false, true) >= ShopManager.Shops[i].Items[z].GiveValue * n)
                             {
                                 client.Player.TakeItem(ShopManager.Shops[i].Items[z].GiveItem, ShopManager.Shops[i].Items[z].GiveValue * n);
                                 client.Player.GiveItem(ShopManager.Shops[i].Items[z].GetItem, n);
@@ -5226,9 +5226,9 @@ namespace Server.Network
                                     SellItemAmount = 1;
                                 }
                             }
-                            if (client.Player.HasItem(sellItemNum) > 0)
+                            if (client.Player.HasItem(sellItemNum, false, true) > 0)
                             {
-                                if (client.Player.HasItem(sellItemNum) < SellItemAmount)
+                                if (client.Player.HasItem(sellItemNum, false, true) < SellItemAmount)
                                 {
                                     Messenger.PlayerMsg(client, "You can't sell more than you have!", Text.BrightRed);
                                     break;
@@ -5287,7 +5287,7 @@ namespace Server.Network
                                             {
                                                 if (pokemon.LevelUpMoves[n].Move == recallMove)
                                                 {
-                                                    if (client.Player.HasItem(priceItem) >= priceAmount)
+                                                    if (client.Player.HasItem(priceItem, false, true) >= priceAmount)
                                                     {
                                                         client.Player.TakeItem(priceItem, priceAmount);
                                                         client.Player.GetActiveRecruit().LearnNewMove(recallMove);
@@ -5315,7 +5315,7 @@ namespace Server.Network
                                     {
                                         if (pokemon.LevelUpMoves[n].Level <= client.Player.GetActiveRecruit().Level && pokemon.LevelUpMoves[n].Move == recallMove)
                                         {
-                                            if (client.Player.HasItem(priceItem) >= priceAmount)
+                                            if (client.Player.HasItem(priceItem, false, true) >= priceAmount)
                                             {
                                                 client.Player.TakeItem(priceItem, priceAmount);
                                                 client.Player.GetActiveRecruit().LearnNewMove(recallMove);
