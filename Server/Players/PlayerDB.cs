@@ -2378,6 +2378,9 @@ namespace Server.Players
 
         public bool CanViewZone(int zoneID)
         {
+#if DEBUG
+            return true;
+#endif
             if (Access == Enums.Rank.Scripter)
             {
                 return true;
@@ -2400,6 +2403,9 @@ namespace Server.Players
 
         public bool CanEditZone(int zoneID)
         {
+#if DEBUG
+            return true;
+#endif
             if (Access == Enums.Rank.Scripter)
             {
                 return true;
@@ -2421,6 +2427,6 @@ namespace Server.Players
             return (member.Access == Enums.ZoneAccess.Member || member.Access == Enums.ZoneAccess.Leader);
         }
 
-        #endregion Methods
+#endregion Methods
     }
 }
