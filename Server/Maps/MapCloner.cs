@@ -119,6 +119,8 @@ namespace Server.Maps
 
         public static void CloneMapGeneralProperties(IMap sourceMap, IMap destinationMap)
         {
+            destinationMap.ZoneID = sourceMap.ZoneID;
+            destinationMap.IsSandboxed = sourceMap.IsSandboxed;
             destinationMap.Up = sourceMap.Up;
             destinationMap.Down = sourceMap.Down;
             destinationMap.Left = sourceMap.Left;
