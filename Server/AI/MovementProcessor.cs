@@ -1388,7 +1388,7 @@ namespace Server.AI
                     mobilityList /= 2;
                 }
             }
-            else if (map.Tile[X, Y].Type != Enums.TileType.Hallway && map.Tile[X, Y].Type != Enums.TileType.Walkable && map.Tile[X, Y].Type != Enums.TileType.Item && map.Tile[X, Y].Type != Enums.TileType.Scripted)
+            else if (map.Tile[X, Y].Type != Enums.TileType.Road && map.Tile[X, Y].Type != Enums.TileType.Hallway && map.Tile[X, Y].Type != Enums.TileType.Walkable && map.Tile[X, Y].Type != Enums.TileType.Item && map.Tile[X, Y].Type != Enums.TileType.Scripted)
             {
                 return false;
             }
