@@ -9899,7 +9899,7 @@ namespace Script
             }
             catch (Exception ex)
             {
-                Messenger.AdminMsg("Error: OnNpcDeath", Text.Black);
+                Messenger.AdminMsg("Error: OnNpcDeath" + ex.ToString(), Text.Black);
                 Messenger.AdminMsg("NPCNum: " + npc.Num, Text.Black);
             }
         }

@@ -2090,6 +2090,26 @@ namespace Server.Network
                                             }
                                         }
                                         break;
+                                    case Enums.StoryAction.PadlockChapter:
+                                        {
+                                            int chapter = -1;
+                                            if (story.Parameters.ContainsKey("Chapter"))
+                                            {
+                                                chapter = story.Parameters.GetValue("Chapter").ToInt();
+                                            }
+                                            if (chapter > -1)
+                                            {
+                                                if (story.Parameters.GetValue("State") == "Unlock")
+                                                {
+                                                    client.Player.SetStoryState(chapter, false);
+                                                }
+                                                else if (story.Parameters.GetValue("State") == "Lock")
+                                                {
+                                                    client.Player.SetStoryState(chapter, true);
+                                                }
+                                            }
+                                        }
+                                        break;
                                     case Enums.StoryAction.Warp:
                                         {
                                             int X, Y;
