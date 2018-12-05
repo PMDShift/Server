@@ -407,6 +407,14 @@ namespace Server.Maps
                     ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
                 }
 
+                if (NpcManager.Npcs[NPCNum].IsFriendly())
+                {
+                    if (NpcManager.Npcs[NPCNum].ShinyChance == 1)
+                    {
+                        ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
+                    }
+                }
+
                 ActiveNpc[npcSlot].HP = ActiveNpc[npcSlot].MaxHP;
 
                 if (NpcManager.Npcs[NPCNum].Behavior == Enums.NpcBehavior.Shopkeeper)

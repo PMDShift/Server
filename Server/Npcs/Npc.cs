@@ -110,5 +110,19 @@ namespace Server.Npcs
                 Stories.StoryBuilder.AppendSaySegment(segment, this.Name.Trim() + ": " + this.AttackSay3.Trim(), this.Species, 0, 0);
             }
         }
+
+        public bool IsFriendly()
+        {
+            switch (this.Behavior)
+            {
+                case Enums.NpcBehavior.Friendly:
+                case Enums.NpcBehavior.Shopkeeper:
+                case Enums.NpcBehavior.Story:
+                case Enums.NpcBehavior.Scripted:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }
