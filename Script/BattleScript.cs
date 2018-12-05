@@ -2370,8 +2370,7 @@ namespace Script
                                 bool eligible = true;
                                 if (targets[i].CharacterType == Enums.CharacterType.MapNpc)
                                 {
-                                    if (NpcManager.Npcs[((MapNpc)targets[i]).Num].Behavior == Enums.NpcBehavior.Scripted
-                                    || NpcManager.Npcs[((MapNpc)targets[i]).Num].Behavior == Enums.NpcBehavior.Friendly)
+                                    if (NpcManager.Npcs[((MapNpc)targets[i]).Num].IsFriendly())
                                     {
                                         eligible = false;
                                     }

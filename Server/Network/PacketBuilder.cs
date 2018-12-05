@@ -763,7 +763,7 @@ namespace Server.Network
                 if ((int)map.ActiveNpc[i].Direction > 3) map.ActiveNpc[i].Direction = Enums.Direction.Right;
                 packet.AppendParameters(map.ActiveNpc[i].Num.ToString(), map.ActiveNpc[i].Sprite.ToString(), map.ActiveNpc[i].Form.ToString(), ((int)map.ActiveNpc[i].Shiny).ToString(), ((int)map.ActiveNpc[i].Sex).ToString(),
                     map.ActiveNpc[i].X.ToString(), map.ActiveNpc[i].Y.ToString(), ((int)map.ActiveNpc[i].Direction).ToString(), ((int)map.ActiveNpc[i].StatusAilment).ToString());
-                if (map.ActiveNpc[i].Num > 0 && NpcManager.Npcs[map.ActiveNpc[i].Num].Behavior != Enums.NpcBehavior.Friendly && NpcManager.Npcs[map.ActiveNpc[i].Num].Behavior != Enums.NpcBehavior.Shopkeeper && NpcManager.Npcs[map.ActiveNpc[i].Num].Behavior != Enums.NpcBehavior.Scripted)
+                if (map.ActiveNpc[i].Num > 0 && !NpcManager.Npcs[map.ActiveNpc[i].Num].IsFriendly())
                 {
                     packet.AppendParameters("1");
                 }
@@ -1541,7 +1541,7 @@ namespace Server.Network
             if (mapNpc.Num > 0)
             {
                 Npc npc = NpcManager.Npcs[mapNpc.Num];
-                if (npc.Behavior != Enums.NpcBehavior.Friendly && npc.Behavior != Enums.NpcBehavior.Shopkeeper && npc.Behavior != Enums.NpcBehavior.Scripted)
+                if (!npc.IsFriendly())
                 {
                     packet.AppendParameters("1");
                 }
