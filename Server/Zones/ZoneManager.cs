@@ -47,7 +47,10 @@ namespace Server.Zones
 
         public static void LoadZone(int zoneNum, PMDCP.DatabaseConnector.MySql.MySql database)
         {
-            var zone = new Zone();
+            var zone = new Zone()
+            {
+                Num = zoneNum
+            };
 
             var query = "SELECT name, " +
                         "is_open, " +
