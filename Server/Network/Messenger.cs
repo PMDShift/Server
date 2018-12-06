@@ -870,7 +870,17 @@ namespace Server.Network
                                         mapNpc.MinLevel = npcLevel;
                                         mapNpc.MaxLevel = npcLevel;
 
-                                        map.SpawnNpc(mapNpc, false, false);
+                                        var spawnedNpc = map.SpawnNpc(mapNpc, false, false);
+
+                                        if (spawnedNpc != null)
+                                        {
+                                            spawnedNpc.MaxHPBonus = 250;
+                                            spawnedNpc.SpeedBuff = 3;
+                                            spawnedNpc.SpDefBuff = 3;
+                                            spawnedNpc.DefenseBuff = 3;
+                                            spawnedNpc.SpAtkBuff = 3;
+                                            spawnedNpc.HP = spawnedNpc.MaxHP;
+                                        }
                                     }
                                 }
                             }

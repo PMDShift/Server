@@ -345,16 +345,16 @@ namespace Server.Maps
             return false;
         }
 
-        public void SpawnNpc(MapNpcPreset npc)
+        public MapNpc SpawnNpc(MapNpcPreset npc)
         {
-            SpawnNpc(npc, false);
+            return SpawnNpc(npc, false);
         }
 
-        public void SpawnNpc(MapNpcPreset npc, bool checkSight) {
-            SpawnNpc(npc, checkSight, true);
+        public MapNpc SpawnNpc(MapNpcPreset npc, bool checkSight) {
+            return SpawnNpc(npc, checkSight, true);
         }
 
-        public void SpawnNpc(MapNpcPreset npc, bool checkSight, bool checkZones)
+        public MapNpc SpawnNpc(MapNpcPreset npc, bool checkSight, bool checkZones)
         {
             int NPCNum = 0;
             int X = 0;
@@ -366,7 +366,7 @@ namespace Server.Maps
 
             if (npcSlot < 0 || npcSlot >= Constants.MAX_MAP_NPCS)
             {
-                return;
+                return null;
             }
 
             NPCNum = npc.NpcNum;
@@ -525,8 +525,12 @@ namespace Server.Maps
                     Scripting.ScriptManager.InvokeFunction("OnNpcSpawn", MapManager.RetrieveActiveMap(MapID), npc, ActiveNpc[npcSlot], hitlist);
 
                     PacketHitList.MethodEnded(ref hitlist);
-                }
+
+                    return ActiveNpc[npcSlot];
+                } 
             }
+
+            return null;
         }
 
 
