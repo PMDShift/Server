@@ -7,6 +7,7 @@ using DataManager.Players;
 using Discord.Commands;
 using Discord.WebSocket;
 using Server.Database;
+using Server.Reviews;
 using Server.Zones;
 
 namespace Server.Discord.Commands
@@ -39,21 +40,11 @@ namespace Server.Discord.Commands
 
             responseBuilder.AppendLine();
 
-            using (var dbConnection = new DatabaseConnection(DatabaseID.Data))
-            {
-                var zoneResources = new List<ZoneResource>();
-                zoneResources.AddRange(Dungeons.DungeonManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(Items.ItemManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(Maps.MapManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(Npcs.NpcManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(RDungeons.RDungeonManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(Shops.ShopManager.LoadZoneResources(dbConnection.Database, zoneID));
-                zoneResources.AddRange(Stories.StoryManager.LoadZoneResources(dbConnection.Database, zoneID));
+            var zoneResources = zone.LoadResources();
 
-                responseBuilder.AppendLine("**Resources:**");
-                responseBuilder.AppendLine();
-                responseBuilder.Append(GenerateResourceListing(zoneResources));
-            }
+            responseBuilder.AppendLine("**Resources:**");
+            responseBuilder.AppendLine();
+            responseBuilder.Append(GenerateResourceListing(zoneResources));
 
             await Context.Channel.SendMessageAsync(responseBuilder.ToString());
         }
@@ -235,6 +226,38 @@ namespace Server.Discord.Commands
             ZoneManager.SaveZone(zoneID);
 
             await Context.Channel.SendMessageAsync($"The zone has been renamed to `{zone.Name}`!");
+        }
+
+        [Command("review")]
+        [Summary("Review a zone.")]
+        public async Task ReviewZoneAsync(int zoneID)
+        {
+            if (!ZoneManager.Zones.Zones.ContainsKey(zoneID))
+            {
+                await Context.Channel.SendMessageAsync("Invalid zone id specified.");
+                return;
+            }
+
+            if (await ZoneSupport.IsUserLeader(Context, zoneID, Context.User) == false)
+            {
+                await Context.Channel.SendMessageAsync("You are not a leader of this zone.");
+                return;
+            }
+
+            var reviewer = new Reviewer();
+
+            var review = reviewer.ReviewZone(zoneID);
+
+            var response = new StringBuilder();
+            response.AppendLine("**Items**");
+            foreach (var item in review.Items)
+            {
+                var itemName = Items.ItemManager.Items[item.Number].Name;
+
+                response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} on {item.Location.GetDescription()}");
+            }
+
+            await Context.Channel.SendMessageAsync(response.ToString());
         }
 
         [Command("enable")]
