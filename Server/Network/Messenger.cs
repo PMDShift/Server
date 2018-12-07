@@ -2427,11 +2427,9 @@ namespace Server.Network
 
         public static void SendShopMenu(Client client, int shopNum)
         {
-            if (Shops.ShopManager.Shops[shopNum].JoinSay.Trim() != "")
-            {
-                PlayerMsg(client, Shops.ShopManager.Shops[shopNum].JoinSay.Trim(), Color.Yellow);
-            }
-            SendDataTo(client, TcpPacket.CreatePacket("openshop"));
+            var joinSay = Shops.ShopManager.Shops[shopNum].JoinSay.Trim();
+
+            SendDataTo(client, TcpPacket.CreatePacket("openshop", joinSay));
         }
 
         public static void SendRecallMenu(Client client, bool earlierEvo)
