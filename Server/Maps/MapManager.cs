@@ -1215,7 +1215,7 @@ namespace Server.Maps
         {
             var results = new List<ZoneResource>();
 
-            var query = "SELECT MapID, Name FROM map_data WHERE ZoneID = " + zoneID;
+            var query = "SELECT MapID, Name FROM map_data WHERE ZoneID = " + zoneID + " AND MapID LIKE 's%'";
 
             foreach (var row in database.RetrieveRowsEnumerable(query))
             {
