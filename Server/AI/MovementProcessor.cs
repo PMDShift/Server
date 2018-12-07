@@ -844,14 +844,6 @@ namespace Server.AI
                 // Check for shop
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.Shop)
                 {
-                    if (map.Tile[player.X, player.Y].Data1 > 0)
-                    {
-                        Messenger.SendShopMenu(client, map.Tile[player.X, player.Y].Data1);
-                    }
-                    else
-                    {
-                        Messenger.PlayerMsg(client, "There is no shop here.", Text.BrightRed);
-                    }
                     PacketBuilder.AppendPlayerLock(client, hitlist, false);
                     PacketHitList.MethodEnded(ref hitlist);
                     return false;
