@@ -3101,7 +3101,8 @@ namespace Server.Network
                  NpcManager.Npcs[NPCNum].SpawnsAtNight.ToIntString(),
                  ((int)NpcManager.Npcs[NPCNum].SpawnDirection).ToString(),
                  ((int)NpcManager.Npcs[NPCNum].SpawnWeather).ToString(),
-                 NpcManager.Npcs[NPCNum].Story.ToString()
+                 NpcManager.Npcs[NPCNum].Story.ToString(),
+                 NpcManager.Npcs[NPCNum].Shop.ToString()
              );
 
             for (int i = 0; i < NpcManager.Npcs[NPCNum].Moves.Length; i++)

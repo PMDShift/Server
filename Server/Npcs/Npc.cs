@@ -55,6 +55,7 @@ namespace Server.Npcs
         public Enums.Weather SpawnWeather { get; set; }
 
         public int Story { get; set; }
+        public int Shop { get; set; }
 
         public Npc()
         {

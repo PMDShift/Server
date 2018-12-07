@@ -94,7 +94,8 @@ namespace Server.Npcs
                 "zone_id, " +
                 "spawn_direction, " +
                 "spawn_weather, " +
-                "story " +
+                "story, " +
+                "shop " +
                 "FROM npc WHERE npc.num = \'" + npcNum + "\'";
 
             DataColumnCollection row = database.RetrieveRow(query);
@@ -123,6 +124,7 @@ namespace Server.Npcs
                 npcs[npcNum].SpawnDirection = (Enums.Direction)row["spawn_direction"].ValueString.ToInt();
                 npcs[npcNum].SpawnWeather = (Enums.Weather)row["spawn_weather"].ValueString.ToInt();
                 npcs[npcNum].Story = row["story"].ValueString.ToInt();
+                npcs[npcNum].Shop = row["shop"].ValueString.ToInt();
             }
 
             query = "SELECT drop_num, " +
@@ -200,7 +202,8 @@ namespace Server.Npcs
                     database.CreateColumn(false, "zone_id", npcs[npcNum].ZoneID.ToString()),
                     database.CreateColumn(false, "spawn_direction", ((int)npcs[npcNum].SpawnDirection).ToString()),
                     database.CreateColumn(false, "spawn_weather", ((int)npcs[npcNum].SpawnWeather).ToString()),
-                    database.CreateColumn(false, "story", npcs[npcNum].Story.ToString())
+                    database.CreateColumn(false, "story", npcs[npcNum].Story.ToString()),
+                    database.CreateColumn(false, "shop", npcs[npcNum].Shop.ToString())
                 });
 
                 for (int i = 0; i < npcs[npcNum].Drops.Length; i++)

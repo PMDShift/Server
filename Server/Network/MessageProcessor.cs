@@ -3604,8 +3604,9 @@ namespace Server.Network
                             npc.SpawnDirection = (Enums.Direction)parse[16].ToInt();
                             npc.SpawnWeather = (Enums.Weather)parse[17].ToInt();
                             npc.Story = parse[18].ToInt();
+                            npc.Shop = parse[19].ToInt();
 
-                            int z = 19;
+                            int z = 20;
                             // Load npc moves
                             for (int i = 0; i < npc.Moves.Length; i++)
                             {

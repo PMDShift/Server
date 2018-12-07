@@ -1033,21 +1033,33 @@ namespace Server.Players
                     }
                     else if (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Story)
                     {
-                        var npcObject = Npcs.NpcManager.Npcs[npc.Num];
+                        if (setup.moveIndex == -1)
+                        {
+                            var npcObject = Npcs.NpcManager.Npcs[npc.Num];
 
-                        var storyChapter = npcObject.Story - 1;
-                        if (storyChapter <= -1 || owner.Player.GetStoryState(storyChapter))
-                        {
-                            Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory());
-                        } else
-                        {
-                            if (owner.Player.GetClientEdition() == Constants.ALTERNATE_CLIENT_EDITION)
+                            var storyChapter = npcObject.Story - 1;
+                            if (storyChapter <= -1 || owner.Player.GetStoryState(storyChapter))
                             {
-                                Stories.StoryManager.PlayStory(owner, storyChapter);
-                            } else
-                            {
-                                Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateInvalidClientStory());
+                                Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory());
                             }
+                            else
+                            {
+                                if (owner.Player.GetClientEdition() == Constants.ALTERNATE_CLIENT_EDITION)
+                                {
+                                    Stories.StoryManager.PlayStory(owner, storyChapter);
+                                }
+                                else
+                                {
+                                    Stories.StoryManager.PlayStory(owner, Npcs.NpcManager.Npcs[npc.Num].CreateInvalidClientStory());
+                                }
+                            }
+                        }
+                    }
+                    else if (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Shopkeeper && Npcs.NpcManager.Npcs[npc.Num].Shop > 0)
+                    {
+                        if (setup.moveIndex == -1)
+                        {
+                            Messenger.SendShopMenu(owner, Npcs.NpcManager.Npcs[npc.Num].Shop);
                         }
                     }
                     else if (!string.IsNullOrEmpty(Npcs.NpcManager.Npcs[npc.Num].AttackSay) && (Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Friendly || Npcs.NpcManager.Npcs[npc.Num].Behavior == Enums.NpcBehavior.Shopkeeper))
@@ -1055,7 +1067,7 @@ namespace Server.Players
                         if (setup.moveIndex == -1)
                         {
                             var story = Npcs.NpcManager.Npcs[npc.Num].CreateAttackSayStory();
-                           
+
                             Stories.StoryManager.PlayStory(owner, story);
                         }
                     }
