@@ -2804,10 +2804,11 @@ namespace Server.Network
                             }
 
                             map.YouTubeMusicID = parse[n + 22];
+                            map.Effect = (Enums.MapEffect)parse[n + 23].ToInt();
 
                             map.Tile = new TileCollection(map.BaseMap, map.MaxX, map.MaxY);
 
-                            n += 23;
+                            n += 24;
 
                             for (Y = 0; Y <= map.MaxY; Y++)
                             {

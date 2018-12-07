@@ -39,6 +39,7 @@ namespace DataManager.Maps
         public int ZoneID { get; set; }
 
         public string YouTubeMusicID { get; set; }
+        public int Effect { get; set; }
 
         public int Down {
             get;

@@ -34,7 +34,7 @@ namespace DataManager.Maps
                 "map_data.Darkness, map_data.HungerEnabled, map_data.RecruitmentEnabled, map_data.ExpEnabled, map_data.TimeLimit, " +
                 "map_data.MinNpcs, map_data.MaxNpcs, map_data.NpcSpawnTime, " +
                 "map_data.IsSandboxed, map_data.ZoneID, " +
-                "map_data.youtube_music_id, map_data.gameplay_mode " +
+                "map_data.youtube_music_id, map_data.gameplay_mode, map_data.effect " +
                 "FROM map_data " +
                 "JOIN map_general ON map_general.MapID = map_data.MapID " +
                 "JOIN map_switchovers ON map_switchovers.MapID = map_data.MapID " +
@@ -69,6 +69,7 @@ namespace DataManager.Maps
                     rawMap.ZoneID = Convert.ToInt32(row[counter++].Value);
                     rawMap.YouTubeMusicID = row[counter++].ValueString;
                     rawMap.GameplayMode = Convert.ToInt32(row[counter++].ValueString);
+                    rawMap.Effect = Convert.ToInt32(row[counter++].ValueString);
 
                     rawMap.Tile = new Tile[rawMap.MaxX + 1, rawMap.MaxY + 1];
                 } else {
@@ -649,7 +650,8 @@ namespace DataManager.Maps
                 database.CreateColumn(false, "IsSandboxed", rawMap.IsSandboxed.ToIntString()),
                 database.CreateColumn(false, "ZoneID", rawMap.ZoneID.ToString()),
                 database.CreateColumn(false, "youtube_music_id", rawMap.YouTubeMusicID),
-                database.CreateColumn(false, "gameplay_mode", rawMap.GameplayMode.ToString())
+                database.CreateColumn(false, "gameplay_mode", rawMap.GameplayMode.ToString()),
+                database.CreateColumn(false, "effect", rawMap.Effect.ToString())
             });
 
             // Save map switchovers

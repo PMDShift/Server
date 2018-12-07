@@ -316,6 +316,12 @@ namespace Server {
             Ashfall = 12
         }
 
+        public enum MapEffect
+        {
+            None = 0,
+            Petals = 1
+        }
+
         public enum Overlay {
             None = 0,
             Night

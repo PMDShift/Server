@@ -51,6 +51,12 @@ namespace Server.Maps
 
         #region Properties
 
+        public Enums.MapEffect Effect
+        {
+            get { return (Enums.MapEffect)rawMap.Effect; }
+            set { rawMap.Effect = (int)value; }
+        }
+
         public Enums.GameplayMode GameplayMode
         {
             get { return (Enums.GameplayMode)rawMap.GameplayMode; }
@@ -234,7 +240,8 @@ namespace Server.Maps
             if (ZoneID > 0)
             {
                 return ZoneManager.Zones[ZoneID].IsOpen;
-            } else
+            }
+            else
             {
                 return IsSandboxed;
             }

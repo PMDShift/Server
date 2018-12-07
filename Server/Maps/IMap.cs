@@ -40,6 +40,8 @@ namespace Server.Maps
         string YouTubeMusicID { get; set; }
         Enums.GameplayMode GameplayMode { get; set; }
 
+        Enums.MapEffect Effect { get; set; }
+
         TickCount ActivationTime
         {
             get;
