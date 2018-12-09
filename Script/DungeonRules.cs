@@ -936,6 +936,11 @@ namespace Script {
                 client.Player.MissionBoard.GenerateMission();
             }
 
+            if (client.Player.Map.IsZoneOrObjectSandboxed())
+            {
+                Main.RemoveSandboxedInventoryItems(client); 
+            }
+
             bool mission = client.Player.HandleMissionRewardDump();
             if (!mission)
             {

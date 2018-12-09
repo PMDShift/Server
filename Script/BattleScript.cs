@@ -9494,6 +9494,20 @@ namespace Script
 
         }
 
+        public static void RemoveSandboxedInventoryItems(Client client)
+        {
+            for (int i = 1; i <= client.Player.MaxInv; i++)
+            {
+                if (client.Player.Inventory[i].Num > 0)
+                {
+                    if (client.Player.Inventory[i].IsSandboxed)
+                    {
+                        client.Player.TakeItem(client.Player.Inventory[i].Num, client.Player.Inventory[i].Amount);
+                    }
+                }
+            }
+        }
+
         public static void OnNpcDeath(PacketHitList hitlist, ICharacter attacker, MapNpc npc)
         {
             try
