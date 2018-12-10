@@ -30,7 +30,7 @@ namespace Server.Reviews
 
             foreach (var dungeonItem in dungeonItems)
             {
-                var mergedDungeonItem = review.Items.Where(x => x.Number == dungeonItem.Number && x.Amount == dungeonItem.Number && x.Tag == dungeonItem.Tag).FirstOrDefault();
+                var mergedDungeonItem = review.Items.Where(x => x.Number == dungeonItem.Number && x.Amount == dungeonItem.Amount && x.Tag == dungeonItem.Tag).FirstOrDefault();
 
                 if (mergedDungeonItem == null)
                 {
