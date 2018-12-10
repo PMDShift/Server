@@ -24,7 +24,10 @@ namespace Server.Reviews
 
                 foreach (var item in floor.Items)
                 {
-                    dungeonItems.Add(new ReviewedItem(item.ItemNum, item.MaxAmount, item.Tag, item.AppearanceRate, new RDungeonFloorLocation(id, i)));
+                    dungeonItems.Add(new ReviewedItem(item.ItemNum, item.MaxAmount, item.Tag, item.AppearanceRate, new RDungeonFloorLocation(false, id, i))
+                    {
+                        Group = $"[{id}] `{rdungeon.DungeonName}`"
+                    });
                 }
             }
 

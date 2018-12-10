@@ -249,12 +249,26 @@ namespace Server.Discord.Commands
             var review = reviewer.ReviewZone(zoneID);
 
             var response = new StringBuilder();
-            response.AppendLine("**Items**");
-            foreach (var item in review.Items)
-            {
-                var itemName = Items.ItemManager.Items[item.Number].Name;
 
-                response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} ({item.AppearanceRate}%) on {item.Location.GetDescription()}");
+            foreach (var group in review.Items.GroupBy(x => x.Group))
+            {
+                if (!string.IsNullOrEmpty(group.Key))
+                {
+                    response.AppendLine($"**Items - {group.Key}**");
+                }
+                else
+                {
+                    response.AppendLine("**Items**");
+                }
+
+                foreach (var item in group)
+                {
+                    var itemName = Items.ItemManager.Items[item.Number].Name;
+
+                    response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} ({item.AppearanceRate}%) on {item.Location.GetDescription()}");
+                }
+
+                response.AppendLine();
             }
 
             foreach (var chunk in ChunksUpto(response.ToString(), 1999))

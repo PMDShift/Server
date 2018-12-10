@@ -6,6 +6,8 @@ namespace Server.Reviews
 {
     public class ReviewedItem
     {
+        public string Group { get; set; }
+
         public int Number { get; set; }
         public int Amount { get; set; }
         public double AppearanceRate { get; set; }
@@ -16,7 +18,7 @@ namespace Server.Reviews
         {
             this.Number = number;
             this.Amount = amount;
-            AppearanceRate = appearanceRate;
+            this.AppearanceRate = appearanceRate;
             this.Location = location;
         }
     }

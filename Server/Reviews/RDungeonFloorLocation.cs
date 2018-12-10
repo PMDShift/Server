@@ -7,24 +7,32 @@ namespace Server.Reviews
 {
     public class RDungeonFloorLocation : ILocation
     {
+        public bool DisplayDungeonName { get; }
         public int RDungeonIndex { get; set; }
         public HashSet<int> Floors { get; set; }
 
-        public RDungeonFloorLocation(int rdungeonIndex, int floor)
+        public RDungeonFloorLocation(bool displayDungeonName, int rdungeonIndex, int floor)
         {
             this.Floors = new HashSet<int>();
-
+            this.DisplayDungeonName = displayDungeonName;
             this.RDungeonIndex = rdungeonIndex;
+
             this.Floors.Add(floor);
         }
 
         public string GetDescription()
         {
-            var rdungeon = Server.RDungeons.RDungeonManager.RDungeons[RDungeonIndex];
-
             var floorsMessage = string.Join(", ", Floors.Select(x => x + 1));
 
-            return $"RDungeon [{RDungeonIndex + 1}] `{rdungeon.DungeonName}` Floors {floorsMessage}";
+            if (DisplayDungeonName)
+            {
+                var rdungeon = Server.RDungeons.RDungeonManager.RDungeons[RDungeonIndex];
+
+                return $"RDungeon [{RDungeonIndex + 1}] `{rdungeon.DungeonName}` Floors {floorsMessage}";
+            } else
+            {
+                return $"Floors {floorsMessage}";
+            }
         }
 
         public bool Equals(ILocation other)
