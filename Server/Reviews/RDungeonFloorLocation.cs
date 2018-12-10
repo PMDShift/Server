@@ -22,14 +22,27 @@ namespace Server.Reviews
 
         public string GetDescription()
         {
-            var floorsMessage = string.Join(", ", Floors.Select(x => x + 1));
+            // https://codereview.stackexchange.com/a/90074
+            var processedFloors = Floors.Select(x => x + 1)
+                                        .Select((n, i) => new { number = n, group = n - i })
+                                        .GroupBy(n => n.group)
+                                        .Select(g =>
+                                            g.Count() >= 3 ?
+                                              g.First().number + "-" + g.Last().number
+                                            :
+                                              String.Join(", ", g.Select(x => x.number))
+                                        )
+                                        .ToList();
+
+            var floorsMessage = string.Join(", ", processedFloors);
 
             if (DisplayDungeonName)
             {
                 var rdungeon = Server.RDungeons.RDungeonManager.RDungeons[RDungeonIndex];
 
                 return $"RDungeon [{RDungeonIndex + 1}] `{rdungeon.DungeonName}` Floors {floorsMessage}";
-            } else
+            }
+            else
             {
                 return $"Floors {floorsMessage}";
             }
