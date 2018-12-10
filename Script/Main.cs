@@ -71,57 +71,47 @@ namespace Script
             {
                 // Called when a player joins the game
 
-                if (Ranks.IsDisallowed(client, Enums.Rank.Monitor))
+                for (int i = 1; i <= client.Player.MaxInv; i++)
                 {
-                    for (int i = 1; i <= client.Player.MaxInv; i++)
+                    if (client.Player.Inventory[i].Amount >= 1000 && client.Player.Inventory[i].Num != 1)
                     {
-                        if (client.Player.Inventory[i].Amount >= 1000 && client.Player.Inventory[i].Num != 1)
-                        {
-                            Messenger.AdminMsg("[Staff] " + client.Player.Name + " has " + client.Player.Inventory[i].Amount + " " + ItemManager.Items[client.Player.Inventory[i].Num].Name + " in their inventory!", Text.BrightRed);
-                        }
-                        if (ItemIllegal(client.Player.Inventory[i].Num) == true)
-                        {
-                            Messenger.AdminMsg("[Staff] " + client.Player.Name + " has an illegal item in their inventory! (" + ItemManager.Items[client.Player.Inventory[i].Num].Name + ")", Text.BrightRed);
-                            client.Player.TakeItem(client.Player.Inventory[i].Num, client.Player.Inventory[i].Amount);
-                        }
+                        Messenger.AdminMsg("[Staff] " + client.Player.Name + " has " + client.Player.Inventory[i].Amount + " " + ItemManager.Items[client.Player.Inventory[i].Num].Name + " in their inventory!", Text.BrightRed);
                     }
-                    for (int i = 1; i <= client.Player.MaxBank; i++)
+                    if (ItemIllegal(client.Player.Inventory[i].Num) == true)
                     {
-                        if (client.Player.Bank[i].Amount >= 1000 && client.Player.Bank[i].Num != 1)
-                        {
-                            Messenger.AdminMsg("[Staff] " + client.Player.Name + " has " + client.Player.Bank[i].Amount + " " + ItemManager.Items[client.Player.Bank[i].Num].Name + " in their bank!", Text.BrightRed);
-                        }
-                        if (ItemIllegal(client.Player.Bank[i].Num) == true)
-                        {
-                            Messenger.AdminMsg("[Staff] " + client.Player.Name + " has an illegal item in their bank! (" + ItemManager.Items[client.Player.Bank[i].Num].Name + ")", Text.BrightRed);
-                            client.Player.TakeBankItem(i, client.Player.Bank[i].Amount); //this uses slot, amount
-                        }
+                        Messenger.AdminMsg("[Staff] " + client.Player.Name + " has an illegal item in their inventory! (" + ItemManager.Items[client.Player.Inventory[i].Num].Name + ")", Text.BrightRed);
+                        client.Player.TakeItem(client.Player.Inventory[i].Num, client.Player.Inventory[i].Amount);
                     }
-                    Messenger.MapMsg(client.Player.MapID, client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
-                    Messenger.AdminMsg(client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
-                    foreach (Client i in ClientManager.GetClients())
+                }
+                for (int i = 1; i <= client.Player.MaxBank; i++)
+                {
+                    if (client.Player.Bank[i].Amount >= 1000 && client.Player.Bank[i].Num != 1)
                     {
-                        if (i.Player.IsFriend(client.Player.Name) && i.Player.MapID != client.Player.MapID)
-                        {
-                            Messenger.PlayerMsg(i, client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
-                        }
+                        Messenger.AdminMsg("[Staff] " + client.Player.Name + " has " + client.Player.Bank[i].Amount + " " + ItemManager.Items[client.Player.Bank[i].Num].Name + " in their bank!", Text.BrightRed);
                     }
+                    if (ItemIllegal(client.Player.Bank[i].Num) == true)
+                    {
+                        Messenger.AdminMsg("[Staff] " + client.Player.Name + " has an illegal item in their bank! (" + ItemManager.Items[client.Player.Bank[i].Num].Name + ")", Text.BrightRed);
+                        client.Player.TakeBankItem(i, client.Player.Bank[i].Amount); //this uses slot, amount
+                    }
+                }
+                //Messenger.MapMsg(client.Player.MapID, client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
+
+                if (client.ClientEdition == Constants.ALTERNATE_CLIENT_EDITION)
+                {
+                    Messenger.GlobalMsg($"[Crow] {client.Player.Name} has joined {Settings.GameName}!", Text.BrightGreen);
                 }
                 else
                 {
-                    if (Ranks.IsDisallowed(client, Enums.Rank.Admin))
-                    {// && NetScript.GetPlayerName(client) != "Shockie") {
-                        Messenger.GlobalMsg("[" + GetRankName(client.Player.Access) + "] " + client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
-                    }
-                    else
-                    {
-                        Messenger.AdminMsg("[" + GetRankName(client.Player.Access) + "] " + client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
-                    }
-                    //string msg = DatabaseManager.OptionsDB.RetrieveSetting("Generic", "AdminMsg");
-                    //if (!string.IsNullOrEmpty(msg)) {
-                    //    Messenger.PlayerMsg(client, "Admin Msg: " + msg, Text.Cyan);
-                    //}
+                    Messenger.GlobalMsg($"{client.Player.Name} has joined {Settings.GameName}!", Text.BrightGreen);
                 }
+                //foreach (Client i in ClientManager.GetClients())
+                //{
+                //    if (i.Player.IsFriend(client.Player.Name) && i.Player.MapID != client.Player.MapID)
+                //    {
+                //        Messenger.PlayerMsg(i, client.Player.Name + " has joined " + Settings.GameName + "!", Text.BrightGreen);
+                //    }
+                //}
 
                 //for (int i = 0; i < NetScript.GetMaxPlayers(); i++) {
                 //if (NetScript.IsPlaying(i)) {
