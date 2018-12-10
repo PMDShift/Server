@@ -238,7 +238,8 @@ namespace Server {
             ChangePlayerDir = 32,
             PadlockChapter = 33,
             ExitStory = 34,
-            HasInventoryItem = 35
+            HasInventoryItem = 35,
+            PlayerSay = 36
         }
 
         public enum ItemType {
