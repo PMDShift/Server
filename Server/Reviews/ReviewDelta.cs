@@ -18,7 +18,7 @@ namespace Server.Reviews
         {
             foreach (var otherItem in reviewDelta.Items)
             {
-                var matchingItem = Items.Where(x => x.Number == otherItem.Number && x.Location.Equals(otherItem.Location)).FirstOrDefault();
+                var matchingItem = Items.Where(x => x.Number == otherItem.Number && x.AppearanceRate == otherItem.AppearanceRate && x.Location.Equals(otherItem.Location)).FirstOrDefault();
 
                 if (matchingItem == null)
                 {

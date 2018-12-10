@@ -254,7 +254,7 @@ namespace Server.Discord.Commands
             {
                 var itemName = Items.ItemManager.Items[item.Number].Name;
 
-                response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} on {item.Location.GetDescription()}");
+                response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} ({item.AppearanceRate}%) on {item.Location.GetDescription()}");
             }
 
             await Context.Channel.SendMessageAsync(response.ToString());

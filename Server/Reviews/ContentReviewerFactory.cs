@@ -13,6 +13,10 @@ namespace Server.Reviews
             {
                 case ZoneResourceType.Maps:
                     return new MapContentReviewer();
+                case ZoneResourceType.RDungeons:
+                    return new RDungeonContentReviewer();
+                case ZoneResourceType.NPCs:
+                    return new NPCContentReviewer();
                 default:
                     return null;
             }

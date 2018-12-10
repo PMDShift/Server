@@ -26,7 +26,7 @@ namespace Server.Reviews
                     {
                         case Enums.TileType.Item:
                             {
-                                review.Items.Add(new ReviewedItem(tile.Data1, tile.Data2, tile.String2, new MapLocation(id, x, y)));
+                                review.Items.Add(new ReviewedItem(tile.Data1, tile.Data2, tile.String2, 100, new MapLocation(id, x, y)));
                             }
                             break;
                     }
