@@ -3524,7 +3524,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed)
+                            if (!Npcs.NpcManager.Npcs[n].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;
@@ -3570,7 +3570,7 @@ namespace Server.Network
                                 return;
                             }
 
-                            if (!Npcs.NpcManager.Npcs[n].IsSandboxed)
+                            if (!Npcs.NpcManager.Npcs[n].IsZoneOrObjectSandboxed())
                             {
                                 Messenger.PlayerMsg(client, "You can't edit this NPC (NPC not sandboxed).", Text.BrightRed);
                                 return;

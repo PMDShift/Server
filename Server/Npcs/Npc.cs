@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Server.Stories;
+using Server.Zones;
 
 namespace Server.Npcs
 {
@@ -123,6 +124,18 @@ namespace Server.Npcs
                     return true;
                 default:
                     return false;
+            }
+        }
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            }
+            else
+            {
+                return IsSandboxed;
             }
         }
     }
