@@ -257,7 +257,19 @@ namespace Server.Discord.Commands
                 response.AppendLine($"[{item.Number}] `{itemName}` x{item.Amount} ({item.AppearanceRate}%) on {item.Location.GetDescription()}");
             }
 
-            await Context.Channel.SendMessageAsync(response.ToString());
+            foreach (var chunk in ChunksUpto(response.ToString(), 1999))
+            {
+                await Context.Channel.SendMessageAsync(chunk);
+            }
+        }
+
+        // https://stackoverflow.com/a/1450889
+        IEnumerable<string> ChunksUpto(string str, int maxChunkSize)
+        {
+            for (int i = 0; i < str.Length; i += maxChunkSize)
+            {
+                yield return str.Substring(i, System.Math.Min(maxChunkSize, str.Length - i));
+            }
         }
 
         [Command("enable")]
