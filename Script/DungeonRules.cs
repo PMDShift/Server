@@ -888,11 +888,14 @@ namespace Script {
                 }
             if (joined) Messenger.SendActiveTeam(client);
 
-            if (DungeonManager.Dungeons[dungeonIndex].IsZoneOrObjectSandboxed())
+            if (dungeonIndex > -1)
             {
-                var level = (int)System.Math.Round(client.Player.Team.Where(x => x != null).Average(x => x.Level));
+                if (DungeonManager.Dungeons[dungeonIndex].IsZoneOrObjectSandboxed())
+                {
+                    var level = (int)System.Math.Round(client.Player.Team.Where(x => x != null).Average(x => x.Level));
 
-                client.Player.BeginTempStatMode(level, true);
+                    client.Player.BeginTempStatMode(level, true);
+                }
             }
         }
 

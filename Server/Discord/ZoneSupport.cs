@@ -88,7 +88,7 @@ namespace Server.Discord
                     }
                 }
             }
-                
+
             foreach (var user in context.Guild.Users)
             {
                 if (!validRoleUsers.Contains(user.Id))
