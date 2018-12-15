@@ -99,6 +99,8 @@ namespace Script
                 {
                     spawnedNpc.Unrecruitable = true;
                     spawnedNpc.Shiny = Server.Enums.Coloration.Shiny;
+
+                    PacketBuilder.AppendNpcSprite(map, hitlist, spawnedNpc.MapSlot);
                 }
             }
         }
@@ -135,6 +137,8 @@ namespace Script
                             {
                                 userScore.FoundSpecies.Add(npc.Species);
                             }
+
+                            Messenger.PlayerMsg(owner, "You got a point!", Text.BrightGreen);
                         }
                     }
                 }
