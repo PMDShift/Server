@@ -161,6 +161,7 @@ namespace Script
                                 }
 
                                 ActiveEvent.Start();
+                                Messenger.GlobalMsg($"{ActiveEvent.Name} has started!", Text.BrightGreen);
 
                                 foreach (var registeredClient in EventManager.GetRegisteredClients())
                                 {
@@ -174,6 +175,7 @@ namespace Script
                             if (Ranks.IsAllowed(client, Enums.Rank.Scripter))
                             {
                                 ActiveEvent.End();
+                                Messenger.GlobalMsg($"{ActiveEvent.Name} has finished!", Text.BrightGreen);
 
                                 foreach (var registeredClient in EventManager.GetRegisteredClients())
                                 {

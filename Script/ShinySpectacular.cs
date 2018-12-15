@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Server;
 using Server.Combat;
+using Server.Database;
 using Server.Events;
 using Server.Maps;
 using Server.Network;
 using Server.Players;
+using Server.Pokedex;
 
 namespace Script
 {
@@ -14,7 +17,23 @@ namespace Script
     {
         public class ShinySpectacularData : AbstractEventData
         {
-            public Dictionary<string, int> Scores { get; set; }
+            public Dictionary<string, UserScore> Scores { get; set; }
+
+            public ShinySpectacularData()
+            {
+                this.Scores = new Dictionary<string, UserScore>();
+            }
+        }
+
+        public class UserScore
+        {
+            public int Score { get; set; }
+            public HashSet<int> FoundSpecies { get; set; }
+
+            public UserScore()
+            {
+                this.FoundSpecies = new HashSet<int>();
+            }
         }
 
         public override string Identifier => "shinyspectacular";
@@ -31,11 +50,43 @@ namespace Script
             {
                 if (Data.Scores.TryGetValue(client.Player.CharID, out var score))
                 {
-                    rankings.Add(new EventRanking(client, score));
+                    rankings.Add(new EventRanking(client, score.Score));
                 }
             }
 
             return rankings;
+        }
+
+        public override string HandoutReward(EventRanking eventRanking, int position)
+        {
+            base.HandoutReward(eventRanking, position);
+
+            if (!Data.Scores.TryGetValue(eventRanking.Client.Player.CharID, out var userScore))
+            {
+                return "";
+            }
+
+            var availableSpecies = userScore.FoundSpecies.ToList();
+            var selectedIndex = Server.Math.Rand(0, availableSpecies.Count);
+            var selectedSpecies = Pokedex.GetPokemon(availableSpecies[selectedIndex]);
+
+            var recruit = new Recruit(eventRanking.Client);
+            //recruit.SpriteOverride = -1;
+            recruit.Level = 1;
+            recruit.Species = selectedSpecies.ID;
+            recruit.Sex = Pokedex.GetPokemonForm(selectedSpecies.ID).GenerateLegalSex();
+            recruit.Name = Pokedex.GetPokemon(selectedSpecies.ID).Name;
+            recruit.Shiny = Enums.Coloration.Shiny;
+            recruit.NpcBase = 0;
+
+            recruit.GenerateMoveset();
+
+            using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                eventRanking.Client.Player.AddToRecruitmentBank(dbConnection, recruit);
+            }
+
+            return $"a shiny {selectedSpecies.Name}";
         }
 
         public override void OnNpcSpawn(IMap map, MapNpcPreset npc, MapNpc spawnedNpc, PacketHitList hitlist)
@@ -44,8 +95,11 @@ namespace Script
 
             if (Data.Started)
             {
-                spawnedNpc.Unrecruitable = true;
-                spawnedNpc.Shiny = Server.Enums.Coloration.Shiny;
+                if (!map.IsZoneOrObjectSandboxed())
+                {
+                    spawnedNpc.Unrecruitable = true;
+                    spawnedNpc.Shiny = Server.Enums.Coloration.Shiny;
+                }
             }
         }
 
@@ -55,19 +109,32 @@ namespace Script
 
             if (Data.Started)
             {
-                if (attacker.CharacterType == Enums.CharacterType.Recruit)
+                var map = MapManager.RetrieveMap(attacker.MapID);
+                if (!map.IsZoneOrObjectSandboxed())
                 {
-                    var owner = ((Recruit)attacker).Owner;
-
-                    if (npc.Shiny == Enums.Coloration.Shiny)
+                    if (attacker.CharacterType == Enums.CharacterType.Recruit)
                     {
-                        if (Data.Scores.ContainsKey(owner.Player.CharID))
+                        var owner = ((Recruit)attacker).Owner;
+
+                        if (npc.Shiny == Enums.Coloration.Shiny)
                         {
-                            Data.Scores[owner.Player.CharID] = Data.Scores[owner.Player.CharID] + 1;
-                        }
-                        else
-                        {
-                            Data.Scores.Add(owner.Player.CharID, 1);
+                            if (Data.Scores.TryGetValue(owner.Player.CharID, out var userScore))
+                            {
+                                userScore.Score += 1;
+                            }
+                            else
+                            {
+                                userScore = new UserScore()
+                                {
+                                    Score = 1
+                                };
+                                Data.Scores.Add(owner.Player.CharID, userScore);
+                            }
+
+                            if (!userScore.FoundSpecies.Contains(npc.Species))
+                            {
+                                userScore.FoundSpecies.Add(npc.Species);
+                            }
                         }
                     }
                 }
