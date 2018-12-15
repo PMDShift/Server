@@ -25,6 +25,8 @@ namespace Server.Reviews
                 }
             }
 
+            review.NPCs.Add(new ReviewedNPC(id));
+
             return review;
         }
     }

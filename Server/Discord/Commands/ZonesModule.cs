@@ -271,6 +271,28 @@ namespace Server.Discord.Commands
                 response.AppendLine();
             }
 
+            foreach (var group in review.NPCs.GroupBy(x => x.Group))
+            {
+                if (!string.IsNullOrEmpty(group.Key))
+                {
+                    response.AppendLine($"**NPCs - {group.Key}**");
+                }
+                else
+                {
+                    response.AppendLine("**NPCs**");
+                }
+
+                foreach (var groupItem in group)
+                {
+                    var npc = Npcs.NpcManager.Npcs[groupItem.Number];
+                    var pokemon = Pokedex.Pokedex.GetPokemon(npc.Species);
+
+                    response.AppendLine($"[{groupItem.Number}] `{npc.Name}` ({pokemon.Name}) {npc.Behavior.ToString()}, RR: {npc.RecruitRate}");
+                }
+
+                response.AppendLine();
+            }
+
             foreach (var chunk in ChunksUpto(response.ToString(), 1999))
             {
                 await Context.Channel.SendMessageAsync(chunk);
