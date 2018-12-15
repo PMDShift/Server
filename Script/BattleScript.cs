@@ -9515,6 +9515,11 @@ namespace Script
                 // Called when a npc faints
                 PacketHitList.MethodStart(ref hitlist);
 
+                if (ActiveEvent != null)
+                {
+                    ActiveEvent.OnNpcDeath(hitlist, attacker, npc);
+                }
+
                 hitlist.AddPacketToMap(MapManager.RetrieveActiveMap(npc.MapID), PacketBuilder.CreateBattleMsg(npc.Name + " fainted!", Text.WhiteSmoke), npc.X, npc.Y, 10);
 
                 //aftermath
@@ -9603,15 +9608,15 @@ namespace Script
                 {
                     var owner = ((Recruit)attacker).Owner;
 
-                    for (int i = 0; i < client.Player.JobList.JobList.Count; i++)
+                    for (int i = 0; i < owner.Player.JobList.JobList.Count; i++)
                     {
-                        var job = client.Player.JobList.JobList[i];
+                        var job = owner.Player.JobList.JobList[i];
 
                         if (job.Mission.MissionType == Enums.MissionType.Outlaw && job.Accepted == Enums.JobStatus.Taken && Generator.IsGoalMap(job.Mission, map))
                         {
                             if (job.Mission.Data1 == npc.Num)
                             {
-                                client.Player.HandleMissionComplete(i);
+                                owner.Player.HandleMissionComplete(i);
                                 break;
                             }
                         }

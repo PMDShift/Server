@@ -85,6 +85,12 @@ namespace Server.Maps
             get { return rawNpc.Num; }
             set { rawNpc.Num = value; }
         }
+
+        public bool Unrecruitable
+        {
+            get { return rawNpc.Unrecruitable; }
+            set { rawNpc.Unrecruitable = value; }
+        }
         public int Sprite
         {
             get;

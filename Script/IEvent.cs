@@ -21,6 +21,8 @@ namespace Script
         void OnActivateMap(IMap map);
         void OnPickupItem(ICharacter character, int itemSlot, InventoryItem invItem);
         void OnDeath(Client client);
+        void OnNpcSpawn(IMap map, MapNpcPreset npc, MapNpc spawnedNpc, PacketHitList hitlist);
+        void OnNpcDeath(PacketHitList hitlist, ICharacter attacker, MapNpc npc);
 
         void Load(string data);
         string Save();

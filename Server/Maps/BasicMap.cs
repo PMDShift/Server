@@ -350,7 +350,8 @@ namespace Server.Maps
             return SpawnNpc(npc, false);
         }
 
-        public MapNpc SpawnNpc(MapNpcPreset npc, bool checkSight) {
+        public MapNpc SpawnNpc(MapNpcPreset npc, bool checkSight)
+        {
             return SpawnNpc(npc, checkSight, true);
         }
 
@@ -402,14 +403,16 @@ namespace Server.Maps
                 ActiveNpc[npcSlot].CalculateOriginalAbility();
                 //ActiveNpc[npcSlot].CalculateOriginalMobility();
 
-                if (Server.Math.Rand(0, 4096) < System.Math.Max(PlayersOnMap.Count, 5))
-                {
-                    ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
-                }
-
                 if (NpcManager.Npcs[NPCNum].IsFriendly())
                 {
                     if (NpcManager.Npcs[NPCNum].ShinyChance == 1)
+                    {
+                        ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
+                    }
+                }
+                else
+                {
+                    if (Server.Math.Rand(0, 4096) < System.Math.Max(PlayersOnMap.Count, 5))
                     {
                         ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
                     }
@@ -527,7 +530,7 @@ namespace Server.Maps
                     PacketHitList.MethodEnded(ref hitlist);
 
                     return ActiveNpc[npcSlot];
-                } 
+                }
             }
 
             return null;

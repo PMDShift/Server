@@ -2713,6 +2713,10 @@ namespace Server.Combat
                             skipRecruit = true;
                         }
                         if (NpcManager.Npcs[defender.Num].RecruitRate == 0) skipRecruit = true;
+                        if (defender.Unrecruitable)
+                        {
+                            skipRecruit = true;
+                        }
                         //if (((Recruit)setup.Attacker).Owner.Player.GetTeamSize() + Pokedex.Pokedex.GetPokemon(NpcManager.Npcs[defender.Num].Species).Size > 4) {
                         //    skipRecruit = true;
                         //}

@@ -1272,6 +1272,11 @@ namespace Script
         {
             try
             {
+                if (ActiveEvent != null)
+                {
+                    ActiveEvent.OnNpcSpawn(map, npc, spawnedNpc, hitlist);
+                }
+
                 if (spawnedNpc.Num == 0) return;
                 bool listed = false;
                 for (int i = 0; i < map.Npc.Count; i++)

@@ -14,6 +14,8 @@ namespace Script
             {
                 case "treasurehunt":
                     return new TreasureHuntEvent();
+                case "shinyspectacular":
+                    return new ShinySpectacular();
                 default:
                     return null;
             }

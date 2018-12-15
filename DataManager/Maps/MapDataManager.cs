@@ -230,7 +230,7 @@ namespace DataManager.Maps
                    "mapstate_activenpc_data.Level, mapstate_activenpc_data.NpcNumber, mapstate_activenpc_data.Sex, " +
                    "mapstate_activenpc_data.AttackTimer, mapstate_activenpc_data.PauseTimer, mapstate_activenpc_data.StatusAilment, " +
                    "mapstate_activenpc_data.StatusAilmentCounter, mapstate_activenpc_data.HPStepCounter, " +
-                   "mapstate_activenpc_data.Target, " +
+                   "mapstate_activenpc_data.Target, mapstate_activenpc_data.Unrecruitable, " +
                    "mapstate_activenpc_location.X, mapstate_activenpc_location.Y, mapstate_activenpc_location.Direction, " +
                    "mapstate_activenpc_stats.IQ, mapstate_activenpc_stats.HP, mapstate_activenpc_stats.HPRemainder, " +
                    "mapstate_activenpc_stats.MaxHPBonus, mapstate_activenpc_stats.AtkBonus, mapstate_activenpc_stats.DefBonus, " +
@@ -267,8 +267,9 @@ namespace DataManager.Maps
                     //npc.ConfusionStepCounter = Convert.ToInt32(row[counter++].Value);
                     //npc.SpeedLimit = Convert.ToByte(row[counter++].Value);
                     npc.Target = row[counter++].ValueString;
+                    npc.Unrecruitable = row[counter++].ValueString.ToBool();
                     //npc.ItemActive = row[counter++].ValueString.ToBool();
-                    
+
 
                     // Load location data
                     npc.X = Convert.ToInt32(row[counter++].Value);
@@ -446,7 +447,7 @@ namespace DataManager.Maps
             multiRowInsert.UpdateParameters("mapstate_activenpc_data", new string[] {"MapID", "MapNpcSlot", "Name", "Shiny", "Form", "Level",
                 "NpcNumber", "Sex",
                 "AttackTimer", "PauseTimer", "StatusAilment", "StatusAilmentCounter", "HPStepCounter",
-                "Target" });
+                "Target", "Unrecruitable" });
             for (int i = 0; i < mapDump.ActiveNpc.Length; i++) {
                 MapNpc npc = mapDump.ActiveNpc[i];
                 if (mapDump.ActiveNpc[i].Num > 0) {
@@ -459,6 +460,7 @@ namespace DataManager.Maps
                     multiRowInsert.AddColumnData(npc.AttackTimer, npc.PauseTimer, (int)npc.StatusAilment, npc.StatusAilmentCounter,
                         npc.HPStepCounter);
                     multiRowInsert.AddColumnData(npc.Target);
+                    multiRowInsert.AddColumnData(npc.Unrecruitable.ToIntString());
 
                     multiRowInsert.AddRowClosing();
                 }

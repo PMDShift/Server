@@ -13,12 +13,10 @@ using Server.Stories;
 
 namespace Script
 {
-    public class TreasureHuntEvent : IEvent
+    public class TreasureHuntEvent : AbstractEvent<TreasureHuntEvent.TreasureHuntData>
     {
-        public class TreasureHuntData
+        public class TreasureHuntData : AbstractEventData
         {
-            public bool Started { get; set; }
-
             public class TreasureData
             {
                 public string MapID { get; set; }
@@ -30,33 +28,18 @@ namespace Script
             public TreasureData[] EventItems = Array.Empty<TreasureData>();
         }
 
-        public string Identifier => "treasurehunt";
+        public override string Identifier => "treasurehunt";
 
-        public string Name => "Treasure Hunt";
+        public override string Name => "Treasure Hunt";
 
-        public string IntroductionMessage => "Treasure has been scattered throughout the overworld! Find it all!";
-
-        public TreasureHuntData Data { get; private set; }
+        public override string IntroductionMessage => "Treasure has been scattered throughout the overworld! Find it all!";
 
         public static readonly int TreasureItemID = 980;
 
-        public TreasureHuntEvent()
+        public override void ConfigurePlayer(Client client)
         {
-            this.Data = new TreasureHuntData();
-        }
+            base.ConfigurePlayer(client);
 
-        public void Load(string data)
-        {
-            this.Data = JsonConvert.DeserializeObject<TreasureHuntData>(data);
-        }
-
-        public string Save()
-        {
-            return JsonConvert.SerializeObject(Data);
-        }
-
-        public void ConfigurePlayer(Client client)
-        {
             if (Data.Started)
             {
                 if (Ranks.IsDisallowed(client, Enums.Rank.Scripter))
@@ -67,8 +50,10 @@ namespace Script
             }
         }
 
-        public void DeconfigurePlayer(Client client)
+        public override void DeconfigurePlayer(Client client)
         {
+            base.DeconfigurePlayer(client);
+
             client.Player.KillableAnywhere = false;
             client.Player.EndTempStatMode();
 
@@ -80,8 +65,10 @@ namespace Script
             PacketHitList.MethodEnded(ref packetHitList);
         }
 
-        public void OnActivateMap(IMap map)
+        public override void OnActivateMap(IMap map)
         {
+            base.OnActivateMap(map);
+
             foreach (var eventItem in Data.EventItems.Where(x => !x.Claimed && x.MapID == map.MapID))
             {
                 var existingItem = map.ActiveItem.Enumerate().Where(x => x.Num == TreasureItemID && x.X == eventItem.X && x.Y == eventItem.Y).FirstOrDefault();
@@ -93,8 +80,10 @@ namespace Script
             }
         }
 
-        public void OnPickupItem(ICharacter character, int itemSlot, InventoryItem invItem)
+        public override void OnPickupItem(ICharacter character, int itemSlot, InventoryItem invItem)
         {
+            base.OnPickupItem(character, itemSlot, invItem);
+
             if (character.CharacterType == Enums.CharacterType.Recruit)
             {
                 var player = ((Recruit)character).Owner.Player;
@@ -115,8 +104,10 @@ namespace Script
             }
         }
 
-        public void OnDeath(Client client)
+        public override void OnDeath(Client client)
         {
+            base.OnDeath(client);
+
             if (Data.Started)
             {
                 var itemCount = client.Player.HasItem(TreasureItemID);
@@ -147,15 +138,15 @@ namespace Script
             }
         }
 
-        public void Start()
+        public override void Start()
         {
+            base.Start();
+
             Data.EventItems = new TreasureHuntData.TreasureData[] {
                 new TreasureHuntData.TreasureData() { MapID = "s152", X = 21, Y = 15, Claimed = false },
                 new TreasureHuntData.TreasureData() { MapID = "s152", X = 20, Y = 15, Claimed = false },
                 new TreasureHuntData.TreasureData() { MapID = "s152", X = 22, Y = 15, Claimed = false },
             };
-
-            Data.Started = true;
 
             foreach (var client in EventManager.GetRegisteredClients())
             {
@@ -165,14 +156,9 @@ namespace Script
             ActivateTreasures();
         }
 
-        public void End()
+        public override void End()
         {
-            Data.Started = false;
-
-            foreach (var client in EventManager.GetRegisteredClients())
-            {
-                Messenger.PlayerWarp(client, 152, 15, 16);
-            }
+            base.End();
 
             foreach (var eventItem in Data.EventItems)
             {
@@ -215,55 +201,27 @@ namespace Script
             }
         }
 
-        public void AnnounceWinner()
+        public override void CleanPlayer(Client client)
         {
-            var rankings = new List<Tuple<Client, int>>();
+            base.CleanPlayer(client);
+
+            CleanupTreasures(client);
+        }
+
+        protected override List<EventRanking> DetermineRankings()
+        {
+            var rankings = new List<EventRanking>();
             foreach (var client in EventManager.GetRegisteredClients())
             {
                 var amount = client.Player.HasItem(TreasureItemID);
 
                 if (amount > 0)
                 {
-                    rankings.Add(Tuple.Create(client, amount));
+                    rankings.Add(new EventRanking(client, amount));
                 }
             }
 
-            var sortedRankings = rankings.OrderByDescending(x => x.Item2).ToList();
-
-            foreach (var client in EventManager.GetRegisteredClients())
-            {
-                CleanupTreasures(client);
-
-                var story = new Story();
-                var segment = StoryBuilder.BuildStory();
-                StoryBuilder.AppendSaySegment(segment, $"And the winners are...!", -1, 0, 0);
-
-                if (sortedRankings.Count >= 3)
-                {
-                    StoryBuilder.AppendSaySegment(segment, "In third place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[2].Item1.Player.DisplayName}, with a score of {sortedRankings[2].Item2}!", -1, 0, 0);
-                }
-
-                if (sortedRankings.Count >= 2)
-                {
-                    StoryBuilder.AppendSaySegment(segment, "In second place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[1].Item1.Player.DisplayName}, with a score of {sortedRankings[1].Item2}!", -1, 0, 0);
-                }
-
-                if (sortedRankings.Count >= 1)
-                {
-                    StoryBuilder.AppendSaySegment(segment, "In first place...", -1, 0, 0);
-                    StoryBuilder.AppendSaySegment(segment, $"{sortedRankings[0].Item1.Player.DisplayName}, with a score of {sortedRankings[0].Item2}!", -1, 0, 0);
-                }
-
-                if (sortedRankings.Count == 0)
-                {
-                    StoryBuilder.AppendSaySegment(segment, "...no one. Strange?", -1, 0, 0);
-                }
-
-                segment.AppendToStory(story);
-                StoryManager.PlayStory(client, story);
-            }
+            return rankings;
         }
     }
 }

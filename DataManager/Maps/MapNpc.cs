@@ -80,6 +80,8 @@ namespace DataManager.Maps
 
         #region Properties
 
+        public bool Unrecruitable { get; set; }
+
         //public string Ability1 {
         //    get;
         //    set;

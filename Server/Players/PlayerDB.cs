@@ -426,15 +426,16 @@ namespace Server.Players
             //    requestedRecruit.Moves[i].MaxPP = npc.Moves[i].MaxPP;
             //}
 
+            var displayName = requestedRecruit.Shiny == Enums.Coloration.Shiny ? $"*{requestedRecruit.Name}" : requestedRecruit.Name;
 
             Hunted = false;
             if (pokemon != null)
             {
-                Messenger.AskQuestion(client, "RecruitPokemon", requestedRecruit.Name + " wants to join your team! Will you accept it?", requestedRecruit.Species);
+                Messenger.AskQuestion(client, "RecruitPokemon", displayName + " wants to join your team! Will you accept it?", requestedRecruit.Species);
             }
             else
             {
-                Messenger.AskQuestion(client, "RecruitPokemon", requestedRecruit.Name + " wants to join your team! Will you accept it?", -1);
+                Messenger.AskQuestion(client, "RecruitPokemon", displayName + " wants to join your team! Will you accept it?", -1);
             }
         }
 
