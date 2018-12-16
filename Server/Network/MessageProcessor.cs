@@ -2066,6 +2066,64 @@ namespace Server.Network
                                 StorySegment story = client.Player.CurrentChapter.Segments[client.Player.CurrentSegment];
                                 switch (story.Action)
                                 {
+                                    case Enums.StoryAction.SpawnNPC:
+                                        {
+                                            var x = 0;
+                                            var y = 0;
+                                            var npc = 0;
+                                            var direction = Enums.Direction.Down;
+                                            var level = 1;
+                                            var buff = 0;
+
+                                            if (story.Parameters.ContainsKey("X"))
+                                            {
+                                                x = story.Parameters.GetValue("X").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("Y"))
+                                            {
+                                                y = story.Parameters.GetValue("Y").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("NPC"))
+                                            {
+                                                npc = story.Parameters.GetValue("NPC").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("Direction"))
+                                            {
+                                                direction = (Enums.Direction)story.Parameters.GetValue("Direction").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("Level"))
+                                            {
+                                                level = story.Parameters.GetValue("Level").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("Buff"))
+                                            {
+                                                buff = story.Parameters.GetValue("Buff").ToInt();
+                                            }
+
+                                            var mapNpcSpawn = new MapNpcPreset();
+
+                                            mapNpcSpawn.SpawnX = x;
+                                            mapNpcSpawn.SpawnY = y;
+
+                                            mapNpcSpawn.NpcNum = npc;
+
+                                            mapNpcSpawn.MinLevel = level;
+                                            mapNpcSpawn.MaxLevel = level;
+
+                                            var spawnedNpc = client.Player.Map.SpawnNpc(mapNpcSpawn);
+
+                                            if (spawnedNpc != null)
+                                            {
+                                                spawnedNpc.MaxHPBonus = 100 * buff;
+                                                spawnedNpc.SpeedBuff = buff;
+                                                spawnedNpc.SpDefBuff = buff;
+                                                spawnedNpc.DefenseBuff = buff;
+                                                spawnedNpc.SpAtkBuff = buff;
+                                                spawnedNpc.HP = spawnedNpc.MaxHP;
+                                            }
+
+                                        }
+                                        break;
                                     case Enums.StoryAction.RunScript:
                                         {
                                             Stories.StoryManager.RunScript(client, story.Parameters.GetValue("ScriptIndex").ToInt(),

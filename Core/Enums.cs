@@ -240,7 +240,8 @@ namespace Server {
             PadlockChapter = 33,
             ExitStory = 34,
             HasInventoryItem = 35,
-            PlayerSay = 36
+            PlayerSay = 36,
+            SpawnNPC = 37
         }
 
         public enum ItemType {
