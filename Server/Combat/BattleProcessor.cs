@@ -29,6 +29,8 @@ using Server.Exp;
 using Server.Moves;
 using PMDCP.Sockets;
 using Server.Players.Parties;
+using System.Linq;
+using Server.Stories;
 
 namespace Server.Combat
 {
@@ -2699,11 +2701,11 @@ namespace Server.Combat
                     Scripting.ScriptManager.InvokeSub("OnNpcDeath", setup.PacketStack, setup.Attacker, defender);
 
                     bool skipRecruit = false;
+                    var ownerPlayer = ((Recruit)setup.Attacker).Owner.Player;
+                    var owner = ((Recruit)setup.Attacker).Owner;
 
                     try
                     {
-                        var ownerPlayer = ((Recruit)setup.Attacker).Owner.Player;
-
                         if (!ownerPlayer.Map.RecruitEnabled)
                         {
                             skipRecruit = true;
@@ -2788,6 +2790,20 @@ namespace Server.Combat
                         Exp = (ulong)(Exp);
 
                         setup.ExpGained += Exp;
+                    }
+
+                    var npcObject = NpcManager.Npcs[defender.Num];
+                    if (npcObject.Behavior == Enums.NpcBehavior.Boss)
+                    {
+                        var otherBossesAlive = setup.DefenderMap.ActiveNpc.Enumerate().Where(x => x.Num > 0).Where(x => x != defender).Where(x => NpcManager.Npcs[x.Num].Behavior == Enums.NpcBehavior.Boss).Any();
+
+                        if (!otherBossesAlive)
+                        {
+                            if (npcObject.DeathStory > -1)
+                            {
+                                StoryManager.PlayStory(owner, npcObject.DeathStory);
+                            }
+                        }
                     }
                 }
                 else
