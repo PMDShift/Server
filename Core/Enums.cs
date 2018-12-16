@@ -159,7 +159,8 @@ namespace Server {
             Scripted = 5,
             FullyScriptedAI = 6,
             FleeOnsight = 7,
-            Story = 8
+            Story = 8,
+            Boss = 9
         }
 
         public enum Rank {

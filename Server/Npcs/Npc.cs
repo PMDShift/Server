@@ -58,6 +58,8 @@ namespace Server.Npcs
         public int Story { get; set; }
         public int Shop { get; set; }
 
+        public int DeathStory { get; set; }
+
         public Npc()
         {
             Name = "";

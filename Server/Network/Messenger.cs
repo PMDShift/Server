@@ -3102,7 +3102,8 @@ namespace Server.Network
                  ((int)NpcManager.Npcs[NPCNum].SpawnDirection).ToString(),
                  ((int)NpcManager.Npcs[NPCNum].SpawnWeather).ToString(),
                  NpcManager.Npcs[NPCNum].Story.ToString(),
-                 NpcManager.Npcs[NPCNum].Shop.ToString()
+                 NpcManager.Npcs[NPCNum].Shop.ToString(),
+                 NpcManager.Npcs[NPCNum].DeathStory.ToString()
              );
 
             for (int i = 0; i < NpcManager.Npcs[NPCNum].Moves.Length; i++)
