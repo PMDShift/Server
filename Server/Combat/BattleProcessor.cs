@@ -2801,7 +2801,7 @@ namespace Server.Combat
                         {
                             if (npcObject.DeathStory > -1)
                             {
-                                StoryManager.PlayStory(owner, npcObject.DeathStory);
+                                StoryManager.PlayStory(owner, npcObject.DeathStory - 1);
                             }
                         }
                     }
