@@ -2066,6 +2066,25 @@ namespace Server.Network
                                 StorySegment story = client.Player.CurrentChapter.Segments[client.Player.CurrentSegment];
                                 switch (story.Action)
                                 {
+                                    case Enums.StoryAction.UnblockTile:
+                                        {
+                                            var x = 0;
+                                            var y = 0;
+
+                                            if (story.Parameters.ContainsKey("X"))
+                                            {
+                                                x = story.Parameters.GetValue("X").ToInt();
+                                            }
+                                            if (story.Parameters.ContainsKey("Y"))
+                                            {
+                                                y = story.Parameters.GetValue("Y").ToInt();
+                                            }
+
+                                            client.Player.Map.SetTile(x, y, 0, 1, 3);
+                                            client.Player.Map.SetAttribute(x, y, Enums.TileType.Walkable, 0, 0, 0, "", "", "");
+                                            Messenger.SendTile(x, y, client.Player.Map);
+                                        }
+                                        break;
                                     case Enums.StoryAction.SpawnNPC:
                                         {
                                             var x = 0;
