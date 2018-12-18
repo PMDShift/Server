@@ -2222,7 +2222,33 @@ namespace Server.Network
                                                     Y = client.Player.Y;
                                                 }
                                             }
-                                            Messenger.PlayerWarp(client, story.Parameters.GetValue("MapID"), X, Y);
+
+                                            var mapID = story.Parameters.GetValue("MapID");
+
+                                            var localWarp = false;
+                                            if (client.Player.Map.MapType == Enums.MapType.Instanced)
+                                            {
+                                                string mapBase = MapManager.GenerateMapID(((InstancedMap)client.Player.Map).MapBase);
+
+                                                if (client.Player.MapID == mapBase)
+                                                {
+                                                    localWarp = true;
+                                                }
+                                            }
+
+                                            if (string.IsNullOrEmpty(mapID) || client.Player.MapID == mapID)
+                                            {
+                                                localWarp = true;
+                                            }
+
+                                            if (!localWarp)
+                                            {
+                                                Messenger.PlayerWarp(client, story.Parameters.GetValue("MapID"), X, Y);
+                                            }
+                                            else
+                                            {
+                                                Messenger.PlayerXYWarp(client, X, Y);
+                                            }
                                         }
                                         break;
                                 }
