@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using LibGit2Sharp;
 
@@ -10,7 +11,7 @@ namespace Server.Scripting
     {
         public static void PullChanges()
         {
-            var targetDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Scripts");
+            var targetDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
             if (!Directory.Exists(targetDirectory))
             {
                 Directory.CreateDirectory(targetDirectory);
