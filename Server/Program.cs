@@ -34,6 +34,9 @@ namespace Server
                 AppDomain.CurrentDomain.FirstChanceException += new EventHandler<System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs>(CurrentDomain_FirstChanceException);
                 AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+                Console.WriteLine("Pulling scripts...");
+                Scripting.ScriptRepoHelper.PullChanges();
+
                 ServerLoader.LoadServer();
 
                 while (true)
