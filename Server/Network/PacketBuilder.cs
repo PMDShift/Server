@@ -1954,8 +1954,9 @@ namespace Server.Network
                         //    mugshot = pokemon.Mugshot[assemblyRecruit.Shiny, assemblyRecruit.Sex];
                         //    sprite = pokemon.Sprite[assemblyRecruit.Shiny, assemblyRecruit.Sex];
                         //}
+                        var name = (Enums.Coloration)assemblyRecruit.Shiny == Enums.Coloration.Shiny ? $"*{assemblyRecruit.Name}" : assemblyRecruit.Name;
                         packet.AppendParameters(assemblyRecruit.RecruitIndex, species, (int)assemblyRecruit.Sex, assemblyRecruit.Form, (int)assemblyRecruit.Shiny, assemblyRecruit.Level);
-                        packet.AppendParameter(assemblyRecruit.Name);
+                        packet.AppendParameter(name);
                     }
                     else
                     {
@@ -1964,8 +1965,10 @@ namespace Server.Network
                         //int mugshot = Pokedex.Pokedex.GetPokemonForm(client.Player.Team[teamSlot].Species, client.Player.Team[teamSlot].Form).Mugshot[assemblyRecruit.Shiny, assemblyRecruit.Sex];
                         if (teamSlot > -1 && teamSlot < 4)
                         {
+                            var name = client.Player.Team[teamSlot].Shiny == Enums.Coloration.Shiny ? $"*{client.Player.Team[teamSlot].Name}" : client.Player.Team[teamSlot].Name;
+
                             packet.AppendParameters(assemblyRecruit.RecruitIndex.ToString(), client.Player.Team[teamSlot].Sprite.ToString(), ((int)client.Player.Team[teamSlot].Sex).ToString(),
-                                                        client.Player.Team[teamSlot].Form.ToString(), ((int)client.Player.Team[teamSlot].Shiny).ToString(), client.Player.Team[teamSlot].Level.ToString(), client.Player.Team[teamSlot].Name);
+                                                        client.Player.Team[teamSlot].Form.ToString(), ((int)client.Player.Team[teamSlot].Shiny).ToString(), client.Player.Team[teamSlot].Level.ToString(), name);
                         }
                     }
                 }
