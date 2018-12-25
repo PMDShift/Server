@@ -7,6 +7,7 @@ using DataManager.Players;
 using Discord.Commands;
 using Discord.WebSocket;
 using Server.Database;
+using Server.Discord.Preconditions;
 using Server.Reviews;
 using Server.Zones;
 
@@ -299,12 +300,24 @@ namespace Server.Discord.Commands
             }
         }
 
-        // https://stackoverflow.com/a/1450889
         IEnumerable<string> ChunksUpto(string str, int maxChunkSize)
         {
-            for (int i = 0; i < str.Length; i += maxChunkSize)
+            var lines = str.Split(Environment.NewLine);
+
+            var responseBuilder = new StringBuilder();
+
+            var currentChunkSize = 0;
+            foreach (var line in lines)
             {
-                yield return str.Substring(i, System.Math.Min(maxChunkSize, str.Length - i));
+                if (currentChunkSize + line.Length > maxChunkSize)
+                {
+                    yield return responseBuilder.ToString();
+                    responseBuilder.Clear();
+                }
+
+                responseBuilder.AppendLine(line);
+
+                currentChunkSize += line.Length;
             }
         }
 
@@ -374,7 +387,8 @@ namespace Server.Discord.Commands
 
         [Command("create")]
         [Summary("Create a new zone.")]
-        [RequireOwner]
+        [RequireContext(ContextType.Guild)]
+        [RequireZoneManagerRole]
         public async Task CreateAsync(string name)
         {
             var zone = new Zone()
@@ -386,11 +400,15 @@ namespace Server.Discord.Commands
             ZoneManager.CreateZone(zone);
 
             await Context.Channel.SendMessageAsync($"Zone #{zone.Num}, `{zone.Name}`, has been created!");
+
+            var user = (SocketGuildUser)Context.User;
+            await ZoneSupport.AddMember(Context, zone, user, Enums.ZoneAccess.Leader);
         }
 
         [Command("open")]
         [Summary("Opens a zone for editing.")]
-        [RequireOwner]
+        [RequireContext(ContextType.Guild)]
+        [RequireZoneManagerRole]
         public async Task OpenAsync(int id)
         {
             if (!ZoneManager.Zones.Zones.ContainsKey(id))
@@ -405,12 +423,13 @@ namespace Server.Discord.Commands
 
             ZoneManager.SaveZone(id);
 
-            await Context.Channel.SendMessageAsync($"Zone #{id} has been opened!");
+            await Context.Channel.SendMessageAsync($"Zone #{id} has been sandboxed!");
         }
 
         [Command("close")]
         [Summary("Closes a zone for editing.")]
-        [RequireOwner]
+        [RequireContext(ContextType.Guild)]
+        [RequireZoneManagerRole]
         public async Task CloseAsync(int id)
         {
             if (!ZoneManager.Zones.Zones.ContainsKey(id))
@@ -425,12 +444,13 @@ namespace Server.Discord.Commands
 
             ZoneManager.SaveZone(id);
 
-            await Context.Channel.SendMessageAsync($"Zone #{id} has been closed!");
+            await Context.Channel.SendMessageAsync($"Zone #{id} has been released!");
         }
 
         [Command("add")]
         [Summary("Adds a resource to a zone.")]
-        [RequireOwner]
+        [RequireContext(ContextType.Guild)]
+        [RequireZoneManagerRole]
         public async Task AddAsync(int id, ZoneResourceType resource, int amount)
         {
             if (!ZoneManager.Zones.Zones.ContainsKey(id))
@@ -453,7 +473,8 @@ namespace Server.Discord.Commands
 
         [Command("preset")]
         [Summary("Add a preset of resources to a zone.")]
-        [RequireOwner]
+        [RequireContext(ContextType.Guild)]
+        [RequireZoneManagerRole]
         public async Task AddPresetAsync(int id, ZonePresetType presetType)
         {
             var addedResources = new List<ZoneResource>();
@@ -592,50 +613,7 @@ namespace Server.Discord.Commands
                         break;
                 }
 
-                string characterID;
-                using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
-                {
-                    characterID = PlayerDataManager.FindLinkedDiscordCharacter(dbConnection.Database, user.Id);
-                }
-
-                if (string.IsNullOrEmpty(characterID))
-                {
-                    await Context.Channel.SendMessageAsync("That user has not linked their Discord account with their in-game account yet. Unable to add to the zone.");
-                    return;
-                }
-
-                bool foundMember = false;
-
-                var zoneMember = zone.Members.Where(x => x.CharacterID == characterID).FirstOrDefault();
-                if (zoneMember == null)
-                {
-                    zoneMember = new ZoneMember()
-                    {
-                        Access = accessValue,
-                        ZoneID = zoneID,
-                        CharacterID = characterID
-                    };
-
-                    zone.Members.Add(zoneMember);
-                }
-                else
-                {
-                    zoneMember.Access = accessValue;
-                    foundMember = true;
-                }
-
-                ZoneManager.SaveZone(zoneID);
-
-                await ZoneSupport.SyncUsersWithZoneRole(Context, zoneID);
-
-                if (!foundMember)
-                {
-                    await Context.Channel.SendMessageAsync($"User added as a `{accessValue}` to `{zone.Name}`!");
-                }
-                else
-                {
-                    await Context.Channel.SendMessageAsync($"User updated to be a `{accessValue}` in `{zone.Name}`!");
-                }
+                await ZoneSupport.AddMember(Context, zone, user, accessValue); 
             }
 
             [Command("remove")]

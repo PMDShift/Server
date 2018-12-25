@@ -44,6 +44,56 @@ namespace Server.Discord
             return (member.Access == Enums.ZoneAccess.Leader);
         }
 
+        public static async Task<bool> AddMember(SocketCommandContext context, Zone zone, SocketGuildUser user, Enums.ZoneAccess zoneAccess)
+        {
+            string characterID;
+            using (var dbConnection = new DatabaseConnection(DatabaseID.Players))
+            {
+                characterID = PlayerDataManager.FindLinkedDiscordCharacter(dbConnection.Database, user.Id);
+            }
+
+            if (string.IsNullOrEmpty(characterID))
+            {
+                await context.Channel.SendMessageAsync("That user has not linked their Discord account with their in-game account yet. Unable to add to the zone.");
+                return false;
+            }
+
+            bool foundMember = false;
+
+            var zoneMember = zone.Members.Where(x => x.CharacterID == characterID).FirstOrDefault();
+            if (zoneMember == null)
+            {
+                zoneMember = new ZoneMember()
+                {
+                    Access = zoneAccess,
+                    ZoneID = zone.Num,
+                    CharacterID = characterID
+                };
+
+                zone.Members.Add(zoneMember);
+            }
+            else
+            {
+                zoneMember.Access = zoneAccess;
+                foundMember = true;
+            }
+
+            ZoneManager.SaveZone(zone.Num);
+
+            await SyncUsersWithZoneRole(context, zone.Num);
+
+            if (!foundMember)
+            {
+                await context.Channel.SendMessageAsync($"`{user.Nickname}` added as a `{zoneAccess}` to `{zone.Name}`!");
+            }
+            else
+            {
+                await context.Channel.SendMessageAsync($"`{user.Nickname}` updated to be a `{zoneAccess}` in `{zone.Name}`!");
+            }
+
+            return true;
+        }
+
         public static async Task SyncUsersWithZoneRole(SocketCommandContext context, int zoneID, global::Discord.IRole role = null)
         {
             var roleName = $"zone-{zoneID}";

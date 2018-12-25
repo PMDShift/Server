@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Zones;
 // This file is part of Mystery Dungeon eXtended.
 
 // Copyright (C) 2015 Pikablu, MDX Contributors, PMU Staff
@@ -83,5 +84,17 @@ namespace Server.Stories
         }
 
         #endregion Properties
+
+        public bool IsZoneOrObjectSandboxed()
+        {
+            if (ZoneID > 0)
+            {
+                return ZoneManager.Zones[ZoneID].IsOpen;
+            }
+            else
+            {
+                return IsSandboxed;
+            }
+        }
     }
 }
