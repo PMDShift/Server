@@ -84,11 +84,11 @@ namespace Server.Discord
 
             if (!foundMember)
             {
-                await context.Channel.SendMessageAsync($"`{user.Nickname}` added as a `{zoneAccess}` to `{zone.Name}`!");
+                await context.Channel.SendMessageAsync($"`{user.Username}` added as a `{zoneAccess}` to `{zone.Name}`!");
             }
             else
             {
-                await context.Channel.SendMessageAsync($"`{user.Nickname}` updated to be a `{zoneAccess}` in `{zone.Name}`!");
+                await context.Channel.SendMessageAsync($"`{user.Username}` updated to be a `{zoneAccess}` in `{zone.Name}`!");
             }
 
             return true;

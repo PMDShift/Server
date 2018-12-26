@@ -27,7 +27,7 @@ namespace Server.Discord.Commands
                 var detailsBuilder = new StringBuilder();
                 detailsBuilder.AppendLine($"**Move Details (#{id})**");
                 detailsBuilder.AppendLine($"Name: `{move.Name}`");
-                detailsBuilder.AppendLine($"Sanboxed: {move.IsSandboxed}");
+                detailsBuilder.AppendLine($"Sandboxed: {move.IsSandboxed}");
                 detailsBuilder.AppendLine($"Under Review: {move.IsBeingReviewed}");
                 detailsBuilder.AppendLine($"Max PP: {move.MaxPP}");
                 detailsBuilder.AppendLine($"Effect Type: {move.EffectType}");

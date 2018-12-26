@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Server.Scripting
 {
     public static class ScriptRepoHelper
     {
+        [Conditional("RELEASE")]
         public static void PullChanges()
         {
             var targetDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");

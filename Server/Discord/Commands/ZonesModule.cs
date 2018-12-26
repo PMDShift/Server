@@ -33,7 +33,7 @@ namespace Server.Discord.Commands
             responseBuilder.AppendLine("**Zone Details**");
             responseBuilder.AppendLine();
             responseBuilder.AppendLine($"Name: `{zone.Name}`");
-            responseBuilder.AppendLine($"Open for Editing: {zone.IsOpen}");
+            responseBuilder.AppendLine($"Sandboxed: {zone.IsOpen}");
             responseBuilder.AppendLine();
 
             responseBuilder.AppendLine("**Options:**");
@@ -80,7 +80,7 @@ namespace Server.Discord.Commands
                 }
             }
 
-            await Context.Channel.SendMessageAsync(responseBuilder.ToString());
+            await Context.Channel.SendSplitMessageAsync(responseBuilder.ToString());
         }
 
         [Command("help")]
@@ -294,31 +294,7 @@ namespace Server.Discord.Commands
                 response.AppendLine();
             }
 
-            foreach (var chunk in ChunksUpto(response.ToString(), 1999))
-            {
-                await Context.Channel.SendMessageAsync(chunk);
-            }
-        }
-
-        IEnumerable<string> ChunksUpto(string str, int maxChunkSize)
-        {
-            var lines = str.Split(Environment.NewLine);
-
-            var responseBuilder = new StringBuilder();
-
-            var currentChunkSize = 0;
-            foreach (var line in lines)
-            {
-                if (currentChunkSize + line.Length > maxChunkSize)
-                {
-                    yield return responseBuilder.ToString();
-                    responseBuilder.Clear();
-                }
-
-                responseBuilder.AppendLine(line);
-
-                currentChunkSize += line.Length;
-            }
+            await Context.Channel.SendSplitMessageAsync(response.ToString());
         }
 
         [Command("enable")]
