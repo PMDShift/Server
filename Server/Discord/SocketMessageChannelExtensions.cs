@@ -10,7 +10,7 @@ namespace Server.Discord
     {
         public static async Task SendSplitMessageAsync(this ISocketMessageChannel channel, string message)
         {
-            foreach (var chunk in ChunksUpto(message, 50))
+            foreach (var chunk in ChunksUpto(message, 1998))
             {
                 await channel.SendMessageAsync(chunk);
             }
