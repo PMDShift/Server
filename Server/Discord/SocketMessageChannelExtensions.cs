@@ -12,6 +12,7 @@ namespace Server.Discord
         {
             foreach (var chunk in ChunksUpto(message, 1998))
             {
+                var length = chunk.Length;
                 await channel.SendMessageAsync(chunk);
             }
         }
@@ -22,18 +23,15 @@ namespace Server.Discord
 
             var responseBuilder = new StringBuilder();
 
-            var currentChunkSize = 0;
             foreach (var line in lines)
             {
-                if (currentChunkSize + line.Length > maxChunkSize)
+                if (responseBuilder.Length + line.Length > maxChunkSize)
                 {
                     yield return responseBuilder.ToString();
                     responseBuilder.Clear();
                 }
 
                 responseBuilder.AppendLine(line);
-
-                currentChunkSize += line.Length;
             }
 
             var leftoverResponse = responseBuilder.ToString();
