@@ -849,92 +849,6 @@ namespace Server.AI
                     return false;
                 }
 
-                // Check for guild shop
-                if (!map.IsZoneOrObjectSandboxed())
-                {
-                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
-                    {
-                        if (client.Player.GuildAccess > 0)
-                        {
-                            //manage or view guild
-                            Messenger.SendGuildMenu(client);
-                        }
-                        else
-                        {
-                            //register guild
-                            if (client.Player.ExplorerRank >= Guilds.GuildManager.MIN_RANK)
-                            {
-                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Guilds can be created for " + Guilds.GuildManager.CREATE_PRICE + " " + Items.ItemManager.Items[1].Name + " per founder.", Text.Yellow));
-                                Messenger.SendGuildCreation(client);
-                            }
-                            else
-                            {
-                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Register a guild here.  You can create a guild when your explorer rank is " + Guilds.GuildManager.MIN_RANK + " or higher.", Text.Green));
-                            }
-                        }
-                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                        PacketHitList.MethodEnded(ref hitlist);
-                        return false;
-                    }
-                }
-
-                // Check for Link Shop
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.LinkShop)
-                {
-                    int priceItem = map.Tile[player.X, player.Y].Data1;
-                    int priceAmount = map.Tile[player.X, player.Y].Data2;
-                    bool earlierEvo = (map.Tile[player.X, player.Y].Data3 == 1);
-                    Messenger.SendRecallMenu(client, earlierEvo);
-                    if (priceItem > 0)
-                    {
-                        if (Items.ItemManager.Items[priceItem].StackCap <= 0 && Items.ItemManager.Items[priceItem].Type != Enums.ItemType.Currency)
-                        {
-                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Moves will be taught in exchange for a " + Items.ItemManager.Items[priceItem].Name + ".", Text.Yellow));
-                        }
-                        else if (priceAmount > 0)
-                        {
-                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Moves will be taught in exchange for " + priceAmount + " " + Items.ItemManager.Items[priceItem].Name + ".", Text.Yellow));
-                        }
-                    }
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                // Check if player stepped on sprite changing tile
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.SpriteChange)
-                {
-                    if (player.GetActiveRecruit().Sprite == map.Tile[player.X, player.Y].Data1)
-                    {
-                        hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You already have this sprite!", Text.BrightRed));
-                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                        PacketHitList.MethodEnded(ref hitlist);
-                        return false;
-                    }
-                    else
-                    {
-                        if (map.Tile[player.X, player.Y].Data2 == 0)
-                        {
-                            hitlist.AddPacket(client, TcpPacket.CreatePacket("spritechange", "0"));
-                        }
-                        else
-                        {
-                            if (ItemManager.Items[map.Tile[player.X, player.Y].Data2].Type == Enums.ItemType.Currency)
-                            {
-                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("This sprite will cost you " + map.Tile[player.X, player.Y].Data3 + " " + ItemManager.Items[map.Tile[player.X, player.Y].Data2].Name.Trim() + "!", Text.Yellow));
-                            }
-                            else
-                            {
-                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("This sprite will cost you a " + ItemManager.Items[map.Tile[player.X, player.Y].Data2].Name.Trim() + "!", Text.Yellow));
-                            }
-                            hitlist.AddPacket(client, TcpPacket.CreatePacket("spritechange", "1"));
-                        }
-                    }
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
                 // Check if player stepped on notice tile
                 if (map.Tile[player.X, player.Y].Type == Enums.TileType.Notice)
                 {
@@ -967,144 +881,174 @@ namespace Server.AI
                     return false;
                 }
 
-                //Check if player stepped on a scripted tile
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Scripted)
+                // Check for guild shop
+                if (!map.IsZoneOrObjectSandboxed() && map.MapType != Enums.MapType.House)
                 {
-                    Scripting.ScriptManager.InvokeSub("ScriptedTile", map, client.Player.GetActiveRecruit(), map.Tile[player.X, player.Y].Data1, map.Tile[player.X, player.Y].String1, map.Tile[player.X, player.Y].String2, map.Tile[player.X, player.Y].String3, hitlist);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                // Check if player stepped on Bank tile
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Bank)
-                {
-                    Messenger.OpenBank(client);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Assembly)
-                {
-                    Messenger.SendAllRecruits(client);
-                    Messenger.OpenAssembly(client);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Evolution)
-                {
-                    EvolutionManager.StartEvolution(player);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.Story)
-                {
-                    StoryManager.PlayStory(client, map.Tile[player.X, player.Y].Data1);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.MissionBoard)
-                {
-                    Messenger.OpenMissionBoard(client);
-                    PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                    PacketHitList.MethodEnded(ref hitlist);
-                    return false;
-                }
-
-                if (map.Tile[player.X, player.Y].Type == Enums.TileType.RDungeonGoal)
-                {
-                    if (client.Player.PartyID == null)
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Guild)
                     {
-                        RDungeonMap rmap = map as RDungeonMap;
-                        if (rmap != null)
+                        if (client.Player.GuildAccess > 0)
                         {
-                            RDungeon dungeon = RDungeonManager.RDungeons[rmap.RDungeonIndex];
-                            int floor = rmap.RDungeonFloor;
-                            if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.NextFloor)
+                            //manage or view guild
+                            Messenger.SendGuildMenu(client);
+                        }
+                        else
+                        {
+                            //register guild
+                            if (client.Player.ExplorerRank >= Guilds.GuildManager.MIN_RANK)
                             {
-                                if (floor + 1 < dungeon.Floors.Count)
-                                {
-                                    player.WarpToRDungeon(rmap.RDungeonIndex, floor + 1);
-                                }
-                                else
-                                {
-                                    //client.Player.dungeonIndex = -1;
-                                    //client.Player.dungeonFloor = -1;
-                                    hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
-                                    client.Player.EndTempStatMode();
-                                    Messenger.PlayerWarp(client, Settings.Crossroads, Settings.StartX, Settings.StartY);
-                                }
-                            }
-                            else if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.Map)
-                            {
-                                //client.Player.dungeonIndex = -1;
-                                //client.Player.dungeonFloor = -1;
-                                Messenger.PlayerWarp(client, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Guilds can be created for " + Guilds.GuildManager.CREATE_PRICE + " " + Items.ItemManager.Items[1].Name + " per founder.", Text.Yellow));
+                                Messenger.SendGuildCreation(client);
                             }
                             else
                             {
-                                Scripting.ScriptManager.InvokeSub("RDungeonScriptGoal", client, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Register a guild here.  You can create a guild when your explorer rank is " + Guilds.GuildManager.MIN_RANK + " or higher.", Text.Green));
                             }
                         }
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                         PacketHitList.MethodEnded(ref hitlist);
                         return false;
                     }
-                    else
+
+                    // Check for Link Shop
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.LinkShop)
                     {
-                        bool warp = true;
-                        Party party = PartyManager.FindPlayerParty(client);
-                        IMap sourceMap = client.Player.Map;
-                        foreach (Client member in party.GetOnlineMemberClients())
+                        int priceItem = map.Tile[player.X, player.Y].Data1;
+                        int priceAmount = map.Tile[player.X, player.Y].Data2;
+                        bool earlierEvo = (map.Tile[player.X, player.Y].Data3 == 1);
+                        Messenger.SendRecallMenu(client, earlierEvo);
+                        if (priceItem > 0)
                         {
-                            if (/*!member.Player.Dead && */member.Player.MapID == client.Player.MapID && (member.Player.X != client.Player.X || member.Player.Y != client.Player.Y))
+                            if (Items.ItemManager.Items[priceItem].StackCap <= 0 && Items.ItemManager.Items[priceItem].Type != Enums.ItemType.Currency)
                             {
-                                warp = false;
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Moves will be taught in exchange for a " + Items.ItemManager.Items[priceItem].Name + ".", Text.Yellow));
+                            }
+                            else if (priceAmount > 0)
+                            {
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("Moves will be taught in exchange for " + priceAmount + " " + Items.ItemManager.Items[priceItem].Name + ".", Text.Yellow));
                             }
                         }
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
 
-                        if (warp)
+                    // Check if player stepped on sprite changing tile
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.SpriteChange)
+                    {
+                        if (player.GetActiveRecruit().Sprite == map.Tile[player.X, player.Y].Data1)
+                        {
+                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You already have this sprite!", Text.BrightRed));
+                            PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                            PacketHitList.MethodEnded(ref hitlist);
+                            return false;
+                        }
+                        else
+                        {
+                            if (map.Tile[player.X, player.Y].Data2 == 0)
+                            {
+                                hitlist.AddPacket(client, TcpPacket.CreatePacket("spritechange", "0"));
+                            }
+                            else
+                            {
+                                if (ItemManager.Items[map.Tile[player.X, player.Y].Data2].Type == Enums.ItemType.Currency)
+                                {
+                                    hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("This sprite will cost you " + map.Tile[player.X, player.Y].Data3 + " " + ItemManager.Items[map.Tile[player.X, player.Y].Data2].Name.Trim() + "!", Text.Yellow));
+                                }
+                                else
+                                {
+                                    hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("This sprite will cost you a " + ItemManager.Items[map.Tile[player.X, player.Y].Data2].Name.Trim() + "!", Text.Yellow));
+                                }
+                                hitlist.AddPacket(client, TcpPacket.CreatePacket("spritechange", "1"));
+                            }
+                        }
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    //Check if player stepped on a scripted tile
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Scripted)
+                    {
+                        Scripting.ScriptManager.InvokeSub("ScriptedTile", map, client.Player.GetActiveRecruit(), map.Tile[player.X, player.Y].Data1, map.Tile[player.X, player.Y].String1, map.Tile[player.X, player.Y].String2, map.Tile[player.X, player.Y].String3, hitlist);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    // Check if player stepped on Bank tile
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Bank)
+                    {
+                        Messenger.OpenBank(client);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Assembly)
+                    {
+                        Messenger.SendAllRecruits(client);
+                        Messenger.OpenAssembly(client);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Evolution)
+                    {
+                        EvolutionManager.StartEvolution(player);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Story)
+                    {
+                        StoryManager.PlayStory(client, map.Tile[player.X, player.Y].Data1);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.MissionBoard)
+                    {
+                        Messenger.OpenMissionBoard(client);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
+
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.RDungeonGoal)
+                    {
+                        if (client.Player.PartyID == null)
                         {
                             RDungeonMap rmap = map as RDungeonMap;
-                            foreach (Client member in party.GetOnlineMemberClients())
+                            if (rmap != null)
                             {
-                                if (member.Player.Map != sourceMap) continue;
-                                if (rmap != null)
+                                RDungeon dungeon = RDungeonManager.RDungeons[rmap.RDungeonIndex];
+                                int floor = rmap.RDungeonFloor;
+                                if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.NextFloor)
                                 {
-                                    RDungeon dungeon = RDungeonManager.RDungeons[rmap.RDungeonIndex];
-                                    int floor = rmap.RDungeonFloor;
-                                    if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.NextFloor)
+                                    if (floor + 1 < dungeon.Floors.Count)
                                     {
-                                        if (floor + 1 < dungeon.Floors.Count)
-                                        {
-                                            member.Player.WarpToRDungeon(rmap.RDungeonIndex, floor + 1);
-                                        }
-                                        else
-                                        {
-                                            //client.Player.dungeonIndex = -1;
-                                            //client.Player.dungeonFloor = -1;
-                                            hitlist.AddPacket(member, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
-                                            Messenger.PlayerWarp(member, Settings.Crossroads, Settings.StartX, Settings.StartY);
-                                        }
-                                    }
-                                    else if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.Map)
-                                    {
-                                        //client.Player.dungeonIndex = -1;
-                                        //client.Player.dungeonFloor = -1;
-                                        Messenger.PlayerWarp(member, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                        player.WarpToRDungeon(rmap.RDungeonIndex, floor + 1);
                                     }
                                     else
                                     {
                                         //client.Player.dungeonIndex = -1;
                                         //client.Player.dungeonFloor = -1;
-                                        Scripting.ScriptManager.InvokeSub("RDungeonScriptGoal", member, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                        hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
+                                        client.Player.EndTempStatMode();
+                                        Messenger.PlayerWarp(client, Settings.Crossroads, Settings.StartX, Settings.StartY);
                                     }
+                                }
+                                else if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.Map)
+                                {
+                                    //client.Player.dungeonIndex = -1;
+                                    //client.Player.dungeonFloor = -1;
+                                    Messenger.PlayerWarp(client, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                }
+                                else
+                                {
+                                    Scripting.ScriptManager.InvokeSub("RDungeonScriptGoal", client, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
                                 }
                             }
                             PacketBuilder.AppendPlayerLock(client, hitlist, false);
@@ -1113,66 +1057,122 @@ namespace Server.AI
                         }
                         else
                         {
-                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("All surviving players on the floor must be on the goal in order to continue.", Text.WhiteSmoke));
-                            PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                            PacketHitList.MethodEnded(ref hitlist);
-                            return false;
-                        }
-                    }
-                }
+                            bool warp = true;
+                            Party party = PartyManager.FindPlayerParty(client);
+                            IMap sourceMap = client.Player.Map;
+                            foreach (Client member in party.GetOnlineMemberClients())
+                            {
+                                if (/*!member.Player.Dead && */member.Player.MapID == client.Player.MapID && (member.Player.X != client.Player.X || member.Player.Y != client.Player.Y))
+                                {
+                                    warp = false;
+                                }
+                            }
 
-                for (int i = client.Player.ActiveGoalPoints.Count - 1; i >= 0; i--)
-                {
-                    bool missionComplete = false;
-                    if (player.X == client.Player.ActiveGoalPoints[i].GoalX && player.Y == client.Player.ActiveGoalPoints[i].GoalY)
-                    {
-                        switch (player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.MissionType)
-                        {
-                            case Enums.MissionType.Rescue:
+                            if (warp)
+                            {
+                                RDungeonMap rmap = map as RDungeonMap;
+                                foreach (Client member in party.GetOnlineMemberClients())
                                 {
-                                    missionComplete = true;
-                                }
-                                break;
-                            case Enums.MissionType.ItemRetrieval:
-                                {
-                                    int itemVal = player.HasItem(player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.Data1);
-                                    if (itemVal > 0)
+                                    if (member.Player.Map != sourceMap) continue;
+                                    if (rmap != null)
                                     {
-                                        player.TakeItem(player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.Data1, 1);
-                                        missionComplete = true;
-                                    }
-                                    else
-                                    {
-                                        missionComplete = false;
-                                        hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You've reached the target Pok\u00E9mon!  But you don't have the requested item...", Text.Grey));
-                                    }
-                                    //else {
-                                    //    missionComplete = false;
-                                    //    hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You don't have enough " + ItemManager.Items[player.ActiveMission.WonderMail.Data1].Name + "!", Text.BrightRed));
-                                    //}
-                                }
-                                break;
-                            case Enums.MissionType.Escort:
-                                {
-                                    if (player.IsInTeam(-2 - client.Player.ActiveGoalPoints[i].JobListIndex))
-                                    {
-                                        player.RemoveFromTeam(player.FindTeamSlot(-2 - client.Player.ActiveGoalPoints[i].JobListIndex));
-                                        missionComplete = true;
-                                    }
-                                    else
-                                    {
-                                        missionComplete = false;
-                                        hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You've reached the target Pok\u00E9mon!  But you don't have the escort with you...", Text.Grey));
+                                        RDungeon dungeon = RDungeonManager.RDungeons[rmap.RDungeonIndex];
+                                        int floor = rmap.RDungeonFloor;
+                                        if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.NextFloor)
+                                        {
+                                            if (floor + 1 < dungeon.Floors.Count)
+                                            {
+                                                member.Player.WarpToRDungeon(rmap.RDungeonIndex, floor + 1);
+                                            }
+                                            else
+                                            {
+                                                //client.Player.dungeonIndex = -1;
+                                                //client.Player.dungeonFloor = -1;
+                                                hitlist.AddPacket(member, PacketBuilder.CreateChatMsg("You have completed the dungeon!", Text.Yellow));
+                                                Messenger.PlayerWarp(member, Settings.Crossroads, Settings.StartX, Settings.StartY);
+                                            }
+                                        }
+                                        else if (dungeon.Floors[floor].GoalType == Enums.RFloorGoalType.Map)
+                                        {
+                                            //client.Player.dungeonIndex = -1;
+                                            //client.Player.dungeonFloor = -1;
+                                            Messenger.PlayerWarp(member, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                        }
+                                        else
+                                        {
+                                            //client.Player.dungeonIndex = -1;
+                                            //client.Player.dungeonFloor = -1;
+                                            Scripting.ScriptManager.InvokeSub("RDungeonScriptGoal", member, dungeon.Floors[floor].GoalMap, dungeon.Floors[floor].GoalX, dungeon.Floors[floor].GoalY);
+                                        }
                                     }
                                 }
-                                break;
+                                PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                                PacketHitList.MethodEnded(ref hitlist);
+                                return false;
+                            }
+                            else
+                            {
+                                hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("All surviving players on the floor must be on the goal in order to continue.", Text.WhiteSmoke));
+                                PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                                PacketHitList.MethodEnded(ref hitlist);
+                                return false;
+                            }
                         }
                     }
-                    if (missionComplete)
+
+                    for (int i = client.Player.ActiveGoalPoints.Count - 1; i >= 0; i--)
                     {
-                        client.Player.HandleMissionComplete(client.Player.ActiveGoalPoints[i].JobListIndex);
-                        client.Player.ActiveGoalPoints.RemoveAt(i);
-                        break;
+                        bool missionComplete = false;
+                        if (player.X == client.Player.ActiveGoalPoints[i].GoalX && player.Y == client.Player.ActiveGoalPoints[i].GoalY)
+                        {
+                            switch (player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.MissionType)
+                            {
+                                case Enums.MissionType.Rescue:
+                                    {
+                                        missionComplete = true;
+                                    }
+                                    break;
+                                case Enums.MissionType.ItemRetrieval:
+                                    {
+                                        int itemVal = player.HasItem(player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.Data1);
+                                        if (itemVal > 0)
+                                        {
+                                            player.TakeItem(player.JobList.JobList[client.Player.ActiveGoalPoints[i].JobListIndex].Mission.Data1, 1);
+                                            missionComplete = true;
+                                        }
+                                        else
+                                        {
+                                            missionComplete = false;
+                                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You've reached the target Pok\u00E9mon!  But you don't have the requested item...", Text.Grey));
+                                        }
+                                        //else {
+                                        //    missionComplete = false;
+                                        //    hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You don't have enough " + ItemManager.Items[player.ActiveMission.WonderMail.Data1].Name + "!", Text.BrightRed));
+                                        //}
+                                    }
+                                    break;
+                                case Enums.MissionType.Escort:
+                                    {
+                                        if (player.IsInTeam(-2 - client.Player.ActiveGoalPoints[i].JobListIndex))
+                                        {
+                                            player.RemoveFromTeam(player.FindTeamSlot(-2 - client.Player.ActiveGoalPoints[i].JobListIndex));
+                                            missionComplete = true;
+                                        }
+                                        else
+                                        {
+                                            missionComplete = false;
+                                            hitlist.AddPacket(client, PacketBuilder.CreateChatMsg("You've reached the target Pok\u00E9mon!  But you don't have the escort with you...", Text.Grey));
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        if (missionComplete)
+                        {
+                            client.Player.HandleMissionComplete(client.Player.ActiveGoalPoints[i].JobListIndex);
+                            client.Player.ActiveGoalPoints.RemoveAt(i);
+                            break;
+                        }
                     }
                 }
 
