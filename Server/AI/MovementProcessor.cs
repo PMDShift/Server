@@ -899,6 +899,14 @@ namespace Server.AI
                         PacketHitList.MethodEnded(ref hitlist);
                         return false;
                     }
+
+                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Evolution)
+                    {
+                        EvolutionManager.StartEvolution(player);
+                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
+                        PacketHitList.MethodEnded(ref hitlist);
+                        return false;
+                    }
                 }
 
                 // Check for guild shop
@@ -1002,14 +1010,7 @@ namespace Server.AI
                         PacketBuilder.AppendPlayerLock(client, hitlist, false);
                         PacketHitList.MethodEnded(ref hitlist);
                         return false;
-                    }
-                    if (map.Tile[player.X, player.Y].Type == Enums.TileType.Evolution)
-                    {
-                        EvolutionManager.StartEvolution(player);
-                        PacketBuilder.AppendPlayerLock(client, hitlist, false);
-                        PacketHitList.MethodEnded(ref hitlist);
-                        return false;
-                    }
+                    } 
 
                     if (map.Tile[player.X, player.Y].Type == Enums.TileType.MissionBoard)
                     {
