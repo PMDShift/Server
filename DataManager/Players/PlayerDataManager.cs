@@ -871,7 +871,7 @@ namespace DataManager.Players
             string query = "SELECT accounts.Email, characteristics.Name, characteristics.Access, characteristics.ActiveSlot, characteristics.PK, " +
                 "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " +
                 "characteristics.CanLinkDiscord, characteristics.LinkedDiscordId, " +
-                "characteristics.IsSandboxed, " +
+                "characteristics.IsSandboxed, characteristics.IdleMessage, " +
                 "expkit.AvailableModules, " +
                 "location.Map, location.X, location.Y, location.Direction, " +
                 "guild.GuildName, guild.GuildAccess, " +
@@ -904,6 +904,7 @@ namespace DataManager.Players
                 playerData.CanLinkDiscord = row["CanLinkDiscord"].ValueString.ToBool();
                 playerData.LinkedDiscordId = row["LinkedDiscordId"].ValueString.ToUlng();
                 playerData.IsSandboxed = row["IsSandboxed"].ValueString.ToBool();
+                playerData.IdleMessage = row["IdleMessage"].ValueString;
 
                 playerData.AvailableModules = row["AvailableModules"].ValueString;
 
@@ -1624,7 +1625,8 @@ namespace DataManager.Players
                 database.CreateColumn(false, "Dead", playerData.Dead.ToIntString()),
                 database.CreateColumn(false, "CanLinkDiscord", playerData.CanLinkDiscord.ToIntString()),
                 database.CreateColumn(false, "LinkedDiscordId", playerData.LinkedDiscordId.ToString()),
-                database.CreateColumn(false, "IsSandboxed", playerData.IsSandboxed.ToIntString())
+                database.CreateColumn(false, "IsSandboxed", playerData.IsSandboxed.ToIntString()),
+                database.CreateColumn(false, "IdleMessage", playerData.IdleMessage)
             });
         }
 

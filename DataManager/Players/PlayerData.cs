@@ -40,6 +40,8 @@ namespace DataManager.Players
         public bool CanLinkDiscord { get; set; }
         public ulong LinkedDiscordId { get; set; }
 
+        public string IdleMessage { get; set; }
+
         public bool IsSandboxed { get; set; }
 
         public string AvailableModules { get; set; }

@@ -1017,6 +1017,13 @@ namespace Server.Players
                             return;
                         }
                     }
+                    else
+                    {
+                        if (setup.moveIndex == -1)
+                        {
+                            Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
+                        }
+                    }
                 }
                 else if (i.CharacterType == Enums.CharacterType.MapNpc && (((MapNpc)i).Num <= 0 || ((MapNpc)i).HP <= 0))
                 {
