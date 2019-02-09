@@ -2208,6 +2208,12 @@ namespace Server.Combat
             bool hitsFoes = HitsFoes(setup.Move.TargetType);
             bool hitsAllies = HitsAllies(setup.Move.TargetType);
 
+            // Players can use their standard attack to "hit" allies - this will trigger an interaction
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit && setup.Move == MoveManager.StandardAttack)
+            {
+                hitsAllies = true;
+            }
+
             TargetCollection targets = MoveProcessor.GetTargetsInRange(setup.Move.RangeType, setup.Move.Range, setup.AttackerMap, setup.Attacker, setup.Attacker.X, setup.Attacker.Y, setup.Attacker.Direction, hitsFoes, hitsAllies, false);
 
             if (hitsFoes)

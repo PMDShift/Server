@@ -953,9 +953,14 @@ namespace Server.Players
             // Attack any players that are on the map
             foreach (ICharacter i in targets.Friends)
             {
-                if (i.CharacterType == Enums.CharacterType.Recruit && Ranks.IsAllowed(((Recruit)i).Owner, Enums.Rank.Monitor)
-                        && !((Recruit)i).Owner.Player.Hunted && !((Recruit)i).Owner.Player.Dead)
+                if (i.CharacterType == Enums.CharacterType.Recruit && !((Recruit)i).Owner.Player.Dead)
                 {
+                    var recruit = i as Recruit;
+
+                    if (setup.Move == MoveManager.StandardAttack)
+                    {
+                        Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
+                    }
                 }
                 else
                 {
@@ -1015,13 +1020,6 @@ namespace Server.Players
                         if (setup.Cancel)
                         {
                             return;
-                        }
-                    }
-                    else
-                    {
-                        if (setup.moveIndex == -1)
-                        {
-                            Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
                         }
                     }
                 }
