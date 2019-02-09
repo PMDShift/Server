@@ -2209,7 +2209,7 @@ namespace Server.Combat
             bool hitsAllies = HitsAllies(setup.Move.TargetType);
 
             // Players can use their standard attack to "hit" allies - this will trigger an interaction
-            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit && setup.Move == MoveManager.StandardAttack)
+            if (setup.Attacker.CharacterType == Enums.CharacterType.Recruit && setup.moveIndex == -1)
             {
                 hitsAllies = true;
             }

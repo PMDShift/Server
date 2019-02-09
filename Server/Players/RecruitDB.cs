@@ -957,7 +957,7 @@ namespace Server.Players
                 {
                     var recruit = i as Recruit;
 
-                    if (setup.Move == MoveManager.StandardAttack)
+                    if (setup.moveIndex == -1)
                     {
                         Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
                     }
