@@ -155,6 +155,16 @@ namespace Server.Players
                     }
                 }
             }
+
+            if (itemNum == 1)
+            {
+                if (PlayerData.Money >= amount)
+                {
+                    PlayerData.Money -= amount;
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -270,6 +280,14 @@ namespace Server.Players
             {
                 return false;
             }
+
+            if (itemNum == 1)
+            {
+                PlayerData.Money = amount;
+                Messenger.UpdateMoney(client);
+                return true;
+            }
+
             int i = FindInvSlot(itemNum, amount);
             if (i == -1)
             {
@@ -425,7 +443,15 @@ namespace Server.Players
                 {
                     if (ItemManager.Items[Inventory[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[i].Num].StackCap > 0)
                     {
-                        return Inventory[i].Amount;
+                        // Intercept for money
+                        if (Inventory[i].Num == 1)
+                        {
+                            return Inventory[i].Amount + PlayerData.Money;
+                        }
+                        else
+                        {
+                            return Inventory[i].Amount;
+                        }
                     }
                     else
                     {

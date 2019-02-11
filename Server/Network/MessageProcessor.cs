@@ -5463,6 +5463,58 @@ namespace Server.Network
                         break;
                     #endregion
                     #region Bank
+                    case "storemoney":
+                        {
+                            if (client.Player.Map.Tile[client.Player.X, client.Player.Y].Type == Enums.TileType.Bank)
+                            {
+                                var amount = parse[1].ToInt();
+
+                                if (amount <= 0)
+                                {
+                                    Messenger.StorageMessage(client, "You must deposit more than 0!");
+                                    return;
+                                }
+
+                                var currentAmount = client.Player.HasItem(1);
+                                if (amount > currentAmount)
+                                {
+                                    Messenger.StorageMessage(client, "You cant deposit more than you have!");
+                                    return;
+                                }
+
+                                client.Player.TakeItem(1, amount);
+                                client.Player.PlayerData.Savings += amount;
+
+                                Messenger.UpdateMoney(client);
+                            }
+                        }
+                        break;
+                    case "withdrawmoney":
+                        {
+                            if (client.Player.Map.Tile[client.Player.X, client.Player.Y].Type == Enums.TileType.Bank)
+                            {
+                                var amount = parse[1].ToInt();
+
+                                if (amount <= 0)
+                                {
+                                    Messenger.StorageMessage(client, "You must take more than 0!");
+                                    return;
+                                }
+
+                                var currentAmount = client.Player.PlayerData.Savings;
+                                if (amount > currentAmount)
+                                {
+                                    Messenger.StorageMessage(client, "You cant take more than you have!");
+                                    return;
+                                }
+
+                                client.Player.PlayerData.Savings -= amount;
+                                client.Player.PlayerData.Money += amount;
+
+                                Messenger.UpdateMoney(client);
+                            }
+                        }
+                        break;
                     case "bankdeposit":
                         {
                             if (client.Player.Map.Tile[client.Player.X, client.Player.Y].Type == Enums.TileType.Bank)

@@ -350,7 +350,12 @@ namespace Server.Network
 
         public static void OpenBank(Client client)
         {
-            SendDataTo(client, TcpPacket.CreatePacket("openbank", client.Player.PlayerData.Savings));
+            SendDataTo(client, TcpPacket.CreatePacket("openbank"));
+        }
+
+        public static void UpdateMoney(Client client)
+        {
+            SendDataTo(client, TcpPacket.CreatePacket("mymoney", client.Player.PlayerData.Money, client.Player.PlayerData.Savings));
         }
 
         // 
@@ -1765,6 +1770,8 @@ namespace Server.Network
                 //}
 
                 client.Player.LoggedIn = true;
+
+                Messenger.UpdateMoney(client);
             }
             catch (Exception ex)
             {
