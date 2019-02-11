@@ -98,6 +98,9 @@ namespace DataManager.Players
         public bool DungeonCompletionCountsLoaded { get; internal set; }
         public bool RecruitListLoaded { get; internal set; }
 
+        public int Money { get; set; }
+        public int Savings { get; set; }
+
         public PlayerData(string charID) {
             this.CharID = charID;
             TeamMembers = new PlayerDataTeamMember[4];

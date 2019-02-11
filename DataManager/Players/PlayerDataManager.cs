@@ -871,7 +871,7 @@ namespace DataManager.Players
             string query = "SELECT accounts.Email, characteristics.Name, characteristics.Access, characteristics.ActiveSlot, characteristics.PK, " +
                 "characteristics.Solid, characteristics.Status, characteristics.Veteran, characteristics.InTempMode, characteristics.Dead, " +
                 "characteristics.CanLinkDiscord, characteristics.LinkedDiscordId, " +
-                "characteristics.IsSandboxed, characteristics.IdleMessage, " +
+                "characteristics.IsSandboxed, characteristics.IdleMessage, characteristics.Money, characteristics.Savings, " +
                 "expkit.AvailableModules, " +
                 "location.Map, location.X, location.Y, location.Direction, " +
                 "guild.GuildName, guild.GuildAccess, " +
@@ -905,6 +905,8 @@ namespace DataManager.Players
                 playerData.LinkedDiscordId = row["LinkedDiscordId"].ValueString.ToUlng();
                 playerData.IsSandboxed = row["IsSandboxed"].ValueString.ToBool();
                 playerData.IdleMessage = row["IdleMessage"].ValueString;
+                playerData.Money = row["Money"].ValueString.ToInt();
+                playerData.Savings = row["Savings"].ValueString.ToInt();
 
                 playerData.AvailableModules = row["AvailableModules"].ValueString;
 
@@ -1626,7 +1628,9 @@ namespace DataManager.Players
                 database.CreateColumn(false, "CanLinkDiscord", playerData.CanLinkDiscord.ToIntString()),
                 database.CreateColumn(false, "LinkedDiscordId", playerData.LinkedDiscordId.ToString()),
                 database.CreateColumn(false, "IsSandboxed", playerData.IsSandboxed.ToIntString()),
-                database.CreateColumn(false, "IdleMessage", playerData.IdleMessage)
+                database.CreateColumn(false, "IdleMessage", playerData.IdleMessage),
+                database.CreateColumn(false, "Money", playerData.Money.ToString()),
+                database.CreateColumn(false, "Savings", playerData.Savings.ToString())
             });
         }
 

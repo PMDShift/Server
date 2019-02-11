@@ -350,7 +350,7 @@ namespace Server.Network
 
         public static void OpenBank(Client client)
         {
-            SendDataTo(client, TcpPacket.CreatePacket("openbank"));
+            SendDataTo(client, TcpPacket.CreatePacket("openbank", client.Player.PlayerData.Savings));
         }
 
         // 
