@@ -1120,10 +1120,17 @@ namespace Server.Players
 
                                     if (mapItem.Num == 1)
                                     {
-                                        PlayerData.Money += mapItem.Value;
+                                        if (!mapItem.IsSandboxed)
+                                        {
+                                            PlayerData.Money += mapItem.Value;
+                                            Messenger.PlayerMsg(client, $"You picked up {mapItem.Value} {ItemManager.Items[mapItem.Num].Name}.", Text.Yellow);
+                                        }
+                                        else
+                                        {
+                                            Messenger.PlayerMsg(client, $"You didn't pick up {mapItem.Value} s{ItemManager.Items[mapItem.Num].Name}.", Text.Yellow);
+                                        }
 
                                         map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
-                                        Messenger.PlayerMsg(client, $"You picked up {mapItem.Value} {ItemManager.Items[mapItem.Num].Name}.", Text.Yellow);
                                         Messenger.UpdateMoney(client);
 
                                         return;
@@ -2443,6 +2450,6 @@ namespace Server.Players
             return (member.Access == Enums.ZoneAccess.Member || member.Access == Enums.ZoneAccess.Leader);
         }
 
-#endregion Methods
+        #endregion Methods
     }
 }
