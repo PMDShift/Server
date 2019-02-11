@@ -965,6 +965,19 @@ namespace Server.Network
             {
                 packet.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus[j].Emoticon);
             }
+            for (var i = 0; i < client.Player.Team.Length; i++)
+            {
+                if (client.Player.Team[i].Loaded)
+                {
+                    packet.AppendParameter(client.Player.Team[i].Species);
+                    packet.AppendParameter(client.Player.Team[i].Form);
+                    packet.AppendParameter((int)client.Player.Team[i].Sex);
+                    packet.AppendParameter((int)client.Player.Team[i].Shiny);
+                } else
+                {
+                    packet.AppendParameters(-1, -1, -1, -1);
+                }
+            }
             packetList.AddPacketToSurroundingPlayersBut(client, client.Player.Map, packet);
             //packetList.AddPacketToMapBut(client, client.Player.MapID, packet);
 
@@ -987,7 +1000,7 @@ namespace Server.Network
                                                       client.Player.Solid.ToIntString(), client.Player.Status, client.Player.GetActiveRecruit().Confused.ToIntString(),
                                                       ((int)client.Player.GetActiveRecruit().StatusAilment).ToString(), ((int)client.Player.SpeedLimit).ToString(),
                                                       mobility.ToString(), client.Player.GetActiveRecruit().TimeMultiplier.ToString(),
-                                                      recruit.Darkness.ToString());
+                                                      recruit.Darkness.ToString(), client.Player.PlayerData.Money.ToString());
 
                 myPacket.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus.Count);
                 for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++)
@@ -1278,6 +1291,20 @@ namespace Server.Network
                         {
                             packet.AppendParameter(player2.GetActiveRecruit().VolatileStatus[j].Emoticon);
                         }
+                        for (var n = 0; n < player2.Team.Length; n++)
+                        {
+                            if (player2.Team[n].Loaded)
+                            {
+                                packet.AppendParameter(player2.Team[n].Species);
+                                packet.AppendParameter(player2.Team[n].Form);
+                                packet.AppendParameter((int)player2.Team[n].Sex);
+                                packet.AppendParameter((int)player2.Team[n].Shiny);
+                            }
+                            else
+                            {
+                                packet.AppendParameters(-1, -1, -1, -1);
+                            }
+                        }
                         hitlist.AddPacket(client, packet);
                     }
                 }
@@ -1421,7 +1448,7 @@ namespace Server.Network
                                                       client.Player.Solid.ToIntString(), client.Player.Status, client.Player.GetActiveRecruit().Confused.ToIntString(),
                                                       ((int)client.Player.GetActiveRecruit().StatusAilment).ToString(), ((int)client.Player.SpeedLimit).ToString(),
                                                       mobility.ToString(), client.Player.GetActiveRecruit().TimeMultiplier.ToString(),
-                                                      recruit.Darkness.ToString());
+                                                      recruit.Darkness.ToString(), client.Player.PlayerData.Money.ToString());
 
             myPacket.AppendParameter(recruit.VolatileStatus.Count);
             for (int j = 0; j < recruit.VolatileStatus.Count; j++)

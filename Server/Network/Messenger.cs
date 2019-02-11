@@ -2142,6 +2142,20 @@ namespace Server.Network
             {
                 packet.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus[j].Emoticon);
             }
+            for (var i = 0; i < client.Player.Team.Length; i++)
+            {
+                if (client.Player.Team[i].Loaded)
+                {
+                    packet.AppendParameter(client.Player.Team[i].Species);
+                    packet.AppendParameter(client.Player.Team[i].Form);
+                    packet.AppendParameter((int)client.Player.Team[i].Sex);
+                    packet.AppendParameter((int)client.Player.Team[i].Shiny);
+                }
+                else
+                {
+                    packet.AppendParameters(-1, -1, -1, -1);
+                }
+            }
             PacketHitList hitlist = null;
             PacketHitList.MethodStart(ref hitlist);
 
@@ -2167,7 +2181,7 @@ namespace Server.Network
                                                   client.Player.Solid.ToIntString(), client.Player.Status, client.Player.GetActiveRecruit().Confused.ToIntString(),
                                                   ((int)client.Player.GetActiveRecruit().StatusAilment).ToString(), ((int)client.Player.SpeedLimit).ToString(),
                                                   mobility.ToString(), client.Player.GetActiveRecruit().TimeMultiplier.ToString(),
-                                                  recruit.Darkness.ToString());
+                                                  recruit.Darkness.ToString(), client.Player.PlayerData.Money.ToString());
 
             myPacket.AppendParameter(client.Player.GetActiveRecruit().VolatileStatus.Count);
             for (int j = 0; j < client.Player.GetActiveRecruit().VolatileStatus.Count; j++)
