@@ -1116,67 +1116,82 @@ namespace Server.Players
                                 // Find open slot
                                 if (ItemManager.Items[map.ActiveItem[i].Num].Rarity <= (int)ExplorerRank + 1)
                                 {
-                                    n = FindInvSlot(map.ActiveItem[i].Num, map.ActiveItem[i].Value);
+                                    var mapItem = map.ActiveItem[i];
 
-                                    // Open slot available?
-                                    if (n != -1)
+                                    if (mapItem.Num == 1)
                                     {
-                                        // Set item in players inventory
-                                        Inventory[n].Num = map.ActiveItem[i].Num;
-                                        Inventory[n].Sticky = map.ActiveItem[i].Sticky;
-                                        Inventory[n].Tag = map.ActiveItem[i].Tag;
-                                        Inventory[n].IsSandboxed = map.ActiveItem[i].IsSandboxed;
+                                        PlayerData.Money += mapItem.Value;
 
-                                        if (Inventory[n].Sticky)
-                                        {
-                                            Msg = "x" + ItemManager.Items[Inventory[n].Num].Name.Trim();
-                                        }
-                                        else
-                                        {
-                                            Msg = ItemManager.Items[Inventory[n].Num].Name.Trim();
-                                        }
-                                        if (ItemManager.Items[Inventory[n].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[n].Num].StackCap > 0)
-                                        {
-                                            Inventory[n].Amount += map.ActiveItem[i].Value;
-                                            if (Inventory[n].Amount > ItemManager.Items[Inventory[n].Num].StackCap)
-                                            {
-                                                Inventory[n].Amount = ItemManager.Items[Inventory[n].Num].StackCap;
-                                            }
-                                            Msg = "You picked up " + map.ActiveItem[i].Value + " " + Msg + ".";
-                                        }
-                                        else
-                                        {
-                                            Inventory[n].Amount = 0;
-
-                                            Msg = "You picked up a " + Msg + ".";
-                                        }
-                                        //mInventory[n].Dur = map.ActiveItem[i].Dur;
-
-                                        if (ItemManager.Items[Inventory[n].Num].Type == Enums.ItemType.HeldInBag)
-                                        {
-                                            for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
-                                            {
-                                                if (Team[j] != null && !Inventory[n].Sticky && Team[j].MeetsReqs(Inventory[n].Num))
-                                                {
-                                                    //the function auto-checks if it's in the activeItemlist to begin with
-                                                    Team[j].AddToActiveItemList(Inventory[n].Num);
-                                                }
-                                            }
-                                        }
-
-                                        // Erase item from the map ~ done in spawnitemslot
-
-                                        Messenger.SendInventoryUpdate(client, n);
                                         map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
-                                        Messenger.PlayerMsg(client, Msg, Text.Yellow);
+                                        Messenger.PlayerMsg(client, $"You picked up {mapItem.Value} {ItemManager.Items[mapItem.Num].Name}.", Text.Yellow);
+                                        Messenger.UpdateMoney(client);
 
-                                        Scripting.ScriptManager.InvokeSub("OnPickupItem", GetActiveRecruit(), n, Inventory[n]);
                                         return;
                                     }
                                     else
                                     {
-                                        Messenger.PlayerMsg(client, "Your inventory is full.", Text.BrightRed);
-                                        return;
+                                        n = FindInvSlot(map.ActiveItem[i].Num, map.ActiveItem[i].Value);
+
+                                        // Open slot available?
+                                        if (n != -1)
+                                        {
+                                            // Set item in players inventory
+                                            Inventory[n].Num = map.ActiveItem[i].Num;
+                                            Inventory[n].Sticky = map.ActiveItem[i].Sticky;
+                                            Inventory[n].Tag = map.ActiveItem[i].Tag;
+                                            Inventory[n].IsSandboxed = map.ActiveItem[i].IsSandboxed;
+
+                                            if (Inventory[n].Sticky)
+                                            {
+                                                Msg = "x" + ItemManager.Items[Inventory[n].Num].Name.Trim();
+                                            }
+                                            else
+                                            {
+                                                Msg = ItemManager.Items[Inventory[n].Num].Name.Trim();
+                                            }
+                                            if (ItemManager.Items[Inventory[n].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[n].Num].StackCap > 0)
+                                            {
+                                                Inventory[n].Amount += map.ActiveItem[i].Value;
+                                                if (Inventory[n].Amount > ItemManager.Items[Inventory[n].Num].StackCap)
+                                                {
+                                                    Inventory[n].Amount = ItemManager.Items[Inventory[n].Num].StackCap;
+                                                }
+                                                Msg = "You picked up " + map.ActiveItem[i].Value + " " + Msg + ".";
+                                            }
+                                            else
+                                            {
+                                                Inventory[n].Amount = 0;
+
+                                                Msg = "You picked up a " + Msg + ".";
+                                            }
+                                            //mInventory[n].Dur = map.ActiveItem[i].Dur;
+
+                                            if (ItemManager.Items[Inventory[n].Num].Type == Enums.ItemType.HeldInBag)
+                                            {
+                                                for (int j = 0; j < Constants.MAX_ACTIVETEAM; j++)
+                                                {
+                                                    if (Team[j] != null && !Inventory[n].Sticky && Team[j].MeetsReqs(Inventory[n].Num))
+                                                    {
+                                                        //the function auto-checks if it's in the activeItemlist to begin with
+                                                        Team[j].AddToActiveItemList(Inventory[n].Num);
+                                                    }
+                                                }
+                                            }
+
+                                            // Erase item from the map ~ done in spawnitemslot
+
+                                            Messenger.SendInventoryUpdate(client, n);
+                                            map.SpawnItemSlot(i, -1, 0, false, false, "", map.IsZoneOrObjectSandboxed(), X, Y, null);
+                                            Messenger.PlayerMsg(client, Msg, Text.Yellow);
+
+                                            Scripting.ScriptManager.InvokeSub("OnPickupItem", GetActiveRecruit(), n, Inventory[n]);
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            Messenger.PlayerMsg(client, "Your inventory is full.", Text.BrightRed);
+                                            return;
+                                        }
                                     }
                                 }
                                 else

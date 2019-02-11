@@ -161,6 +161,7 @@ namespace Server.Players
                 if (PlayerData.Money >= amount)
                 {
                     PlayerData.Money -= amount;
+                    Messenger.UpdateMoney(client);
                     return true;
                 }
             }
@@ -443,15 +444,7 @@ namespace Server.Players
                 {
                     if (ItemManager.Items[Inventory[i].Num].Type == Enums.ItemType.Currency || ItemManager.Items[Inventory[i].Num].StackCap > 0)
                     {
-                        // Intercept for money
-                        if (Inventory[i].Num == 1)
-                        {
-                            return Inventory[i].Amount + PlayerData.Money;
-                        }
-                        else
-                        {
-                            return Inventory[i].Amount;
-                        }
+                        return Inventory[i].Amount;
                     }
                     else
                     {
@@ -459,6 +452,12 @@ namespace Server.Players
                     }
                 }
             }
+
+            if (itemNum == 1)
+            {
+                return PlayerData.Money;
+            }
+
             return 0;
         }
 
