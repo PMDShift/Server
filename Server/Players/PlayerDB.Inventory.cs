@@ -284,7 +284,7 @@ namespace Server.Players
 
             if (itemNum == 1)
             {
-                PlayerData.Money = amount;
+                PlayerData.Money += amount;
                 Messenger.UpdateMoney(client);
                 return true;
             }
