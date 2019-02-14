@@ -140,6 +140,7 @@ namespace Server.Maps
             destinationMap.MinNpcs = sourceMap.MinNpcs;
             destinationMap.MaxNpcs = sourceMap.MaxNpcs;
             destinationMap.NpcSpawnTime = sourceMap.NpcSpawnTime;
+            destinationMap.Effect = sourceMap.Effect;
         }
 
         public static void CloneMapTileProperties(IMap sourceMap, IMap destinationMap)
