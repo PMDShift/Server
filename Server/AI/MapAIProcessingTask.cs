@@ -90,7 +90,7 @@ namespace Server.AI
                                 if (npc.Behavior != Enums.NpcBehavior.FullyScriptedAI || npc.AIScript == "" || npc.AIScript.ToLower() == "none")
                                 {
                                     #region Used for attacking on sight
-                                    if (npc.Behavior == Enums.NpcBehavior.AttackOnSight || npc.Behavior == Enums.NpcBehavior.Guard)
+                                    if (npc.Behavior == Enums.NpcBehavior.AttackOnSight || npc.Behavior == Enums.NpcBehavior.Guard || npc.Behavior == Enums.NpcBehavior.Boss)
                                     {
                                         foreach (Client i in map.GetClients())
                                         {
@@ -99,7 +99,7 @@ namespace Server.AI
                                             {
                                                 if (MovementProcessor.CanCharacterSeeCharacter(map, map.ActiveNpc[mapNpcSlot], i.Player.GetActiveRecruit()))
                                                 {
-                                                    if (npc.Behavior == Enums.NpcBehavior.AttackOnSight/* || i.Player.PK == true*/)
+                                                    if (npc.Behavior == Enums.NpcBehavior.AttackOnSight || npc.Behavior == Enums.NpcBehavior.Boss/* || i.Player.PK == true*/)
                                                     {
                                                         //if (!string.IsNullOrEmpty(npc.AttackSay)) {
                                                         //    packetList.AddPacket(i, PacketBuilder.CreateChatMsg("A " + npc.Name + " : " + npc.AttackSay, Text.Grey));
