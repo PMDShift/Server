@@ -68,7 +68,7 @@ namespace Server
             {
                 var discordThread = new Thread(new ThreadStart(() =>
                 {
-                    new DiscordManager().Run(Settings.DiscordBotToken);
+                    DiscordManager.Instance.Run(Settings.DiscordBotToken);
                 }));
                 discordThread.Start();
             }

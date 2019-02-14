@@ -10,7 +10,7 @@ namespace Server.Scripting
 {
     public static class ScriptRepoHelper
     {
-        [Conditional("RELEASE")]
+        //[Conditional("RELEASE")]
         public static void PullChanges()
         {
             var targetDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
