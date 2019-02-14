@@ -49,6 +49,7 @@ namespace Server
         public static string DatabasePassword { get; set; }
 
         public static string DiscordBotToken { get; set; }
+        public static ulong DiscordGeneralChannel { get; set; }
 
         public static XmlWriterSettings XmlWriterSettings { get; set; }
 
@@ -113,6 +114,14 @@ namespace Server
                                     }
                                 }
                                 break;
+                            case "DiscordGeneralChannel":
+                                {
+                                    if (reader.Read())
+                                    {
+                                        DiscordGeneralChannel = reader.ReadString().ToUlng();
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -152,6 +161,12 @@ namespace Server
             if (!string.IsNullOrEmpty(discordBotTokenEnvironmentVariable))
             {
                 DiscordBotToken = discordBotTokenEnvironmentVariable;
+            }
+
+            var discordBotGeneralChannelEnvironmentVariable = Environment.GetEnvironmentVariable("PMDCP_DISCORD_GENERAL_CHANNEL");
+            if (!string.IsNullOrEmpty(discordBotGeneralChannelEnvironmentVariable))
+            {
+                DiscordGeneralChannel = discordBotGeneralChannelEnvironmentVariable.ToUlng();
             }
 
             using (DatabaseConnection dbConnection = new DatabaseConnection(DatabaseID.Data))

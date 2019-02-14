@@ -41,6 +41,9 @@ using Server.Tournaments;
 using Server.Database;
 using System.IO;
 using Server.Players.Turns;
+using Server.Discord;
+using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace Server.Network
 {
@@ -1571,7 +1574,14 @@ namespace Server.Network
                                                         {
                                                             var pokemon = Pokedex.Pokedex.GetPokemon(client.Player.RequestedRecruit.Species);
 
-                                                            Messenger.GlobalMsg($"{client.Player.DisplayName} has recruited a shiny {pokemon.Name}!", Text.BrightGreen);
+                                                            var shinyAnnouncement = $"{client.Player.DisplayName} has recruited a shiny {pokemon.Name}!";
+
+                                                            Messenger.GlobalMsg(shinyAnnouncement, Text.BrightGreen);
+
+                                                            if (Settings.DiscordGeneralChannel > 0)
+                                                            {
+                                                                Task.Run(() => ((ISocketMessageChannel)DiscordManager.Instance.Client.GetChannel(Settings.DiscordGeneralChannel)).SendMessageAsync(shinyAnnouncement));
+                                                            }
                                                         }
 
                                                         client.Player.AddToTeam(recruitIndex, openSlot);
