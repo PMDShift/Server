@@ -18,6 +18,7 @@ namespace Server.Discord.Commands
             "Dev",
             "Moves",
             "Coding",
+            "Dungeons",
 
             "Spoilers",
 
