@@ -323,7 +323,8 @@ namespace Server {
         public enum MapEffect
         {
             None = 0,
-            Petals = 1
+            Petals = 1,
+            Bubbles = 2
         }
 
         public enum Overlay {
