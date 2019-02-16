@@ -959,7 +959,10 @@ namespace Server.Players
 
                     if (setup.moveIndex == -1)
                     {
-                        Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
+                        if (setup.AttackerMap.Moral == Enums.MapMoral.Safe || setup.AttackerMap.Moral == Enums.MapMoral.House)
+                        {
+                            Scripting.ScriptManager.InvokeSub("InteractWithPlayer", Owner, recruit.Owner);
+                        }
                     }
                 }
                 else
