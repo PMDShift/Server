@@ -27,6 +27,8 @@ namespace Server.Npcs
 {
     public class NpcManagerBase
     {
+        private static readonly int MaxNpcs = 4000;
+
         #region Fields
 
         protected static NpcCollection npcs;
@@ -63,7 +65,16 @@ namespace Server.Npcs
                 DataColumnCollection row = dbConnection.Database.RetrieveRow(query);
 
                 int count = row["COUNT(num)"].ValueString.ToInt();
-                npcs = new NpcCollection(count);
+
+                npcs = new NpcCollection(MaxNpcs);
+
+                if (count < MaxNpcs)
+                {
+                    for (var i = count + 1; i < MaxNpcs; i++)
+                    {
+                        SaveNpc(i);
+                    }
+                }
             }
         }
 
