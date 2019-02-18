@@ -2241,9 +2241,9 @@ namespace Server.Network
                                             var localWarp = false;
                                             if (client.Player.Map.MapType == Enums.MapType.Instanced)
                                             {
-                                                string mapBase = MapManager.GenerateMapID(((InstancedMap)client.Player.Map).MapBase);
+                                                string currentMapBase = MapManager.GenerateMapID(((InstancedMap)client.Player.Map).MapBase);
 
-                                                if (client.Player.MapID == mapBase)
+                                                if (currentMapBase == mapID)
                                                 {
                                                     localWarp = true;
                                                 }
