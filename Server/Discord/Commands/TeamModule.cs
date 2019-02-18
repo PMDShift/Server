@@ -27,7 +27,8 @@ namespace Server.Discord.Commands
             "NPCs",
             "Stories",
             "Sprites",
-            "Tiles"
+            "Tiles",
+            "Tester"
         };
 
         [Command("join")]
