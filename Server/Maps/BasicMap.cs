@@ -412,7 +412,7 @@ namespace Server.Maps
                 }
                 else
                 {
-                    if (Server.Math.Rand(0, 4096) < System.Math.Max(PlayersOnMap.Count, 5))
+                    if (Server.Math.Rand(0, 1024) < System.Math.Min(PlayersOnMap.Count, 4))
                     {
                         ActiveNpc[npcSlot].Shiny = Enums.Coloration.Shiny;
                     }
