@@ -403,7 +403,7 @@ namespace Server.Maps
                 ActiveNpc[npcSlot].CalculateOriginalAbility();
                 //ActiveNpc[npcSlot].CalculateOriginalMobility();
 
-                if (NpcManager.Npcs[NPCNum].IsFriendly())
+                if (NpcManager.Npcs[NPCNum].IsFriendly() || NpcManager.Npcs[NPCNum].RecruitRate == 0)
                 {
                     if (NpcManager.Npcs[NPCNum].ShinyChance == 1)
                     {
