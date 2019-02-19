@@ -2138,7 +2138,7 @@ namespace Server.Network
         {
             TcpPacket packet = TcpPacket.CreatePacket("playerdata",
                                                                   client.ConnectionID.ToString(), client.Player.Name, client.Player.GetActiveRecruit().Sprite.ToString(),
-                                                                  client.Player.GetActiveRecruit().Form.ToString(), ((int)client.Player.GetActiveRecruit().Shiny).ToString(), ((int)client.Player.GetActiveRecruit().Sex).ToString(),
+                                                                  client.Player.GetActiveRecruit().Form.ToString(), client.Player.GetActiveRecruit().Costume.ToString(), ((int)client.Player.GetActiveRecruit().Shiny).ToString(), ((int)client.Player.GetActiveRecruit().Sex).ToString(),
                                                                   client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
                                                                   ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
                                                                   client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),
@@ -2181,7 +2181,7 @@ namespace Server.Network
             }
 
             TcpPacket myPacket = TcpPacket.CreatePacket("myplayerdata", client.Player.ActiveSlot.ToString(),
-                                                  client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
+                                                  client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), recruit.Costume.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
                                                   client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
                                                   ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
                                                   client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),

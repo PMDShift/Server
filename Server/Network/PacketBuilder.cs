@@ -954,7 +954,7 @@ namespace Server.Network
         {
             TcpPacket packet = TcpPacket.CreatePacket("playerdata",
                                                                   client.ConnectionID.ToString(), client.Player.Name, client.Player.GetActiveRecruit().Sprite.ToString(),
-                                                                  client.Player.GetActiveRecruit().Form.ToString(), ((int)client.Player.GetActiveRecruit().Shiny).ToString(), ((int)client.Player.GetActiveRecruit().Sex).ToString(),
+                                                                  client.Player.GetActiveRecruit().Form.ToString(), client.Player.GetActiveRecruit().Costume.ToString(), ((int)client.Player.GetActiveRecruit().Shiny).ToString(), ((int)client.Player.GetActiveRecruit().Sex).ToString(),
                                                                   client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
                                                                   ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
                                                                   client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),
@@ -993,7 +993,7 @@ namespace Server.Network
             if (sendMyPlayerData)
             {
                 TcpPacket myPacket = TcpPacket.CreatePacket("myplayerdata", client.Player.ActiveSlot.ToString(),
-                                                      client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
+                                                      client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), recruit.Costume.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
                                                       client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
                                                       ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
                                                       client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),
@@ -1079,10 +1079,10 @@ namespace Server.Network
         public static void AppendSprite(Client client, PacketHitList hitlist)
         {
             Recruit player = client.Player.GetActiveRecruit();
-            hitlist.AddPacket(client, TcpPacket.CreatePacket("sprite", (player.Sprite).ToString(), (player.Form).ToString(), ((int)player.Shiny).ToString(), ((int)player.Sex).ToString()));
+            hitlist.AddPacket(client, TcpPacket.CreatePacket("sprite", (player.Sprite).ToString(), (player.Form).ToString(), ((int)player.Shiny).ToString(), ((int)player.Sex).ToString(), player.Costume.ToString()));
 
             hitlist.AddPacketToOthers(client.Player.GetActiveRecruit(), client.Player.Map, TcpPacket.CreatePacket("playersprite", client.ConnectionID.ToString(),
-                player.Sprite.ToString(), player.Form.ToString(), ((int)player.Shiny).ToString(), ((int)player.Sex).ToString()), Enums.OutdateType.Condition);
+                player.Sprite.ToString(), player.Form.ToString(), ((int)player.Shiny).ToString(), ((int)player.Sex).ToString(), player.Costume.ToString()), Enums.OutdateType.Condition);
         }
 
         public static void AppendDead(Client client, PacketHitList hitlist)
@@ -1280,7 +1280,7 @@ namespace Server.Network
                         i.Player.SeeNewCharacter(client.Player.GetActiveRecruit());
                         TcpPacket packet = TcpPacket.CreatePacket("playerdata",
                                                                   i.ConnectionID.ToString(), player2.Name, player2.GetActiveRecruit().Sprite.ToString(),
-                                                                  player2.GetActiveRecruit().Form.ToString(), ((int)player2.GetActiveRecruit().Shiny).ToString(), ((int)player2.GetActiveRecruit().Sex).ToString(),
+                                                                  player2.GetActiveRecruit().Form.ToString(), player2.GetActiveRecruit().Costume.ToString(), ((int)player2.GetActiveRecruit().Shiny).ToString(), ((int)player2.GetActiveRecruit().Sex).ToString(),
                                                                   player2.MapID, player2.X.ToString(), player2.Y.ToString(),
                                                                   ((int)player2.Direction).ToString(), ((int)player2.Access).ToString(), player2.Hunted.ToIntString(),
                                                                   player2.Dead.ToIntString(), player2.GuildName, ((int)player2.GuildAccess).ToString(),
@@ -1441,7 +1441,7 @@ namespace Server.Network
                 }
             }
             TcpPacket myPacket = TcpPacket.CreatePacket("myplayerdata", client.Player.ActiveSlot.ToString(),
-                                                      client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
+                                                      client.Player.Name, recruit.Sprite.ToString(), recruit.Form.ToString(), recruit.Costume.ToString(), ((int)recruit.Shiny).ToString(), ((int)recruit.Sex).ToString(),
                                                       client.Player.MapID, client.Player.X.ToString(), client.Player.Y.ToString(),
                                                       ((int)client.Player.Direction).ToString(), ((int)client.Player.Access).ToString(), client.Player.Hunted.ToIntString(),
                                                       client.Player.Dead.ToIntString(), client.Player.GuildName, ((int)client.Player.GuildAccess).ToString(),

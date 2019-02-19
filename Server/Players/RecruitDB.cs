@@ -276,6 +276,7 @@ namespace Server.Players
             this.Sex = (Enums.Sex)recruitData.Sex;
             this.PermanentForm = recruitData.Form;
             this.Form = this.PermanentForm;
+            this.Costume = recruitData.Costume;
             this.Shiny = (Enums.Coloration)recruitData.Shiny;
             this.Level = recruitData.Level;
             this.Exp = recruitData.Exp;
@@ -332,6 +333,7 @@ namespace Server.Players
             recruitData.Species = this.Species;
             recruitData.Sex = (byte)this.Sex;
             recruitData.Form = this.PermanentForm;
+            recruitData.Costume = this.Costume;
             recruitData.Shiny = (int)this.Shiny;
             recruitData.Level = this.Level;
             recruitData.Exp = this.Exp;

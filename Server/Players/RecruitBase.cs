@@ -65,6 +65,7 @@ namespace Server.Players
         public int Species { get; set; }
         public int PermanentForm { get; set; }
         public int Form { get; set; }
+        public int Costume { get; set; }
         public Enums.Sex Sex { get; set; }
         public Enums.PokemonType Type1 { get; set; }
         public Enums.PokemonType Type2 { get; set; }

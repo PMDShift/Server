@@ -1219,7 +1219,7 @@ namespace DataManager.Players
 
             // Load general
             string query = "SELECT recruit_data.Name, recruit_data.Nickname, " +
-                "recruit_data.NpcBase, recruit_data.Species, recruit_data.Sex, recruit_data.Shiny, recruit_data.Form, recruit_data.HeldItemSlot, " +
+                "recruit_data.NpcBase, recruit_data.Species, recruit_data.Sex, recruit_data.Shiny, recruit_data.Form, recruit_data.Costume, recruit_data.HeldItemSlot, " +
                 "recruit_data.Level, recruit_data.Experience, recruit_data.HP, " +
                 "recruit_data.StatusAilment, recruit_data.StatusAilmentCounter, " +
                 "recruit_data.IQ, recruit_data.Belly, recruit_data.MaxBelly, recruit_data.AttackBonus, " +
@@ -1240,6 +1240,7 @@ namespace DataManager.Players
                 recruitData.Sex = row["Sex"].ValueString.ToByte();
                 recruitData.Shiny = row["Shiny"].ValueString.ToInt();
                 recruitData.Form = row["Form"].ValueString.ToInt();
+                recruitData.Costume = row["Costume"].ValueString.ToInt();
                 recruitData.HeldItemSlot = row["HeldItemSlot"].ValueString.ToInt(-1);
                 recruitData.Level = row["Level"].ValueString.ToInt();
                 recruitData.Exp = row["Experience"].ValueString.ToUlng();
@@ -1870,6 +1871,7 @@ namespace DataManager.Players
                 database.CreateColumn(false, "Sex", recruitData.Sex.ToString()),
                 database.CreateColumn(false, "Shiny", recruitData.Shiny.ToString()),
                 database.CreateColumn(false, "Form", recruitData.Form.ToString()),
+                database.CreateColumn(false, "Costume", recruitData.Costume.ToString()),
                 database.CreateColumn(false, "HeldItemSlot", recruitData.HeldItemSlot.ToString()),
                 database.CreateColumn(false, "Level", recruitData.Level.ToString()),
                 database.CreateColumn(false, "Experience", recruitData.Exp.ToString()),

@@ -30,6 +30,7 @@ namespace DataManager.Players
         public int NpcBase { get; set; }
         public int Species { get; set; }
         public int Form { get; set; }
+        public int Costume { get; set; }
         public int Shiny { get; set; }
         public byte Sex { get; set; }
         public int HeldItemSlot { get; set; }
