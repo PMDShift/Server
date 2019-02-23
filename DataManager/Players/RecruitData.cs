@@ -54,6 +54,7 @@ namespace DataManager.Players
 
         public RecruitData() {
             HeldItemSlot = -1;
+            Costume = -1;
             Moves = new Characters.Move[4];
             for (int i = 0; i < Moves.Length; i++) {
                 Moves[i] = new Characters.Move();

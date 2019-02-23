@@ -449,6 +449,7 @@ namespace Server.Players
             Moves = new RecruitMove[Constants.MAX_PLAYER_MOVES];
             RecruitIndex = -1;
             MoveItem = -1;
+            Costume = -1;
             for (int i = 0; i < Constants.MAX_PLAYER_MOVES; i++)
             {
                 Moves[i] = new RecruitMove();
